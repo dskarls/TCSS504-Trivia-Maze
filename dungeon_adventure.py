@@ -80,8 +80,9 @@ class DungeonAdventure:
         Start the game
     __move_and_get_next_room
         Move the adventurer around the dungeon
-    __take_damage
-        Deduct damage from pit to user hit points
+    __apply_pit_damage_to_adventurer
+        Apply the damage value of a pit to an adventurer when they step into
+        it.
     """
 
     # NOTE: Welcome string generated using https://patorjk.com/ using the
@@ -558,7 +559,9 @@ _________________________________________________
 
                 if next_room.get_pit():
                     # Apply damage to adventurer
-                    self.__take_damage(current_room.get_pit())
+                    self.__apply_pit_damage_to_adventurer(
+                        current_room.get_pit()
+                    )
 
                 # Check to see if this room was the exit
                 if current_room.is_exit():
@@ -690,7 +693,7 @@ _________________________________________________
 
         return adjacent_rooms
 
-    def __take_damage(self, pit):
+    def __apply_pit_damage_to_adventurer(self, pit):
         """Adventurer takes damage from pit."""
         self.__adventurer.hit_points -= pit.damage_value
         print(
