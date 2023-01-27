@@ -1,5 +1,5 @@
 from room import Room
-from dungeon_items import (
+from maze_items import (
     AbstractionPillar,
     EncapsulationPillar,
     InheritancePillar,
@@ -8,38 +8,38 @@ from dungeon_items import (
 )
 
 
-class DungeonConstructionError(RuntimeError):
-    """If there is any problem related to the construction of the dungeon"""
+class MazeConstructionError(RuntimeError):
+    """If there is any problem related to the construction of the maze"""
 
 
-class MazeTooSmall(DungeonConstructionError):
+class MazeTooSmall(MazeConstructionError):
     """If the the number of rows and/or columns passed into the maze is/are too small"""
 
 
-class InvalidMinEntranceExitDistance(DungeonConstructionError):
+class InvalidMinEntranceExitDistance(MazeConstructionError):
     """If the minimum Manhattan distance between the (randomly generated)
-    entrance and exit is impossibly large relative to the size of the dungeon
+    entrance and exit is impossibly large relative to the size of the maze
     maze."""
 
 
-class MazeNotTraversible(DungeonConstructionError):
+class MazeNotTraversible(MazeConstructionError):
     """If an adventurer could not possibly reach the exit from the entrance."""
 
 
-class MazeHasNoReachableDeadEnds(DungeonConstructionError):
+class MazeHasNoReachableDeadEnds(MazeConstructionError):
     """If the maze generated does not contain a single dead end traversable
     from the entrance."""
 
 
-class FailedToFindValidRoomDecoration(DungeonConstructionError):
-    """If the decoration of the dungeon with potions, pits, and pillars is invalid."""
+class FailedToFindValidRoomDecoration(MazeConstructionError):
+    """If the decoration of the maze with potions, pits, and pillars is invalid."""
 
 
 class MazeIsMissingReachablePillar(FailedToFindValidRoomDecoration):
     """If one of the pillars is not reachable from the entrance"""
 
 
-class InvalidMazeSubsetCoords(DungeonConstructionError):
+class InvalidMazeSubsetCoords(MazeConstructionError):
     """Raised if an invalid pair of rooms are passed to a method."""
 
 
@@ -133,7 +133,7 @@ def depth_first_search(
     return False
 
 
-def test_ensure_maze_is_traversable(dungeon):
+def test_ensure_maze_is_traversable(maze):
     """
     Ensure that it is possible to get from the entrance to the exit.
 
@@ -142,14 +142,14 @@ def test_ensure_maze_is_traversable(dungeon):
     MazeNotTraversible
         If the exit cannot be reached from the entrance due to walls.
     """
-    if not depth_first_search(dungeon, *dungeon.entrance, [], "exit"):
+    if not depth_first_search(maze, *maze.entrance, [], "exit"):
         raise MazeNotTraversible(
             "A valid maze must have an exit that is reachable from the "
             "entrance."
         )
 
 
-def test_ensure_maze_has_at_least_one_dead_end(dungeon):
+def test_ensure_maze_has_at_least_one_dead_end(maze):
     """
     Ensure the maze contains at least one dead end that is reachable from
     the entrance. A dead end is defined as a room with 3 of its 4 sides
@@ -161,14 +161,14 @@ def test_ensure_maze_has_at_least_one_dead_end(dungeon):
         If there was not a single dead end that could be reached from the
         entrance due to walls.
     """
-    if not depth_first_search(dungeon, *dungeon.entrance, [], "dead end"):
+    if not depth_first_search(maze, *maze.entrance, [], "dead end"):
         raise MazeHasNoReachableDeadEnds(
             "A valid maze must have at least one dead end reachable from "
             "the entrance."
         )
 
 
-def test_ensure_all_pillars_reachable(dungeon):
+def test_ensure_all_pillars_reachable(maze):
     """
     Ensure that it is possible to reach each of the four pillars from the
     entrance, ignoring the fact that pits might kill the adventurer.
@@ -185,7 +185,7 @@ def test_ensure_all_pillars_reachable(dungeon):
         InheritancePillar,
         PolymorphismPillar,
     ):
-        if not depth_first_search(dungeon, *dungeon.entrance, [], pillar_type):
+        if not depth_first_search(maze, *maze.entrance, [], pillar_type):
             raise MazeIsMissingReachablePillar(
                 f"The maze does not have a reachable {str(pillar_type())}"
             )

@@ -1,7 +1,7 @@
 from room import Room
 
 
-class DungeonMap:
+class MazeMap:
     """
     Contains a string representation of all rooms an adventurer has either
     visited or exposed by way of a vision potion.
@@ -9,7 +9,7 @@ class DungeonMap:
     Instance attributes
     -------------------
     __num_rows : int
-        How many rows of rooms there are in the dungeon.
+        How many rows of rooms there are in the maze.
     __room_strings : 2D list of str
         The string representation for each room in the map.
 
@@ -25,15 +25,15 @@ class DungeonMap:
         num_cols,
     ):
         """
-        Create an "empty" dungeon map with a 2D array of empty strings, one for
-        each room in the dungeon.
+        Create an "empty" maze map with a 2D array of empty strings, one for
+        each room in the maze.
 
         Parameters
         ----------
         num_rows : int
-            Number of rows in the dungeon.
+            Number of rows in the maze.
         num_cols : int
-            Number of columns in the dungeon.
+            Number of columns in the maze.
         """
         self.__num_rows = num_rows
         no_room = f" {Room.STR_REPR_PADDING} {Room.STR_REPR_PADDING} \n" * 3
@@ -41,7 +41,7 @@ class DungeonMap:
 
     def __str__(self):
         """Join string representations for each room to give a global visual
-        representation of the dungeon (with unexposed parts represented with
+        representation of the maze (with unexposed parts represented with
         spaces)."""
 
         printable_char_lines = [
@@ -73,15 +73,15 @@ class DungeonMap:
                         char_line_to_append
                     )
 
-        dungeon_string = ""
+        maze_string = ""
         for char_row in printable_char_lines:
             if char_row:
-                dungeon_string += ("").join(char_row) + "\n"
+                maze_string += ("").join(char_row) + "\n"
 
         # Remove final newline
-        dungeon_string = dungeon_string.rstrip("\n")
+        maze_string = maze_string.rstrip("\n")
 
-        return dungeon_string
+        return maze_string
 
     def update_room(self, room):
         """
@@ -91,7 +91,7 @@ class DungeonMap:
         Parameters
         ----------
         room : Room
-            A room in the dungeon. Must have a `coords` attr to get x and y
+            A room in the maze. Must have a `coords` attr to get x and y
             coordinates in maze, as well as a str representation.
         """
         # Go to element in room strings corresponding to this room

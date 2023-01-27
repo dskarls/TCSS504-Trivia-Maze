@@ -1,11 +1,11 @@
 """
-Contains the Dungeon class, which constructs and maze and decorates it with OOP
+Contains the Maze class, which constructs and maze and decorates it with OOP
 pillars, potions, and pits. Also contains custom exceptions relevant to these
 operations.
 """
 import random
-from dungeon_items import (
-    DungeonItem,
+from maze_items import (
+    MazeItem,
     PillarOfOOP,
     AbstractionPillar,
     EncapsulationPillar,
@@ -20,54 +20,54 @@ from room import Room
 from util import generate_random_int, randomly_choose_between_two_outcomes
 
 
-class DungeonConstructionError(RuntimeError):
-    """If there is any problem related to the construction of the dungeon"""
+class MazeConstructionError(RuntimeError):
+    """If there is any problem related to the construction of the maze"""
 
 
-class DungeonCannotAccommodatePillars(DungeonConstructionError):
+class MazeCannotAccommodatePillars(MazeConstructionError):
     """If there were too many pits in the generated maze to be able to fit all
     four pillars."""
 
 
-class MazeTooSmall(DungeonConstructionError):
+class MazeTooSmall(MazeConstructionError):
     """If the the number of rows and/or columns passed into the maze is/are too small"""
 
 
-class InvalidMinEntranceExitDistance(DungeonConstructionError):
+class InvalidMinEntranceExitDistance(MazeConstructionError):
     """If the minimum Manhattan distance between the (randomly generated)
-    entrance and exit is impossibly large relative to the size of the dungeon
+    entrance and exit is impossibly large relative to the size of the maze
     maze."""
 
 
-class MazeNotTraversible(DungeonConstructionError):
+class MazeNotTraversible(MazeConstructionError):
     """If an adventurer could not possibly reach the exit from the entrance."""
 
 
-class MazeHasNoReachableDeadEnds(DungeonConstructionError):
+class MazeHasNoReachableDeadEnds(MazeConstructionError):
     """If the maze generated does not contain a single dead end traversable
     from the entrance."""
 
 
-class FailedToFindValidRoomDecoration(DungeonConstructionError):
-    """If the decoration of the dungeon with potions, pits, and pillars is invalid."""
+class FailedToFindValidRoomDecoration(MazeConstructionError):
+    """If the decoration of the maze with potions, pits, and pillars is invalid."""
 
 
 class MazeIsMissingReachablePillar(FailedToFindValidRoomDecoration):
     """If one of the pillars is not reachable from the entrance"""
 
 
-class InvalidMazeSubsetCoords(DungeonConstructionError):
+class InvalidMazeSubsetCoords(MazeConstructionError):
     """Raised if an invalid pair of rooms are passed to a method."""
 
 
 class AttemptedToMarkInvalidItemAsFound(ValueError):
-    """Raised if a non-DungeonItem object is attempted to be marked as picked
+    """Raised if a non-MazeItem object is attempted to be marked as picked
     up by the adventurer."""
 
 
-class Dungeon:
+class Maze:
     """
-    A dungeon maze, which consists of a rectangular array of Room objects. Each
+    A maze maze, which consists of a rectangular array of Room objects. Each
     room can be filled with (A) nothing, (B) a healing potion, (C) a vision
     potion, (D) one of the OOP pillars, and/or (E) a pit. There is exactly one
     entrance and one exit, and these rooms contain no other items (or pits). It
@@ -88,9 +88,9 @@ class Dungeon:
        Room at indices [1][2] corresponds to row 1, column 2 (both zero-based
        indexing).
     num_rows : int
-        The number of rows of the dungeon maze.
+        The number of rows of the maze maze.
     num_cols : int
-        The number of columns of the dungeon maze.
+        The number of columns of the maze maze.
     entrance : tuple of int
         Two-dimensional tuple containing the integer coordinates of the
         maze entrance.
@@ -134,8 +134,8 @@ class Dungeon:
     build_maze
         Initializes the maze of the specified row and column count with rooms
         and fills them with pillars, potions, and pits.
-    mark_dungeon_item_as_found
-        Decrement the appropriate dungeon item type counter if an item is found
+    mark_maze_item_as_found
+        Decrement the appropriate maze item type counter if an item is found
         by the adventurer.
     __set_entrance_and_exit
         Randomly select entrance and exit rooms. If the entrance and exit are
@@ -187,15 +187,15 @@ class Dungeon:
 
     def __init__(self, row_count, col_count):
         """
-        Build a traversable dungeon maze of the specified dimensions and fill
+        Build a traversable maze maze of the specified dimensions and fill
         it with items and pits.
 
         Parameters
         ----------
         row_count : int
-            The number of rows of the dungeon maze.
+            The number of rows of the maze maze.
         col_count : int
-            The number of columns of the dungeon maze.
+            The number of columns of the maze maze.
 
         Raises
         ------
@@ -210,7 +210,7 @@ class Dungeon:
             or col_count < self.__MIN_ALLOWED_ROWS_OR_COLS
         ):
             raise MazeTooSmall(
-                "The dungeon maze must be at least "
+                "The maze maze must be at least "
                 f"{self.__MIN_ALLOWED_ROWS_OR_COLS} x "
                 f"{self.__MIN_ALLOWED_ROWS_OR_COLS} rooms big."
             )
@@ -232,17 +232,17 @@ class Dungeon:
 
     def __str__(self):
         """
-        Prints a string representation of the entire dungeon, including the
+        Prints a string representation of the entire maze, including the
         number of rows, number of columns, the coordinates of the entrance and
         exit, number of pits, number of unfound healing potions, number of
         unfound vision potions, number of unfound pillars.
 
         Returns
         -------
-        dungeon_str
-            The string representation of the entire dungeon.
+        maze_str
+            The string representation of the entire maze.
         """
-        dungeon_str = (
+        maze_str = (
             f"Number of rooms: {self.num_rows * self.num_cols}",
             f"Number of rows: {self.num_rows}",
             f"Number of columns: {self.num_cols}",
@@ -254,30 +254,30 @@ class Dungeon:
             f"Number of unfound pillars: {self.__unfound_items_counter[PillarOfOOP]}",
         )
 
-        return (", ").join(dungeon_str)
+        return (", ").join(maze_str)
 
-    def mark_dungeon_item_as_found(self, dungeon_item):
+    def mark_maze_item_as_found(self, maze_item):
         """
-        Decrement the appropriate dungeon item type counter if an item is found
+        Decrement the appropriate maze item type counter if an item is found
         by the adventurer.
 
         Parameters
         ----------
-        dungeon_item : DungeonItem
-            A dungeon item picked up by the adventurer.
+        maze_item : MazeItem
+            A maze item picked up by the adventurer.
         """
-        if not isinstance(dungeon_item, DungeonItem):
+        if not isinstance(maze_item, MazeItem):
             raise AttemptedToMarkInvalidItemAsFound(
-                "Only a DungeonItem object can be marked as picked up by the "
+                "Only a MazeItem object can be marked as picked up by the "
                 "adventurer."
             )
 
-        if issubclass(type(dungeon_item), PillarOfOOP):
-            dungeon_item_type = PillarOfOOP
+        if issubclass(type(maze_item), PillarOfOOP):
+            maze_item_type = PillarOfOOP
         else:
-            dungeon_item_type = type(dungeon_item)
+            maze_item_type = type(maze_item)
 
-        self.__unfound_items_counter[dungeon_item_type] -= 1
+        self.__unfound_items_counter[maze_item_type] -= 1
 
     def __set_entrance_and_exit(self):
         """
@@ -346,7 +346,7 @@ class Dungeon:
 
     def build_maze(self):
         """
-        Create a rectangular dungeon with the specified number of rows and
+        Create a rectangular maze with the specified number of rows and
         columns, one entrance, and one exit.
 
         Begin by created a 2D dynamic array in the form of a list of lists
@@ -381,7 +381,7 @@ class Dungeon:
         while True:
             try:
                 self.__decorate_rooms()
-            except DungeonCannotAccommodatePillars:
+            except MazeCannotAccommodatePillars:
                 continue
             else:
                 break
@@ -475,7 +475,7 @@ class Dungeon:
             num_pillar_placement_attempts += 1
 
             if num_pillar_placement_attempts == MAX_PILLAR_PLACEMENT_ATTEMPTS:
-                raise DungeonCannotAccommodatePillars(
+                raise MazeCannotAccommodatePillars(
                     "Not enough rooms left for pillars after pits were placed."
                 )
 
@@ -647,7 +647,7 @@ class Dungeon:
         # Shuffle list of potential neighbors
         random.shuffle(potential_neighbor_coords)
 
-        # Attempt to descend further into dungeon down each neighbor
+        # Attempt to descend further into maze down each neighbor
         for neigh_coords in potential_neighbor_coords:
             self.__set_room_sides_to_doors_during_random_depth_first_traversal(
                 *neigh_coords,

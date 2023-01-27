@@ -1,4 +1,4 @@
-from dungeon_items import AbstractionPillar, HealingPotion, VisionPotion, Pit
+from maze_items import AbstractionPillar, HealingPotion, VisionPotion, Pit
 from room import Room
 
 

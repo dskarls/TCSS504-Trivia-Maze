@@ -1,32 +1,32 @@
-"""Contains definition of dungeon items and pits, which may decorate a dungeon
+"""Contains definition of maze items and pits, which may decorate a maze
 room."""
 from abc import ABC, abstractmethod
 from util import generate_random_int
 
 
-class DungeonItem(ABC):
-    """A parent for all dungeon items. Every dungeon item has a name.
+class MazeItem(ABC):
+    """A parent for all maze items. Every maze item has a name.
     Subclasses must override init."""
 
     @abstractmethod
     def __init__(self, name):
-        """Create a dungeon item and assign it with the name passed in.
+        """Create a maze item and assign it with the name passed in.
 
         Parameters
         ----------
         name : str
-            The name of the dungeon item (used for string representation).
+            The name of the maze item (used for string representation).
         """
         self.__name = name
 
     def __str__(self):
-        """Generate a string representation for this dungeon item, which
+        """Generate a string representation for this maze item, which
         consists of its name."""
         return self.__name
 
 
-class PillarOfOOP(DungeonItem):
-    """A pillars dungeon item that represents some principle of object-oriented
+class PillarOfOOP(MazeItem):
+    """A pillars maze item that represents some principle of object-oriented
     programming.  Picked up by an adventurer automatically upon entering the
     containing room, and is guaranteed to be accessible from the maze entrance
     (ignoring possible death due to pits). Must be picked up by the adventurer
@@ -38,7 +38,7 @@ class PillarOfOOP(DungeonItem):
 
     @abstractmethod
     def __init__(self, pillar_type):
-        """Create an OOP pillar dungeon item with a nicely formatted name."""
+        """Create an OOP pillar maze item with a nicely formatted name."""
         super().__init__(f"Pillar of {pillar_type}")
 
 
@@ -53,7 +53,7 @@ class AbstractionPillar(PillarOfOOP):
     """
 
     def __init__(self):
-        """Create an OOP abstraction pillar dungeon item with a nicely
+        """Create an OOP abstraction pillar maze item with a nicely
         formatted name."""
         super().__init__("Abstraction")
 
@@ -69,7 +69,7 @@ class EncapsulationPillar(PillarOfOOP):
     """
 
     def __init__(self):
-        """Create an OOP encapsulation pillar dungeon item with a nicely
+        """Create an OOP encapsulation pillar maze item with a nicely
         formatted name."""
         super().__init__("Encapsulation")
 
@@ -85,7 +85,7 @@ class InheritancePillar(PillarOfOOP):
     """
 
     def __init__(self):
-        """Create an OOP inheritance pillar dungeon item with a nicely
+        """Create an OOP inheritance pillar maze item with a nicely
         formatted name."""
         super().__init__("Inheritance")
 
@@ -101,12 +101,12 @@ class PolymorphismPillar(PillarOfOOP):
     """
 
     def __init__(self):
-        """Create an OOP polymorphism pillar dungeon item with a nicely
+        """Create an OOP polymorphism pillar maze item with a nicely
         formatted name."""
         super().__init__("Polymorphism")
 
 
-class Potion(DungeonItem):
+class Potion(MazeItem):
     """A concoction automatically picked up by an adventurer when they navigate
     to a containing room. The adventurer can consume them, which allows for
     various benefits.
@@ -116,7 +116,7 @@ class Potion(DungeonItem):
 
     @abstractmethod
     def __init__(self, potion_type):
-        """Create a potion dungeon item with a nicely formatted name."""
+        """Create a potion maze item with a nicely formatted name."""
         super().__init__(f"Potion of {potion_type}")
 
 
@@ -128,7 +128,7 @@ class HealingPotion(Potion):
     (up to the maximum allowable hit points of an adventurer)."""
 
     def __init__(self, min_healing_value, max_healing_value):
-        """Create a healing potion dungeon item with a nicely formatted
+        """Create a healing potion maze item with a nicely formatted
         name and a randomly chosen hit point healing value in the range
         [min_healing_value, _max_healing_value]."""
         super().__init__("Healing")
@@ -151,10 +151,10 @@ class VisionPotion(Potion):
     """A potion that is automatically picked up by an adventurer when they
     navigate to a containing room. When consumed, prints all rooms adjacent to
     the current room (horizontally, vertically, and diagonally) to the console,
-    up to 8 rooms if the adventurer is in an interior room of the dungeon."""
+    up to 8 rooms if the adventurer is in an interior room of the maze."""
 
     def __init__(self):
-        """Create a vision potion dungeon item with a nicely formatted name."""
+        """Create a vision potion maze item with a nicely formatted name."""
         super().__init__("Vision")
 
     def __str__(self):
@@ -164,7 +164,7 @@ class VisionPotion(Potion):
 
 
 class Pit:
-    """A damaging pit that can be placed in a dungeon room. When the adventurer
+    """A damaging pit that can be placed in a maze room. When the adventurer
     navigates into a room with a pit, they endure its damage value, which is
     randomly generated within the specified range on initialization.
 

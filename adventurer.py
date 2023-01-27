@@ -1,7 +1,7 @@
 """
 Contains the Adventurer class and Adventurer-specific exceptions
 """
-from dungeon_items import HealingPotion, PillarOfOOP, VisionPotion
+from maze_items import HealingPotion, PillarOfOOP, VisionPotion
 from util import generate_random_int
 
 
@@ -22,7 +22,7 @@ class AttemptedToPlaceInvalidItemInInventory(RuntimeError):
 
 class Adventurer:
     """
-    An player character that can traverse a dungeon. An adventurer has an
+    An player character that can traverse a maze. An adventurer has an
     integer number of hit points, and can carry healing potions, vision
     potions, and pillars.
 
@@ -213,9 +213,9 @@ class Adventurer:
 
         return hit_points_recovered
 
-    def pick_up_item(self, dungeon_item):
+    def pick_up_item(self, maze_item):
         """
-        Add a single dungeon item (potion or pillar) to the inventory.
+        Add a single maze item (potion or pillar) to the inventory.
 
         Parameters
         ----------
@@ -228,21 +228,21 @@ class Adventurer:
             If an object other than a HealingPotion, VisionPotion, or
             PillarOfOOP subclass object is received as an argument.
         """
-        if isinstance(dungeon_item, HealingPotion):
-            self.__healing_potions.append(dungeon_item)
+        if isinstance(maze_item, HealingPotion):
+            self.__healing_potions.append(maze_item)
 
             # Sort healing potions (descending order)
             self.__healing_potions.sort(reverse=True)
 
-        elif isinstance(dungeon_item, VisionPotion):
-            self.__vision_potions.append(dungeon_item)
+        elif isinstance(maze_item, VisionPotion):
+            self.__vision_potions.append(maze_item)
 
-        elif isinstance(dungeon_item, PillarOfOOP):
-            self.__pillars_found.append(dungeon_item)
+        elif isinstance(maze_item, PillarOfOOP):
+            self.__pillars_found.append(maze_item)
 
         else:
             AttemptedToPlaceInvalidItemInInventory(
-                f"Attempted to add invalid object {dungeon_item} to "
+                f"Attempted to add invalid object {maze_item} to "
                 "adventurer inventory. Only potions or pillars are allowed!"
             )
 
@@ -251,7 +251,7 @@ class Adventurer:
         Consume a vision potion. If adventurer has none left, no action is
         taken.
 
-        NOTE: The Adventurer class has no knowledge of the dungeon itself. The
+        NOTE: The Adventurer class has no knowledge of the maze itself. The
         caller is responsible for taking the appropriate action associated with
         a vision potion, i.e. printing the 8 adjacent rooms.
 
@@ -259,7 +259,7 @@ class Adventurer:
         -------
         VisionPotion
             A vision potion object. Note that these have no knowledge of the
-            dungeon itself, so the object itself is only really useful in that
+            maze itself, so the object itself is only really useful in that
             it has a nice string representation.
         """
         if self.__vision_potions:

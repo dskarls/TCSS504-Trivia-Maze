@@ -4,17 +4,17 @@ import sys
 import textwrap
 
 from adventurer import Adventurer, InvalidAdventurerName
-from dungeon import Dungeon
-from dungeon_map import DungeonMap
+from maze import Maze
+from maze_map import MazeMap
 from room import Room
 
 
-class DungeonAdventure:
+class TriviaMaze:
     """
-    Driver for dungeon adventure game
+    Driver for maze adventure game
 
     NOTE: There is a hidden command, currently set to the key 'z' that can be
-    used to display the entire dungeon at any iteration of the game.
+    used to display the entire maze at any iteration of the game.
 
     Class Attributes
     ------------------
@@ -51,27 +51,27 @@ class DungeonAdventure:
         Current x coordinate (row) of the adventurer
     __adventurer_current_col : int
         Current y coordinate (column) of the adventurer.
-    __dungeon : Dungeon
+    __maze : Maze
         Two-dimensional array of Room objects that comprise the maze. They are
         located in the array according to their two-dimensional coords, e.g. the
         Room at indices [1][2] corresponds to row 1, column 2 (both zero-based
         indexing).
-    __dungeon_map : DungeonMap
-        A map of the dungeon that displays what rooms the adventurer has either
+    __maze_map : MazeMap
+        A map of the maze that displays what rooms the adventurer has either
         visited or revealed using a vision potion.
-    __dungeon_map_filled_in : DungeonMap
-        A map of the dungeon that displays all current rooms and items.
+    __maze_map_filled_in : MazeMap
+        A map of the maze that displays all current rooms and items.
 
     Methods
     -------
     __create_adventurer
         Create an adventurer
-    __get_adjacent_rooms_in_dungeon
-        Get a list of all rooms in the dungeon that are adjacent to the
+    __get_adjacent_rooms_in_maze
+        Get a list of all rooms in the maze that are adjacent to the
         adventurer's current room.
     __get_num_rows_and_cols_from_user
         Get the number of rows and columns from the user that they want to use
-        to build the dungeon.
+        to build the maze.
     __print_instructions
         Display the instructions at the beginning of the game.
     __print_help_menu
@@ -79,7 +79,7 @@ class DungeonAdventure:
     __play_game
         Start the game
     __move_and_get_next_room
-        Move the adventurer around the dungeon
+        Move the adventurer around the maze
     __apply_pit_damage_to_adventurer
         Apply the damage value of a pit to an adventurer when they step into
         it.
@@ -89,23 +89,23 @@ class DungeonAdventure:
     # 'Doom' style.
     __WELCOME_MESSAGE = """
   ______________________________________________________
- /    ____                                              \\
-|    |  _ \                                              |
-|    | | | |_   _ _ __   __ _  ___  ___  _ __            |
-|    | | | | | | | '_ \ / _` |/ _ \/ _ \| '_ \           |
-|    | |/ /| |_| | | | | (_| |  __/ (_) | | | |          |
-|    |___/  \__,_|_| |_|\__, |\___|\___/|_| |_|          |
-|                        __/ |                           |
-|                       |___/                            |
-|      ___      _                 _                      |
-|     / _ \    | |               | |                     |
-|    / /_\ \ __| |_   _____ _ __ | |_ _   _ _ __ ___     |
-|    |  _  |/ _` \ \ / / _ \ '_ \| __| | | | '__/ _ \    |
-|    | | | | (_| |\ V /  __/ | | | |_| |_| | | |  __/    |
-|    \_| |_/\__,_| \_/ \___|_| |_|\__|\__,_|_|  \___|    |
+ /                                                      \\
+|               _____    _       _                       |
+|              |_   _|  (_)     (_)                      |
+|                | |_ __ ___   ___  __ _                 |
+|                | | '__| \ \ / / |/ _` |                |
+|                | | |  | |\ V /| | (_| |                |
+|                \_/_|  |_| \_/ |_|\__,_|                |
+|                                                        |
+|                 ___  ___                               |
+|                 |  \/  |                               |
+|                 | .  . | __ _ _______                  |
+|                 | |\/| |/ _` |_  / _ \                 |
+|                 | |  | | (_| |/ /  __/                 |
+|                 \_|  |_/\__,_/___\___|                 |
  \______________________________________________________/
 
-     By Daniel S. Karls, Sheehan Smith, Tom Swanson
+     By Daniel S. Karls, Sheehan Smith, Tom J. Swanson
     """
 
     __YOU_WIN_MESSAGE = """
@@ -128,8 +128,8 @@ _________________________________________________
                \_/\___/ \__,_|  \__,_|_|\___|\__,_|
     """
 
-    __DUNGEON_MAP_FILLED_IN_MESSAGE = (
-        "Here's what the whole dungeon looked like:"
+    __MAZE_MAP_FILLED_IN_MESSAGE = (
+        "Here's what the whole maze looked like:"
     )
 
     # How many char columns we have in the terminal. Used for choosing length
@@ -213,7 +213,7 @@ _________________________________________________
         },
         __Command.SHOW_MAP: {
             __COMMAND_TYPE: __COMMAND_TYPE_DISPLAY,
-            __COMMAND_DESC_KEY: "Display dungeon map",
+            __COMMAND_DESC_KEY: "Display maze map",
             __COMMAND_KEY_KEY: "m",
         },
         # Other commands
@@ -239,15 +239,15 @@ _________________________________________________
         self.__print_instructions()
 
         num_rows, num_col = self.__get_num_rows_and_cols_from_user()
-        self.__dungeon = Dungeon(num_rows, num_col)
-        self.__dungeon_map = DungeonMap(num_rows, num_col)
+        self.__maze = Maze(num_rows, num_col)
+        self.__maze_map = MazeMap(num_rows, num_col)
 
-        # Also keep a dungeon map that is filled in entirely here and gets
-        # updated as the adventurer walks through the dungeon
-        self.__dungeon_map_filled_in = DungeonMap(num_rows, num_col)
-        for room_row in self.__dungeon.rooms:
+        # Also keep a maze map that is filled in entirely here and gets
+        # updated as the adventurer walks through the maze
+        self.__maze_map_filled_in = MazeMap(num_rows, num_col)
+        for room_row in self.__maze.rooms:
             for room in room_row:
-                self.__dungeon_map_filled_in.update_room(room)
+                self.__maze_map_filled_in.update_room(room)
 
         self.__adventurer = self.__create_adventurer()
 
@@ -270,7 +270,7 @@ _________________________________________________
         Returns
         -------
         tuple
-            The number of rows and columns to use to create dungeon maze.
+            The number of rows and columns to use to create maze maze.
         """
         row_str = input(
             "Enter the desired number of rows in the maze (default: 3): "
@@ -314,8 +314,8 @@ _________________________________________________
         print(self.__WELCOME_MESSAGE)
         INSTRUCTIONS_MESSAGE = """\
         Your goal:
-           1) Collect all the four pillars of OOP.
-           2) Get to the exit safely.
+           1) Collect all the four pillars of OOP
+           2) Get to the exit safely
 
         Items randomly placed in each room:
            1) Healing potion (random heal amount)
@@ -325,7 +325,7 @@ _________________________________________________
 
         Select 'h' to open help menu.
 
-        Good luck!!
+        Good luck!
         """
         print(textwrap.dedent(INSTRUCTIONS_MESSAGE))
 
@@ -398,38 +398,38 @@ _________________________________________________
 
         return textwrap.dedent(legend_str).rstrip()
 
-    def __print_dungeon_map_and_legend(self):
-        """Print out the dungeon map and the map legend below it."""
+    def __print_maze_map_and_legend(self):
+        """Print out the maze map and the map legend below it."""
         print()
-        print("Dungeon map (empty portions are undiscovered):")
-        print(self.__dungeon_map)
+        print("Maze map (empty portions are undiscovered):")
+        print(self.__maze_map)
         print(" ______________ ")
         print("|____Legend____|")
         print(self.__create_legend_string())
 
-    def __update_room_in_dungeon_maps(self, room):
-        """Update the specified room in both the dungeon map the adventurer
-        sees, as well as the hidden dungeon map that's fully revealed.
+    def __update_room_in_maze_maps(self, room):
+        """Update the specified room in both the maze map the adventurer
+        sees, as well as the hidden maze map that's fully revealed.
 
         Parameters
         ----------
         room : Room
             An arbitrary room that the adventurer has passed through.
         """
-        self.__dungeon_map.update_room(room)
-        self.__dungeon_map_filled_in.update_room(room)
+        self.__maze_map.update_room(room)
+        self.__maze_map_filled_in.update_room(room)
 
     def __play_game(self):
         """Start the game"""
         (
             self.__adventurer_current_row,
             self.__adventurer_current_col,
-        ) = self.__dungeon.entrance
-        current_room = self.__dungeon.rooms[self.__adventurer_current_row][
+        ) = self.__maze.entrance
+        current_room = self.__maze.rooms[self.__adventurer_current_row][
             self.__adventurer_current_col
         ]
         current_room.occupied_by_adventurer = True
-        self.__update_room_in_dungeon_maps(current_room)
+        self.__update_room_in_maze_maps(current_room)
 
         valid_options = tuple(
             info[self.__COMMAND_KEY_KEY] for info in self.__COMMANDS.values()
@@ -483,7 +483,7 @@ _________________________________________________
                 ]
             ):
                 # Print out discovered portion of maze
-                self.__print_dungeon_map_and_legend()
+                self.__print_maze_map_and_legend()
 
             elif (
                 option
@@ -528,8 +528,8 @@ _________________________________________________
                 vision_potion = self.__adventurer.consume_vision_potion()
                 print(f"You used a {str(vision_potion)}!")
 
-                # Get set of adjacent rooms inside maze and add to dungeon map
-                rooms_to_update_in_map = self.__get_adjacent_rooms_in_dungeon(
+                # Get set of adjacent rooms inside maze and add to maze map
+                rooms_to_update_in_map = self.__get_adjacent_rooms_in_maze(
                     current_room
                 )
 
@@ -540,8 +540,8 @@ _________________________________________________
                     self.__COMMAND_KEY_KEY
                 ]
             ):
-                print(self.__DUNGEON_MAP_FILLED_IN_MESSAGE)
-                print(self.__dungeon_map_filled_in)
+                print(self.__MAZE_MAP_FILLED_IN_MESSAGE)
+                print(self.__maze_map_filled_in)
 
             # If selected to move a direction
             else:
@@ -568,8 +568,8 @@ _________________________________________________
                     if len(self.__adventurer.get_pillars_found()) == 4:
                         print(self.__YOU_WIN_MESSAGE)
                         print()
-                        print(self.__DUNGEON_MAP_FILLED_IN_MESSAGE)
-                        print(self.__dungeon_map_filled_in)
+                        print(self.__MAZE_MAP_FILLED_IN_MESSAGE)
+                        print(self.__maze_map_filled_in)
                         game_over = True
                     else:
                         print(
@@ -587,24 +587,24 @@ _________________________________________________
 
             for item in all_items_from_room:
                 self.__adventurer.pick_up_item(item)
-                self.__dungeon.mark_dungeon_item_as_found(item)
+                self.__maze.mark_maze_item_as_found(item)
 
-            # Update dungeon map with this room (after all items picked up)
+            # Update maze map with this room (after all items picked up)
             for room in [current_room] + rooms_to_update_in_map:
-                self.__update_room_in_dungeon_maps(room)
+                self.__update_room_in_maze_maps(room)
 
             if vision_potion_used:
-                self.__print_dungeon_map_and_legend()
+                self.__print_maze_map_and_legend()
 
             # Check adventurer's hit point
             if self.__adventurer.hit_points == 0:
                 print(self.__YOU_DIED_MESSAGE)
-                print(self.__DUNGEON_MAP_FILLED_IN_MESSAGE)
-                print(self.__dungeon_map_filled_in)
+                print(self.__MAZE_MAP_FILLED_IN_MESSAGE)
+                print(self.__maze_map_filled_in)
                 sys.exit(0)
 
     def __move_and_get_next_room(self, option, current_room):
-        """Move the adventurers within the dungeon based on input"""
+        """Move the adventurers within the maze based on input"""
         HIT_WALL_MSG = "You hit a wall. Try moving through a door."
 
         # Possible commands (dicts containing key commands & descriptions)
@@ -635,19 +635,19 @@ _________________________________________________
                 self.__adventurer_current_row += 1
 
         # Return the new room
-        return self.__dungeon.rooms[self.__adventurer_current_row][
+        return self.__maze.rooms[self.__adventurer_current_row][
             self.__adventurer_current_col
         ]
 
-    def __get_adjacent_rooms_in_dungeon(self, room):
+    def __get_adjacent_rooms_in_maze(self, room):
         """
         Determine which rooms adjacent to the current room, out of a maximum
-        possible 8, fall inside the dungeon.
+        possible 8, fall inside the maze.
 
         Parameters
         ----------
         room : Room
-            A room inside the dungeon.
+            A room inside the maze.
 
         Returns
         -------
@@ -655,7 +655,7 @@ _________________________________________________
             A list of all of the adjacent rooms that fall within the maze.
         """
         row, col = room.coords
-        num_rows, num_cols = self.__dungeon.num_rows, self.__dungeon.num_cols
+        num_rows, num_cols = self.__maze.num_rows, self.__maze.num_cols
 
         # Set top left and bottom right of maze rectangle
         if row == 0:
@@ -689,7 +689,7 @@ _________________________________________________
         adjacent_rooms = []
         for row_ in range(top_left_coords[0], bottom_right_coords[0] + 1):
             for col_ in range(top_left_coords[1], bottom_right_coords[1] + 1):
-                adjacent_rooms.append(self.__dungeon.rooms[row_][col_])
+                adjacent_rooms.append(self.__maze.rooms[row_][col_])
 
         return adjacent_rooms
 
@@ -704,4 +704,4 @@ _________________________________________________
 
 if __name__ == "__main__":
     # Start the game
-    DungeonAdventure()
+    TriviaMaze()

@@ -3,8 +3,8 @@ import random
 import pytest
 
 from adventurer import Adventurer
-from dungeon import Dungeon
-from dungeon_items import HealingPotion
+from maze import Maze
+from maze_items import HealingPotion
 from room import Room
 
 # Fix random seed so tests always run the same way
@@ -21,20 +21,20 @@ HIT_POINTS_MAX = 100
 NUM_HEALING_POTIONS_TO_GENERATE = 10
 NUM_HEALING_POTION_PAIRS_TO_GENERATE = 10
 
-# Min and max number of rows and columns to use for randomly generated dungeon
+# Min and max number of rows and columns to use for randomly generated maze
 # fixtures
-DUNGEON_MIN_NUM_ROWS = 3
-DUNGEON_MAX_NUM_ROWS = 10
-DUNGEON_MIN_NUM_COLS = DUNGEON_MIN_NUM_ROWS
-DUNGEON_MAX_NUM_COLS = DUNGEON_MAX_NUM_ROWS
+MAZE_MIN_NUM_ROWS = 3
+MAZE_MAX_NUM_ROWS = 10
+MAZE_MIN_NUM_COLS = MAZE_MIN_NUM_ROWS
+MAZE_MAX_NUM_COLS = MAZE_MAX_NUM_ROWS
 
-# How many random dungeon fixtures to generate with the above parameters
-NUM_DUNGEONS_TO_GENERATE = 10
+# How many random maze fixtures to generate with the above parameters
+NUM_MAZES_TO_GENERATE = 10
 
 ###############################################################################
 # Helper methods
 ###############################################################################
-def get_random_dungeon_shape(
+def get_random_maze_shape(
     min_num_rows, max_num_rows, min_num_cols, max_num_cols, num_samples
 ):
     """
@@ -169,18 +169,18 @@ def healing_potion_pair(request):
 
 
 @pytest.fixture(
-    params=get_random_dungeon_shape(
-        DUNGEON_MIN_NUM_ROWS,
-        DUNGEON_MAX_NUM_ROWS,
-        DUNGEON_MIN_NUM_COLS,
-        DUNGEON_MAX_NUM_COLS,
-        NUM_DUNGEONS_TO_GENERATE,
+    params=get_random_maze_shape(
+        MAZE_MIN_NUM_ROWS,
+        MAZE_MAX_NUM_ROWS,
+        MAZE_MIN_NUM_COLS,
+        MAZE_MAX_NUM_COLS,
+        NUM_MAZES_TO_GENERATE,
     )
 )
-def dungeon(request):
-    """A (randomly constructed) dungeon of the specified size"""
+def maze(request):
+    """A (randomly constructed) maze of the specified size"""
     num_rows, num_cols = request.param
-    return Dungeon(num_rows, num_cols)
+    return Maze(num_rows, num_cols)
 
 
 @pytest.fixture

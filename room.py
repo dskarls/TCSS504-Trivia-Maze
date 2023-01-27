@@ -1,9 +1,9 @@
-"""Definition of a room in the dungeon and relevant exceptions"""
+"""Definition of a room in the maze and relevant exceptions"""
 from enum import Enum, auto
 
-from dungeon_items import (
+from maze_items import (
     AbstractionPillar,
-    DungeonItem,
+    MazeItem,
     EncapsulationPillar,
     HealingPotion,
     InheritancePillar,
@@ -24,8 +24,8 @@ class InvalidDirection(ValueError):
 
 class Room:
     """
-    Every dungeon is composed of rooms, which may contain items (potions or
-    pillars), pits, or nothing. Every dungeon has one room that is an entrance
+    Every maze is composed of rooms, which may contain items (potions or
+    pillars), pits, or nothing. Every maze has one room that is an entrance
     and one that is an exit.
 
     Class attributes
@@ -67,7 +67,7 @@ class Room:
         Whether the room is an exit.
     __pit : Pit
         The Pit object, if any, contained in the room.
-    __items : list of DungeonItem
+    __items : list of MazeItem
         List of items in the room.
     __east_side : str
         Whether the east side of the room is a door or wall.
@@ -81,9 +81,9 @@ class Room:
     Instance methods
     ----------------
     place_item
-        Place a dungeon item in the room.
+        Place a maze item in the room.
     remove_items
-        Remove and return all dungeon items, if any, held by the room.
+        Remove and return all maze items, if any, held by the room.
     contains_pillar
         Return whether the room contains a pillar or not.
     get_pillar
@@ -229,16 +229,16 @@ class Room:
         self.__south_side = self.WALL
 
     def place_item(self, item):
-        """Put a DungeonItem in this room.
+        """Put a MazeItem in this room.
 
         Parameters
         ----------
-        item : DungeonItem
-            Any valid DungeonItem object.
+        item : MazeItem
+            Any valid MazeItem object.
         """
-        if not isinstance(item, DungeonItem):
+        if not isinstance(item, MazeItem):
             raise ValueError(
-                "Attempted to insert a non-DungeonItem into a Room!"
+                "Attempted to insert a non-MazeItem into a Room!"
             )
         self.__items.append(item)
 
@@ -491,7 +491,7 @@ class Room:
         return self.__entrance
 
     def set_entrance(self):
-        """Set this room to be an entrance of the dungeon."""
+        """Set this room to be an entrance of the maze."""
         self.__entrance = True
 
     def is_exit(self):
@@ -499,7 +499,7 @@ class Room:
         return self.__exit
 
     def set_exit(self):
-        """Set this room to be an exit of the dungeon."""
+        """Set this room to be an exit of the maze."""
         self.__exit = True
 
     def set_pit(self, pit):
