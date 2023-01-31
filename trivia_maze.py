@@ -604,7 +604,7 @@ _________________________________________________
                 sys.exit(0)
 
     def __move_and_get_next_room(self, option, current_room):
-        """Move the adventurers within the maze based on input"""
+        """Move the adventurer within the maze based on input"""
         HIT_WALL_MSG = "You hit a wall. Try moving through a door."
 
         # Possible commands (dicts containing key commands & descriptions)
