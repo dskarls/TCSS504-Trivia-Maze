@@ -128,9 +128,7 @@ _________________________________________________
                \_/\___/ \__,_|  \__,_|_|\___|\__,_|
     """
 
-    __MAZE_MAP_FILLED_IN_MESSAGE = (
-        "Here's what the whole maze looked like:"
-    )
+    __MAZE_MAP_FILLED_IN_MESSAGE = "Here's what the whole maze looked like:"
 
     # How many char columns we have in the terminal. Used for choosing length
     # of horizontal rules and text wraps.
@@ -603,8 +601,24 @@ _________________________________________________
                 print(self.__maze_map_filled_in)
                 sys.exit(0)
 
-    def __move_and_get_next_room(self, option, current_room):
-        """Move the adventurer within the maze based on input"""
+    def __move_and_get_next_room(self, command_key, current_room):
+        """
+        Move the adventurer within the maze based on command input received.
+
+        Parameters
+        ----------
+        command_key : str
+            Input command indicating which direction the adventurer is trying
+            to move.
+        current_room : Room
+            The room the adventurer currently occupies.
+
+        Returns
+        -------
+        Room
+            If the adventurer was capable of moving to the next room, i.e. did
+            not hit a wall, the room to which they moved.
+        """
         HIT_WALL_MSG = "You hit a wall. Try moving through a door."
 
         # Possible commands (dicts containing key commands & descriptions)
@@ -613,22 +627,22 @@ _________________________________________________
         east_command = self.__COMMANDS[self.__Command.MOVE_EAST]
         west_command = self.__COMMANDS[self.__Command.MOVE_WEST]
 
-        if option == west_command[self.__COMMAND_KEY_KEY]:
+        if command_key == west_command[self.__COMMAND_KEY_KEY]:
             if current_room.get_side(Room.WEST) == Room.WALL:
                 print(HIT_WALL_MSG)
             elif current_room.get_side(Room.WEST) == Room.DOOR:
                 self.__adventurer_current_col -= 1
-        elif option == east_command[self.__COMMAND_KEY_KEY]:
+        elif command_key == east_command[self.__COMMAND_KEY_KEY]:
             if current_room.get_side(Room.EAST) == Room.WALL:
                 print(HIT_WALL_MSG)
             elif current_room.get_side(Room.EAST) == Room.DOOR:
                 self.__adventurer_current_col += 1
-        elif option == north_command[self.__COMMAND_KEY_KEY]:
+        elif command_key == north_command[self.__COMMAND_KEY_KEY]:
             if current_room.get_side(Room.NORTH) == Room.WALL:
                 print(HIT_WALL_MSG)
             elif current_room.get_side(Room.NORTH) == Room.DOOR:
                 self.__adventurer_current_row -= 1
-        elif option == south_command[self.__COMMAND_KEY_KEY]:
+        elif command_key == south_command[self.__COMMAND_KEY_KEY]:
             if current_room.get_side(Room.SOUTH) == Room.WALL:
                 print(HIT_WALL_MSG)
             elif current_room.get_side(Room.SOUTH) == Room.DOOR:
