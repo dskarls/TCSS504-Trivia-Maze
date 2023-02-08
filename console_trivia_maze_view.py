@@ -5,6 +5,10 @@ import curses
 import math
 
 
+class TerminalTooSmall(RuntimeError):
+    """If the user's terminal window is too small to display the game"""
+
+
 class ConsoleWindow:
     def __init__(self, x0, y0, width, height, color):
         """Note that no refresh of the subwindow display is performed upon
@@ -41,14 +45,27 @@ class ConsoleWindow:
 
 
 class ConsoleTriviaMazeView:
+    __MIN_WIDTH = 60
+    __MIN_HEIGHT = 20
+
     def __init__(self):
         self.__colors = self.__initialize_graphics_backend()
 
         self.__windows = self.__initialize_windows()
 
+    def __confirm_terminal_size_large_enough(self):
+        if curses.COLS < self.__MIN_WIDTH:
+            raise TerminalTooSmall("Please increase the size of your terminal")
+
+        if curses.LINES < self.__MIN_HEIGHT:
+            raise TerminalTooSmall("Please increase the size of your terminal")
+
     def __initialize_graphics_backend(self):
         # Initialize curses
         stdscr = curses.initscr()
+
+        # Confirm that terminal is large enough
+        self.__confirm_terminal_size_large_enough()
 
         stdscr.clear()
         stdscr.refresh()
