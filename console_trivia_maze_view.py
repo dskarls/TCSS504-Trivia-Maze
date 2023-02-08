@@ -226,8 +226,8 @@ class ConsoleTriviaMazeView:
             event_log_window,
         ]
 
-    @staticmethod
-    def __main(_, window: ConsoleWindow):
+    def __main(self, stdscr):
+        window = self.__windows[0]
         player_input = None
         while player_input != 27:  # FIXME: Using ESC to quit window for now
             # Retrieve keyboard input
@@ -243,7 +243,7 @@ class ConsoleTriviaMazeView:
     def __enter__(self):
         # We can use any window to grab player input, so just pass the first
         # one created (which is assumed to exist)
-        curses.wrapper(self.__main, self.__windows[0])
+        curses.wrapper(self.__main)
 
     def __exit__(self, type_, value, traceback):
         # curses.wrapper already handles cleanup, so we only need to define
