@@ -1,5 +1,6 @@
 """Definition of a room in the maze and relevant exceptions"""
 from enum import Enum, auto
+from door import Door
 
 from maze_items import (
     AbstractionPillar,
@@ -222,7 +223,7 @@ class Room:
         # Set coords attr to specified row/col
         self.coords = (row, col)
 
-        # Initialize all sides to be doors (rather than walls)
+        # Initialize all sides to be walls (rather than doors)
         self.__east_side = self.WALL
         self.__north_side = self.WALL
         self.__west_side = self.WALL
@@ -286,7 +287,7 @@ class Room:
     def get_side(self, direction):
         """
         Return whether the side of the room given by the specified direction is
-        a door ("door") or wall ("wall").
+        a Door object or wall ("wall").
 
         Parameters
         ----------
@@ -296,8 +297,9 @@ class Room:
         Returns
         -------
         str
-            Whether the side of the room is a door or wall.
-
+            If the side is a wall
+        Door
+            If the side is a Door object
         Raises
         ------
         InvalidDirection
@@ -320,7 +322,7 @@ class Room:
     def set_side(self, direction, door_or_wall):
         """
         Set one side of a room ("east", "north", "west", or "south") to be
-        either a door or a wall.
+        either a Door object or a wall.
 
         Parameters
         ----------
@@ -333,9 +335,12 @@ class Room:
         door_or_wall = door_or_wall.lower()
         if door_or_wall not in {self.DOOR, self.WALL}:
             raise InvalidRoomSideValue(
-                "A side of a room must one of the following: "
+                "A side of a room must be one of the following: "
                 f"{(', ').join((self.DOOR, self.WALL))}"
             )
+        
+        if door_or_wall == "door":
+            door_or_wall = Door()
 
         direction = direction.lower()
         if direction == self.EAST:
@@ -428,6 +433,10 @@ class Room:
         room_str = "*"
         if self.__north_side == self.WALL:
             room_str += f"{self.STR_REPR_PADDING}*{self.STR_REPR_PADDING}"
+        elif self.__north_side.perm_locked:
+            room_str += f"{self.STR_REPR_PADDING}P{self.STR_REPR_PADDING}"
+        elif self.__north_side.locked:
+            room_str += f"{self.STR_REPR_PADDING}T{self.STR_REPR_PADDING}"
         else:
             room_str += f"{self.STR_REPR_PADDING}-{self.STR_REPR_PADDING}"
         # room_str += f"*{self.STR_REPR_PADDING}\n"
@@ -436,7 +445,10 @@ class Room:
         # West and East sides
         if self.__west_side == self.WALL:
             room_str += "*"
-
+        elif self.__west_side.perm_locked:
+            room_str += "P" #place holder string for a permanently locked door    
+        elif self.__west_side.locked:
+            room_str += "T" #place holder string for a locked door
         else:
             room_str += "|"
 
@@ -459,16 +471,23 @@ class Room:
         room_str += f"{room_symbol}"
         if self.__east_side == self.WALL:
             room_str += f"{self.STR_REPR_PADDING}*"
+        elif self.__east_side.perm_locked:
+            room_str += f"{self.STR_REPR_PADDING}P"
+        elif self.__east_side.locked:
+            room_str += f"{self.STR_REPR_PADDING}T"
         else:
             room_str += f"{self.STR_REPR_PADDING}|"
 
-        # room_str += f"{self.STR_REPR_PADDING}\n"
         room_str += "\n"
 
         # Form bottom row
         room_str += "*"
         if self.__south_side == self.WALL:
             room_str += f"{self.STR_REPR_PADDING}*{self.STR_REPR_PADDING}"
+        elif self.__south_side.perm_locked:
+            room_str += f"{self.STR_REPR_PADDING}P{self.STR_REPR_PADDING}"
+        elif self.__south_side.locked:
+            room_str += f"{self.STR_REPR_PADDING}T{self.STR_REPR_PADDING}"
         else:
             room_str += f"{self.STR_REPR_PADDING}-{self.STR_REPR_PADDING}"
         # room_str += f"*{self.STR_REPR_PADDING}\n"
@@ -528,3 +547,6 @@ class Room:
         pit, if it has one."""
         self.__items = []
         self.set_pit(None)
+        
+
+

@@ -22,7 +22,7 @@ class AttemptedToPlaceInvalidItemInInventory(RuntimeError):
 
 class Adventurer:
     """
-    An player character that can traverse a maze. An adventurer has an
+    A player character that can traverse a maze. An adventurer has an
     integer number of hit points, and can carry healing potions, vision
     potions, and pillars.
 

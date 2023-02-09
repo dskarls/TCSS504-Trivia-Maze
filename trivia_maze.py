@@ -1,4 +1,4 @@
-from collections import deque
+6from collections import deque
 from enum import Enum, auto
 import sys
 import textwrap
@@ -620,33 +620,76 @@ _________________________________________________
             not hit a wall, the room to which they moved.
         """
         HIT_WALL_MSG = "You hit a wall. Try moving through a door."
+        LOCKED_DOOR_MSG = "This door is locked. Answer a trivia question."
+        PERM_LOCKED_DOOR_MSG = "This door is permanently locked. Find a magic key to open or find another route."
 
         # Possible commands (dicts containing key commands & descriptions)
         north_command = self.__COMMANDS[self.__Command.MOVE_NORTH]
         south_command = self.__COMMANDS[self.__Command.MOVE_SOUTH]
         east_command = self.__COMMANDS[self.__Command.MOVE_EAST]
         west_command = self.__COMMANDS[self.__Command.MOVE_WEST]
-
+        
+        coords_before = (self.__adventurer_current_row, self.__adventurer_current_col)
+        
         if command_key == west_command[self.__COMMAND_KEY_KEY]:
             if current_room.get_side(Room.WEST) == Room.WALL:
                 print(HIT_WALL_MSG)
-            elif current_room.get_side(Room.WEST) == Room.DOOR:
+            elif current_room.get_side(Room.WEST).perm_locked:
+                print(PERM_LOCKED_DOOR_MSG)
+            elif not current_room.get_side(Room.WEST).locked:
                 self.__adventurer_current_col -= 1
+            else:
+                print(LOCKED_DOOR_MSG)
+                answer = input("Question?") #place holder for lock/unlock functionality
+                if isinstance(answer, str):
+                    self.__adventurer_current_col -= 1
+                    current_room.get_side(Room.WEST).locked = False
         elif command_key == east_command[self.__COMMAND_KEY_KEY]:
             if current_room.get_side(Room.EAST) == Room.WALL:
                 print(HIT_WALL_MSG)
-            elif current_room.get_side(Room.EAST) == Room.DOOR:
+            elif current_room.get_side(Room.EAST).perm_locked:
+                print(PERM_LOCKED_DOOR_MSG)
+            elif not current_room.get_side(Room.EAST).locked:
                 self.__adventurer_current_col += 1
+            else:
+                print(LOCKED_DOOR_MSG)
+                answer = input("Question?")
+                if isinstance(answer, str):
+                    self.__adventurer_current_col += 1
+                    current_room.get_side(Room.EAST).locked = False
         elif command_key == north_command[self.__COMMAND_KEY_KEY]:
             if current_room.get_side(Room.NORTH) == Room.WALL:
                 print(HIT_WALL_MSG)
-            elif current_room.get_side(Room.NORTH) == Room.DOOR:
+            elif current_room.get_side(Room.NORTH).perm_locked:
+                print(PERM_LOCKED_DOOR_MSG)
+            elif not current_room.get_side(Room.NORTH).locked:
                 self.__adventurer_current_row -= 1
+            else:
+                print(LOCKED_DOOR_MSG)
+                answer = input("Question?")
+                if isinstance(answer, str):
+                    self.__adventurer_current_row -= 1
+                    current_room.get_side(Room.NORTH).locked = False
         elif command_key == south_command[self.__COMMAND_KEY_KEY]:
             if current_room.get_side(Room.SOUTH) == Room.WALL:
                 print(HIT_WALL_MSG)
-            elif current_room.get_side(Room.SOUTH) == Room.DOOR:
+            elif current_room.get_side(Room.SOUTH).perm_locked:
+                print(PERM_LOCKED_DOOR_MSG)
+            elif not current_room.get_side(Room.SOUTH).locked:
                 self.__adventurer_current_row += 1
+            else:
+                print(LOCKED_DOOR_MSG)
+                answer = input("Question?")
+                if isinstance(answer, str):
+                    self.__adventurer_current_row += 1
+                    current_room.get_side(Room.SOUTH).locked = False
+                    
+        coords_after = (self.__adventurer_current_row, self.__adventurer_current_col)
+        if coords_before != coords_after:
+            new_room = self.__maze.rooms[self.__adventurer_current_row][
+                self.__adventurer_current_col
+            ]
+            self.unlock_adjacent_door(command_key, new_room)
 
         # Return the new room
         return self.__maze.rooms[self.__adventurer_current_row][
@@ -714,7 +757,31 @@ _________________________________________________
             f"You fell into a pit and sustained {pit.damage_value} damage! "
             f"{self.__adventurer.hit_points} health remaining!"
         )
-
+    
+    def unlock_adjacent_door(self, command_key, room):
+        """
+        Sets the door of the room the adventurer will be steping 
+        into to unlocked. i.e. adventurer moves west out of their 
+        current room, the east door of the next room should also
+        be unlocked.
+        
+        Parameters
+        ----------
+        command_key : str
+            Input command indicating which direction the adventurer is 
+            trying to move.
+        room : Room
+            The room the adventurer currently occupies.
+        """
+        if command_key == "w":
+            room.get_side("south").locked = False
+        elif command_key == "s":
+            room.get_side("north").locked = False
+        elif command_key == "d":
+            room.get_side("west").locked = False
+        elif command_key == "a":
+            room.get_side("east").locked = False
+        
 
 if __name__ == "__main__":
     # Start the game
