@@ -241,7 +241,7 @@ class Adventurer:
             self.__pillars_found.append(maze_item)
 
         else:
-            AttemptedToPlaceInvalidItemInInventory(
+            raise AttemptedToPlaceInvalidItemInInventory(
                 f"Attempted to add invalid object {maze_item} to "
                 "adventurer inventory. Only potions or pillars are allowed!"
             )
