@@ -1,4 +1,4 @@
-6from collections import deque
+from collections import deque
 from enum import Enum, auto
 import sys
 import textwrap
@@ -640,10 +640,13 @@ _________________________________________________
                 self.__adventurer_current_col -= 1
             else:
                 print(LOCKED_DOOR_MSG)
-                answer = input("Question?") #place holder for lock/unlock functionality
+                answer = input("Question?")
+                #simulates a user answering a question correctly
                 if isinstance(answer, str):
-                    self.__adventurer_current_col -= 1
-                    current_room.get_side(Room.WEST).locked = False
+                    #moves adventurer to room they are trying to move into
+                    self.__adventurer_current_col -= 1 
+                    #unlocks the door as the question was answered "correctly"
+                    current_room.get_side(Room.WEST).locked = False 
         elif command_key == east_command[self.__COMMAND_KEY_KEY]:
             if current_room.get_side(Room.EAST) == Room.WALL:
                 print(HIT_WALL_MSG)
@@ -773,13 +776,13 @@ _________________________________________________
         room : Room
             The room the adventurer currently occupies.
         """
-        if command_key == "w":
+        if command_key == self.__COMMANDS[self.__Command.MOVE_NORTH][self.__COMMAND_KEY_KEY]:
             room.get_side("south").locked = False
-        elif command_key == "s":
+        elif command_key == self.__COMMANDS[self.__Command.MOVE_SOUTH][self.__COMMAND_KEY_KEY]:
             room.get_side("north").locked = False
-        elif command_key == "d":
+        elif command_key == self.__COMMANDS[self.__Command.MOVE_EAST][self.__COMMAND_KEY_KEY]:
             room.get_side("west").locked = False
-        elif command_key == "a":
+        elif command_key == self.__COMMANDS[self.__Command.MOVE_WEST][self.__COMMAND_KEY_KEY]:
             room.get_side("east").locked = False
         
 
