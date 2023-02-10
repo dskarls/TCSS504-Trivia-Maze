@@ -565,7 +565,7 @@ class Maze:
 
         if this_room_coords[0] > previous_room_coords[0]:
             # Step was in the south direction. Open south side of previous room
-            # and north side of current room.a
+            # and north side of current room.
             previous_room_side = Room.SOUTH
             this_room_side = Room.NORTH
 
@@ -587,7 +587,7 @@ class Maze:
             previous_room_side = Room.WEST
             this_room_side = Room.EAST
 
-        previous_room.set_side(previous_room_side, Room.DOOR)
+        previous_room.set_side(previous_room_side, Room.DOOR, True)
         this_room.set_side(this_room_side, Room.DOOR)
 
     def __set_room_sides_to_doors_during_random_depth_first_traversal(
