@@ -111,6 +111,9 @@ class TextTriviaMazeView:
         self.__hp_gauge, self.__inventory = self.__add_hp_gauge_and_inventory()
         self.__event_log = self.__add_event_log()
 
+        # Create main menu
+        self.__main_menu = self.__create_main_menu()
+
         # Prevent resizing
         self.__window.resizable(False, False)
 
@@ -125,6 +128,22 @@ class TextTriviaMazeView:
                 arrow_key_event,
                 self.__forward_keystroke_to_controller,
             )
+
+    def __create_main_menu(self):
+        return self.__add_subwindow(
+            width=self.__MAP_WIDTH + self.__SIDEBAR_WIDTH,
+            height=self.__MAP_HEIGHT + self.__EVENT_LOG_HEIGHT,
+            row=0,
+            column=0,
+            rowspan=2,
+            columnspan=2,
+        )
+
+    def hide_main_menu(self):
+        self.__main_menu.grid_remove()
+
+    def show_main_menu(self):
+        self.__main_menu.grid()
 
     def __forward_keystroke_to_controller(self, event):
         # For regular keys
