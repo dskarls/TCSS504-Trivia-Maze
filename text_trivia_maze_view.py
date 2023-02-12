@@ -22,11 +22,6 @@ class TriviaMazeView(ABC):
         """Hide the main menu"""
 
     @abstractmethod
-    def show_primary_interface(self):
-        """Show the primary graphical interface, which includes the map, hp
-        gauge, inventory, and event log."""
-
-    @abstractmethod
     def show_in_game_menu(self):
         """Show the in-game menu pop-up"""
 
@@ -71,8 +66,13 @@ class TriviaMazeView(ABC):
 
 class TextTriviaMazeView:
     """A text-based view for the Trivia Maze application that uses tkinter
-    (specifically, themed-tkinter aka "ttk"). Currently, the size is fixed upon
-    creation.
+    (specifically, themed-tkinter aka "ttk").
+
+    NOTE: Currently, the size is fixed upon creation.
+    NOTE: The primary interface (the map, hp gauge, inventory, and event log)
+    is technically always shown. The main menu simply consists of overlaying
+    the main menu window over the top of the primary interface. Showing the
+    primary interface then simply amounts to hiding the main menu (or pop-ups).
     """
 
     # Primary display config params
