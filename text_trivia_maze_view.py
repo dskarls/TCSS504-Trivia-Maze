@@ -105,7 +105,7 @@ class TextTriviaMazeView:
     # Keyboard inputs
     # FIXME: These should all be moved to the controller and accessed by the
     # view through its reference to the controller!
-    __KEY_DISMISS_YOU_WIN_OR_GAME_LOST = "Enter"
+    __KEY_DISMISS_YOU_WIN_OR_GAME_LOST = "Return"
 
     def __init__(self, title, theme_path=None, theme_name=None):
         # Create primary tkinter window and bind mainloop method (might fit
