@@ -1,5 +1,72 @@
+from abc import ABC, abstractmethod
+
 from tkinter import *
 from tkinter.ttk import *
+
+
+class TriviaMazeView(ABC):
+    """
+    A view to display the trivia maze game to the user and gather input
+    commands.
+    """
+
+    def __init__(self, maze_controller):
+        self.__maze_controller = maze_controller
+
+    @abstractmethod
+    def show_main_menu(self):
+        """Display the main menu"""
+
+    @abstractmethod
+    def hide_main_menu(self):
+        """Hide the main menu"""
+
+    @abstractmethod
+    def show_primary_interface(self):
+        """Show the primary graphical interface, which includes the map, hp
+        gauge, inventory, and event log."""
+
+    @abstractmethod
+    def show_in_game_menu(self):
+        """Show the in-game menu pop-up"""
+
+    @abstractmethod
+    def hide_in_game_menu(self):
+        """Hide the in-game menu pop-up"""
+
+    @abstractmethod
+    def pose_question_and_get_answer(self, question_and_answer):
+        """Show the user a question-and-answer pop-up and retrieve the
+        answer, then hide the pop-up."""
+
+    @abstractmethod
+    def update_map(self):
+        """Update the map according to the latest state of the Model."""
+
+    @abstractmethod
+    def update_hp_gauge(self):
+        """Update the HP gauge to reflect the adventurer's current health
+        points."""
+
+    @abstractmethod
+    def write_to_event_log(self):
+        """Write a message to the event log."""
+
+    @abstractmethod
+    def show_game_won(self):
+        """Display a pop-up to the user telling them they won the game."""
+
+    @abstractmethod
+    def hide_game_won(self):
+        """Hide the pop-up to the user telling them they won the game."""
+
+    @abstractmethod
+    def show_game_lost(self):
+        """Display a pop-up to the user telling them they lost the game."""
+
+    @abstractmethod
+    def hide_game_lost(self):
+        """Hide the pop-up to the user telling them they lost the game."""
 
 
 class TextTriviaMazeView:
