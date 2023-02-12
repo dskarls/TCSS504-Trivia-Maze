@@ -75,6 +75,7 @@ class TextTriviaMazeView:
     creation.
     """
 
+    # Primary display config params
     __MAP_WIDTH = 800
     __MAP_HEIGHT = 500
     __SIDEBAR_WIDTH = 250
@@ -83,6 +84,11 @@ class TextTriviaMazeView:
     __HP_GAUGE_BAR_WIDTH = int(0.8 * __SIDEBAR_WIDTH)
     __EVENT_LOG_HEIGHT = 50
     __EVENT_LOG_NUM_LINES = 10
+
+    # In-game menu config params
+    __IN_GAME_MENU_WIDTH = 200
+    __IN_GAME_MENU_TITLE_VERTICAL_PADDING = 5
+    __IN_GAME_MENU_OPTION_VERTICAL_PADDING = 5
 
     def __init__(self, title, theme_path=None, theme_name=None):
         self.__subwindows = {}
@@ -114,6 +120,9 @@ class TextTriviaMazeView:
         # Create main menu
         self.__main_menu = self.__create_main_menu()
 
+        # Set up in-game menu
+        self.__in_game_menu = self.__create_in_game_menu()
+
         # Prevent resizing
         self.__window.resizable(False, False)
 
@@ -144,6 +153,51 @@ class TextTriviaMazeView:
 
     def show_main_menu(self):
         self.__main_menu.grid()
+
+    def __create_in_game_menu(self):
+        frm = Frame(
+            master=self.__window,
+            relief=RIDGE,
+        )
+        frm.place(
+            relx=0.5,
+            rely=0.5,
+            anchor=CENTER,
+            width=self.__IN_GAME_MENU_WIDTH,
+        )
+
+        # Create header with title in it
+        frm_title = Frame(master=frm, relief=RIDGE)
+        frm_title.pack(fill=BOTH, anchor=CENTER)
+        lbl = Label(
+            master=frm_title,
+            text="In-Game Menu",
+            justify=CENTER,
+            anchor=CENTER,
+        )
+        lbl.pack(fill=BOTH, pady=self.__IN_GAME_MENU_TITLE_VERTICAL_PADDING)
+
+        options = (
+            "Display map legend",
+            "Back to Game",
+            "Quit Game",
+        )
+        for option in options:
+            lbl = Label(master=frm, text=option, justify=CENTER, anchor=CENTER)
+            lbl.pack(
+                fill=BOTH,
+                padx=self.__IN_GAME_MENU_OPTION_VERTICAL_PADDING,
+                pady=self.__IN_GAME_MENU_OPTION_VERTICAL_PADDING,
+            )
+        return frm
+
+    def show_in_game_menu(self):
+        self.__in_game_menu.place(
+            relx=0.5, rely=0.5, anchor=CENTER, width=self.__IN_GAME_MENU_WIDTH
+        )
+
+    def hide_in_game_menu(self):
+        self.__in_game_menu.place_forget()
 
     def __forward_keystroke_to_controller(self, event):
         # For regular keys
