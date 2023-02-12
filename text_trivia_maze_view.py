@@ -10,7 +10,7 @@ class TextTriviaMazeView:
 
     __MAP_WIDTH = 800
     __MAP_HEIGHT = 500
-    __SIDEBAR_WIDTH = 200
+    __SIDEBAR_WIDTH = 250
     __HP_GAUGE_HEIGHT = 30
     __HP_GAUGE_BAR_WIDTH = int(0.8 * __SIDEBAR_WIDTH)
     __EVENT_LOG_HEIGHT = 50
@@ -110,12 +110,18 @@ class TextTriviaMazeView:
     def __add_hp_gauge_and_inventory(self):
         # Create vertical sidebar frame
         frm_sidebar = self.__add_subwindow(
-            self.__SIDEBAR_WIDTH, self.__MAP_HEIGHT, 0, 1
+            width=self.__SIDEBAR_WIDTH,
+            height=self.__MAP_HEIGHT,
+            row=0,
+            column=1,
         )
 
         # Create frame to hold hp gauge label and bar
+        hp_gauge_padx = 15
         frm_hp = Frame(master=frm_sidebar, height=self.__HP_GAUGE_HEIGHT)
-        frm_hp.grid(row=0, column=0, padx=5, pady=15, sticky="nsew")
+        frm_hp.grid(
+            row=0, column=0, padx=hp_gauge_padx, pady=15, sticky="nsew"
+        )
 
         # Create label for hp gauge
         lbl_hp_gauge = Label(master=frm_hp, text="HP ")
@@ -138,16 +144,16 @@ class TextTriviaMazeView:
             relief=RIDGE,
             anchor=CENTER,
         )
-        lbl_inventory.grid(sticky="nsew", pady=(5, 18))
+        lbl_inventory.grid(sticky="nsew", pady=(5, 10))
 
         inventory_quantity_labels = self.__create_inventory_item_labels(
-            frm_sidebar
+            frm_sidebar, hp_gauge_padx
         )
 
         return bar_hp_gauge, inventory_quantity_labels
 
     @staticmethod
-    def __create_inventory_item_labels(frm):
+    def __create_inventory_item_labels(frm, padx):
         # Create inventory_labels
         item_labels = (
             "Health Potion",
@@ -163,15 +169,15 @@ class TextTriviaMazeView:
         for item in item_labels:
             # Create frame for this item
             frm_item = Frame(master=frm)
-            frm_item.grid(sticky="ew", padx=4, pady=10)
+            frm_item.grid(sticky="nsew", padx=padx, pady=10)
 
             # Create label for item
             lbl_item = Label(master=frm_item, text=item)
-            lbl_item.pack(side=LEFT)
+            lbl_item.pack(side=LEFT, padx=padx)
 
             # Create label holding quantity of item
             lbl_quantity = Label(master=frm_item, text="0")
-            lbl_quantity.pack(side=RIGHT)
+            lbl_quantity.pack(side=RIGHT, padx=padx)
 
             inventory_quantity_labels[item] = lbl_quantity
 
