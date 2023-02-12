@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import textwrap
 
 from tkinter import *
 from tkinter.ttk import *
@@ -48,19 +49,19 @@ class TriviaMazeView(ABC):
         """Write a message to the event log."""
 
     @abstractmethod
-    def show_game_won(self):
+    def show_game_won_menu(self):
         """Display a pop-up to the user telling them they won the game."""
 
     @abstractmethod
-    def hide_game_won(self):
+    def hide_game_won_menu(self):
         """Hide the pop-up to the user telling them they won the game."""
 
     @abstractmethod
-    def show_game_lost(self):
+    def show_game_lost_menu(self):
         """Display a pop-up to the user telling them they lost the game."""
 
     @abstractmethod
-    def hide_game_lost(self):
+    def hide_game_lost_menu(self):
         """Hide the pop-up to the user telling them they lost the game."""
 
 
@@ -90,6 +91,22 @@ class TextTriviaMazeView:
     __IN_GAME_MENU_TITLE_VERTICAL_PADDING = 5
     __IN_GAME_MENU_OPTION_VERTICAL_PADDING = 5
 
+    __YOU_WIN_MESSAGE = """
+    _________________________________________________
+        __   __                     _         _
+        \ \ / /                    (_)       | |
+         \ V /___  _   _  __      ___ _ __   | |
+          \ // _ \| | | | \ \ /\ / / | '_ \  | |
+          | | (_) | |_| |  \ V  V /| | | | | |_|
+          \_/\___/ \__,_|   \_/\_/ |_|_| |_| (_)
+    _________________________________________________
+    """
+
+    # Keyboard inputs
+    # FIXME: These should all be moved to the controller and accessed by the
+    # view through its reference to the controller!
+    __KEY_DISMISS_YOU_WIN_OR_GAME_LOST = "Enter"
+
     def __init__(self, title, theme_path=None, theme_name=None):
         # Create primary tkinter window and bind mainloop method (might fit
         # better in the driver and we can just pass the main Tk window into the
@@ -109,6 +126,9 @@ class TextTriviaMazeView:
         self.__window.rowconfigure(0, minsize=self.__MAP_HEIGHT)
         self.__window.columnconfigure(0, minsize=self.__MAP_WIDTH)
         self.__window.columnconfigure(1, minsize=self.__SIDEBAR_WIDTH)
+
+        # Create game won menu
+        self.__game_won_menu = self.__create_game_won_menu()
 
         # Set up in-game menu
         self.__in_game_menu = self.__create_in_game_menu()
@@ -206,6 +226,37 @@ class TextTriviaMazeView:
 
     def hide_in_game_menu(self):
         self.__in_game_menu.place_forget()
+
+    def __create_game_won_menu(self):
+        # Create the frame for the whole in-game menu
+        frm = self.__create_pop_up_window(width=None)
+
+        # TODO: Store all styles in a single place (possibly some kind of view
+        # configuration class)
+        sty_name = "you_won.TLabel"
+        sty = Style()
+        sty.configure(sty_name, font=("Courier New", 16))
+
+        lbl = Label(
+            master=frm,
+            text=textwrap.dedent(self.__YOU_WIN_MESSAGE),
+            justify=CENTER,
+            anchor=CENTER,
+            style=sty_name,
+        )
+        lbl.pack(fill=BOTH, pady=self.__IN_GAME_MENU_TITLE_VERTICAL_PADDING)
+
+        # Put return to main menu option below
+        lbl = Label(
+            master=frm,
+            text=f"Press [{self.__KEY_DISMISS_YOU_WIN_OR_GAME_LOST}] to return to main menu",
+            justify=CENTER,
+            anchor=CENTER,
+        )
+        lbl.pack(
+            fill=BOTH,
+        )
+        return frm
 
     def __forward_keystroke_to_controller(self, event):
         # For regular keys
