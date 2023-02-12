@@ -101,6 +101,14 @@ class TextTriviaMazeView:
           \_/\___/ \__,_|   \_/\_/ |_|_| |_| (_)
     _________________________________________________
     """
+    __YOU_DIED_MESSAGE = """
+     ______     __   __                _ _          _
+    /       \   \ \ / /               | (_)        | |
+    | @   @ |    \ V /___  _   _    __| |_  ___  __| |
+    \   0   /     \ // _ \| | | |  / _` | |/ _ \/ _` |
+     |_|_|_|      | | (_) | |_| | | (_| | |  __/ (_| |
+                  \_/\___/ \__,_|  \__,_|_|\___|\__,_|
+    """
 
     # Keyboard inputs
     # FIXME: These should all be moved to the controller and accessed by the
@@ -127,8 +135,9 @@ class TextTriviaMazeView:
         self.__window.columnconfigure(0, minsize=self.__MAP_WIDTH)
         self.__window.columnconfigure(1, minsize=self.__SIDEBAR_WIDTH)
 
-        # Create game won menu
+        # Create game won/lost menus
         self.__game_won_menu = self.__create_game_won_menu()
+        self.__game_lost_menu = self.__create_game_lost_menu()
 
         # Set up in-game menu
         self.__in_game_menu = self.__create_in_game_menu()
@@ -227,29 +236,24 @@ class TextTriviaMazeView:
     def hide_in_game_menu(self):
         self.__in_game_menu.place_forget()
 
-    def __create_game_won_menu(self):
-        # Create the frame for the whole in-game menu
+    def __create_message_menu_with_only_dismiss_option(
+        self, text, dismiss_key, style_name
+    ):
         frm = self.__create_pop_up_window(width=None)
-
-        # TODO: Store all styles in a single place (possibly some kind of view
-        # configuration class)
-        sty_name = "you_won.TLabel"
-        sty = Style()
-        sty.configure(sty_name, font=("Courier New", 16))
 
         lbl = Label(
             master=frm,
-            text=textwrap.dedent(self.__YOU_WIN_MESSAGE),
+            text=text,
             justify=CENTER,
             anchor=CENTER,
-            style=sty_name,
+            style=style_name,
         )
         lbl.pack(fill=BOTH, pady=self.__IN_GAME_MENU_TITLE_VERTICAL_PADDING)
 
         # Put return to main menu option below
         lbl = Label(
             master=frm,
-            text=f"Press [{self.__KEY_DISMISS_YOU_WIN_OR_GAME_LOST}] to return to main menu",
+            text=f"Press [{dismiss_key}] to return to main menu",
             justify=CENTER,
             anchor=CENTER,
         )
@@ -257,6 +261,32 @@ class TextTriviaMazeView:
             fill=BOTH,
         )
         return frm
+
+    def __create_game_won_menu(self):
+        # TODO: Store all styles in a single place (possibly some kind of view
+        # configuration class)
+        style_name = "you_won.TLabel"
+        sty = Style()
+        sty.configure(style_name, font=("Courier New", 16))
+
+        return self.__create_message_menu_with_only_dismiss_option(
+            textwrap.dedent(self.__YOU_WIN_MESSAGE),
+            self.__KEY_DISMISS_YOU_WIN_OR_GAME_LOST,
+            style_name,
+        )
+
+    def __create_game_lost_menu(self):
+        # TODO: Store all styles in a single place (possibly some kind of view
+        # configuration class)
+        style_name = "you_died.TLabel"
+        sty = Style()
+        sty.configure(style_name, font=("Courier New", 16))
+
+        return self.__create_message_menu_with_only_dismiss_option(
+            textwrap.dedent(self.__YOU_DIED_MESSAGE),
+            self.__KEY_DISMISS_YOU_WIN_OR_GAME_LOST,
+            style_name,
+        )
 
     def __forward_keystroke_to_controller(self, event):
         # For regular keys
