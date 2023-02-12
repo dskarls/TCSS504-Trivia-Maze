@@ -236,27 +236,6 @@ class TextTriviaMazeView:
 
         return frm
 
-    def __update_text_in_subwindow(
-        self, subwindow_name, text_content, justify=CENTER
-    ):
-        frm = self.__subwindows[subwindow_name]
-
-        # Update frame widget so we can get its width
-        frm.update()
-        frm_width = frm.winfo_width()
-
-        lbl = Label(
-            master=frm,
-            text=text_content,
-            wraplength=frm_width,
-            justify=justify,
-        )
-        lbl.pack(
-            fill=BOTH,
-            padx=3,
-            pady=3,
-        )
-
     @staticmethod
     def __add_scrollable_readonly_textbox_to_subwindow(subwindow, num_lines):
         frm = subwindow
