@@ -12,6 +12,7 @@ class TextTriviaMazeView:
     __MAP_WIDTH = 800
     __MAP_HEIGHT = 500
     __SIDEBAR_WIDTH = 250
+    __SIDEBAR_HORIZONTAL_PADDING = 15
     __HP_GAUGE_HEIGHT = 30
     __HP_GAUGE_BAR_WIDTH = int(0.8 * __SIDEBAR_WIDTH)
     __EVENT_LOG_HEIGHT = 50
@@ -145,10 +146,13 @@ class TextTriviaMazeView:
         )
 
         # Create frame to hold hp gauge label and bar
-        hp_gauge_padx = 15
         frm_hp = Frame(master=frm_sidebar, height=self.__HP_GAUGE_HEIGHT)
         frm_hp.grid(
-            row=0, column=0, padx=hp_gauge_padx, pady=15, sticky="nsew"
+            row=0,
+            column=0,
+            padx=self.__SIDEBAR_HORIZONTAL_PADDING,
+            pady=15,
+            sticky="nsew",
         )
 
         # Create label for hp gauge
@@ -175,7 +179,7 @@ class TextTriviaMazeView:
         lbl_inventory.grid(sticky="nsew", pady=(5, 10))
 
         inventory_quantity_labels = self.__create_inventory_item_labels(
-            frm_sidebar, hp_gauge_padx
+            frm_sidebar, self.__SIDEBAR_HORIZONTAL_PADDING
         )
 
         return bar_hp_gauge, inventory_quantity_labels
