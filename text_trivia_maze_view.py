@@ -136,9 +136,8 @@ class TextTriviaMazeView:
 
 
 if __name__ == "__main__":
-    theme_path = "Azure-ttk-theme-main/azure.tcl"
-    theme_name = "dark"
-    view = TextTriviaMazeView("TriviaMaze", theme_path, theme_name)
+
+    view = TextTriviaMazeView("TriviaMaze")
 
     for i in range(100):
         view.write_to_event_log(f"Here is message {i}")
