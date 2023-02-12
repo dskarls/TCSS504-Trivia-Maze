@@ -112,6 +112,7 @@ class TextTriviaMazeView:
 
         # Set up in-game menu
         self.__in_game_menu = self.__create_in_game_menu()
+        self.hide_in_game_menu()
 
         # Set up the initial component frames
         self.__map = self.__add_map()
@@ -170,10 +171,8 @@ class TextTriviaMazeView:
         return frm
 
     def __create_in_game_menu(self):
-
         # Create the frame for the whole in-game menu
-        frm = self.__create_pop_up_window(
-            self.__IN_GAME_MENU_WIDTH)
+        frm = self.__create_pop_up_window(self.__IN_GAME_MENU_WIDTH)
 
         # Create header with title in it
         frm_title = Frame(master=frm, relief=RIDGE)
