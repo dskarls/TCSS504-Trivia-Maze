@@ -256,6 +256,12 @@ class TextTriviaMazeView:
         # Make text box read-only
         scrltxt.config(state=DISABLED)
 
+    def update_hp_gauge(self):
+        # FIXME: Retrieve current adventurer HP from Model
+        current_hp = 72
+
+        self.__hp_gauge["value"] = current_hp
+
     def __add_map(self):
         return self.__add_subwindow(self.__MAP_WIDTH, self.__MAP_HEIGHT, 0, 0)
 
