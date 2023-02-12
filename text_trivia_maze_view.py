@@ -54,10 +54,11 @@ class TextTriviaMazeView:
             "<KeyPress>", self.__forward_keystroke_to_controller
         )
         # Also capture arrow keys
-        self.__window.bind(
-            "<Left>",
-            self.__forward_keystroke_to_controller,
-        )
+        for arrow_key_event in {"<Left>", "<Right>", "<Up>", "<Down>"}:
+            self.__window.bind(
+                arrow_key_event,
+                self.__forward_keystroke_to_controller,
+            )
 
     def __forward_keystroke_to_controller(self, event):
         # For regular keys
