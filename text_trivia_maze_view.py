@@ -112,6 +112,9 @@ class TextTriviaMazeView:
         self.__window.columnconfigure(0, minsize=self.__MAP_WIDTH)
         self.__window.columnconfigure(1, minsize=self.__SIDEBAR_WIDTH)
 
+        # Set up in-game menu
+        self.__in_game_menu = self.__create_in_game_menu()
+
         # Set up the initial component frames
         self.__map = self.__add_map()
         self.__hp_gauge, self.__inventory = self.__add_hp_gauge_and_inventory()
@@ -120,14 +123,15 @@ class TextTriviaMazeView:
         # Create main menu
         self.__main_menu = self.__create_main_menu()
 
-        # Set up in-game menu
-        self.__in_game_menu = self.__create_in_game_menu()
-
         # Prevent resizing
         self.__window.resizable(False, False)
 
-        # Capture keystrokes so they can be sent to the controller for
-        # interpretation
+        # Intercept keystrokes from user
+        self.__configure_keystroke_capture()
+
+    def __configure_keystroke_capture(self):
+        """Capture keystrokes so they can be sent to the controller for
+        interpretation"""
         self.__window.bind(
             "<KeyPress>", self.__forward_keystroke_to_controller
         )
