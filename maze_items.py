@@ -132,9 +132,7 @@ class HealingPotion(Potion):
         name and a randomly chosen hit point healing value in the range
         [min_healing_value, _max_healing_value]."""
         super().__init__("Healing")
-        self.healing_value = generate_random_int(
-            min_healing_value, max_healing_value
-        )
+        self.healing_value = generate_random_int(min_healing_value, max_healing_value)
 
     def __lt__(self, other):
         """Define a healing potion to be less than another healing potion if
@@ -195,3 +193,12 @@ class Pit:
         """Return a human-readable string indicating this is a pit with a
         certain hit point damage value."""
         return f"Pit({self.damage_value})"
+
+
+class MagicKey(MazeItem):
+    """A key that is automatically picked up by an adventurer when they
+    navigate to a containing room. When consumed, will open a permanently
+    locked door."""
+
+    def __init__(self):
+        super().__init__("Magic Key")

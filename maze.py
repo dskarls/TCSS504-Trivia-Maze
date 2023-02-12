@@ -14,6 +14,7 @@ from maze_items import (
     Pit,
     PolymorphismPillar,
     VisionPotion,
+    MagicKey,
 )
 
 from room import Room
@@ -67,7 +68,7 @@ class AttemptedToMarkInvalidItemAsFound(ValueError):
 
 class Maze:
     """
-    A maze maze, which consists of a rectangular array of Room objects. Each
+    A maze, which consists of a rectangular array of Room objects. Each
     room can be filled with (A) nothing, (B) a healing potion, (C) a vision
     potion, (D) one of the OOP pillars, and/or (E) a pit. There is exactly one
     entrance and one exit, and these rooms contain no other items (or pits). It
@@ -88,9 +89,9 @@ class Maze:
        Room at indices [1][2] corresponds to row 1, column 2 (both zero-based
        indexing).
     num_rows : int
-        The number of rows of the maze maze.
+        The number of rows of the maze.
     num_cols : int
-        The number of columns of the maze maze.
+        The number of columns of the maze.
     entrance : tuple of int
         Two-dimensional tuple containing the integer coordinates of the
         maze entrance.
@@ -168,6 +169,7 @@ class Maze:
     __PIT_PROBABILITY = 0.15
     __HEALING_POTION_PROBABILITY = 0.15
     __VISION_POTION_PROBABILITY = 0.15
+    __MAGIC_KEY_PROBABILITY = 0.05
 
     # Min and max amount that a healing potion can restore to hit points
     __MIN_HEALING_POTION_VALUE = 5
@@ -187,15 +189,15 @@ class Maze:
 
     def __init__(self, row_count, col_count):
         """
-        Build a traversable maze maze of the specified dimensions and fill
+        Build a traversable maze of the specified dimensions and fill
         it with items and pits.
 
         Parameters
         ----------
         row_count : int
-            The number of rows of the maze maze.
+            The number of rows of the maze.
         col_count : int
-            The number of columns of the maze maze.
+            The number of columns of the maze.
 
         Raises
         ------
@@ -226,6 +228,7 @@ class Maze:
             HealingPotion: 0,
             VisionPotion: 0,
             PillarOfOOP: 0,
+            MagicKey: 0,
         }
 
         self.build_maze()
@@ -252,6 +255,7 @@ class Maze:
             f"Number of unfound healing potions: {self.__unfound_items_counter[HealingPotion]}",
             f"Number of unfound vision potions: {self.__unfound_items_counter[VisionPotion]}",
             f"Number of unfound pillars: {self.__unfound_items_counter[PillarOfOOP]}",
+            f"Number of unfound magic keys: {self.__unfound_items_counter[MagicKey]}",
         )
 
         return (", ").join(maze_str)
@@ -298,9 +302,9 @@ class Maze:
             maze exit.
         """
         # Check that min. distance is valid
-        if self.__MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE > (
-            self.num_rows - 1
-        ) + (self.num_cols - 1):
+        if self.__MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE > (self.num_rows - 1) + (
+            self.num_cols - 1
+        ):
             raise InvalidMinEntranceExitDistance(
                 "The minimum Manhattan distance enforced between the "
                 "(randomly generated) entrance and exit cannot exceed "
@@ -362,9 +366,7 @@ class Maze:
         literally be impossible to some games!
         """
         for row in range(0, self.num_rows):
-            self.rooms.append(
-                [Room(row, col) for col in range(0, self.num_cols)]
-            )
+            self.rooms.append([Room(row, col) for col in range(0, self.num_cols)])
 
         # Set entrance and exit
         self.entrance, self.exit = self.__set_entrance_and_exit()
@@ -420,23 +422,19 @@ class Maze:
                 if this_room.is_entrance() or this_room.is_exit():
                     continue
 
-                # Keep track of whether we placed a pillar or potion. If we do,
-                # then don't make this room a pit.
-                placed_potion_or_pillar = False
+                # Keep track of whether we placed a pillar, potion, or magic key.
+                # If we do, then don't make this room a pit.
+                placed_potion_pillar_or_key = False
 
                 # Roll to see if we should place a pillar here
                 if pillars_to_place:
-                    if self.__roll_to_place_item_or_pit(
-                        self.__PILLAR_PROBABILITY
-                    ):
+                    if self.__roll_to_place_item_or_pit(self.__PILLAR_PROBABILITY):
                         self.__unfound_items_counter[PillarOfOOP] += 1
                         this_room.place_item(pillars_to_place.pop())
-                        placed_potion_or_pillar = True
+                        placed_potion_pillar_or_key = True
 
                 # Roll to see if we should place a healing potion
-                if self.__roll_to_place_item_or_pit(
-                    self.__HEALING_POTION_PROBABILITY
-                ):
+                if self.__roll_to_place_item_or_pit(self.__HEALING_POTION_PROBABILITY):
                     this_room.place_item(
                         HealingPotion(
                             self.__MIN_HEALING_POTION_VALUE,
@@ -444,22 +442,24 @@ class Maze:
                         )
                     )
                     self.__unfound_items_counter[HealingPotion] += 1
-                    placed_potion_or_pillar = True
+                    placed_potion_pillar_or_key = True
 
                 # Roll to see if we should place a vision potion
-                if self.__roll_to_place_item_or_pit(
-                    self.__VISION_POTION_PROBABILITY
-                ):
+                if self.__roll_to_place_item_or_pit(self.__VISION_POTION_PROBABILITY):
                     this_room.place_item(VisionPotion())
                     self.__unfound_items_counter[VisionPotion] += 1
-                    placed_potion_or_pillar = True
+                    placed_potion_pillar_or_key = True
+
+                # Roll to see if we should place a magic key
+                if self.__roll_to_place_item_or_pit(self.__MAGIC_KEY_PROBABILITY):
+                    this_room.place_item(MagicKey())
+                    self.__unfound_items_counter[MagicKey] += 1
+                    placed_potion_pillar_or_key = True
 
                 # If we did not place a pillar or potion, roll to see if we
                 # should place a pit.
-                if not placed_potion_or_pillar:
-                    if self.__roll_to_place_item_or_pit(
-                        self.__PIT_PROBABILITY
-                    ):
+                if not placed_potion_pillar_or_key:
+                    if self.__roll_to_place_item_or_pit(self.__PIT_PROBABILITY):
                         this_room.set_pit(
                             Pit(self.__MIN_PIT_DAMAGE, self.__MAX_PIT_DAMAGE)
                         )
@@ -471,7 +471,6 @@ class Maze:
         MAX_PILLAR_PLACEMENT_ATTEMPTS = 10
         num_pillar_placement_attempts = 0
         while pillars_to_place:
-
             num_pillar_placement_attempts += 1
 
             if num_pillar_placement_attempts == MAX_PILLAR_PLACEMENT_ATTEMPTS:
@@ -481,7 +480,6 @@ class Maze:
 
             for row in range(self.num_rows):
                 for col in range(self.num_cols):
-
                     if not pillars_to_place:
                         # All done
                         return
@@ -499,9 +497,7 @@ class Maze:
                         continue
 
                     # Roll to see if we should place a pillar here
-                    if self.__roll_to_place_item_or_pit(
-                        self.__PILLAR_PROBABILITY
-                    ):
+                    if self.__roll_to_place_item_or_pit(self.__PILLAR_PROBABILITY):
                         this_room.place_item(pillars_to_place.pop())
                         self.__unfound_items_counter[PillarOfOOP] += 1
 
@@ -617,10 +613,7 @@ class Maze:
             Contains (row, col) coordinate tuples of *ALL* rooms previously
             visited. This list only grows in size during traversal.
         """
-        if (
-            not self.__room_is_in_maze(row, col)
-            or (row, col) in cumulative_visited
-        ):
+        if not self.__room_is_in_maze(row, col) or (row, col) in cumulative_visited:
             # Done tracing out new rooms as far as we can in this
             # path...backtrack by letting this frame get popped off the call
             # stack

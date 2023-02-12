@@ -11,6 +11,7 @@ from maze_items import (
     PillarOfOOP,
     PolymorphismPillar,
     VisionPotion,
+    MagicKey,
 )
 
 
@@ -151,6 +152,7 @@ class Room:
         INHERITANCE_PILLAR = auto()
         ENCAPSULATION_PILLAR = auto()
         POLYMORPHISM_PILLAR = auto()
+        MAGIC_KEY = auto()
 
         EMPTY = auto()
 
@@ -203,6 +205,10 @@ class Room:
             ROOM_CONTENT_SYMBOL_KEY: "P",
             ROOM_CONTENT_DESC_KEY: "Polymorphism Pillar",
         },
+        RoomContents.MAGIC_KEY: {
+            ROOM_CONTENT_SYMBOL_KEY: "K",
+            ROOM_CONTENT_DESC_KEY: "Magic Key",
+        },
         RoomContents.EMPTY: {
             ROOM_CONTENT_SYMBOL_KEY: " ",
             ROOM_CONTENT_DESC_KEY: "Empty room",
@@ -238,9 +244,7 @@ class Room:
             Any valid MazeItem object.
         """
         if not isinstance(item, MazeItem):
-            raise ValueError(
-                "Attempted to insert a non-MazeItem into a Room!"
-            )
+            raise ValueError("Attempted to insert a non-MazeItem into a Room!")
         self.__items.append(item)
 
     def remove_items(self):
@@ -340,7 +344,7 @@ class Room:
                 "A side of a room must be one of the following: "
                 f"{(', ').join((self.DOOR, self.WALL))}"
             )
-        
+
         if door_or_wall == "door":
             door_or_wall = Door(locked)
 
@@ -408,13 +412,12 @@ class Room:
             EncapsulationPillar: self.RoomContents.ENCAPSULATION_PILLAR,
             InheritancePillar: self.RoomContents.INHERITANCE_PILLAR,
             PolymorphismPillar: self.RoomContents.POLYMORPHISM_PILLAR,
+            MagicKey: self.RoomContents.MAGIC_KEY,
         }
         only_item = self.__items[0]
         for item_type, enum_val in item_types_to_room_contents_enum.items():
             if isinstance(only_item, item_type):
-                return self.ROOM_CONTENT_SYMBOLS[enum_val][
-                    self.ROOM_CONTENT_SYMBOL_KEY
-                ]
+                return self.ROOM_CONTENT_SYMBOLS[enum_val][self.ROOM_CONTENT_SYMBOL_KEY]
 
     def __str__(self):
         """The string representation of a room consists of three rows of
@@ -448,14 +451,13 @@ class Room:
         if self.__west_side == self.WALL:
             room_str += "*"
         elif self.__west_side.perm_locked:
-            room_str += "P" #place holder string for a permanently locked door    
+            room_str += "P"  # place holder string for a permanently locked door
         elif self.__west_side.locked:
-            room_str += "T" #place holder string for a locked door
+            room_str += "T"  # place holder string for a locked door
         else:
             room_str += "|"
 
         if self.occupied_by_adventurer:
-
             if not self.STR_REPR_PADDING:
                 after_adventurer_symbol = ""
             elif len(self.STR_REPR_PADDING) == 1:
@@ -463,9 +465,9 @@ class Room:
             elif len(self.STR_REPR_PADDING) >= 2:
                 after_adventurer_symbol = self.STR_REPR_PADDING[1]
 
-            adventurer_symbol = self.ROOM_CONTENT_SYMBOLS[
-                self.RoomContents.ADVENTURER
-            ][self.ROOM_CONTENT_SYMBOL_KEY]
+            adventurer_symbol = self.ROOM_CONTENT_SYMBOLS[self.RoomContents.ADVENTURER][
+                self.ROOM_CONTENT_SYMBOL_KEY
+            ]
             room_str += f"{adventurer_symbol}{after_adventurer_symbol}"
         else:
             room_str += f"{self.STR_REPR_PADDING}"
