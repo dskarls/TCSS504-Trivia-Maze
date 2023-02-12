@@ -91,8 +91,6 @@ class TextTriviaMazeView:
     __IN_GAME_MENU_OPTION_VERTICAL_PADDING = 5
 
     def __init__(self, title, theme_path=None, theme_name=None):
-        self.__subwindows = {}
-
         # Create primary tkinter window and bind mainloop method (might fit
         # better in the driver and we can just pass the main Tk window into the
         # view init?
