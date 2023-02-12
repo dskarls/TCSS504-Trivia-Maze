@@ -1,3 +1,4 @@
+import functools
 from tkinter import *
 from tkinter.ttk import *
 
@@ -45,6 +46,33 @@ class TextTriviaMazeView:
 
         # Prevent resizing
         self.__window.resizable(False, False)
+
+        # Capture keystrokes so they can be sent to the controller for
+        # interpretation
+        self.__window.bind(
+            "<KeyPress>", self.__forward_keystroke_to_controller
+        )
+        # Also capture arrow keys
+        self.__window.bind(
+            "<Left>",
+            self.__forward_keystroke_to_controller,
+        )
+
+    def __forward_keystroke_to_controller(self, event):
+        # For regular keys
+        key = event.char
+
+        # If char was empty, check to see if it was an arrow key
+        if not key:
+            key = event.keysym
+
+        if key:
+            # If keysym wasn't empty, forward it to controller. Otherwise, just
+            # ignore it since it's not a supported key command.
+
+            # FIXME: This should really be sent to the controller. Just writing to
+            # the event log here for demonstration purposes.
+            self.write_to_event_log(f"You pressed {key}")
 
     def __add_subwindow(
         self, width, height, row, column, rowspan=1, columnspan=1
@@ -194,8 +222,6 @@ class TextTriviaMazeView:
         return frm
 
     def write_to_event_log(self, message):
-        # If this is the first write
-        #    line_prefix = "" if i == 0 else "\n"
         event_log_text_box = self.__event_log.children["!text"]
 
         # Make text box writable for a brief instant, write to it, then make it
