@@ -11,6 +11,8 @@ class TextTriviaMazeView:
     __MAP_WIDTH = 800
     __MAP_HEIGHT = 500
     __SIDEBAR_WIDTH = 200
+    __HP_GAUGE_HEIGHT = 30
+    __HP_GAUGE_BAR_WIDTH = int(0.8 * __SIDEBAR_WIDTH)
     __EVENT_LOG_HEIGHT = 50
     __EVENT_LOG_NUM_LINES = 10
 
@@ -38,7 +40,7 @@ class TextTriviaMazeView:
 
         # Set up the initial component frames
         self.__map = self.__add_map()
-        self.__sidebar = self.__add_sidebar()
+        self.__hp_gauge, self.__inventory = self.__add_hp_gauge_and_inventory()
         self.__event_log = self.__add_event_log()
 
         # Prevent resizing
@@ -105,10 +107,75 @@ class TextTriviaMazeView:
     def __add_map(self):
         return self.__add_subwindow(self.__MAP_WIDTH, self.__MAP_HEIGHT, 0, 0)
 
-    def __add_sidebar(self):
-        return self.__add_subwindow(
+    def __add_hp_gauge_and_inventory(self):
+        # Create vertical sidebar frame
+        frm_sidebar = self.__add_subwindow(
             self.__SIDEBAR_WIDTH, self.__MAP_HEIGHT, 0, 1
         )
+
+        # Create frame to hold hp gauge label and bar
+        frm_hp = Frame(master=frm_sidebar, height=self.__HP_GAUGE_HEIGHT)
+        frm_hp.grid(row=0, column=0, padx=5, pady=15, sticky="nsew")
+
+        # Create label for hp gauge
+        lbl_hp_gauge = Label(master=frm_hp, text="HP ")
+        lbl_hp_gauge.pack(side=LEFT)
+
+        # Create bar for hp gauge
+        bar_hp_gauge = Progressbar(
+            master=frm_hp,
+            orient=HORIZONTAL,
+            length=self.__HP_GAUGE_BAR_WIDTH,
+            mode="determinate",
+        )
+        bar_hp_gauge.pack(side=LEFT)
+        bar_hp_gauge["value"] = 100
+
+        # Create label for inventory
+        lbl_inventory = Label(
+            master=frm_sidebar,
+            text="Inventory",
+            relief=RIDGE,
+            anchor=CENTER,
+        )
+        lbl_inventory.grid(sticky="nsew", pady=(5, 18))
+
+        inventory_quantity_labels = self.__create_inventory_item_labels(
+            frm_sidebar
+        )
+
+        return bar_hp_gauge, inventory_quantity_labels
+
+    @staticmethod
+    def __create_inventory_item_labels(frm):
+        # Create inventory_labels
+        item_labels = (
+            "Health Potion",
+            "Suggestion Potion",
+            "Vision Potion",
+            "Magic Key",
+            "Pillar of Abstraction",
+            "Pillar of Encapsulation",
+            "Pillar of Inheritance",
+            "Pillar of Polymorphism",
+        )
+        inventory_quantity_labels = {}
+        for item in item_labels:
+            # Create frame for this item
+            frm_item = Frame(master=frm)
+            frm_item.grid(sticky="ew", padx=4, pady=10)
+
+            # Create label for item
+            lbl_item = Label(master=frm_item, text=item)
+            lbl_item.pack(side=LEFT)
+
+            # Create label holding quantity of item
+            lbl_quantity = Label(master=frm_item, text="0")
+            lbl_quantity.pack(side=RIGHT)
+
+            inventory_quantity_labels[item] = lbl_quantity
+
+        return inventory_quantity_labels
 
     def __add_event_log(self):
         # event_log_name = "event log"
@@ -136,7 +203,6 @@ class TextTriviaMazeView:
 
 
 if __name__ == "__main__":
-
     view = TextTriviaMazeView("TriviaMaze")
 
     for i in range(100):
