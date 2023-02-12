@@ -9,12 +9,13 @@ def create_sqlite_database(qa_true_false, qa_multiple_choice, qa_short_answer):
     Returns:
         None
     """
-    connection_string = sqlite3.connect(qa_true_false.db, qa_multiple_choice.db, qa_short_answer.db)
-    cursor = connection_string.cursor()
+    connection = sqlite3.connect("questions_answers.db")
 
-    cursor.execute("CREATE TABLE qa_true_false (question_id INTEGER, difficulty TEXT, category TEXT question TEXT, "
-                   "answer TEXT, hint TEXT")
-    true_and_false = [
+    cursor = connection.cursor()
+
+    cursor.execute("CREATE TABLE qa_true_false (question_id INTEGER, difficulty TEXT, category TEXT, question TEXT, answer TEXT, hint TEXT)")
+
+    true_false = [
         (1001, "easy", "general cs", "Computer science is not the study of the theory and application of computers.",
          "false", "Not not false"),
         (1002, "easy", "general cs", "The first electronic computer was created in the 17th century.", "false",
@@ -31,12 +32,10 @@ def create_sqlite_database(qa_true_false, qa_multiple_choice, qa_short_answer):
                                      "arbitrary computer program, it is possible to decide whether the program "
                                      "finishes running or continues running forever.", "true", "Not not not false"),
     ]
-    cursor.executemany(
-        "INSERT INTO qa_true_false VALUES (question_id, difficulty, category, question, answer, hint), true_and_false")
+    cursor.executemany("INSERT INTO qa_true_false VALUES(?,?,?,?,?,?)", true_false)
 
-    cursor.execute("CREATE TABLE qa_multiple_choice (question_id INTEGER, difficulty TEXT, category TEXT, question "
-                   "TEXT,"
-                   "answer TEXT, hint TEXT")
+    cursor.execute("CREATE TABLE qa_multiple_choice (question_id INTEGER, difficulty TEXT, category TEXT, question TEXT, answer TEXT, hint TEXT)")
+
     multiple_choice = [
         (2001, "easy", "general cs", "Which of the following is not a type of computer memory? a) RAM b) ROM c) CPU "
                                      "d) HDD", "c", "Not a) or d)"),
@@ -53,12 +52,10 @@ def create_sqlite_database(qa_true_false, qa_multiple_choice, qa_short_answer):
          "Not b) or c)"),
     ]
 
-    cursor.executemany(
-        "INSERT INTO qa_multiple_choice VALUES(question_id, difficulty, category, question, answer, hint), "
-        "multiple_choice")
+    cursor.executemany("INSERT INTO qa_multiple_choice VALUES(?,?,?,?,?,?)", multiple_choice)
 
-    cursor.execute("CREATE TABLE qa_short_answer (question_id INTEGER, difficulty TEXT, category TEXT, question TEXT, "
-                   "answer, TEXT, hint TEXT")
+    cursor.execute("CREATE TABLE qa_short_answer(question_id INTEGER, difficulty TEXT, category TEXT, question TEXT, answer TEXT, hint TEXT)")
+
     short_answer = [
         (3001, "easy", "general cs", "A _____ specific set of instructions that a computer can perform.",
          "computer program", "c______r p_____m"),
@@ -75,7 +72,8 @@ def create_sqlite_database(qa_true_false, qa_multiple_choice, qa_short_answer):
          "encryption", "e________n"),
     ]
 
-    cursor.executemany(
-        "INSERT INTO qa_short_answer VALUES(question_id, difficulty, category, question, answer, hint), short_answer")
+    cursor.executemany("INSERT INTO qa_short_answer VALUES(?,?,?,?,?,?)", short_answer)
 
-    connection_string.close()
+    connection.commit()
+    connection.close()
+
