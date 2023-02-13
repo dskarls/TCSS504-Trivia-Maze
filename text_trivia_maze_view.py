@@ -146,7 +146,9 @@ class TextTriviaMazeView:
 
         # Create game won/lost menus
         self.__game_won_menu = self.__create_game_won_menu()
+        self.hide_game_won_menu()
         self.__game_lost_menu = self.__create_game_lost_menu()
+        self.hide_game_lost_menu()
 
         # Set up in-game menu
         self.__in_game_menu = self.__create_in_game_menu()
@@ -283,6 +285,12 @@ class TextTriviaMazeView:
             style_name,
         )
 
+    def show_game_won_menu(self):
+        self.__place_pop_up_at_center_of_window(self.__game_won_menu, None)
+
+    def hide_game_won_menu(self):
+        self.__game_won_menu.place_forget()
+
     def __create_game_lost_menu(self):
         # TODO: Store all styles in a single place (possibly some kind of view
         # configuration class)
@@ -295,6 +303,12 @@ class TextTriviaMazeView:
             self.__KEY_DISMISS_YOU_WIN_OR_GAME_LOST,
             style_name,
         )
+
+    def show_game_lost_menu(self):
+        self.__place_pop_up_at_center_of_window(self.__game_lost_menu, None)
+
+    def hide_game_lost_menu(self):
+        self.__game_lost_menu.place_forget()
 
     def __forward_keystroke_to_controller(self, event):
         # For regular keys
