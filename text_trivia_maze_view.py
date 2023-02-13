@@ -91,6 +91,28 @@ class TextTriviaMazeView:
     __IN_GAME_MENU_TITLE_VERTICAL_PADDING = 5
     __IN_GAME_MENU_OPTION_VERTICAL_PADDING = 5
 
+    # Static messages for menus/popups
+    __WELCOME_MESSAGE = """
+    _______________________________________________________
+    /_______________________________________________________\\
+    |               _____    _       _                       |
+    |              |_   _|  (_)     (_)                      |
+    |                | |_ __ ___   ___  __ _                 |
+    |                | | '__| \ \ / / |/ _` |                |
+    |                | | |  | |\ V /| | (_| |                |
+    |                \_/_|  |_| \_/ |_|\__,_|                |
+    |                                                        |
+    |                 ___  ___                               |
+    |                 |  \/  |                               |
+    |                 | .  . | __ _ _______                  |
+    |                 | |\/| |/ _` |_  / _ \                 |
+    |                 | |  | | (_| |/ /  __/                 |
+    |                 \_|  |_/\__,_/___\___|                 |
+    |                                                        |
+    \________________________________________________________/
+
+         By Daniel S. Karls, Sheehan Smith, Tom J. Swanson
+    """
     __YOU_WIN_MESSAGE = """
     _________________________________________________
         __   __                     _         _
@@ -177,14 +199,41 @@ class TextTriviaMazeView:
             )
 
     def __create_main_menu(self):
-        return self.__add_subwindow(
-            width=self.__MAP_WIDTH + self.__SIDEBAR_WIDTH,
+        full_window_width = self.__MAP_WIDTH + self.__SIDEBAR_WIDTH
+        frm = self.__add_subwindow(
+            width=full_window_width,
             height=self.__MAP_HEIGHT + self.__EVENT_LOG_HEIGHT,
             row=0,
             column=0,
             rowspan=2,
             columnspan=2,
         )
+
+        # Add banner message
+        # TODO: Store all styles in a single place (possibly some kind of view
+        # configuration class)
+        style_name = "welcome.TLabel"
+        sty = Style()
+        sty.configure(style_name, font=("Courier New", 16))
+
+        lbl = Label(
+            master=frm,
+            text=textwrap.dedent(self.__WELCOME_MESSAGE),
+            justify=CENTER,
+            anchor=CENTER,
+            style=style_name,
+        )
+        lbl.pack(fill=BOTH)
+
+        # Add frame with options
+        frm_options = Frame(master=frm, relief=RIDGE)
+        frm_options.pack(padx=10, pady=5)
+        options = ("Start game", "Quit game")
+        for option in options:
+            lbl = Label(master=frm_options, text=option)
+            lbl.pack(padx=5, pady=5)
+
+        return frm
 
     def hide_main_menu(self):
         self.__main_menu.grid_remove()
