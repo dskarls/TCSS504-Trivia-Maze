@@ -135,6 +135,15 @@ class TextTriviaMazeView:
         self.__window.columnconfigure(0, minsize=self.__MAP_WIDTH)
         self.__window.columnconfigure(1, minsize=self.__SIDEBAR_WIDTH)
 
+        # Create primary interface windows
+        # NOTE: These windows should be created first. Otherwise, the other
+        # widgets will always be "hidden" behind them. You could also get
+        # around this by using the 'lift()' and 'lower()' methods of the frame
+        # widgets, but it's simpler just to make them in order.
+        self.__map = self.__add_map()
+        self.__hp_gauge, self.__inventory = self.__add_hp_gauge_and_inventory()
+        self.__event_log = self.__add_event_log()
+
         # Create game won/lost menus
         self.__game_won_menu = self.__create_game_won_menu()
         self.__game_lost_menu = self.__create_game_lost_menu()
@@ -142,11 +151,6 @@ class TextTriviaMazeView:
         # Set up in-game menu
         self.__in_game_menu = self.__create_in_game_menu()
         self.hide_in_game_menu()
-
-        # Set up the initial component frames
-        self.__map = self.__add_map()
-        self.__hp_gauge, self.__inventory = self.__add_hp_gauge_and_inventory()
-        self.__event_log = self.__add_event_log()
 
         # Create main menu
         self.__main_menu = self.__create_main_menu()
