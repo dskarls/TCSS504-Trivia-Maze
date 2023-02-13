@@ -190,17 +190,21 @@ class TextTriviaMazeView:
     def show_main_menu(self):
         self.__main_menu.grid()
 
-    def __create_pop_up_window(self, width):
-        frm = Frame(
-            master=self.__window,
-            relief=RIDGE,
-        )
-        frm.place(
+    @staticmethod
+    def __place_pop_up_at_center_of_window(frame, width):
+        frame.place(
             relx=0.5,
             rely=0.5,
             anchor=CENTER,
             width=width,
         )
+
+    def __create_pop_up_window(self, width):
+        frm = Frame(
+            master=self.__window,
+            relief=RIDGE,
+        )
+        self.__place_pop_up_at_center_of_window(frm, width)
         return frm
 
     def __create_in_game_menu(self):
