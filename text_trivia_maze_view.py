@@ -88,7 +88,7 @@ class TextTriviaMazeView:
     __EVENT_LOG_NUM_LINES = 10
 
     # In-game menu config params
-    __IN_GAME_MENU_WIDTH = 200
+    __IN_GAME_MENU_WIDTH = 400
     __IN_GAME_MENU_TITLE_VERTICAL_PADDING = 5
     __IN_GAME_MENU_OPTION_VERTICAL_PADDING = 5
 
