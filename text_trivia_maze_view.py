@@ -227,14 +227,24 @@ class TextTriviaMazeView:
         lbl.pack(fill=BOTH)
 
         # Add frame with options
-        frm_options = Frame(master=frm, relief=RIDGE)
-        frm_options.pack(padx=10, pady=5)
-        options = ("Start game", "Quit game")
-        for option in options:
-            lbl = Label(master=frm_options, text=option)
-            lbl.pack(padx=5, pady=5)
-
+        options = ("Start game", "Help", "Quit game")
+        text_menu = TextMenu(
+            options=options,
+            master=frm,
+            width=None,
+            height=len(options),
+            unselected_foreground_color="grey",
+            unselected_background_color="black",
+            selected_foreground_color="black",
+            selected_background_color="white",
+            font=("Courier New", 18),
+            justify=CENTER,
+        )
+        text_menu.focus()
         return frm
+
+    def get_main_menu_current_selection(self):
+        return self.__main_menu.children["!listbox"].get_current_selection()
 
     def hide_main_menu(self):
         self.__main_menu.grid_remove()
@@ -522,6 +532,56 @@ class TextTriviaMazeView:
 
         # Scroll down as far as possible
         event_log_text_box.yview(END)
+
+
+class TextMenu:
+    """A menu of strings traversable with arrow keys. The selected element can
+    be colored differently from the rest of the elements. Intended to be used
+    with keystroke detection to make a selection."""
+
+    def __init__(
+        self,
+        options,
+        master,
+        width,
+        height,
+        unselected_foreground_color,
+        unselected_background_color,
+        selected_foreground_color,
+        selected_background_color,
+        font,
+        justify,
+    ):
+        self.__options = options
+        self.__list_box = Listbox(
+            master,
+            width=width,
+            height=height,
+            font=font,
+            foreground=unselected_foreground_color,
+            background=unselected_background_color,
+            selectforeground=selected_foreground_color,
+            selectbackground=selected_background_color,
+            justify=justify,
+        )
+        self.__add_options()
+
+        # Pack into containing frame
+        self.__list_box.pack()
+
+        # Set first element as selected
+        self.__list_box.select_set(0)
+
+    def focus(self):
+        """Have this widget take focus"""
+        self.__list_box.focus()
+
+    def get_currently_selected(self):
+        return self.__options[self.__list_box.curselection()[0]]
+
+    def __add_options(self):
+        for ind, option in enumerate(self.__options):
+            self.__list_box.insert(ind + 1, option)
 
 
 if __name__ == "__main__":
