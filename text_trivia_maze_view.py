@@ -90,7 +90,6 @@ class TextTriviaMazeView:
     # In-game menu config params
     __IN_GAME_MENU_WIDTH = 400
     __IN_GAME_MENU_TITLE_VERTICAL_PADDING = 5
-    __IN_GAME_MENU_OPTION_VERTICAL_PADDING = 5
 
     # Static messages for menus/popups
     __WELCOME_MESSAGE = """
