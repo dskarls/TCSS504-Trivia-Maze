@@ -228,7 +228,7 @@ class TextTriviaMazeView:
 
         # Add frame with options
         options = ("Start game", "Help", "Quit game")
-        text_menu = TextMenu(
+        TextMenu(
             options=options,
             master=frm,
             width=None,
@@ -240,7 +240,6 @@ class TextTriviaMazeView:
             font=("Courier New", 18),
             justify=CENTER,
         )
-        text_menu.focus()
         return frm
 
     def get_main_menu_current_selection(self):
@@ -277,7 +276,7 @@ class TextTriviaMazeView:
         frm = self.__create_pop_up_window(self.__IN_GAME_MENU_WIDTH)
 
         # Create header with title in it
-        frm_title = Frame(master=frm, relief=RIDGE)
+        frm_title = Frame(master=frm, width=200, relief=RIDGE)
         frm_title.pack(fill=BOTH, anchor=CENTER)
         lbl = Label(
             master=frm_title,
@@ -288,23 +287,32 @@ class TextTriviaMazeView:
         lbl.pack(fill=BOTH, pady=self.__IN_GAME_MENU_TITLE_VERTICAL_PADDING)
 
         options = (
-            "Display map legend",
+            "Display Map Legend",
+            "Display Commands",
             "Back to Game",
             "Quit Game",
         )
-        for option in options:
-            lbl = Label(master=frm, text=option, justify=CENTER, anchor=CENTER)
-            lbl.pack(
-                fill=BOTH,
-                padx=self.__IN_GAME_MENU_OPTION_VERTICAL_PADDING,
-                pady=self.__IN_GAME_MENU_OPTION_VERTICAL_PADDING,
-            )
+        TextMenu(
+            options=options,
+            master=frm,
+            width=200,
+            height=len(options),
+            unselected_foreground_color="grey",
+            unselected_background_color="black",
+            selected_foreground_color="black",
+            selected_background_color="white",
+            font=("Courier New", 18),
+            justify=CENTER,
+        )
+
         return frm
 
     def show_in_game_menu(self):
         self.__in_game_menu.place(
             relx=0.5, rely=0.5, anchor=CENTER, width=self.__IN_GAME_MENU_WIDTH
         )
+        self.__in_game_menu.children["!listbox"].focus()
+        self.__in_game_menu.children["!listbox"].select_set(0)
 
     def hide_in_game_menu(self):
         self.__in_game_menu.place_forget()
