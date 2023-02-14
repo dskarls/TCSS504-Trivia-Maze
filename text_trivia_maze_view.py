@@ -251,6 +251,9 @@ class TextTriviaMazeView:
 
     def show_main_menu(self):
         self.__main_menu.grid()
+        # Turn focus to main menu's TextMenu
+        self.__main_menu.children["!listbox"].focus()
+        self.__main_menu.children["!listbox"].select_set(0)
 
     @staticmethod
     def __place_pop_up_at_center_of_window(frame, width):
