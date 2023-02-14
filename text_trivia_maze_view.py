@@ -1,3 +1,4 @@
+import os
 from abc import ABC, abstractmethod
 import textwrap
 
@@ -364,7 +365,7 @@ class TextTriviaMazeView:
         key = event.char
 
         # If char was empty, check to see if it was an arrow key
-        if not key:
+        if not key or key in os.linesep:
             key = event.keysym
 
         if key:
