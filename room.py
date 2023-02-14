@@ -1,5 +1,6 @@
 """Definition of a room in the maze and relevant exceptions"""
 from enum import Enum, auto
+from door import Door
 
 from maze_items import (
     AbstractionPillar,
@@ -10,6 +11,7 @@ from maze_items import (
     PillarOfOOP,
     PolymorphismPillar,
     VisionPotion,
+    MagicKey,
 )
 
 
@@ -150,6 +152,7 @@ class Room:
         INHERITANCE_PILLAR = auto()
         ENCAPSULATION_PILLAR = auto()
         POLYMORPHISM_PILLAR = auto()
+        MAGIC_KEY = auto()
 
         EMPTY = auto()
 
@@ -202,6 +205,10 @@ class Room:
             ROOM_CONTENT_SYMBOL_KEY: "P",
             ROOM_CONTENT_DESC_KEY: "Polymorphism Pillar",
         },
+        RoomContents.MAGIC_KEY: {
+            ROOM_CONTENT_SYMBOL_KEY: "K",
+            ROOM_CONTENT_DESC_KEY: "Magic Key",
+        },
         RoomContents.EMPTY: {
             ROOM_CONTENT_SYMBOL_KEY: " ",
             ROOM_CONTENT_DESC_KEY: "Empty room",
@@ -222,7 +229,7 @@ class Room:
         # Set coords attr to specified row/col
         self.coords = (row, col)
 
-        # Initialize all sides to be doors (rather than walls)
+        # Initialize all sides to be walls (rather than doors)
         self.__east_side = self.WALL
         self.__north_side = self.WALL
         self.__west_side = self.WALL
@@ -237,9 +244,7 @@ class Room:
             Any valid MazeItem object.
         """
         if not isinstance(item, MazeItem):
-            raise ValueError(
-                "Attempted to insert a non-MazeItem into a Room!"
-            )
+            raise ValueError("Attempted to insert a non-MazeItem into a Room!")
         self.__items.append(item)
 
     def remove_items(self):
@@ -286,7 +291,7 @@ class Room:
     def get_side(self, direction):
         """
         Return whether the side of the room given by the specified direction is
-        a door ("door") or wall ("wall").
+        a Door object or wall ("wall").
 
         Parameters
         ----------
@@ -296,8 +301,9 @@ class Room:
         Returns
         -------
         str
-            Whether the side of the room is a door or wall.
-
+            If the side is a wall
+        Door
+            If the side is a door
         Raises
         ------
         InvalidDirection
@@ -317,10 +323,10 @@ class Room:
                 f"'{self.WEST}', or '{self.SOUTH}'."
             )
 
-    def set_side(self, direction, door_or_wall):
+    def set_side(self, direction, door_or_wall, locked=False):
         """
         Set one side of a room ("east", "north", "west", or "south") to be
-        either a door or a wall.
+        either a Door object or a wall.
 
         Parameters
         ----------
@@ -329,13 +335,18 @@ class Room:
             "north", "west", or "south".
         door_or_wall : str
             What to set the side of the room as. Options are "door" or "wall".
+        locked : bool
+            Sets lock state when placing a Door.
         """
         door_or_wall = door_or_wall.lower()
         if door_or_wall not in {self.DOOR, self.WALL}:
             raise InvalidRoomSideValue(
-                "A side of a room must one of the following: "
+                "A side of a room must be one of the following: "
                 f"{(', ').join((self.DOOR, self.WALL))}"
             )
+
+        if door_or_wall == "door":
+            door_or_wall = Door(locked)
 
         direction = direction.lower()
         if direction == self.EAST:
@@ -401,13 +412,12 @@ class Room:
             EncapsulationPillar: self.RoomContents.ENCAPSULATION_PILLAR,
             InheritancePillar: self.RoomContents.INHERITANCE_PILLAR,
             PolymorphismPillar: self.RoomContents.POLYMORPHISM_PILLAR,
+            MagicKey: self.RoomContents.MAGIC_KEY,
         }
         only_item = self.__items[0]
         for item_type, enum_val in item_types_to_room_contents_enum.items():
             if isinstance(only_item, item_type):
-                return self.ROOM_CONTENT_SYMBOLS[enum_val][
-                    self.ROOM_CONTENT_SYMBOL_KEY
-                ]
+                return self.ROOM_CONTENT_SYMBOLS[enum_val][self.ROOM_CONTENT_SYMBOL_KEY]
 
     def __str__(self):
         """The string representation of a room consists of three rows of
@@ -428,6 +438,10 @@ class Room:
         room_str = "*"
         if self.__north_side == self.WALL:
             room_str += f"{self.STR_REPR_PADDING}*{self.STR_REPR_PADDING}"
+        elif self.__north_side.perm_locked:
+            room_str += f"{self.STR_REPR_PADDING}P{self.STR_REPR_PADDING}"
+        elif self.__north_side.locked:
+            room_str += f"{self.STR_REPR_PADDING}T{self.STR_REPR_PADDING}"
         else:
             room_str += f"{self.STR_REPR_PADDING}-{self.STR_REPR_PADDING}"
         # room_str += f"*{self.STR_REPR_PADDING}\n"
@@ -436,12 +450,14 @@ class Room:
         # West and East sides
         if self.__west_side == self.WALL:
             room_str += "*"
-
+        elif self.__west_side.perm_locked:
+            room_str += "P"  # place holder string for a permanently locked door
+        elif self.__west_side.locked:
+            room_str += "T"  # place holder string for a locked door
         else:
             room_str += "|"
 
         if self.occupied_by_adventurer:
-
             if not self.STR_REPR_PADDING:
                 after_adventurer_symbol = ""
             elif len(self.STR_REPR_PADDING) == 1:
@@ -449,9 +465,9 @@ class Room:
             elif len(self.STR_REPR_PADDING) >= 2:
                 after_adventurer_symbol = self.STR_REPR_PADDING[1]
 
-            adventurer_symbol = self.ROOM_CONTENT_SYMBOLS[
-                self.RoomContents.ADVENTURER
-            ][self.ROOM_CONTENT_SYMBOL_KEY]
+            adventurer_symbol = self.ROOM_CONTENT_SYMBOLS[self.RoomContents.ADVENTURER][
+                self.ROOM_CONTENT_SYMBOL_KEY
+            ]
             room_str += f"{adventurer_symbol}{after_adventurer_symbol}"
         else:
             room_str += f"{self.STR_REPR_PADDING}"
@@ -459,16 +475,23 @@ class Room:
         room_str += f"{room_symbol}"
         if self.__east_side == self.WALL:
             room_str += f"{self.STR_REPR_PADDING}*"
+        elif self.__east_side.perm_locked:
+            room_str += f"{self.STR_REPR_PADDING}P"
+        elif self.__east_side.locked:
+            room_str += f"{self.STR_REPR_PADDING}T"
         else:
             room_str += f"{self.STR_REPR_PADDING}|"
 
-        # room_str += f"{self.STR_REPR_PADDING}\n"
         room_str += "\n"
 
         # Form bottom row
         room_str += "*"
         if self.__south_side == self.WALL:
             room_str += f"{self.STR_REPR_PADDING}*{self.STR_REPR_PADDING}"
+        elif self.__south_side.perm_locked:
+            room_str += f"{self.STR_REPR_PADDING}P{self.STR_REPR_PADDING}"
+        elif self.__south_side.locked:
+            room_str += f"{self.STR_REPR_PADDING}T{self.STR_REPR_PADDING}"
         else:
             room_str += f"{self.STR_REPR_PADDING}-{self.STR_REPR_PADDING}"
         # room_str += f"*{self.STR_REPR_PADDING}\n"

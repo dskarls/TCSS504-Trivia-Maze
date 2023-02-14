@@ -158,6 +158,7 @@ _________________________________________________
         # Item commands
         USE_HEALING_POTION = auto()
         USE_VISION_POTION = auto()
+        USE_MAGIC_KEY = auto()
 
         # Display commands
         SHOW_ADVENTURER_STATUS = auto()
@@ -202,6 +203,11 @@ _________________________________________________
             __COMMAND_TYPE: __COMMAND_TYPE_ITEM,
             __COMMAND_DESC_KEY: "Use vision potion",
             __COMMAND_KEY_KEY: "v",
+        },
+        __Command.USE_MAGIC_KEY: {
+            __COMMAND_TYPE: __COMMAND_TYPE_ITEM,
+            __COMMAND_DESC_KEY: "Use magic key",
+            __COMMAND_KEY_KEY: "k",
         },
         # Display commands
         __Command.SHOW_ADVENTURER_STATUS: {
@@ -270,9 +276,7 @@ _________________________________________________
         tuple
             The number of rows and columns to use to create maze maze.
         """
-        row_str = input(
-            "Enter the desired number of rows in the maze (default: 3): "
-        )
+        row_str = input("Enter the desired number of rows in the maze (default: 3): ")
         try:
             num_rows = int(row_str.strip())
         except ValueError:
@@ -476,18 +480,14 @@ _________________________________________________
                 print(self.__adventurer)
             elif (
                 option
-                == self.__COMMANDS[self.__Command.SHOW_MAP][
-                    self.__COMMAND_KEY_KEY
-                ]
+                == self.__COMMANDS[self.__Command.SHOW_MAP][self.__COMMAND_KEY_KEY]
             ):
                 # Print out discovered portion of maze
                 self.__print_maze_map_and_legend()
 
             elif (
                 option
-                == self.__COMMANDS[self.__Command.QUIT_GAME][
-                    self.__COMMAND_KEY_KEY
-                ]
+                == self.__COMMANDS[self.__Command.QUIT_GAME][self.__COMMAND_KEY_KEY]
             ):
                 # Quit the game
                 game_over = True
@@ -507,9 +507,7 @@ _________________________________________________
                 ]
             ):
                 # Use healing potion
-                hit_points_recovered = (
-                    self.__adventurer.consume_healing_potion()
-                )
+                hit_points_recovered = self.__adventurer.consume_healing_potion()
                 if hit_points_recovered:
                     print(
                         "You consume a healing potion and gain "
@@ -527,16 +525,22 @@ _________________________________________________
                 print(f"You used a {str(vision_potion)}!")
 
                 # Get set of adjacent rooms inside maze and add to maze map
-                rooms_to_update_in_map = self.__get_adjacent_rooms_in_maze(
-                    current_room
-                )
+                rooms_to_update_in_map = self.__get_adjacent_rooms_in_maze(current_room)
 
                 vision_potion_used = True
             elif (
                 option
-                == self.__COMMANDS[self.__Command.SHOW_FULL_MAP][
-                    self.__COMMAND_KEY_KEY
-                ]
+                == self.__COMMANDS[self.__Command.USE_MAGIC_KEY][self.__COMMAND_KEY_KEY]
+            ):
+                # Use magic key
+                magic_key = self.__adventurer.consume_magic_key()
+                print(f"You used a {str(magic_key)}!")
+
+                # unlock permanently locked door
+                self.unlock_perm_locked_door()
+            elif (
+                option
+                == self.__COMMANDS[self.__Command.SHOW_FULL_MAP][self.__COMMAND_KEY_KEY]
             ):
                 print(self.__MAZE_MAP_FILLED_IN_MESSAGE)
                 print(self.__maze_map_filled_in)
@@ -557,9 +561,7 @@ _________________________________________________
 
                 if next_room.get_pit():
                     # Apply damage to adventurer
-                    self.__apply_pit_damage_to_adventurer(
-                        current_room.get_pit()
-                    )
+                    self.__apply_pit_damage_to_adventurer(current_room.get_pit())
 
                 # Check to see if this room was the exit
                 if current_room.is_exit():
@@ -620,6 +622,8 @@ _________________________________________________
             not hit a wall, the room to which they moved.
         """
         HIT_WALL_MSG = "You hit a wall. Try moving through a door."
+        LOCKED_DOOR_MSG = "This door is locked. Answer a trivia question."
+        PERM_LOCKED_DOOR_MSG = "This door is permanently locked. Find a magic key to open or find another route."
 
         # Possible commands (dicts containing key commands & descriptions)
         north_command = self.__COMMANDS[self.__Command.MOVE_NORTH]
@@ -627,26 +631,70 @@ _________________________________________________
         east_command = self.__COMMANDS[self.__Command.MOVE_EAST]
         west_command = self.__COMMANDS[self.__Command.MOVE_WEST]
 
+        coords_before = (self.__adventurer_current_row, self.__adventurer_current_col)
+
         if command_key == west_command[self.__COMMAND_KEY_KEY]:
             if current_room.get_side(Room.WEST) == Room.WALL:
                 print(HIT_WALL_MSG)
-            elif current_room.get_side(Room.WEST) == Room.DOOR:
+            elif current_room.get_side(Room.WEST).perm_locked:
+                print(PERM_LOCKED_DOOR_MSG)
+            elif not current_room.get_side(Room.WEST).locked:
                 self.__adventurer_current_col -= 1
+            else:
+                print(LOCKED_DOOR_MSG)
+                answer = input("Question?")
+                # simulates a user answering a question correctly
+                if isinstance(answer, str):
+                    # moves adventurer to room they are trying to move into
+                    self.__adventurer_current_col -= 1
+                    # unlocks the door as the question was answered "correctly"
+                    current_room.get_side(Room.WEST).locked = False
         elif command_key == east_command[self.__COMMAND_KEY_KEY]:
             if current_room.get_side(Room.EAST) == Room.WALL:
                 print(HIT_WALL_MSG)
-            elif current_room.get_side(Room.EAST) == Room.DOOR:
+            elif current_room.get_side(Room.EAST).perm_locked:
+                print(PERM_LOCKED_DOOR_MSG)
+            elif not current_room.get_side(Room.EAST).locked:
                 self.__adventurer_current_col += 1
+            else:
+                print(LOCKED_DOOR_MSG)
+                answer = input("Question?")
+                if isinstance(answer, str):
+                    self.__adventurer_current_col += 1
+                    current_room.get_side(Room.EAST).locked = False
         elif command_key == north_command[self.__COMMAND_KEY_KEY]:
             if current_room.get_side(Room.NORTH) == Room.WALL:
                 print(HIT_WALL_MSG)
-            elif current_room.get_side(Room.NORTH) == Room.DOOR:
+            elif current_room.get_side(Room.NORTH).perm_locked:
+                print(PERM_LOCKED_DOOR_MSG)
+            elif not current_room.get_side(Room.NORTH).locked:
                 self.__adventurer_current_row -= 1
+            else:
+                print(LOCKED_DOOR_MSG)
+                answer = input("Question?")
+                if isinstance(answer, str):
+                    self.__adventurer_current_row -= 1
+                    current_room.get_side(Room.NORTH).locked = False
         elif command_key == south_command[self.__COMMAND_KEY_KEY]:
             if current_room.get_side(Room.SOUTH) == Room.WALL:
                 print(HIT_WALL_MSG)
-            elif current_room.get_side(Room.SOUTH) == Room.DOOR:
+            elif current_room.get_side(Room.SOUTH).perm_locked:
+                print(PERM_LOCKED_DOOR_MSG)
+            elif not current_room.get_side(Room.SOUTH).locked:
                 self.__adventurer_current_row += 1
+            else:
+                print(LOCKED_DOOR_MSG)
+                answer = input("Question?")
+                if isinstance(answer, str):
+                    self.__adventurer_current_row += 1
+                    current_room.get_side(Room.SOUTH).locked = False
+
+        coords_after = (self.__adventurer_current_row, self.__adventurer_current_col)
+        if coords_before != coords_after:
+            new_room = self.__maze.rooms[self.__adventurer_current_row][
+                self.__adventurer_current_col
+            ]
+            self.unlock_adjacent_door(command_key, new_room)
 
         # Return the new room
         return self.__maze.rooms[self.__adventurer_current_row][
@@ -714,6 +762,45 @@ _________________________________________________
             f"You fell into a pit and sustained {pit.damage_value} damage! "
             f"{self.__adventurer.hit_points} health remaining!"
         )
+
+    def unlock_adjacent_door(self, command_key, room):
+        """
+        Sets the door of the room the adventurer will be stepping
+        into to unlocked. i.e. adventurer moves west out of their
+        current room, the east door of the next room should also
+        be unlocked.
+
+        Parameters
+        ----------
+        command_key : str
+            Input command indicating which direction the adventurer is
+            trying to move.
+        room : Room
+            The room the adventurer currently occupies.
+        """
+        if (
+            command_key
+            == self.__COMMANDS[self.__Command.MOVE_NORTH][self.__COMMAND_KEY_KEY]
+        ):
+            room.get_side("south").locked = False
+        elif (
+            command_key
+            == self.__COMMANDS[self.__Command.MOVE_SOUTH][self.__COMMAND_KEY_KEY]
+        ):
+            room.get_side("north").locked = False
+        elif (
+            command_key
+            == self.__COMMANDS[self.__Command.MOVE_EAST][self.__COMMAND_KEY_KEY]
+        ):
+            room.get_side("west").locked = False
+        elif (
+            command_key
+            == self.__COMMANDS[self.__Command.MOVE_WEST][self.__COMMAND_KEY_KEY]
+        ):
+            room.get_side("east").locked = False
+
+    def unlock_perm_locked_door(self):
+        pass
 
 
 if __name__ == "__main__":

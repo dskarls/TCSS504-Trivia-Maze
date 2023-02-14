@@ -1,7 +1,7 @@
 """
 Contains the Adventurer class and Adventurer-specific exceptions
 """
-from maze_items import HealingPotion, PillarOfOOP, VisionPotion
+from maze_items import HealingPotion, PillarOfOOP, VisionPotion, MagicKey
 from util import generate_random_int
 
 
@@ -22,7 +22,7 @@ class AttemptedToPlaceInvalidItemInInventory(RuntimeError):
 
 class Adventurer:
     """
-    An player character that can traverse a maze. An adventurer has an
+    A player character that can traverse a maze. An adventurer has an
     integer number of hit points, and can carry healing potions, vision
     potions, and pillars.
 
@@ -92,6 +92,7 @@ class Adventurer:
         self.__healing_potions = []
         self.__vision_potions = []
         self.__pillars_found = []
+        self.__magic_keys = []
 
         # Verify hit point args
         self.__verify_hit_point_args(
@@ -112,7 +113,8 @@ class Adventurer:
             f"Number of Healing Potions: {len(self.__healing_potions)}, "
             f"Healing Potions: {[str(hp) for hp in self.__healing_potions]}, "
             f"Number of Vision Potions: {len(self.__vision_potions)}, "
-            f"Pillars found: {[str(pillar) for pillar in self.__pillars_found]}"
+            f"Pillars found: {[str(pillar) for pillar in self.__pillars_found]}, "
+            f"Number of Magic Keys: {len(self.__magic_keys)}"
         )
 
     def __verify_hit_point_args(
@@ -219,8 +221,8 @@ class Adventurer:
 
         Parameters
         ----------
-        item : Potion or PillarOfOOP
-            A healing potion, vision potion, or pillar.
+        maze_item : Potion or PillarOfOOP
+            A healing potion, vision potion, pillar, or magic key.
 
         Raises
         ------
@@ -239,6 +241,9 @@ class Adventurer:
 
         elif isinstance(maze_item, PillarOfOOP):
             self.__pillars_found.append(maze_item)
+
+        elif isinstance(maze_item, MagicKey):
+            self.__magic_keys.append(maze_item)
 
         else:
             raise AttemptedToPlaceInvalidItemInInventory(
@@ -276,3 +281,16 @@ class Adventurer:
             held by the adventurer.
         """
         return self.__pillars_found
+
+    def consume_magic_key(self):
+        """
+        Consume a magic key. If adventurer has none left, no action is
+        taken.
+
+        Returns
+        -------
+        MagicKey
+            A magic key object.
+        """
+        if self.__magic_keys:
+            return self.__magic_keys.pop()
