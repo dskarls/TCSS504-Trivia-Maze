@@ -441,7 +441,44 @@ class TextTriviaMazeView:
         self.__hp_gauge["value"] = current_hp
 
     def __add_map(self):
-        return self.__add_subwindow(self.__MAP_WIDTH, self.__MAP_HEIGHT, 0, 0)
+        frm = self.__add_subwindow(self.__MAP_WIDTH, self.__MAP_HEIGHT, 0, 0)
+
+        # Create empty label that will hold the actual map
+        style_name = "map.TLabel"
+        sty = Style()
+        sty.configure(style_name, font=("Courier New", 26, "bold"))
+        lbl = Label(
+            master=frm,
+            text="",
+            style=style_name,
+            justify=CENTER,
+            anchor=CENTER,
+        )
+        lbl.pack(padx=(5, 5), fill=BOTH)
+        return frm
+
+    def update_map(self):
+        # FIXME: Grab the map object from the model here
+        MAP_EXAMPLE = """
+        *  *  **  *  **  *  **  *  **  *  **  *  **  *  *
+        *  P  ||     ||     ||     ||  I  **@ i  **     *
+        *  -  **  *  **  *  **  *  **  -  **  -  **  -  *
+        *  -  **  *  **  *  **  *  **  -  **  -  **  -  *
+        *  X  ||  V  ||  X  **  V  ||     **     ||     *
+        *  *  **  *  **  -  **  -  **  -  **  *  **  -  *
+        *  *  **  *  **  -  **  -  **  -  **  *  **  -  *
+        *  H  ||  M  **  H  **  O  **     ||  H  **     *
+        *  -  **  *  **  -  **  -  **  *  **  *  **  -  *
+        *  -  **  *  **  -  **  -  **  *  **  *  **  -  *
+        *  A  ||     **     **     **     ||  H  **     *
+        *  -  **  -  **  -  **  -  **  -  **  -  **  -  *
+        *  -  **  -  **  -  **  -  **  -  **  -  **  -  *
+        *     **     ||  H  **     ||     **  H  ||  H  *
+        *  *  **  *  **  *  **  *  **  *  **  *  **  *  *
+        """
+        self.__map.children["!label"].configure(
+            text=textwrap.dedent(MAP_EXAMPLE)
+        )
 
     def __add_hp_gauge_and_inventory(self):
         # Create vertical sidebar frame
@@ -598,6 +635,8 @@ class TextMenu:
 if __name__ == "__main__":
     view = TextTriviaMazeView("TriviaMaze")
 
+    view.hide_main_menu()
+    view.update_map()
     for i in range(100):
         view.write_to_event_log(f"Here is message {i}")
     view.mainloop()
