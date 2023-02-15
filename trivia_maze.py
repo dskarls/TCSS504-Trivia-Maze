@@ -763,42 +763,6 @@ _________________________________________________
             f"{self.__adventurer.hit_points} health remaining!"
         )
 
-    def unlock_adjacent_door(self, command_key, room):
-        """
-        Sets the door of the room the adventurer will be stepping
-        into to unlocked. i.e. adventurer moves west out of their
-        current room, the east door of the next room should also
-        be unlocked.
-
-        Parameters
-        ----------
-        command_key : str
-            Input command indicating which direction the adventurer is
-            trying to move.
-        room : Room
-            The room the adventurer currently occupies.
-        """
-        if (
-            command_key
-            == self.__COMMANDS[self.__Command.MOVE_NORTH][self.__COMMAND_KEY_KEY]
-        ):
-            room.get_side("south").locked = False
-        elif (
-            command_key
-            == self.__COMMANDS[self.__Command.MOVE_SOUTH][self.__COMMAND_KEY_KEY]
-        ):
-            room.get_side("north").locked = False
-        elif (
-            command_key
-            == self.__COMMANDS[self.__Command.MOVE_EAST][self.__COMMAND_KEY_KEY]
-        ):
-            room.get_side("west").locked = False
-        elif (
-            command_key
-            == self.__COMMANDS[self.__Command.MOVE_WEST][self.__COMMAND_KEY_KEY]
-        ):
-            room.get_side("east").locked = False
-
     def unlock_perm_locked_door(self):
         pass
 
