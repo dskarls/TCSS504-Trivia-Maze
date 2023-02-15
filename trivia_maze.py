@@ -631,8 +631,6 @@ _________________________________________________
         east_command = self.__COMMANDS[self.__Command.MOVE_EAST]
         west_command = self.__COMMANDS[self.__Command.MOVE_WEST]
 
-        coords_before = (self.__adventurer_current_row, self.__adventurer_current_col)
-
         if command_key == west_command[self.__COMMAND_KEY_KEY]:
             if current_room.get_side(Room.WEST) == Room.WALL:
                 print(HIT_WALL_MSG)
@@ -688,13 +686,6 @@ _________________________________________________
                 if isinstance(answer, str):
                     self.__adventurer_current_row += 1
                     current_room.get_side(Room.SOUTH).locked = False
-
-        coords_after = (self.__adventurer_current_row, self.__adventurer_current_col)
-        if coords_before != coords_after:
-            new_room = self.__maze.rooms[self.__adventurer_current_row][
-                self.__adventurer_current_col
-            ]
-            self.unlock_adjacent_door(command_key, new_room)
 
         # Return the new room
         return self.__maze.rooms[self.__adventurer_current_row][
