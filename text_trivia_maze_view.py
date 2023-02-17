@@ -199,59 +199,17 @@ class TextTriviaMazeView:
             )
 
     def __create_main_menu(self):
-        full_window_width = self.__MAP_WIDTH + self.__SIDEBAR_WIDTH
-        frm = self.__add_subwindow(
-            width=full_window_width,
-            height=self.__MAP_HEIGHT + self.__EVENT_LOG_HEIGHT,
-            row=0,
-            column=0,
-            rowspan=2,
-            columnspan=2,
-        )
-
-        # Add banner message
-        # TODO: Store all styles in a single place (possibly some kind of view
-        # configuration class)
-        style_name = "welcome.TLabel"
-        sty = Style()
-        sty.configure(style_name, font=("Courier New", 16))
-
-        lbl = Label(
-            master=frm,
-            text=textwrap.dedent(self.__WELCOME_MESSAGE),
-            justify=CENTER,
-            anchor=CENTER,
-            style=style_name,
-        )
-        lbl.pack(fill=BOTH)
-
-        # Add frame with options
         options = ("Start game", "Help", "Quit game")
-        TextMenu(
-            options=options,
-            master=frm,
-            width=None,
-            height=len(options),
-            unselected_foreground_color="grey",
-            unselected_background_color="black",
-            selected_foreground_color="black",
-            selected_background_color="white",
-            font=("Courier New", 18),
-            justify=CENTER,
-        )
-        return frm
+        return MainMenu(self.__window, self.__WELCOME_MESSAGE, options)
 
     def get_main_menu_current_selection(self):
-        return self.__main_menu.children["!listbox"].get_current_selection()
+        return self.__main_menu.selected_option
 
     def hide_main_menu(self):
-        self.__main_menu.grid_remove()
+        self.__main_menu.hide()
 
     def show_main_menu(self):
-        self.__main_menu.grid()
-        # Turn focus to main menu's TextMenu
-        self.__main_menu.children["!listbox"].focus()
-        self.__main_menu.children["!listbox"].select_set(0)
+        self.__main_menu.show()
 
     @staticmethod
     def __place_pop_up_at_center_of_window(frame, width):
@@ -271,50 +229,25 @@ class TextTriviaMazeView:
         return frm
 
     def __create_in_game_menu(self):
-        # Create the frame for the whole in-game menu
-        frm = self.__create_pop_up_window(self.__IN_GAME_MENU_WIDTH)
-
-        # Create header with title in it
-        frm_title = Frame(master=frm, width=200, relief=RIDGE)
-        frm_title.pack(fill=BOTH, anchor=CENTER)
-        lbl = Label(
-            master=frm_title,
-            text="In-Game Menu",
-            justify=CENTER,
-            anchor=CENTER,
-        )
-        lbl.pack(fill=BOTH, pady=self.__IN_GAME_MENU_TITLE_VERTICAL_PADDING)
-
         options = (
             "Display Map Legend",
             "Display Commands",
             "Back to Game",
             "Quit Game",
         )
-        TextMenu(
-            options=options,
-            master=frm,
-            width=200,
-            height=len(options),
-            unselected_foreground_color="grey",
-            unselected_background_color="black",
-            selected_foreground_color="black",
-            selected_background_color="white",
-            font=("Courier New", 18),
-            justify=CENTER,
+        return InGameMenu(
+            self.__window,
+            self.__IN_GAME_MENU_WIDTH,
+            "In-Game Menu",
+            self.__IN_GAME_MENU_TITLE_VERTICAL_PADDING,
+            options,
         )
-
-        return frm
 
     def show_in_game_menu(self):
-        self.__in_game_menu.place(
-            relx=0.5, rely=0.5, anchor=CENTER, width=self.__IN_GAME_MENU_WIDTH
-        )
-        self.__in_game_menu.children["!listbox"].focus()
-        self.__in_game_menu.children["!listbox"].select_set(0)
+        self.__in_game_menu.show()
 
     def hide_in_game_menu(self):
-        self.__in_game_menu.place_forget()
+        self.__in_game_menu.hide()
 
     def __create_message_menu_with_only_dismiss_option(
         self, text, dismiss_key, style_name
@@ -623,12 +556,170 @@ class TextMenu:
         """Have this widget take focus"""
         self.__list_box.focus()
 
-    def get_currently_selected(self):
-        return self.__options[self.__list_box.curselection()[0]]
-
     def __add_options(self):
         for ind, option in enumerate(self.__options):
             self.__list_box.insert(ind + 1, option)
+
+    @property
+    def selected_option(self):
+        return self.__options[self.__list_box.curselection()[0]]
+
+    @selected_option.setter
+    def selected_option(self, index):
+        self.__list_box.select_set(index)
+
+
+class SubWindow:
+    def __init__(
+        self,
+        window,
+        width,
+        height,
+        row,
+        column,
+        rowspan=1,
+        columnspan=1,
+        relief=RIDGE,  # FIXME: Remove/change default for relief
+    ):
+        frm = Frame(master=window, width=width, height=height, relief=relief)
+
+        frm.grid(
+            row=row,
+            column=column,
+            rowspan=rowspan,
+            columnspan=columnspan,
+            sticky="nsew",
+        )
+
+        self._frm = frm
+
+    # FIXME: Make show and hide abstract methods? Would the map etc really be a subwindow then?
+
+
+class MainMenu(SubWindow):
+    def __init__(self, window, banner_text, menu_options):
+        """Create a frame inside of `window` that fills up its entire row and
+        column span"""
+        super().__init__(window, None, None, 0, 0, *window.grid_size())
+
+        # Add banner message
+        # TODO: Store all styles in a single place (possibly some kind of view
+        # configuration class)
+        style_name = "welcome.TLabel"
+        sty = Style()
+
+        sty.configure(style_name, font=("Courier New", 16))
+
+        lbl = Label(
+            master=self._frm,
+            text=banner_text,
+            justify=CENTER,
+            anchor=CENTER,
+            style=style_name,
+        )
+
+        lbl.pack(fill=BOTH)
+
+        # Add text menu with desired options
+        self.__text_menu = TextMenu(
+            options=menu_options,
+            master=self._frm,
+            width=None,
+            height=len(menu_options),
+            unselected_foreground_color="grey",
+            unselected_background_color="black",
+            selected_foreground_color="black",
+            selected_background_color="white",
+            font=("Courier New", 18),
+            justify=CENTER,
+        )
+
+    def hide(self):
+        self._frm.grid_remove()
+
+    def show(self):
+        self._frm.grid()
+
+        # Attach focus to text menu of options
+        self.__text_menu.focus()
+        self.__text_menu.selected_option = 0
+
+    @property
+    def selected_option(self):
+        return self.__text_menu.selected_option
+
+    @selected_option.setter
+    def selected_option(self, index):
+        self.__text_menu.selected_option = index
+
+
+class PopUpWindow:
+    # FIXME: Remove/change default for relief
+    def __init__(self, window, width, relief=RIDGE):
+        self._frm = Frame(
+            master=window,
+            relief=relief,
+        )
+        self.__place_pop_up_at_center_of_window(self._frm, width)
+
+    @staticmethod
+    def __place_pop_up_at_center_of_window(frame, width):
+        frame.place(
+            relx=0.5,
+            rely=0.5,
+            anchor=CENTER,
+            width=width,
+        )
+
+    # FIXME: Make show and hide abstract methods? Would the map etc really be a subwindow then?
+
+
+class InGameMenu(PopUpWindow):
+    # FIXME: Remove/change default for relief
+    def __init__(self, window, width, title, pady, menu_options, relief=RIDGE):
+        # Create the frame for the whole in-game menu
+        super().__init__(window, width, relief)
+        self.__width = width
+
+        # Create header with title in it
+        frm_title = Frame(master=self._frm, width=width, relief=relief)
+        frm_title.pack(fill=BOTH, anchor=CENTER)
+        lbl = Label(
+            master=frm_title,
+            text=title,
+            justify=CENTER,
+            anchor=CENTER,
+        )
+        lbl.pack(fill=BOTH, pady=pady)
+
+        self.__text_menu = TextMenu(
+            options=menu_options,
+            master=self._frm,
+            width=width,
+            height=len(menu_options),
+            unselected_foreground_color="grey",
+            unselected_background_color="black",
+            selected_foreground_color="black",
+            selected_background_color="white",
+            font=("Courier New", 18),
+            justify=CENTER,
+        )
+
+    def show(self):
+        self._frm.place(relx=0.5, rely=0.5, anchor=CENTER, width=self.__width)
+        self.__text_menu.focus()
+        self.__text_menu.selected_option = 0
+
+    def hide(self):
+        self._frm.place_forget()
+
+    @property
+    def selected_option(self):
+        return self.__text_menu.selected_option
+
+    @selected_option.setter
+    def selected_option(self, index):
+        self.__text_menu.selected_option = index
 
 
 if __name__ == "__main__":
