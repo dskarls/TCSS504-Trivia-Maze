@@ -80,7 +80,7 @@ class TextTriviaMazeView:
     """
 
     # Primary display config params
-    __MAP_WIDTH = 800
+    __MAP_WIDTH = 900
     __MAP_HEIGHT = 500
     __SIDEBAR_WIDTH = 250
     __SIDEBAR_HORIZONTAL_PADDING = 15
@@ -322,6 +322,17 @@ class TextTriviaMazeView:
         self.__map.contents = textwrap.dedent(MAP_EXAMPLE)
 
     def __add_hp_gauge_and_inventory(self):
+        # Create inventory_labels
+        inventory_item_labels = (
+            "Health Potion",
+            "Suggestion Potion",
+            "Vision Potion",
+            "Magic Key",
+            "Pillar of Abstraction",
+            "Pillar of Encapsulation",
+            "Pillar of Inheritance",
+            "Pillar of Polymorphism",
+        )
         side_bar = SideBar(
             window=self.__window,
             width=self.__SIDEBAR_WIDTH,
@@ -340,6 +351,7 @@ class TextTriviaMazeView:
             inventory_title_ipady=10,
             inventory_padx=10,
             inventory_pady=8,
+            inventory_item_labels=inventory_item_labels,
         )
 
         return side_bar.hp_gauge, side_bar.inventory
@@ -593,6 +605,60 @@ class PopUpWindow:
     # FIXME: Make show and hide abstract methods? Would the map etc really be a subwindow then?
 
 
+class Inventory:
+    def __init__(self, window, title, title_ipady, padx, pady, item_labels):
+        self.__window = window
+        self.__padx = padx
+        self.__pady = pady
+        self.__item_labels = item_labels
+
+        # Create label for inventory
+        lbl_inventory = Label(
+            master=self.__window,
+            text=title,
+            relief=RIDGE,
+            anchor=CENTER,
+            style=STYLES["inventory_title"]["style"],
+        )
+        lbl_inventory.pack(
+            side=TOP,
+            ipady=title_ipady,
+            fill=BOTH,
+        )
+
+        self.__create_inventory_item_labels()
+
+    def __create_inventory_item_labels(self):
+        inventory_quantity_labels = {}
+
+        for item in self.__item_labels:
+            # Create frame for this item
+            frm_item = Frame(master=self.__window)
+            frm_item.pack(
+                side=TOP, fill=BOTH, padx=self.__padx, pady=self.__pady
+            )
+
+            # Create label for item
+            lbl_item = Label(
+                master=frm_item,
+                text=item,
+                style=STYLES["inventory_item"]["style"],
+            )
+            lbl_item.pack(side=LEFT, padx=self.__padx)
+
+            # Create label holding quantity of item
+            lbl_quantity = Label(
+                master=frm_item,
+                text="0",
+                style=STYLES["inventory_item"]["style"],
+            )
+            lbl_quantity.pack(side=RIGHT, padx=self.__padx)
+
+            inventory_quantity_labels[item] = lbl_quantity
+
+        return inventory_quantity_labels
+
+
 class SideBar(SubWindow):
     def __init__(
         self,
@@ -613,6 +679,7 @@ class SideBar(SubWindow):
         inventory_title_ipady,
         inventory_padx,
         inventory_pady,
+        inventory_item_labels,
     ):
         super().__init__(
             window, width, height, row, column, rowspan, columnspan
@@ -627,6 +694,7 @@ class SideBar(SubWindow):
         self.__inventory_title_ipady = inventory_title_ipady
         self.__inventory_padx = inventory_padx
         self.__inventory_pady = inventory_pady
+        self.__inventory_item_labels = inventory_item_labels
 
         # Create hp gauge
         self.hp_gauge = self.__create_hp_gauge()
@@ -634,22 +702,13 @@ class SideBar(SubWindow):
         self.inventory = self.__create_inventory()
 
     def __create_inventory(self):
-        # Create label for inventory
-        lbl_inventory = Label(
-            master=self._frm,
-            text="Inventory",
-            relief=RIDGE,
-            anchor=CENTER,
-            style=STYLES["inventory_title"]["style"],
-        )
-        lbl_inventory.pack(
-            side=TOP,
-            ipady=self.__inventory_title_ipady,
-            fill=BOTH,
-        )
-
-        return self.__create_inventory_item_labels(
-            self._frm, self.__inventory_padx, self.__inventory_pady
+        return Inventory(
+            self._frm,
+            title="Inventory",
+            title_ipady=self.__inventory_title_ipady,
+            padx=self.__inventory_padx,
+            pady=self.__inventory_pady,
+            item_labels=self.__inventory_item_labels,
         )
 
     def __create_hp_gauge(
@@ -683,46 +742,6 @@ class SideBar(SubWindow):
         bar_hp_gauge["value"] = 100
 
         return bar_hp_gauge
-
-    @staticmethod
-    def __create_inventory_item_labels(frm, padx, pady):
-        # Create inventory_labels
-        item_labels = (
-            "Health Potion",
-            "Suggestion Potion",
-            "Vision Potion",
-            "Magic Key",
-            "Pillar of Abstraction",
-            "Pillar of Encapsulation",
-            "Pillar of Inheritance",
-            "Pillar of Polymorphism",
-        )
-        inventory_quantity_labels = {}
-
-        for item in item_labels:
-            # Create frame for this item
-            frm_item = Frame(master=frm)
-            frm_item.pack(side=TOP, fill=BOTH, padx=padx, pady=pady)
-
-            # Create label for item
-            lbl_item = Label(
-                master=frm_item,
-                text=item,
-                style=STYLES["inventory_item"]["style"],
-            )
-            lbl_item.pack(side=LEFT, padx=padx)
-
-            # Create label holding quantity of item
-            lbl_quantity = Label(
-                master=frm_item,
-                text="0",
-                style=STYLES["inventory_item"]["style"],
-            )
-            lbl_quantity.pack(side=RIGHT, padx=padx)
-
-            inventory_quantity_labels[item] = lbl_quantity
-
-        return inventory_quantity_labels
 
 
 class InGameMenu(PopUpWindow):
