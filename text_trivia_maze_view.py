@@ -162,7 +162,7 @@ class TextTriviaMazeView:
         # widgets will always be "hidden" behind them. You could also get
         # around this by using the 'lift()' and 'lower()' methods of the frame
         # widgets, but it's simpler just to make them in order.
-        self.__map = self.__add_map()
+        self.__map = self.__create_map()
         self.__hp_gauge, self.__inventory = self.__add_hp_gauge_and_inventory()
         self.__event_log = self.__add_event_log()
 
@@ -184,6 +184,8 @@ class TextTriviaMazeView:
 
         # Intercept keystrokes from user
         self.__configure_keystroke_capture()
+
+        self.show_main_menu()
 
     def __configure_keystroke_capture(self):
         """Capture keystrokes so they can be sent to the controller for
@@ -372,22 +374,10 @@ class TextTriviaMazeView:
 
         self.__hp_gauge["value"] = current_hp
 
-    def __add_map(self):
-        frm = self.__add_subwindow(self.__MAP_WIDTH, self.__MAP_HEIGHT, 0, 0)
-
-        # Create empty label that will hold the actual map
-        style_name = "map.TLabel"
-        sty = Style()
-        sty.configure(style_name, font=("Courier New", 26, "bold"))
-        lbl = Label(
-            master=frm,
-            text="",
-            style=style_name,
-            justify=CENTER,
-            anchor=CENTER,
+    def __create_map(self):
+        return Map(
+            self.__window, self.__MAP_WIDTH, self.__MAP_HEIGHT, 0, 0, 5, ""
         )
-        lbl.pack(padx=(5, 5), fill=BOTH)
-        return frm
 
     def update_map(self):
         # FIXME: Grab the map object from the model here
@@ -408,9 +398,7 @@ class TextTriviaMazeView:
         *     **     ||  H  **     ||     **  H  ||  H  *
         *  *  **  *  **  *  **  *  **  *  **  *  **  *  *
         """
-        self.__map.children["!label"].configure(
-            text=textwrap.dedent(MAP_EXAMPLE)
-        )
+        self.__map.contents = textwrap.dedent(MAP_EXAMPLE)
 
     def __add_hp_gauge_and_inventory(self):
         # Create vertical sidebar frame
@@ -651,6 +639,39 @@ class MainMenu(SubWindow):
     @selected_option.setter
     def selected_option(self, index):
         self.__text_menu.selected_option = index
+
+
+class Map(SubWindow):
+    def __init__(self, window, width, height, row, column, padx, text):
+        super().__init__(
+            window,
+            width,
+            height,
+            row,
+            column,
+        )
+        self.__text = text
+
+        # Create empty label that will hold the actual map
+        style_name = "map.TLabel"
+        sty = Style()
+        sty.configure(style_name, font=("Courier New", 26, "bold"))
+        lbl = Label(
+            master=self._frm,
+            text=text,
+            style=style_name,
+            justify=CENTER,
+            anchor=CENTER,
+        )
+        lbl.pack(padx=padx, fill=BOTH)
+
+    @property
+    def contents(self):
+        return self.__text
+
+    @contents.setter
+    def contents(self, text):
+        self._frm.children["!label"].configure(text=text)
 
 
 class PopUpWindow:
