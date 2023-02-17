@@ -91,10 +91,8 @@ class TextTriviaMazeView:
     __MAP_WIDTH = 900
     __MAP_HEIGHT = 500
     __SIDEBAR_WIDTH = 250
-    __SIDEBAR_HORIZONTAL_PADDING = 15
     __HP_GAUGE_HEIGHT = 30
     __HP_GAUGE_BAR_WIDTH = int(0.8 * __SIDEBAR_WIDTH)
-    # __EVENT_LOG_HEIGHT = 50
     __EVENT_LOG_NUM_LINES = 10
 
     # In-game menu config params
