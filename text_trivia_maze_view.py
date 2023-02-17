@@ -178,14 +178,13 @@ class TextTriviaMazeView:
 
         # Create main menu
         self.__main_menu = self.__create_main_menu()
+        self.show_main_menu()
 
         # Prevent resizing
         self.__window.resizable(False, False)
 
         # Intercept keystrokes from user
         self.__configure_keystroke_capture()
-
-        self.show_main_menu()
 
     def __configure_keystroke_capture(self):
         """Capture keystrokes so they can be sent to the controller for
@@ -251,69 +250,35 @@ class TextTriviaMazeView:
     def hide_in_game_menu(self):
         self.__in_game_menu.hide()
 
-    def __create_message_menu_with_only_dismiss_option(
-        self, text, dismiss_key, style_name
-    ):
-        frm = self.__create_pop_up_window(width=None)
-
-        lbl = Label(
-            master=frm,
-            text=text,
-            justify=CENTER,
-            anchor=CENTER,
-            style=style_name,
-        )
-        lbl.pack(fill=BOTH, pady=self.__IN_GAME_MENU_TITLE_VERTICAL_PADDING)
-
-        # Put return to main menu option below
-        lbl = Label(
-            master=frm,
-            text=f"Press [{dismiss_key}] to return to main menu",
-            justify=CENTER,
-            anchor=CENTER,
-        )
-        lbl.pack(
-            fill=BOTH,
-        )
-        return frm
-
     def __create_game_won_menu(self):
-        # TODO: Store all styles in a single place (possibly some kind of view
-        # configuration class)
-        style_name = "you_won.TLabel"
-        sty = Style()
-        sty.configure(style_name, font=("Courier New", 16))
-
-        return self.__create_message_menu_with_only_dismiss_option(
+        return DismissiblePopUp(
+            self.__window,
+            None,
             textwrap.dedent(self.__YOU_WIN_MESSAGE),
+            5,
             self.__KEY_DISMISS_YOU_WIN_OR_GAME_LOST,
-            style_name,
         )
 
     def show_game_won_menu(self):
-        self.__place_pop_up_at_center_of_window(self.__game_won_menu, None)
+        self.__game_won_menu.show()
 
     def hide_game_won_menu(self):
-        self.__game_won_menu.place_forget()
+        self.__game_won_menu.hide()
 
     def __create_game_lost_menu(self):
-        # TODO: Store all styles in a single place (possibly some kind of view
-        # configuration class)
-        style_name = "you_died.TLabel"
-        sty = Style()
-        sty.configure(style_name, font=("Courier New", 16))
-
-        return self.__create_message_menu_with_only_dismiss_option(
+        return DismissiblePopUp(
+            self.__window,
+            None,
             textwrap.dedent(self.__YOU_DIED_MESSAGE),
+            5,
             self.__KEY_DISMISS_YOU_WIN_OR_GAME_LOST,
-            style_name,
         )
 
     def show_game_lost_menu(self):
-        self.__place_pop_up_at_center_of_window(self.__game_lost_menu, None)
+        self.__game_lost_menu.show()
 
     def hide_game_lost_menu(self):
-        self.__game_lost_menu.place_forget()
+        self.__game_lost_menu.hide()
 
     def __forward_keystroke_to_controller(self, event):
         # For regular keys
@@ -681,10 +646,11 @@ class PopUpWindow:
             master=window,
             relief=relief,
         )
-        self.__place_pop_up_at_center_of_window(self._frm, width)
+        self._place_pop_up_at_center_of_window(self._frm, width)
+        self._width = width
 
     @staticmethod
-    def __place_pop_up_at_center_of_window(frame, width):
+    def _place_pop_up_at_center_of_window(frame, width):
         frame.place(
             relx=0.5,
             rely=0.5,
@@ -696,11 +662,14 @@ class PopUpWindow:
 
 
 class InGameMenu(PopUpWindow):
+    """
+    A pop-up window with a text-based menu inside.
+    """
+
     # FIXME: Remove/change default for relief
     def __init__(self, window, width, title, pady, menu_options, relief=RIDGE):
         # Create the frame for the whole in-game menu
         super().__init__(window, width, relief)
-        self.__width = width
 
         # Create header with title in it
         frm_title = Frame(master=self._frm, width=width, relief=relief)
@@ -727,7 +696,7 @@ class InGameMenu(PopUpWindow):
         )
 
     def show(self):
-        self._frm.place(relx=0.5, rely=0.5, anchor=CENTER, width=self.__width)
+        self._place_pop_up_at_center_of_window(self._frm, self._width)
         self.__text_menu.focus()
         self.__text_menu.selected_option = 0
 
@@ -743,11 +712,56 @@ class InGameMenu(PopUpWindow):
         self.__text_menu.selected_option = index
 
 
+class DismissiblePopUp(PopUpWindow):
+    """
+    A pop-up window that simply displays a message and allows the user to
+    dismiss it by entering a specific key.
+    """
+
+    def __init__(self, window, width, text, pady, dismiss_key, relief=RIDGE):
+        # Create the frame for the whole in-game menu
+        super().__init__(window, width, relief)
+
+        # TODO: Store all styles in a single place (possibly some kind of view
+        # configuration class)
+        style_name = "you_won.TLabel"
+        sty = Style()
+        sty.configure(style_name, font=("Courier New", 16))
+
+        lbl = Label(
+            master=self._frm,
+            text=text,
+            justify=CENTER,
+            anchor=CENTER,
+            style=style_name,
+        )
+        lbl.pack(fill=BOTH, pady=pady)
+
+        # Put return to main menu option below
+        lbl = Label(
+            master=self._frm,
+            text=f"Press [{dismiss_key}] to return to main menu",
+            justify=CENTER,
+            anchor=CENTER,
+        )
+        lbl.pack(
+            fill=BOTH,
+        )
+
+    def show(self):
+        self._place_pop_up_at_center_of_window(self._frm, self._width)
+
+    def hide(self):
+        self._frm.place_forget()
+
+
 if __name__ == "__main__":
     view = TextTriviaMazeView("TriviaMaze")
 
     view.hide_main_menu()
     view.update_map()
+    view.show_game_lost_menu()
+    view.hide_game_lost_menu()
     for i in range(100):
         view.write_to_event_log(f"Here is message {i}")
     view.mainloop()
