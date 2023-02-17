@@ -279,23 +279,6 @@ class TextTriviaMazeView:
             # the event log here for demonstration purposes.
             self.write_to_event_log(f"You pressed {key}")
 
-    def __add_subwindow(
-        self, width, height, row, column, rowspan=1, columnspan=1
-    ):
-        frm = Frame(
-            master=self.__window, width=width, height=height, relief=RIDGE
-        )
-
-        frm.grid(
-            row=row,
-            column=column,
-            rowspan=rowspan,
-            columnspan=columnspan,
-            sticky="nsew",
-        )
-
-        return frm
-
     def update_hp_gauge(self):
         # FIXME: Retrieve current adventurer HP from Model
         current_hp = 72
@@ -329,83 +312,27 @@ class TextTriviaMazeView:
         self.__map.contents = textwrap.dedent(MAP_EXAMPLE)
 
     def __add_hp_gauge_and_inventory(self):
-        # Create vertical sidebar frame
-        frm_sidebar = self.__add_subwindow(
+        side_bar = SideBar(
+            window=self.__window,
             width=self.__SIDEBAR_WIDTH,
             height=self.__MAP_HEIGHT,
             row=0,
             column=1,
+            rowspan=1,
+            columnspan=1,
+            padx=0,
+            pady=5,
+            hp_gauge_height=self.__HP_GAUGE_HEIGHT,
+            hp_gauge_bar_width=self.__HP_GAUGE_BAR_WIDTH,
+            hp_gauge_label_padx=5,
+            hp_gauge_bar_padx=5,
+            hp_gauge_bar_pady=15,
+            inventory_title_ipady=10,
+            inventory_padx=10,
+            inventory_pady=8,
         )
 
-        # Create frame to hold hp gauge label and bar
-        frm_hp = Frame(master=frm_sidebar, height=self.__HP_GAUGE_HEIGHT)
-        frm_hp.grid(
-            row=0,
-            column=0,
-            padx=self.__SIDEBAR_HORIZONTAL_PADDING,
-            pady=15,
-            sticky="nsew",
-        )
-
-        # Create label for hp gauge
-        lbl_hp_gauge = Label(master=frm_hp, text="HP ")
-        lbl_hp_gauge.pack(side=LEFT)
-
-        # Create bar for hp gauge
-        bar_hp_gauge = Progressbar(
-            master=frm_hp,
-            orient=HORIZONTAL,
-            length=self.__HP_GAUGE_BAR_WIDTH,
-            mode="determinate",
-        )
-        bar_hp_gauge.pack(side=LEFT)
-        bar_hp_gauge["value"] = 100
-
-        # Create label for inventory
-        lbl_inventory = Label(
-            master=frm_sidebar,
-            text="Inventory",
-            relief=RIDGE,
-            anchor=CENTER,
-        )
-        lbl_inventory.grid(sticky="nsew", pady=(5, 10))
-
-        inventory_quantity_labels = self.__create_inventory_item_labels(
-            frm_sidebar, self.__SIDEBAR_HORIZONTAL_PADDING
-        )
-
-        return bar_hp_gauge, inventory_quantity_labels
-
-    @staticmethod
-    def __create_inventory_item_labels(frm, padx):
-        # Create inventory_labels
-        item_labels = (
-            "Health Potion",
-            "Suggestion Potion",
-            "Vision Potion",
-            "Magic Key",
-            "Pillar of Abstraction",
-            "Pillar of Encapsulation",
-            "Pillar of Inheritance",
-            "Pillar of Polymorphism",
-        )
-        inventory_quantity_labels = {}
-        for item in item_labels:
-            # Create frame for this item
-            frm_item = Frame(master=frm)
-            frm_item.grid(sticky="nsew", padx=padx, pady=10)
-
-            # Create label for item
-            lbl_item = Label(master=frm_item, text=item)
-            lbl_item.pack(side=LEFT, padx=padx)
-
-            # Create label holding quantity of item
-            lbl_quantity = Label(master=frm_item, text="0")
-            lbl_quantity.pack(side=RIGHT, padx=padx)
-
-            inventory_quantity_labels[item] = lbl_quantity
-
-        return inventory_quantity_labels
+        return side_bar.hp_gauge, side_bar.inventory
 
     def __create_event_log(self):
         return EventLog(
@@ -664,6 +591,112 @@ class PopUpWindow:
         )
 
     # FIXME: Make show and hide abstract methods? Would the map etc really be a subwindow then?
+
+
+class SideBar(SubWindow):
+    def __init__(
+        self,
+        window,
+        width,
+        height,
+        row,
+        column,
+        rowspan,
+        columnspan,
+        padx,
+        pady,
+        hp_gauge_height,
+        hp_gauge_bar_width,
+        hp_gauge_label_padx,
+        hp_gauge_bar_padx,
+        hp_gauge_bar_pady,
+        inventory_title_ipady,
+        inventory_padx,
+        inventory_pady,
+    ):
+        super().__init__(
+            window, width, height, row, column, rowspan, columnspan
+        )
+        # Create frame to hold hp gauge label and bar
+        frm_hp = Frame(master=self._frm, height=hp_gauge_height)
+        frm_hp.pack(
+            side=TOP,
+            padx=padx,
+            pady=pady,
+        )
+
+        # Create label for hp gauge
+        style_name = "inventory_title.TLabel"
+        sty = Style()
+        sty.configure(style_name, font=("Arial", 16, "bold"))
+        lbl_hp_gauge = Label(master=frm_hp, text="HP", style=style_name)
+        lbl_hp_gauge.pack(padx=(hp_gauge_label_padx, 0), side=LEFT)
+
+        # Create bar for hp gauge
+        bar_hp_gauge = Progressbar(
+            master=frm_hp,
+            orient=HORIZONTAL,
+            length=hp_gauge_bar_width,
+            mode="determinate",
+        )
+        bar_hp_gauge.pack(padx=hp_gauge_bar_padx, pady=hp_gauge_bar_pady)
+        bar_hp_gauge["value"] = 100
+        self.hp_gauge = bar_hp_gauge
+
+        # Create label for inventory
+        style_name = "inventory_title.TLabel"
+        sty = Style()
+        sty.configure(style_name, font=("Arial", 16, "bold"))
+        lbl_inventory = Label(
+            master=self._frm,
+            text="Inventory",
+            relief=RIDGE,
+            anchor=CENTER,
+            style=style_name,
+        )
+        lbl_inventory.pack(
+            side=TOP,
+            ipady=inventory_title_ipady,
+            fill=BOTH,
+        )
+
+        self.inventory = self.__create_inventory_item_labels(
+            self._frm, inventory_padx, inventory_pady
+        )
+
+    @staticmethod
+    def __create_inventory_item_labels(frm, padx, pady):
+        # Create inventory_labels
+        item_labels = (
+            "Health Potion",
+            "Suggestion Potion",
+            "Vision Potion",
+            "Magic Key",
+            "Pillar of Abstraction",
+            "Pillar of Encapsulation",
+            "Pillar of Inheritance",
+            "Pillar of Polymorphism",
+        )
+        inventory_quantity_labels = {}
+        style_name = "inventory_item.TLabel"
+        sty = Style()
+        sty.configure(style_name, font=("Arial", 15, "bold"))
+        for item in item_labels:
+            # Create frame for this item
+            frm_item = Frame(master=frm)
+            frm_item.pack(side=TOP, fill=BOTH, padx=padx, pady=pady)
+
+            # Create label for item
+            lbl_item = Label(master=frm_item, text=item, style=style_name)
+            lbl_item.pack(side=LEFT, padx=padx)
+
+            # Create label holding quantity of item
+            lbl_quantity = Label(master=frm_item, text="0", style=style_name)
+            lbl_quantity.pack(side=RIGHT, padx=padx)
+
+            inventory_quantity_labels[item] = lbl_quantity
+
+        return inventory_quantity_labels
 
 
 class InGameMenu(PopUpWindow):
