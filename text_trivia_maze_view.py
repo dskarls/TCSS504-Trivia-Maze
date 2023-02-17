@@ -84,7 +84,7 @@ class TextTriviaMazeView:
     __SIDEBAR_HORIZONTAL_PADDING = 15
     __HP_GAUGE_HEIGHT = 30
     __HP_GAUGE_BAR_WIDTH = int(0.8 * __SIDEBAR_WIDTH)
-    __EVENT_LOG_HEIGHT = 50
+    # __EVENT_LOG_HEIGHT = 50
     __EVENT_LOG_NUM_LINES = 10
 
     # In-game menu config params
@@ -164,7 +164,7 @@ class TextTriviaMazeView:
         # widgets, but it's simpler just to make them in order.
         self.__map = self.__create_map()
         self.__hp_gauge, self.__inventory = self.__add_hp_gauge_and_inventory()
-        self.__event_log = self.__add_event_log()
+        self.__event_log = self.__create_event_log()
 
         # Create game won/lost menus
         self.__game_won_menu = self.__create_game_won_menu()
@@ -211,23 +211,6 @@ class TextTriviaMazeView:
 
     def show_main_menu(self):
         self.__main_menu.show()
-
-    @staticmethod
-    def __place_pop_up_at_center_of_window(frame, width):
-        frame.place(
-            relx=0.5,
-            rely=0.5,
-            anchor=CENTER,
-            width=width,
-        )
-
-    def __create_pop_up_window(self, width):
-        frm = Frame(
-            master=self.__window,
-            relief=RIDGE,
-        )
-        self.__place_pop_up_at_center_of_window(frm, width)
-        return frm
 
     def __create_in_game_menu(self):
         options = (
@@ -312,26 +295,6 @@ class TextTriviaMazeView:
         )
 
         return frm
-
-    @staticmethod
-    def __add_scrollable_readonly_textbox_to_subwindow(subwindow, num_lines):
-        frm = subwindow
-        scrlbar = Scrollbar(master=frm, orient=VERTICAL)
-        scrlbar.pack(side=RIGHT, pady=5, fill=Y, padx=3)
-
-        scrltxt = Text(
-            master=frm,
-            height=num_lines,
-            yscrollcommand=scrlbar.set,
-        )
-        scrltxt.pack(fill=BOTH, pady=2)
-
-        # Enable dragging of scroll bar now that text box exists (has to be
-        # done in this order)
-        scrlbar.config(command=scrltxt.yview)
-
-        # Make text box read-only
-        scrltxt.config(state=DISABLED)
 
     def update_hp_gauge(self):
         # FIXME: Retrieve current adventurer HP from Model
@@ -444,27 +407,13 @@ class TextTriviaMazeView:
 
         return inventory_quantity_labels
 
-    def __add_event_log(self):
-        # event_log_name = "event log"
-        frm = self.__add_subwindow(
-            None, self.__EVENT_LOG_HEIGHT, 1, 0, columnspan=2
+    def __create_event_log(self):
+        return EventLog(
+            self.__window, None, self.__EVENT_LOG_NUM_LINES, 1, 0, 1, 2, 3, 5
         )
-        self.__add_scrollable_readonly_textbox_to_subwindow(
-            frm, self.__EVENT_LOG_NUM_LINES
-        )
-        return frm
 
     def write_to_event_log(self, message):
-        event_log_text_box = self.__event_log.children["!text"]
-
-        # Make text box writable for a brief instant, write to it, then make it
-        # read-only again
-        event_log_text_box.config(state=NORMAL)
-        event_log_text_box.insert(END, message + "\n")
-        event_log_text_box.config(state=DISABLED)
-
-        # Scroll down as far as possible
-        event_log_text_box.yview(END)
+        self.__event_log.write(message)
 
 
 class TextMenu:
@@ -637,6 +586,62 @@ class Map(SubWindow):
     @contents.setter
     def contents(self, text):
         self._frm.children["!label"].configure(text=text)
+
+
+class EventLog(SubWindow):
+    def __init__(
+        self,
+        window,
+        width,
+        num_lines,
+        row,
+        column,
+        rowspan,
+        columnspan,
+        padx,
+        pady,
+    ):
+        super().__init__(window, width, None, row, column, rowspan, columnspan)
+
+        self.__textbox = self.__add_scrollable_readonly_textbox_to_subwindow(
+            self._frm, num_lines, padx, pady
+        )
+
+    def write(self, message):
+        event_log_text_box = self.__textbox
+
+        # Make text box writable for a brief instant, write to it, then make it
+        # read-only again
+        event_log_text_box.config(state=NORMAL)
+        event_log_text_box.insert(END, message + "\n")
+        event_log_text_box.config(state=DISABLED)
+
+        # Scroll down as far as possible
+        event_log_text_box.yview(END)
+
+    @staticmethod
+    def __add_scrollable_readonly_textbox_to_subwindow(
+        subwindow, num_lines, padx, pady
+    ):
+        frm = subwindow
+        scrlbar = Scrollbar(master=frm, orient=VERTICAL)
+        scrlbar.pack(side=RIGHT, pady=pady, fill=Y, padx=padx)
+
+        scrltxt = Text(
+            master=frm,
+            height=num_lines,
+            yscrollcommand=scrlbar.set,
+        )
+        scrltxt.pack(fill=BOTH, pady=pady)
+
+        # Enable dragging of scroll bar now that text box exists (has to be
+        # done in this order)
+        scrlbar.config(command=scrltxt.yview)
+
+        # Make text box read-only
+        scrltxt.config(state=DISABLED)
+
+        return scrltxt
 
 
 class PopUpWindow:
