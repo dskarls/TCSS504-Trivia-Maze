@@ -5,7 +5,7 @@ import textwrap
 from tkinter import *
 from tkinter.ttk import *
 
-from view_config import STYLES
+from view_config import DIMENSIONS, MESSAGES, KEYS, STYLES
 from view_components import (
     MainMenu,
     InGameMenu,
@@ -87,64 +87,6 @@ class TextTriviaMazeView:
     primary interface then simply amounts to hiding the main menu (or pop-ups).
     """
 
-    # Primary display config params
-    __MAP_WIDTH = 900
-    __MAP_HEIGHT = 500
-    __SIDEBAR_WIDTH = 250
-    __HP_GAUGE_HEIGHT = 30
-    __HP_GAUGE_BAR_WIDTH = int(0.8 * __SIDEBAR_WIDTH)
-    __EVENT_LOG_NUM_LINES = 10
-
-    # In-game menu config params
-    __IN_GAME_MENU_WIDTH = 400
-    __IN_GAME_MENU_TITLE_VERTICAL_PADDING = 5
-
-    # Static messages for menus/popups
-    __WELCOME_MESSAGE = """
-    _______________________________________________________
-    /_______________________________________________________\\
-    |               _____    _       _                       |
-    |              |_   _|  (_)     (_)                      |
-    |                | |_ __ ___   ___  __ _                 |
-    |                | | '__| \ \ / / |/ _` |                |
-    |                | | |  | |\ V /| | (_| |                |
-    |                \_/_|  |_| \_/ |_|\__,_|                |
-    |                                                        |
-    |                 ___  ___                               |
-    |                 |  \/  |                               |
-    |                 | .  . | __ _ _______                  |
-    |                 | |\/| |/ _` |_  / _ \                 |
-    |                 | |  | | (_| |/ /  __/                 |
-    |                 \_|  |_/\__,_/___\___|                 |
-    |                                                        |
-    \________________________________________________________/
-
-         By Daniel S. Karls, Sheehan Smith, Tom J. Swanson
-    """
-    __YOU_WIN_MESSAGE = """
-    _________________________________________________
-        __   __                     _         _
-        \ \ / /                    (_)       | |
-         \ V /___  _   _  __      ___ _ __   | |
-          \ // _ \| | | | \ \ /\ / / | '_ \  | |
-          | | (_) | |_| |  \ V  V /| | | | | |_|
-          \_/\___/ \__,_|   \_/\_/ |_|_| |_| (_)
-    _________________________________________________
-    """
-    __YOU_DIED_MESSAGE = """
-     ______     __   __                _ _          _
-    /       \   \ \ / /               | (_)        | |
-    | @   @ |    \ V /___  _   _    __| |_  ___  __| |
-    \   0   /     \ // _ \| | | |  / _` | |/ _ \/ _` |
-     |_|_|_|      | | (_) | |_| | | (_| | |  __/ (_| |
-                  \_/\___/ \__,_|  \__,_|_|\___|\__,_|
-    """
-
-    # Keyboard inputs
-    # FIXME: These should all be moved to the controller and accessed by the
-    # view through its reference to the controller!
-    __KEY_DISMISS_YOU_WIN_OR_GAME_LOST = "Return"
-
     def __init__(self, title, theme_path=None, theme_name=None):
         # Create primary tkinter window and bind mainloop method (might fit
         # better in the driver and we can just pass the main Tk window into the
@@ -164,9 +106,11 @@ class TextTriviaMazeView:
 
         # Set minimum row/col sizes to prevent frames from collapsing to their
         # contained content
-        self.__window.rowconfigure(0, minsize=self.__MAP_HEIGHT)
-        self.__window.columnconfigure(0, minsize=self.__MAP_WIDTH)
-        self.__window.columnconfigure(1, minsize=self.__SIDEBAR_WIDTH)
+        self.__window.rowconfigure(0, minsize=DIMENSIONS["map"]["height"])
+        self.__window.columnconfigure(0, minsize=DIMENSIONS["map"]["width"])
+        self.__window.columnconfigure(
+            1, minsize=DIMENSIONS["sidebar"]["width"]
+        )
 
         # Create primary interface windows
         # NOTE: These windows should be created first. Otherwise, the other
@@ -217,7 +161,7 @@ class TextTriviaMazeView:
 
     def __create_main_menu(self):
         options = ("Start game", "Help", "Quit game")
-        return MainMenu(self.__window, self.__WELCOME_MESSAGE, options)
+        return MainMenu(self.__window, MESSAGES["main_menu"], options)
 
     def get_main_menu_current_selection(self):
         return self.__main_menu.selected_option
@@ -237,9 +181,9 @@ class TextTriviaMazeView:
         )
         return InGameMenu(
             self.__window,
-            self.__IN_GAME_MENU_WIDTH,
+            DIMENSIONS["in_game_menu"]["width"],
             "In-Game Menu",
-            self.__IN_GAME_MENU_TITLE_VERTICAL_PADDING,
+            DIMENSIONS["in_game_menu_title"]["pady"],
             options,
         )
 
@@ -253,9 +197,9 @@ class TextTriviaMazeView:
         return DismissiblePopUp(
             self.__window,
             None,
-            textwrap.dedent(self.__YOU_WIN_MESSAGE),
+            textwrap.dedent(MESSAGES["game_won_menu"]),
             5,
-            self.__KEY_DISMISS_YOU_WIN_OR_GAME_LOST,
+            KEYS["game_won_menu"]["dismiss"],
         )
 
     def show_game_won_menu(self):
@@ -268,9 +212,9 @@ class TextTriviaMazeView:
         return DismissiblePopUp(
             self.__window,
             None,
-            textwrap.dedent(self.__YOU_DIED_MESSAGE),
+            textwrap.dedent(MESSAGES["game_lost_menu"]),
             5,
-            self.__KEY_DISMISS_YOU_WIN_OR_GAME_LOST,
+            KEYS["game_lost_menu"]["dismiss"],
         )
 
     def show_game_lost_menu(self):
@@ -303,7 +247,13 @@ class TextTriviaMazeView:
 
     def __create_map(self):
         return Map(
-            self.__window, self.__MAP_WIDTH, self.__MAP_HEIGHT, 0, 0, 5, ""
+            self.__window,
+            DIMENSIONS["map"]["width"],
+            DIMENSIONS["map"]["height"],
+            0,
+            0,
+            DIMENSIONS["map"]["padx"],
+            "",
         )
 
     def update_map(self):
@@ -341,16 +291,16 @@ class TextTriviaMazeView:
         )
         side_bar = SideBar(
             window=self.__window,
-            width=self.__SIDEBAR_WIDTH,
-            height=self.__MAP_HEIGHT,
+            width=DIMENSIONS["sidebar"]["width"],
+            height=DIMENSIONS["map"]["height"],
             row=0,
             column=1,
             rowspan=1,
             columnspan=1,
             padx=0,
             pady=5,
-            hp_gauge_height=self.__HP_GAUGE_HEIGHT,
-            hp_gauge_bar_width=self.__HP_GAUGE_BAR_WIDTH,
+            hp_gauge_height=DIMENSIONS["hp_gauge"]["height"],
+            hp_gauge_bar_width=DIMENSIONS["hp_gauge_bar"]["width"],
             hp_gauge_label_padx=5,
             hp_gauge_bar_padx=5,
             hp_gauge_bar_pady=15,
@@ -364,7 +314,15 @@ class TextTriviaMazeView:
 
     def __create_event_log(self):
         return EventLog(
-            self.__window, None, self.__EVENT_LOG_NUM_LINES, 1, 0, 1, 2, 3, 5
+            self.__window,
+            None,
+            DIMENSIONS["event_log"]["height"],
+            1,
+            0,
+            1,
+            2,
+            3,
+            5,
         )
 
     def write_to_event_log(self, message):
