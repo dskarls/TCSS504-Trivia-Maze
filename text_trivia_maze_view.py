@@ -617,32 +617,23 @@ class SideBar(SubWindow):
         super().__init__(
             window, width, height, row, column, rowspan, columnspan
         )
-        # Create frame to hold hp gauge label and bar
-        frm_hp = Frame(master=self._frm, height=hp_gauge_height)
-        frm_hp.pack(
-            side=TOP,
-            padx=padx,
-            pady=pady,
-        )
+        self.__padx = padx
+        self.__pady = pady
+        self.__hp_gauge_height = hp_gauge_height
+        self.__hp_gauge_bar_width = hp_gauge_bar_width
+        self.__hp_gauge_label_padx = hp_gauge_label_padx
+        self.__hp_gauge_bar_padx = hp_gauge_bar_padx
+        self.__hp_gauge_bar_pady = hp_gauge_bar_pady
+        self.__inventory_title_ipady = inventory_title_ipady
+        self.__inventory_padx = inventory_padx
+        self.__inventory_pady = inventory_pady
 
-        # Create label for hp gauge
-        style_name = "inventory_title.TLabel"
-        sty = Style()
-        sty.configure(style_name, font=("Arial", 16, "bold"))
-        lbl_hp_gauge = Label(master=frm_hp, text="HP", style=style_name)
-        lbl_hp_gauge.pack(padx=(hp_gauge_label_padx, 0), side=LEFT)
+        # Create hp gauge
+        self.hp_gauge = self.__create_hp_gauge()
 
-        # Create bar for hp gauge
-        bar_hp_gauge = Progressbar(
-            master=frm_hp,
-            orient=HORIZONTAL,
-            length=hp_gauge_bar_width,
-            mode="determinate",
-        )
-        bar_hp_gauge.pack(padx=hp_gauge_bar_padx, pady=hp_gauge_bar_pady)
-        bar_hp_gauge["value"] = 100
-        self.hp_gauge = bar_hp_gauge
+        self.inventory = self.__create_inventory()
 
+    def __create_inventory(self):
         # Create label for inventory
         style_name = "inventory_title.TLabel"
         sty = Style()
@@ -656,13 +647,46 @@ class SideBar(SubWindow):
         )
         lbl_inventory.pack(
             side=TOP,
-            ipady=inventory_title_ipady,
+            ipady=self.__inventory_title_ipady,
             fill=BOTH,
         )
 
-        self.inventory = self.__create_inventory_item_labels(
-            self._frm, inventory_padx, inventory_pady
+        return self.__create_inventory_item_labels(
+            self._frm, self.__inventory_padx, self.__inventory_pady
         )
+
+    def __create_hp_gauge(
+        self,
+    ):
+        # Create frame to hold hp gauge label and bar
+        frm_hp = Frame(master=self._frm, height=self.__hp_gauge_height)
+        frm_hp.pack(
+            side=TOP,
+            padx=self.__padx,
+            pady=self.__pady,
+        )
+
+        style_name = "inventory_title.TLabel"
+        sty = Style()
+        sty.configure(style_name, font=("Arial", 16, "bold"))
+        lbl_hp_gauge = Label(master=frm_hp, text="HP", style=style_name)
+        lbl_hp_gauge.pack(padx=(self.__hp_gauge_label_padx, 0), side=LEFT)
+
+        # Create bar for hp gauge
+        bar_hp_gauge = Progressbar(
+            master=frm_hp,
+            orient=HORIZONTAL,
+            length=self.__hp_gauge_bar_width,
+            mode="determinate",
+        )
+        bar_hp_gauge.pack(
+            padx=self.__hp_gauge_bar_padx, pady=self.__hp_gauge_bar_pady
+        )
+
+        # Initialize to full health
+        bar_hp_gauge["value"] = 100
+
+        return bar_hp_gauge
 
     @staticmethod
     def __create_inventory_item_labels(frm, padx, pady):
