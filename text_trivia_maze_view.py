@@ -232,9 +232,9 @@ class TextTriviaMazeView:
 
     def __create_in_game_menu(self):
         options = (
+            "Back to Game",
             "Display Map Legend",
             "Display Commands",
-            "Back to Game",
             "Quit Game",
         )
         return InGameMenu(
