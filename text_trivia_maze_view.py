@@ -109,7 +109,7 @@ class TextTriviaMazeView:
         self.__window.rowconfigure(0, minsize=DIMENSIONS["map"]["height"])
         self.__window.columnconfigure(0, minsize=DIMENSIONS["map"]["width"])
         self.__window.columnconfigure(
-            1, minsize=DIMENSIONS["sidebar"]["width"]
+            1, minsize=DIMENSIONS["side_bar"]["width"]
         )
 
         # Create primary interface windows
@@ -198,7 +198,7 @@ class TextTriviaMazeView:
             self.__window,
             None,
             textwrap.dedent(MESSAGES["game_won_menu"]),
-            5,
+            DIMENSIONS["game_won_menu"]["pady"],
             KEYS["game_won_menu"]["dismiss"],
         )
 
@@ -213,7 +213,7 @@ class TextTriviaMazeView:
             self.__window,
             None,
             textwrap.dedent(MESSAGES["game_lost_menu"]),
-            5,
+            DIMENSIONS["game_lost_menu"]["pady"],
             KEYS["game_lost_menu"]["dismiss"],
         )
 
@@ -246,13 +246,14 @@ class TextTriviaMazeView:
         self.__hp_gauge["value"] = current_hp
 
     def __create_map(self):
+        dims = DIMENSIONS["map"]
         return Map(
             self.__window,
-            DIMENSIONS["map"]["width"],
-            DIMENSIONS["map"]["height"],
+            dims["width"],
+            dims["height"],
             0,
             0,
-            DIMENSIONS["map"]["padx"],
+            dims["padx"],
             "",
         )
 
@@ -289,40 +290,46 @@ class TextTriviaMazeView:
             "Pillar of Inheritance",
             "Pillar of Polymorphism",
         )
+
+        dims_side_bar = DIMENSIONS["side_bar"]
+        dims_hp_gauge_bar = DIMENSIONS["hp_gauge_bar"]
+        dims_inventory = DIMENSIONS["inventory"]
+
         side_bar = SideBar(
             window=self.__window,
-            width=DIMENSIONS["sidebar"]["width"],
+            width=dims_side_bar["width"],
             height=DIMENSIONS["map"]["height"],
             row=0,
             column=1,
             rowspan=1,
             columnspan=1,
-            padx=0,
-            pady=5,
+            padx=dims_side_bar["padx"],
+            pady=dims_side_bar["pady"],
             hp_gauge_height=DIMENSIONS["hp_gauge"]["height"],
-            hp_gauge_bar_width=DIMENSIONS["hp_gauge_bar"]["width"],
-            hp_gauge_label_padx=5,
-            hp_gauge_bar_padx=5,
-            hp_gauge_bar_pady=15,
-            inventory_title_ipady=10,
-            inventory_padx=10,
-            inventory_pady=8,
+            hp_gauge_bar_width=dims_hp_gauge_bar["width"],
+            hp_gauge_label_padx=DIMENSIONS["hp_gauge_label"]["padx"],
+            hp_gauge_bar_padx=dims_hp_gauge_bar["padx"],
+            hp_gauge_bar_pady=dims_hp_gauge_bar["pady"],
+            inventory_title_ipady=DIMENSIONS["inventory_title"]["ipady"],
+            inventory_padx=dims_inventory["padx"],
+            inventory_pady=dims_inventory["pady"],
             inventory_item_labels=inventory_item_labels,
         )
 
         return side_bar.hp_gauge, side_bar.inventory
 
     def __create_event_log(self):
+        dims = DIMENSIONS["event_log"]
         return EventLog(
             self.__window,
             None,
-            DIMENSIONS["event_log"]["height"],
+            dims["height"],
             1,
             0,
             1,
             2,
-            3,
-            5,
+            dims["padx"],
+            dims["pady"],
         )
 
     def write_to_event_log(self, message):

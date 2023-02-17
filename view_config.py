@@ -5,12 +5,17 @@
 ##############################################################################
 DIMENSIONS = {
     "map": {"width": 900, "height": 500, "padx": 5},
-    "sidebar": {"width": 250},
+    "side_bar": {"width": 250, "padx": 0, "pady": 5},
     "hp_gauge": {"height": 30},
-    "hp_gauge_bar": {"width": int(0.8 * 30)},
-    "event_log": {"height": 10},
+    "hp_gauge_label": {"padx": 5},
+    "hp_gauge_bar": {"width": int(0.7 * 250), "padx": 5, "pady": 15},
+    "event_log": {"height": 10, "padx": 3, "pady": 5},
     "in_game_menu": {"width": 400},
     "in_game_menu_title": {"pady": 5},
+    "inventory": {"padx": 10, "pady": 8},
+    "inventory_title": {"ipady": 10},
+    "game_won_menu": {"pady": 5},
+    "game_lost_menu": {"pady": 5},
 }
 
 ##############################################################################
