@@ -11,11 +11,11 @@ class TriviaDatabase:
         """
         self._db = None
 
-    def connect(self, connection_string):
+    def connect(self, connection):
         """
         Connect to the database using the specified connection string.
 
-        :param connection_string: the connection string to use when connecting to the database.
+        :param connection: the connection string to use when connecting to the database.
         :raise NotImplementedError: this method must be overridden by a concrete implementation.
         """
         raise NotImplementedError
@@ -49,13 +49,13 @@ class SQLiteTriviaDatabase(TriviaDatabase):
     """
     A concrete implementation of the TriviaDatabase interface that uses SQLite as the underlying database.
     """
-    def connect(self, connection_string):
+    def connect(self, connection):
         """
-        Connect to an SQLite database using the specified connection string.
+        Connect to an SQLite database using the specified connection.
 
-        :param connection_string: the connection string to use when connecting to the SQLite database.
+        :param connection: the connection string to use when connecting to the SQLite database.
         """
-        self._db = sqlite3.connect(connection_string)
+        self._db = sqlite3.connect(connection)
 
     def get_question(self, question_id):
         """

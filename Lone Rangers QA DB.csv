@@ -1,0 +1,128 @@
+﻿Category,Type,Difficulty,Question,Option 1,Option 2,Option 3,Option 4,Answer,Hint
+General Computer Science,True or False,Easy,Computer science is not the study of the theory and application of computers. ,TRUE,FALSE,Null,Null,FALSE,"Really, you need a hint?"
+General Computer Science,True or False,Easy,The first electronic computer was created in the 19th century,TRUE,FALSE,Null,Null,FALSE,"Really, you need a hint?"
+General Computer Science,True or False,Medium,The Turing machine is a theoretical model of a general-purpose computer that can perform any calculation that is algorithmically solvable. ,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+General Computer Science,True or False,Medium,The Von Neumann architecture is a design model for computers that separates the memory and processing units. ,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+General Computer Science,True or False,Hard,"The P vs NP problem is a computational problem that asks whether every problem whose solution can be verified in polynomial time, can also be solved in polynomial time. ",TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+General Computer Science,True or False,Hard,"The Halting problem is a problem that asks whether, given a description of an arbitrary computer program, it is possible to decide whether the program finishes running or continues running forever. ",TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+General Computer Science,Multiple Choice,Easy,Which of the following is not a type of computer memory? ,a) RAM,b) ROM ,c) CPU ,d) HDD ,c) CPU,Not a) or d)
+General Computer Science,Multiple Choice,Easy,Which of the following is not a type of computer network? ,a) LAN ,b) WAN ,c) PAN ,d) SAN ,d) SAN,Not b) or c)
+General Computer Science,Multiple Choice,Medium,Which of the following is not a type of software,a) System software ,b) Application software ,c) Hardware software ,d) Firmware ,c) Hardware software,Not a) or d)
+General Computer Science,Multiple Choice,Medium,Which of the following is not a type of computer language? ,a) Assembly ,b) High-level ,c) Low-level ,d) Database ,d) Database,Not b) or c)
+General Computer Science,Multiple Choice,Hard,Which of the following is not a type of computer architecture? ,a) Von Neumann,b) Harvard ,c) Neural ,d) Quantum ,c) Neural,Not a) or d)
+General Computer Science,Multiple Choice,Hard,Which of the following is not a type of computer security? ,a) Network security ,b) Application security ,c) Hardware security ,d) Time security ,d) Time security,Not b) or c)
+General Computer Science,Short Answer,Easy,A _____ specific set of instructions that a computer can perform.,computer program,Null,Null,Null,computer program,c______r p_____m
+General Computer Science,Short Answer,Easy,A _____ is a set of rules and conventions for organizing and formatting data.,code,Null,Null,Null,code,c__e
+General Computer Science,Short Answer,Medium,"An _____ is a list set of instructions used to solve problems or perform tasks, based on the understanding of available alternatives.",algorithm,Null,Null,Null,algorithm,a_______m
+General Computer Science,Short Answer,Medium,A _____ is a sequence of instructions that are executed in a specific order. ,program,Null,Null,Null,program,p_____m
+General Computer Science,Short Answer,Hard,A _____ is a program or device that can gain unauthorized access to a computer system. ,malware,Null,Null,Null,malware,m_____e
+General Computer Science,Short Answer,Hard,A _____ is a process of ensuring that data is kept private and secure.,encryption,Null,Null,Null,encryption,e________n
+Python3 Syntax,True or False,Easy,"In Python, a variable must be declared before it can be used. ",TRUE,FALSE,Null,Null,FALSE,"Really, you need a hint?"
+Python3 Syntax,True or False,Easy,The print function in Python requires parentheses. ,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+Python3 Syntax,True or False,Medium,"In Python, a variable declared with the ""global"" keyword can be accessed and modified inside a function. ",TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+Python3 Syntax,True or False,Medium,The range() function in Python includes the end value. ,TRUE,FALSE,Null,Null,FALSE,"Really, you need a hint?"
+Python3 Syntax,True or False,Hard,The pass statement in Python can be used as a placeholder for a function or loop that is not yet implemented. ,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+Python3 Syntax,True or False,Hard,The del keyword in Python cannot be used to delete a variable from memory. ,TRUE,FALSE,Null,Null,FALSE,"Really, you need a hint?"
+Python3 Syntax,Multiple Choice,Easy,What is the correct syntax for creating a list in Python? ,"a) list = {1, 2, 3} ","b) list = [1, 2, 3] ","c) list {1, 2, 3} ","d) list [1, 2, 3] ","b) list = [1, 2, 3] ",Not a) or d)
+Python3 Syntax,Multiple Choice,Easy,What is the correct way to create a tuple in Python? ,"a) tuple = {1, 2, 3} ","b) tuple = [1, 2, 3]","c) tuple {1, 2, 3} ","d) tuple (1, 2, 3) ","d) tuple (1, 2, 3) ",Not b) or c)
+Python3 Syntax,Multiple Choice,Medium,What is the correct syntax for creating a dictionary in Python? ,a) dict = {'key': 'value'} ,"b) dict = [""key"": ""value""] ",c) {'key': 'value'} ,"d) {""key"": ""value""} ","d) {""key"": ""value""} ",Not b) or c)
+Python3 Syntax,Multiple Choice,Medium,What is the correct way to create a set in Python? ,"a) set = (1, 2, 3) ","b) set = [1, 2, 3] ","c) set {1, 2, 3} ","d) set {(1, 2, 3)} ","c) set {1, 2, 3} ",Not a) or d)
+Python3 Syntax,Multiple Choice,Hard,What is the correct syntax for creating a lambda function in Python? ,a) lambda x: x+1 ,b) function x: x+1 ,c) def x: return x+1 ,d) x => x+1 ,a) lambda x: x+1 ,Not b) or c)
+Python3 Syntax,Multiple Choice,Hard,What is the correct way to create a class in Python? ,a) class MyClass: ,b) class MyClass(): ,c) def MyClass: ,d) def MyClass(): ,b) class MyClass(): ,Not a) or d)
+Python3 Syntax,Short Answer,Easy,The __init__ method is used to initialize a _______. ,class,Null,Null,Null,class,c___s
+Python3 Syntax,Short Answer,Easy,The _____ function is used to convert a variable to a string. ,str,Null,Null,Null,str,s_r
+Python3 Syntax,Short Answer,Medium,The _____ function is used to catch exceptions in Python. ,try,Null,Null,Null,try,t_y
+Python3 Syntax,Short Answer,Medium,The _____ statement is used to iterate over a sequence in Python,for,Null,Null,Null,for,f_r
+Python3 Syntax,Short Answer,Hard,The _____ function is used to raise an exception in Python. ,raise,Null,Null,Null,raise,r___e
+Python3 Syntax,Short Answer,Hard,The _____ statement is used to create a new scope in Python. ,with,Null,Null,Null,with,w__h
+Object-Oriented Programming,True or False,Easy,"In object-oriented programming, a class is a blueprint for creating objects. ",TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+Object-Oriented Programming,True or False,Easy,"The main advantage of object-oriented programming is small, concise programs. ",TRUE,FALSE,Null,Null,FALSE,"Really, you need a hint?"
+Object-Oriented Programming,True or False,Medium,Polymorphism in object-oriented programming allows objects of different classes to be treated as objects of a common class. ,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+Object-Oriented Programming,True or False,Medium,Inheritance in object-oriented programming allows a subclass to inherit the attributes and methods of its superclass. ,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+Object-Oriented Programming,True or False,Hard,"In object-oriented programming, encapsulation is the ability of an object to display its internal state and behavior from the outside world. ",TRUE,FALSE,Null,Null,FALSE,"Really, you need a hint?"
+Object-Oriented Programming,True or False,Hard,"In object-oriented programming, abstraction is the ability of an object to provide a simplified interface to its users. ",TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+Object-Oriented Programming,Multiple Choice,Easy,What is the correct syntax for creating a constructor in a class? ,a) constructor(){},b) __construct(){} ,c) __init__{}() ,d) __init__(){} ,d) __init__(){} ,Not b) or c)
+Object-Oriented Programming,Multiple Choice,Easy,Which of the following is not an advantage of object-oriented programming? ,a) Code ,b) Data hiding ,c) Increased code size ,d) Modularity ,c) Increased code size ,Not a) or d)
+Object-Oriented Programming,Multiple Choice,Medium,Which of the following is not a principle of object-oriented programming? ,a) Encapsulation,b) Abstraction ,c) Inheritance ,d) Performance,d) Performance,Not b) or c)
+Object-Oriented Programming,Multiple Choice,Medium,Which of the following is not a type of polymorphism in object-oriented programming? ,a) Ad-hoc polymorphism ,b) Parametric polymorphism ,c) Subtype polymorphism ,d) Performance polymorphism ,d) Performance polymorphism ,Not b) or c)
+Object-Oriented Programming,Multiple Choice,Hard,Which of the following is not a way to achieve encapsulation in object-oriented programming? ,a) Using private variables ,b) Using protected variables ,c) Using public variables ,d) Using global variables ,d) Using global variables ,Not b) or c)
+Object-Oriented Programming,Multiple Choice,Hard,Which of the following is not a way to achieve abstraction in object-oriented programming? ,a) Using interfaces ,b) Using abstract classes ,c) Using inheritance ,d) Using global variables,d) Using global variables,Not b) or c)
+Object-Oriented Programming,Short Answer,Easy,An _____ is a variable that belongs to an object or a class. ,attribute,Null,Null,Null,attribute,a_______e
+Object-Oriented Programming,Short Answer,Easy,A _____ is a function that belongs to an object or a class. ,method,Null,Null,Null,method,m____d
+Object-Oriented Programming,Short Answer,Medium,A _____ is a class that inherits the attributes and methods of another class. ,subclass,Null,Null,Null,subclass,s______s
+Object-Oriented Programming,Short Answer,Medium,A _____ is a class that is inherited by a subclass. ,superclass,Null,Null,Null,superclass,s________s
+Object-Oriented Programming,Short Answer,Hard,An _____ is a class that cannot be instantiated. ,abstract class,Null,Null,Null,abstract class,a______t c___s
+Object-Oriented Programming,Short Answer,Hard,An _____ is a class that defines a contract for its subclasses. ,interface,Null,Null,Null,interface,i_______e
+"Algorithms and Big ""O""",True or False,Easy,Big O notation is used to measure the time complexity of an algorithm. ,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+"Algorithms and Big ""O""",True or False,Easy,A quadratic time algorithm has a time complexity of O(n). ,TRUE,FALSE,Null,Null,FALSE,"Really, you need a hint?"
+"Algorithms and Big ""O""",True or False,Medium,The best possible time complexity for an algorithm is O(n^2). ,TRUE,FALSE,Null,Null,FALSE,"Really, you need a hint?"
+"Algorithms and Big ""O""",True or False,Medium,The best-case time complexity for an algorithm is represented by Big O notation.,TRUE,FALSE,Null,Null,FALSE,"Really, you need a hint?"
+"Algorithms and Big ""O""",True or False,Hard,An algorithm's time complexity can be described by more than one Big O notation. ,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+"Algorithms and Big ""O""",True or False,Hard,The average time complexity for an algorithm is represented by Big Theta notation. ,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+"Algorithms and Big ""O""",Multiple Choice,Easy,Which of the following is not a common time complexity? ,a) O(1) ,b) O(n) ,c) O(n^2,d) O(n^3) ,d) O(n^3) ,Not b) or c)
+"Algorithms and Big ""O""",Multiple Choice,Easy,Which of the following is not a common space complexity? ,a) O(1) ,b) O(n) ,c) O(n^2,d) O(n^3) ,d) O(n^3) ,Not b) or c)
+"Algorithms and Big ""O""",Multiple Choice,Medium,Which of the following is not a common type of sorting algorithm? ,a) bubble sort ,b) quick sort ,c) insertion sort ,d) matrix sort ,d) matrix sort ,Not b) or c)
+"Algorithms and Big ""O""",Multiple Choice,Medium,Which of the following is not a common type of data structure? a,a) array ,array b) linked list ,c) stack ,d) matrix ,d) matrix ,Not b) or c)
+"Algorithms and Big ""O""",Multiple Choice,Hard,Which of the following is not a way to improve the time complexity of an algorithm? ,a) memoization ,b) dynamic programming ,c) increasing hardware power ,d) decreasing the input size ,c) increasing hardware power ,Not a) or d)
+"Algorithms and Big ""O""",Multiple Choice,Hard,Which of the following is not a property of Big O notation?,a) It describes the worst-case scenario ,b) It describes the average-case scenario ,c) It describes the best-case scenario ,d) It describes the time complexity in terms of the input size ,b) It describes the average-case scenario ,Not a) or d)
+"Algorithms and Big ""O""",Short Answer,Easy,A _____ algorithm has a time complexity of O(log n). ,logarithmic,Null,Null,Null,logarithmic,l_________c
+"Algorithms and Big ""O""",Short Answer,Easy,A _____ algorithm has a time complexity of O(n^2). ,quadratic,Null,Null,Null,quadratic,q_______c
+"Algorithms and Big ""O""",Short Answer,Medium,A _____ algorithm has a time complexity of O(n log n). ,merge sort,Null,Null,Null,merge sort,m___e s__t
+"Algorithms and Big ""O""",Short Answer,Medium,A _____ data structure is a linear collection of elements in which a new element is added at one end and an existing element is removed from the other end. ,queue,Null,Null,Null,queue,q___e
+"Algorithms and Big ""O""",Short Answer,Hard,A _____ is a technique used to improve the time complexity of a recursive algorithm by storing the results of expensive function calls and returning the cached result when the same inputs occur again. ,memoization,Null,Null,Null,memoization,m_________n
+"Algorithms and Big ""O""",Short Answer,Hard,A _____ is a technique used to improve the time complexity of a problem by breaking it down into smaller subproblems and storing the solutions to these subproblems to avoid redundant calculations,dynamic programming,Null,Null,Null,dynamic programming,d_____c p_________g
+Software Design Patterns,True or False,Easy,Design patterns are reusable solutions to common problems in software development. ,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+Software Design Patterns,True or False,Easy,Design patterns are specific to a particular programming language. ,TRUE,FALSE,Null,Null,FALSE,"Really, you need a hint?"
+Software Design Patterns,True or False,Easy,The Model-View-Controller design pattern is a way to separate the logic of an application into three interconnected components. ,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+Software Design Patterns,True or False,Medium,Design patterns are a set of best practices for software development. ,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+Software Design Patterns,True or False,Medium,Design patterns are only used for large-scale software development projects. ,TRUE,FALSE,Null,Null,FALSE,"Really, you need a hint?"
+Software Design Patterns,True or False,Medium,The Model-View-Controller design pattern is used mainly in web development,TRUE,FALSE,Null,Null,FALSE,"Really, you need a hint?"
+Software Design Patterns,True or False,Hard,Design patterns are a one-size-fits-all solution to software development problems. ,TRUE,FALSE,Null,Null,FALSE,"Really, you need a hint?"
+Software Design Patterns,True or False,Hard,Design patterns are only used in object-oriented programming. ,TRUE,FALSE,Null,Null,FALSE,"Really, you need a hint?"
+Software Design Patterns,True or False,Hard,"The Model-View-Controller design pattern is a way to separate the logic of an application into three interconnected components, with the Model being responsible for updating the View and the Controller. ",TRUE,FALSE,Null,Null,FALSE,"Really, you need a hint?"
+Software Design Patterns,Multiple Choice,Easy,Which of the following is not a type of design pattern? ,a) creational ,b) behavioral,c) structural ,d) numerical ,d) numerical ,Not b) or c)
+Software Design Patterns,Multiple Choice,Easy,Which of the following is an example of a creational design pattern? ,a) singleton ,b) observer ,c) adapter ,d) bridge ,a) singleton ,Not b) or c)
+Software Design Patterns,Multiple Choice,Easy,What is the component of the Model-View-Controller design pattern that handles the data and business logic? ,a) model ,b) view ,c) controller ,d) database ,a) model ,Not b) or c)
+Software Design Patterns,Multiple Choice,Medium,Which of the following is not an example of a structural design pattern? ,a) decorator ,b) facade ,c) iterator ,d) transition ,d) transition ,Not b) or c)
+Software Design Patterns,Multiple Choice,Medium,Which of the following is an example of a behavioral design pattern? ,a) proxy ,b) adapter ,c) composite ,d) chain of responsibility ,d) chain of responsibility ,Not b) or c)
+Software Design Patterns,Multiple Choice,Medium,"In the Model-View-Controller design pattern, which component is responsible for updating the view when the model changes? ",a) model ,b) view ,c) controller ,d) database ,c) controller ,Not a) or d)
+Software Design Patterns,Multiple Choice,Hard,Which of the following is not a principle of design patterns,a) encapsulation ,b) abstraction,c) inheritance ,d) performance ,d) performance ,Not b) or c)
+Software Design Patterns,Multiple Choice,Hard,Which of the following is not a Gang of Four design pattern? ,a) command , b) interpreter,c) mediator ,d) validator ,d) validator ,Not b) or c)
+Software Design Patterns,Multiple Choice,Hard,"In the Model-View-Controller design pattern, which component is responsible for updating the model when the view changes? ",a) model ,b) view ,c) controller ,d) database ,c) controller ,Not a) or d)
+Software Design Patterns,Short Answer,Easy,The _____ pattern is a creational design pattern that allows only one instance of a class to be created. ,singleton,Null,Null,Null,singleton,s_______n
+Software Design Patterns,Short Answer,Easy,The _____ pattern is a behavioral design pattern that allows objects to notify other objects about changes in their state. ,observer,Null,Null,Null,observer,o______r
+Software Design Patterns,Short Answer,Easy,"In the Model-View-Controller design pattern, the ___ handles user input and updates the model and view. ",controller,Null,Null,Null,controller,c________r
+Software Design Patterns,Short Answer,Medium,The _____ pattern is a structural design pattern that allows objects to be used interchangeably. ,adapter,Null,Null,Null,adapter,a_____r
+Software Design Patterns,Short Answer,Medium,"The _____ pattern is a behavioral design pattern that allows multiple objects to handle a request, with the decision of which object to handle it being made at runtime. ",chain of responsibility,Null,Null,Null,chain of responsibility,c___n of r____________y
+Software Design Patterns,Short Answer,Medium,The _____ is responsible for displaying the data to the user,view,Null,Null,Null,view,
+Software Design Patterns,Short Answer,Hard,The _____ pattern is a behavioral design pattern that allows objects to separate their responsibilities and interactions with one another. ,mediator,Null,Null,Null,mediator,m______r
+Software Design Patterns,Short Answer,Hard,The _____ pattern is a behavioral design pattern that allows an object to change its behavior at runtime based on different states. ,state,Null,Null,Null,state,s___e
+Software Design Patterns,Short Answer,Hard,The _____ is responsible for updating the model when the view changes and updating the view when the model changes. ,controller,Null,Null,Null,controller,c________r
+"History of Tacoma, UW, and UWT",True or False,Easy,The University of Washington Tacoma was founded in the 1990s. ,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+"History of Tacoma, UW, and UWT",True or False,Easy,"The City of Tacoma is located in King County, Washington. ",TRUE,FALSE,Null,Null,FALSE,"Really, you need a hint?"
+"History of Tacoma, UW, and UWT",True or False,Easy,The University of Washington Tacoma was founded in the 2000s. ,TRUE,FALSE,Null,Null,FALSE,"Really, you need a hint?"
+"History of Tacoma, UW, and UWT",True or False,Medium,The City of Tacoma is located on Commencement Bay,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+"History of Tacoma, UW, and UWT",True or False,Medium,The University of Washington football team won the National Championships in 1991. ,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+"History of Tacoma, UW, and UWT",True or False,Hard,The City of Tacoma was officially incorporated in 1875. ,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+"History of Tacoma, UW, and UWT",True or False,Hard,The University of Washington football team has won a Rose Bowl seven times. ,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+"History of Tacoma, UW, and UWT",True or False,Medium,The City of Tacoma was originally a logging town. ,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+"History of Tacoma, UW, and UWT",True or False,Medium,The City of Tacoma was named after the nearby Mount Rainier. ,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+"History of Tacoma, UW, and UWT",True or False,Medium,The City of Tacoma was named after the nearby Mount Tacoma. ,TRUE,FALSE,Null,Null,FALSE,"Really, you need a hint?"
+"History of Tacoma, UW, and UWT",True or False,Hard,The University of Washington Tacoma's student body president is Jai'Shon Berry.,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+"History of Tacoma, UW, and UWT",True or False,Hard,The University of Washington Tacoma's Chancellor is Dr. Sheila Edwards,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+"History of Tacoma, UW, and UWT",True or False,Hard,The University of Washington football team’s Head Coach is Kalen DeBoer.,TRUE,FALSE,Null,Null,TRUE,"Really, you need a hint?"
+"History of Tacoma, UW, and UWT",Multiple Choice,Easy,The Washington State Fair is located in which Pierce County city? ,a) tacoma ,b) orting ,c) puyallup ,d) sumner ,c) puyallup ,Not a) or d)
+"History of Tacoma, UW, and UWT",Multiple Choice,Medium,Which year did the University of Washington Tacoma open its doors to students? ,a) 1990 ,b) 2020,c) 1910 ,d) 1850 ,a) 1990 ,Not b) or c)
+"History of Tacoma, UW, and UWT",Multiple Choice,Hard,What was the original industry of the City of Tacoma? ,a) fishing ,b) apples ,c) logging ,d) microchips ,c) logging ,Not a) or d)
+"History of Tacoma, UW, and UWT",Multiple Choice,Hard,Which year was the City of Tacoma officially incorporated? ,a) 1858 ,b) 1863 ,c) 1875 ,d) 1889 ,c) 1875 ,Not a) or d)
+"History of Tacoma, UW, and UWT",Multiple Choice,Hard,What is the nickname of the City of Tacoma? ,a) the city of trees,b) the city of destiny,c) the city of mountain,d) the city of the brave,b) the city of destiny,Not a) or d)
+"History of Tacoma, UW, and UWT",Short Answer,Easy,The University of Washington Tacoma is located in the ___ of Tacoma. ,downtown,Null,Null,Null,downtown,d______n
+"History of Tacoma, UW, and UWT",Short Answer,Easy,The University of Washington mascot’s name is a ___. ,husky,Null,Null,Null,husky,h___y
+"History of Tacoma, UW, and UWT",Short Answer,Easy,The City of Tacoma is located in which county ___.? (,pierce,Null,Null,Null,pierce,p____e
+"History of Tacoma, UW, and UWT",Short Answer,Easy,The acronym for University of Washington Tacoma is ___. ,uwt,Null,Null,Null,uwt,u_t
+"History of Tacoma, UW, and UWT",Short Answer,Medium,The City of Tacoma is located in the ___ region of Washington. ,south puget sound,Null,Null,Null,south puget sound,s___h p___t s___d
+"History of Tacoma, UW, and UWT",Short Answer,Medium,The seat of Pierce County is the City of ___. ,tacoma,Null,Null,Null,tacoma,t____a
+"History of Tacoma, UW, and UWT",Short Answer,Medium,The University of Washington football team plays its home games at ,husky stadium,Null,Null,Null,husky stadium,h___y s_____m
+"History of Tacoma, UW, and UWT",Short Answer,Hard,The City of Tacoma is the ___ largest city in Washington. ,third,Null,Null,Null,third,t___d
+"History of Tacoma, UW, and UWT",Short Answer,Hard,The first branch campus of th eUniversity of Washington was in _____.,bothell,Null,Null,Null,bothell,b_____l
+"History of Tacoma, UW, and UWT",Short Answer,Hard,"Tacoma derives from  _____, the native name of Mt. Rainier.",tahoma,Null,Null,Null,tahoma,t____a
