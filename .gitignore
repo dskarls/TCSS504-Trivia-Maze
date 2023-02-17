@@ -131,9 +131,5 @@ dmypy.json
 
 # MacOS dir metadata files
 .DS_Store
-.idea/vcs.xml
-.idea/TCSS504-Trivia-Maze.iml
-.idea/modules.xml
-.idea/misc.xml
-.idea/inspectionProfiles/profiles_settings.xml
-.idea/workspace.xml
+
+.idea/
