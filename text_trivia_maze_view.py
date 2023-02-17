@@ -5,6 +5,8 @@ import textwrap
 from tkinter import *
 from tkinter.ttk import *
 
+from view_config import STYLES
+
 
 class TriviaMazeView(ABC):
     """
@@ -151,6 +153,9 @@ class TextTriviaMazeView:
             self.__window.tk.call("source", theme_path)
             self.__window.tk.call("set_theme", theme_name)
 
+        # Define styles in memory for tk
+        self.__configure_styles()
+
         # Set minimum row/col sizes to prevent frames from collapsing to their
         # contained content
         self.__window.rowconfigure(0, minsize=self.__MAP_HEIGHT)
@@ -185,6 +190,11 @@ class TextTriviaMazeView:
 
         # Intercept keystrokes from user
         self.__configure_keystroke_capture()
+
+    @staticmethod
+    def __configure_styles():
+        for style in STYLES.values():
+            Style().configure(**style)
 
     def __configure_keystroke_capture(self):
         """Capture keystrokes so they can be sent to the controller for
@@ -432,19 +442,12 @@ class MainMenu(SubWindow):
         super().__init__(window, None, None, 0, 0, *window.grid_size())
 
         # Add banner message
-        # TODO: Store all styles in a single place (possibly some kind of view
-        # configuration class)
-        style_name = "welcome.TLabel"
-        sty = Style()
-
-        sty.configure(style_name, font=("Courier New", 16))
-
         lbl = Label(
             master=self._frm,
             text=banner_text,
             justify=CENTER,
             anchor=CENTER,
-            style=style_name,
+            style=STYLES["main_menu"]["style"],
         )
 
         lbl.pack(fill=BOTH)
@@ -494,13 +497,10 @@ class Map(SubWindow):
         self.__text = text
 
         # Create empty label that will hold the actual map
-        style_name = "map.TLabel"
-        sty = Style()
-        sty.configure(style_name, font=("Courier New", 26, "bold"))
         lbl = Label(
             master=self._frm,
             text=text,
-            style=style_name,
+            style=STYLES["map"]["style"],
             justify=CENTER,
             anchor=CENTER,
         )
@@ -635,15 +635,12 @@ class SideBar(SubWindow):
 
     def __create_inventory(self):
         # Create label for inventory
-        style_name = "inventory_title.TLabel"
-        sty = Style()
-        sty.configure(style_name, font=("Arial", 16, "bold"))
         lbl_inventory = Label(
             master=self._frm,
             text="Inventory",
             relief=RIDGE,
             anchor=CENTER,
-            style=style_name,
+            style=STYLES["inventory_title"]["style"],
         )
         lbl_inventory.pack(
             side=TOP,
@@ -666,10 +663,9 @@ class SideBar(SubWindow):
             pady=self.__pady,
         )
 
-        style_name = "inventory_title.TLabel"
-        sty = Style()
-        sty.configure(style_name, font=("Arial", 16, "bold"))
-        lbl_hp_gauge = Label(master=frm_hp, text="HP", style=style_name)
+        lbl_hp_gauge = Label(
+            master=frm_hp, text="HP", style=STYLES["hp_gauge_label"]["style"]
+        )
         lbl_hp_gauge.pack(padx=(self.__hp_gauge_label_padx, 0), side=LEFT)
 
         # Create bar for hp gauge
@@ -702,20 +698,26 @@ class SideBar(SubWindow):
             "Pillar of Polymorphism",
         )
         inventory_quantity_labels = {}
-        style_name = "inventory_item.TLabel"
-        sty = Style()
-        sty.configure(style_name, font=("Arial", 15, "bold"))
+
         for item in item_labels:
             # Create frame for this item
             frm_item = Frame(master=frm)
             frm_item.pack(side=TOP, fill=BOTH, padx=padx, pady=pady)
 
             # Create label for item
-            lbl_item = Label(master=frm_item, text=item, style=style_name)
+            lbl_item = Label(
+                master=frm_item,
+                text=item,
+                style=STYLES["inventory_item"]["style"],
+            )
             lbl_item.pack(side=LEFT, padx=padx)
 
             # Create label holding quantity of item
-            lbl_quantity = Label(master=frm_item, text="0", style=style_name)
+            lbl_quantity = Label(
+                master=frm_item,
+                text="0",
+                style=STYLES["inventory_item"]["style"],
+            )
             lbl_quantity.pack(side=RIGHT, padx=padx)
 
             inventory_quantity_labels[item] = lbl_quantity
@@ -784,18 +786,12 @@ class DismissiblePopUp(PopUpWindow):
         # Create the frame for the whole in-game menu
         super().__init__(window, width, relief)
 
-        # TODO: Store all styles in a single place (possibly some kind of view
-        # configuration class)
-        style_name = "you_won.TLabel"
-        sty = Style()
-        sty.configure(style_name, font=("Courier New", 16))
-
         lbl = Label(
             master=self._frm,
             text=text,
             justify=CENTER,
             anchor=CENTER,
-            style=style_name,
+            style=STYLES["game_won_menu"]["style"],
         )
         lbl.pack(fill=BOTH, pady=pady)
 
