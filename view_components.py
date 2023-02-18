@@ -82,7 +82,9 @@ class SubWindow:
             sticky="nsew",
         )
 
-        self._frm = frm
+        # Expose tk frame so that this object can be passed to other interface
+        # objects, e.g. HP Gauge, as a master
+        self.frame = frm
 
     # FIXME: Make show and hide abstract methods? Would the map etc really be a subwindow then?
 
@@ -95,7 +97,7 @@ class MainMenu(SubWindow):
 
         # Add banner message
         lbl = Label(
-            master=self._frm,
+            master=self.frame,
             text=banner_text,
             justify=CENTER,
             anchor=CENTER,
@@ -107,7 +109,7 @@ class MainMenu(SubWindow):
         # Add text menu with desired options
         self.__text_menu = TextMenu(
             options=menu_options,
-            master=self._frm,
+            master=self.frame,
             width=None,
             height=len(menu_options),
             unselected_foreground_color="grey",
@@ -119,10 +121,10 @@ class MainMenu(SubWindow):
         )
 
     def hide(self):
-        self._frm.grid_remove()
+        self.frame.grid_remove()
 
     def show(self):
-        self._frm.grid()
+        self.frame.grid()
 
         # Attach focus to text menu of options
         self.__text_menu.focus()
@@ -150,7 +152,7 @@ class Map(SubWindow):
 
         # Create empty label that will hold the actual map
         lbl = Label(
-            master=self._frm,
+            master=self.frame,
             text=text,
             style=STYLES["map"]["style"],
             justify=CENTER,
@@ -164,7 +166,7 @@ class Map(SubWindow):
 
     @contents.setter
     def contents(self, text):
-        self._frm.children["!label"].configure(text=text)
+        self.frame.children["!label"].configure(text=text)
 
 
 class EventLog(SubWindow):
@@ -183,7 +185,7 @@ class EventLog(SubWindow):
         super().__init__(window, width, None, row, column, rowspan, columnspan)
 
         self.__textbox = self.__add_scrollable_readonly_textbox_to_subwindow(
-            self._frm, num_lines, padx, pady
+            self.frame, num_lines, padx, pady
         )
 
     def write(self, message):
@@ -299,89 +301,41 @@ class Inventory:
         return inventory_quantity_labels
 
 
-class SideBar(SubWindow):
+class HPGauge:
     def __init__(
         self,
         window,
-        width,
         height,
-        row,
-        column,
-        rowspan,
-        columnspan,
-        padx,
-        pady,
-        hp_gauge_height,
-        hp_gauge_bar_width,
-        hp_gauge_label_padx,
-        hp_gauge_bar_padx,
-        hp_gauge_bar_pady,
-        inventory_title_ipady,
-        inventory_padx,
-        inventory_pady,
-        inventory_item_labels,
-    ):
-        super().__init__(
-            window, width, height, row, column, rowspan, columnspan
-        )
-        self.__padx = padx
-        self.__pady = pady
-        self.__hp_gauge_height = hp_gauge_height
-        self.__hp_gauge_bar_width = hp_gauge_bar_width
-        self.__hp_gauge_label_padx = hp_gauge_label_padx
-        self.__hp_gauge_bar_padx = hp_gauge_bar_padx
-        self.__hp_gauge_bar_pady = hp_gauge_bar_pady
-        self.__inventory_title_ipady = inventory_title_ipady
-        self.__inventory_padx = inventory_padx
-        self.__inventory_pady = inventory_pady
-        self.__inventory_item_labels = inventory_item_labels
-
-        # Create hp gauge
-        self.hp_gauge = self.__create_hp_gauge()
-
-        self.inventory = self.__create_inventory()
-
-    def __create_inventory(self):
-        return Inventory(
-            self._frm,
-            title="Inventory",
-            title_ipady=self.__inventory_title_ipady,
-            padx=self.__inventory_padx,
-            pady=self.__inventory_pady,
-            item_labels=self.__inventory_item_labels,
-        )
-
-    def __create_hp_gauge(
-        self,
+        bar_width,
+        label_padx,
+        bar_padx,
+        bar_pady,
     ):
         # Create frame to hold hp gauge label and bar
-        frm_hp = Frame(master=self._frm, height=self.__hp_gauge_height)
-        frm_hp.pack(
+        frm = Frame(master=window, height=height)
+        frm.pack(
             side=TOP,
-            padx=self.__padx,
-            pady=self.__pady,
         )
 
         lbl_hp_gauge = Label(
-            master=frm_hp, text="HP", style=STYLES["hp_gauge_label"]["style"]
+            master=frm, text="HP", style=STYLES["hp_gauge_label"]["style"]
         )
-        lbl_hp_gauge.pack(padx=(self.__hp_gauge_label_padx, 0), side=LEFT)
+        lbl_hp_gauge.pack(padx=(label_padx, 0), side=LEFT)
 
         # Create bar for hp gauge
-        bar_hp_gauge = Progressbar(
-            master=frm_hp,
+        self.__bar_hp_gauge = Progressbar(
+            master=frm,
             orient=HORIZONTAL,
-            length=self.__hp_gauge_bar_width,
+            length=bar_width,
             mode="determinate",
         )
-        bar_hp_gauge.pack(
-            padx=self.__hp_gauge_bar_padx, pady=self.__hp_gauge_bar_pady
-        )
+        self.__bar_hp_gauge.pack(padx=bar_padx, pady=bar_pady)
 
         # Initialize to full health
-        bar_hp_gauge["value"] = 100
+        self.set(100)
 
-        return bar_hp_gauge
+    def set(self, value):
+        self.__bar_hp_gauge["value"] = value
 
 
 class InGameMenu(PopUpWindow):

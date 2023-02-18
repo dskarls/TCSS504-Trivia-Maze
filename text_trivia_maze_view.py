@@ -7,12 +7,14 @@ from tkinter.ttk import *
 
 from view_config import DIMENSIONS, MESSAGES, KEYS, STYLES
 from view_components import (
+    HPGauge,
+    Inventory,
     MainMenu,
     InGameMenu,
     DismissiblePopUp,
     Map,
-    SideBar,
     EventLog,
+    SubWindow,
 )
 
 
@@ -243,7 +245,7 @@ class TextTriviaMazeView:
         # FIXME: Retrieve current adventurer HP from Model
         current_hp = 72
 
-        self.__hp_gauge["value"] = current_hp
+        self.__hp_gauge.set(current_hp)
 
     def __create_map(self):
         dims = DIMENSIONS["map"]
@@ -258,7 +260,7 @@ class TextTriviaMazeView:
         )
 
     def update_map(self):
-        # FIXME: Grab the map object from the model here
+        # FIXME: Grab the Rooms objects from the model here
         MAP_EXAMPLE = """
         *  *  **  *  **  *  **  *  **  *  **  *  **  *  *
         *  P  ||     ||     ||     ||  I  **@ i  **     *
@@ -280,6 +282,30 @@ class TextTriviaMazeView:
 
     def __add_hp_gauge_and_inventory(self):
         # Create inventory_labels
+
+        dims_side_bar = DIMENSIONS["side_bar"]
+        dims_inventory = DIMENSIONS["inventory"]
+
+        side_bar = SubWindow(
+            window=self.__window,
+            width=dims_side_bar["width"],
+            height=DIMENSIONS["map"]["height"],
+            row=0,
+            column=1,
+            rowspan=1,
+            columnspan=1,
+        )
+
+        dims_hp_gauge_bar = DIMENSIONS["hp_gauge_bar"]
+        hp_gauge = HPGauge(
+            window=side_bar.frame,
+            height=DIMENSIONS["hp_gauge"]["height"],
+            bar_width=dims_hp_gauge_bar["width"],
+            label_padx=DIMENSIONS["hp_gauge_label"]["padx"],
+            bar_padx=dims_hp_gauge_bar["padx"],
+            bar_pady=dims_hp_gauge_bar["pady"],
+        )
+
         inventory_item_labels = (
             "Health Potion",
             "Suggestion Potion",
@@ -291,32 +317,16 @@ class TextTriviaMazeView:
             "Pillar of Polymorphism",
         )
 
-        dims_side_bar = DIMENSIONS["side_bar"]
-        dims_hp_gauge_bar = DIMENSIONS["hp_gauge_bar"]
-        dims_inventory = DIMENSIONS["inventory"]
-
-        side_bar = SideBar(
-            window=self.__window,
-            width=dims_side_bar["width"],
-            height=DIMENSIONS["map"]["height"],
-            row=0,
-            column=1,
-            rowspan=1,
-            columnspan=1,
-            padx=dims_side_bar["padx"],
-            pady=dims_side_bar["pady"],
-            hp_gauge_height=DIMENSIONS["hp_gauge"]["height"],
-            hp_gauge_bar_width=dims_hp_gauge_bar["width"],
-            hp_gauge_label_padx=DIMENSIONS["hp_gauge_label"]["padx"],
-            hp_gauge_bar_padx=dims_hp_gauge_bar["padx"],
-            hp_gauge_bar_pady=dims_hp_gauge_bar["pady"],
-            inventory_title_ipady=DIMENSIONS["inventory_title"]["ipady"],
-            inventory_padx=dims_inventory["padx"],
-            inventory_pady=dims_inventory["pady"],
-            inventory_item_labels=inventory_item_labels,
+        inventory = Inventory(
+            window=side_bar.frame,
+            title="Inventory",
+            title_ipady=DIMENSIONS["inventory_title"]["ipady"],
+            padx=dims_inventory["padx"],
+            pady=dims_inventory["pady"],
+            item_labels=inventory_item_labels,
         )
 
-        return side_bar.hp_gauge, side_bar.inventory
+        return hp_gauge, inventory
 
     def __create_event_log(self):
         dims = DIMENSIONS["event_log"]
