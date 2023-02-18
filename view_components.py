@@ -171,6 +171,8 @@ class Map(SubWindow):
 
 
 class EventLog(SubWindow):
+    __PREFIX = "> "
+
     def __init__(
         self,
         window,
@@ -195,7 +197,7 @@ class EventLog(SubWindow):
         # Make text box writable for a brief instant, write to it, then make it
         # read-only again
         event_log_text_box.config(state=NORMAL)
-        event_log_text_box.insert(END, message + "\n")
+        event_log_text_box.insert(END, self.__PREFIX + message + "\n")
         event_log_text_box.config(state=DISABLED)
 
         # Scroll down as far as possible
