@@ -70,9 +70,8 @@ class SubWindow:
         column,
         rowspan=1,
         columnspan=1,
-        relief=RIDGE,  # FIXME: Remove/change default for relief
     ):
-        frm = Frame(master=window, width=width, height=height, relief=relief)
+        frm = Frame(master=window, width=width, height=height)
 
         frm.grid(
             row=row,
@@ -226,11 +225,9 @@ class EventLog(SubWindow):
 
 
 class PopUpWindow:
-    # FIXME: Remove/change default for relief
-    def __init__(self, window, width, relief=RIDGE):
+    def __init__(self, window, width):
         self._frm = Frame(
             master=window,
-            relief=relief,
         )
         self._place_pop_up_at_center_of_window(self._frm, width)
         self._width = width
@@ -258,7 +255,6 @@ class Inventory:
         lbl_inventory = Label(
             master=self.__window,
             text=title,
-            relief=RIDGE,
             anchor=CENTER,
             style=STYLES["inventory_title"]["style"],
         )
@@ -343,13 +339,12 @@ class InGameMenu(PopUpWindow):
     A pop-up window with a text-based menu inside.
     """
 
-    # FIXME: Remove/change default for relief
-    def __init__(self, window, width, title, pady, menu_options, relief=RIDGE):
+    def __init__(self, window, width, title, pady, menu_options):
         # Create the frame for the whole in-game menu
-        super().__init__(window, width, relief)
+        super().__init__(window, width)
 
         # Create header with title in it
-        frm_title = Frame(master=self._frm, width=width, relief=relief)
+        frm_title = Frame(master=self._frm, width=width)
         frm_title.pack(fill=BOTH, anchor=CENTER)
         lbl = Label(
             master=frm_title,
@@ -395,9 +390,9 @@ class DismissiblePopUp(PopUpWindow):
     dismiss it by entering a specific key.
     """
 
-    def __init__(self, window, width, text, pady, dismiss_key, relief=RIDGE):
+    def __init__(self, window, width, text, pady, dismiss_key):
         # Create the frame for the whole in-game menu
-        super().__init__(window, width, relief)
+        super().__init__(window, width)
 
         lbl = Label(
             master=self._frm,
