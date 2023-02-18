@@ -120,7 +120,10 @@ class TextTriviaMazeView:
         # around this by using the 'lift()' and 'lower()' methods of the frame
         # widgets, but it's simpler just to make them in order.
         self.__map = self.__create_map()
-        self.__hp_gauge, self.__inventory = self.__add_hp_gauge_and_inventory()
+        (
+            self.__hp_gauge,
+            self.__inventory,
+        ) = self.__create_hp_gauge_and_inventory()
         self.__event_log = self.__create_event_log()
 
         # Create game won/lost menus
@@ -280,7 +283,7 @@ class TextTriviaMazeView:
         """
         self.__map.contents = textwrap.dedent(MAP_EXAMPLE)
 
-    def __add_hp_gauge_and_inventory(self):
+    def __create_hp_gauge_and_inventory(self):
         # Create inventory_labels
 
         dims_side_bar = DIMENSIONS["side_bar"]
