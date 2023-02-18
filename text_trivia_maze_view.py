@@ -392,6 +392,7 @@ if __name__ == "__main__":
     view.update_map()
     view.show_game_lost_menu()
     view.hide_game_lost_menu()
-    for i in range(100):
-        view.write_to_event_log(f"Here is message {i}")
+    view.write_to_event_log("Here is a message")
+    view.write_to_event_log("And here is another message")
+    view.write_to_event_log("One more time")
     view.mainloop()

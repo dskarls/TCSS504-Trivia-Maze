@@ -282,10 +282,10 @@ class EnumeratedInventory:
             fill=BOTH,
         )
 
-        self.__create_inventory_item_labels()
+        self.__item_quantity_labels = self.__create_inventory_item_labels()
 
     def __create_inventory_item_labels(self):
-        inventory_quantity_labels = {}
+        item_quantity_labels = {}
 
         for item in self.__item_labels:
             # Create frame for this item
@@ -310,9 +310,12 @@ class EnumeratedInventory:
             )
             lbl_quantity.pack(side=RIGHT, padx=self.__padx)
 
-            inventory_quantity_labels[item] = lbl_quantity
+            item_quantity_labels[item] = lbl_quantity
 
-        return inventory_quantity_labels
+        return item_quantity_labels
+
+    def update_item_quantity(self, item_name, quantity):
+        self.__item_quantity_labels[item_name].configure(text=str(quantity))
 
 
 class CheckboxInventory:
@@ -335,10 +338,12 @@ class CheckboxInventory:
             fill=BOTH,
         )
 
-        self.__create_inventory_item_labels()
+        self.__item_check_button_control_vars = (
+            self.__create_inventory_item_labels()
+        )
 
     def __create_inventory_item_labels(self):
-        inventory_quantity_labels = {}
+        item_check_button_control_vars = {}
 
         control_vars = [IntVar() for _ in range(len(self.__item_labels))]
 
@@ -374,10 +379,16 @@ class CheckboxInventory:
                 ),
             )
             check_btn.pack(side=RIGHT, padx=self.__padx)
-            control_vars[ind].set(0)
-            inventory_quantity_labels[item] = check_btn
 
-        return inventory_quantity_labels
+            item_check_button_control_vars[item] = control_vars[ind]
+
+            # Mark item as not held
+            control_vars[ind].set(0)
+
+        return item_check_button_control_vars
+
+    def check_item(self, item_name):
+        self.__item_check_button_control_vars[item_name].set(1)
 
 
 class HPGauge:
