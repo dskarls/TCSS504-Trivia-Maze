@@ -143,8 +143,31 @@ class TextTriviaMazeView:
         # Prevent resizing
         self.__window.resizable(False, False)
 
+        # Add separator lines to divide UI cleanly
+        self.__create_separators()
+
         # Intercept keystrokes from user
         self.__configure_keystroke_capture()
+
+    def __create_separators(self):
+        # Vertical line along right edge of map
+        Separator(self.__window, orient=VERTICAL).place(
+            x=DIMENSIONS["map"]["width"],
+            height=DIMENSIONS["map"]["height"],
+        )
+
+        # Horizontal line along bottom edge of map
+        Separator(self.__window, orient=HORIZONTAL).place(
+            y=DIMENSIONS["map"]["height"], width=DIMENSIONS["map"]["width"]
+        )
+
+        # Horizonal line under hp gauge
+        Separator(self.__window, orient=HORIZONTAL).place(
+            x=DIMENSIONS["map"]["width"],
+            y=DIMENSIONS["hp_gauge"]["height"]
+            + DIMENSIONS["hp_gauge_bar"]["pady"],
+            width=DIMENSIONS["side_bar"]["width"],
+        )
 
     @staticmethod
     def __configure_styles():
