@@ -14,6 +14,8 @@ DIMENSIONS = {
     "in_game_menu_title": {"pady": 5},
     "inventory": {"padx": 10, "pady": 8},
     "inventory_title": {"ipady": 10},
+    "pillars": {"padx": 10, "pady": 8},
+    "pillars_title": {"ipady": 10},
     "game_won_menu": {"pady": 5},
     "game_lost_menu": {"pady": 5},
 }
@@ -95,6 +97,14 @@ STYLES = {
     },
     "inventory_item": {
         "style": "inventory_item.TLabel",
+        "font": ("Arial", 15, "bold"),
+    },
+    "pillars_title": {
+        "style": "pillars_title.TLabel",
+        "font": ("Arial", 16, "bold"),
+    },
+    "pillars_item": {
+        "style": "pillars_item.TLabel",
         "font": ("Arial", 15, "bold"),
     },
 }

@@ -8,7 +8,8 @@ from tkinter.ttk import *
 from view_config import DIMENSIONS, MESSAGES, KEYS, STYLES
 from view_components import (
     HPGauge,
-    Inventory,
+    EnumeratedInventory,
+    CheckboxInventory,
     MainMenu,
     InGameMenu,
     DismissiblePopUp,
@@ -123,7 +124,8 @@ class TextTriviaMazeView:
         (
             self.__hp_gauge,
             self.__inventory,
-        ) = self.__create_hp_gauge_and_inventory()
+            self.__pillars_inventory,
+        ) = self.__create_side_bar()
         self.__event_log = self.__create_event_log()
 
         # Create game won/lost menus
@@ -306,11 +308,8 @@ class TextTriviaMazeView:
         """
         self.__map.contents = textwrap.dedent(MAP_EXAMPLE)
 
-    def __create_hp_gauge_and_inventory(self):
-        # Create inventory_labels
-
+    def __create_side_bar(self):
         dims_side_bar = DIMENSIONS["side_bar"]
-        dims_inventory = DIMENSIONS["inventory"]
 
         side_bar = SubWindow(
             window=self.__window,
@@ -337,13 +336,10 @@ class TextTriviaMazeView:
             "Suggestion Potion",
             "Vision Potion",
             "Magic Key",
-            "Pillar of Abstraction",
-            "Pillar of Encapsulation",
-            "Pillar of Inheritance",
-            "Pillar of Polymorphism",
         )
 
-        inventory = Inventory(
+        dims_inventory = DIMENSIONS["inventory"]
+        inventory = EnumeratedInventory(
             window=side_bar.frame,
             title="Inventory",
             title_ipady=DIMENSIONS["inventory_title"]["ipady"],
@@ -352,7 +348,24 @@ class TextTriviaMazeView:
             item_labels=inventory_item_labels,
         )
 
-        return hp_gauge, inventory
+        pillars_item_labels = (
+            "Abstraction",
+            "Encapsulation",
+            "Inheritance",
+            "Polymorphism",
+        )
+
+        dims_pillars = DIMENSIONS["pillars"]
+        pillars_inventory = CheckboxInventory(
+            window=side_bar.frame,
+            title="Pillars of OOP",
+            title_ipady=DIMENSIONS["pillars_title"]["ipady"],
+            padx=dims_pillars["padx"],
+            pady=dims_pillars["pady"],
+            item_labels=pillars_item_labels,
+        )
+
+        return hp_gauge, inventory, pillars_inventory
 
     def __create_event_log(self):
         dims = DIMENSIONS["event_log"]

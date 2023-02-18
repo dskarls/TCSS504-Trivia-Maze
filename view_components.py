@@ -1,3 +1,5 @@
+import functools
+
 from tkinter import *
 from tkinter.ttk import *
 
@@ -244,7 +246,7 @@ class PopUpWindow:
     # FIXME: Make show and hide abstract methods? Would the map etc really be a subwindow then?
 
 
-class Inventory:
+class EnumeratedInventory:
     def __init__(self, window, title, title_ipady, padx, pady, item_labels):
         self.__window = window
         self.__padx = padx
@@ -293,6 +295,71 @@ class Inventory:
             lbl_quantity.pack(side=RIGHT, padx=self.__padx)
 
             inventory_quantity_labels[item] = lbl_quantity
+
+        return inventory_quantity_labels
+
+
+class CheckboxInventory:
+    def __init__(self, window, title, title_ipady, padx, pady, item_labels):
+        self.__window = window
+        self.__padx = padx
+        self.__pady = pady
+        self.__item_labels = item_labels
+
+        # Create label for inventory
+        lbl_inventory = Label(
+            master=self.__window,
+            text=title,
+            anchor=CENTER,
+            style=STYLES["pillars_title"]["style"],
+        )
+        lbl_inventory.pack(
+            side=TOP,
+            ipady=title_ipady,
+            fill=BOTH,
+        )
+
+        self.__create_inventory_item_labels()
+
+    def __create_inventory_item_labels(self):
+        inventory_quantity_labels = {}
+
+        control_vars = [IntVar() for _ in range(len(self.__item_labels))]
+
+        for ind, item in enumerate(self.__item_labels):
+            # Create frame for this item
+            frm_item = Frame(master=self.__window, height=50)
+            frm_item.pack(
+                side=TOP, fill=BOTH, padx=self.__padx, pady=self.__pady
+            )
+
+            # Create label for item
+            lbl_item = Label(
+                master=frm_item,
+                text=item,
+                style=STYLES["pillars_item"]["style"],
+            )
+            lbl_item.pack(side=LEFT, padx=self.__padx)
+
+            # Create checkbutton indicating if the item is held
+            # NOTE: Using `partial` is necessary here to prevent all of the
+            # command closures form just taking the final value of `ind` after
+            # the loop is exhausted.
+            check_btn = Checkbutton(
+                frm_item,
+                variable=control_vars[ind],
+                onvalue=1,
+                offvalue=0,
+                command=functools.partial(
+                    lambda ind: control_vars[ind].set(
+                        1 - control_vars[ind].get()
+                    ),
+                    ind=ind,
+                ),
+            )
+            check_btn.pack(side=RIGHT, padx=self.__padx)
+            control_vars[ind].set(0)
+            inventory_quantity_labels[item] = check_btn
 
         return inventory_quantity_labels
 
