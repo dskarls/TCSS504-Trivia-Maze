@@ -80,7 +80,7 @@ class SubWindow:
             column=column,
             rowspan=rowspan,
             columnspan=columnspan,
-            sticky="nsew",
+            sticky=NSEW,
         )
 
         # Expose tk frame so that this object can be passed to other interface
