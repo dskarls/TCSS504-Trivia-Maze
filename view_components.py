@@ -191,17 +191,31 @@ class EventLog(SubWindow):
             self.frame, num_lines, padx, pady
         )
 
+        # Initialize a var to track whether the log has already been written
+        # to. This is used to determine prefixes/postfixes wrapped around each
+        # message.
+        self.__contents_empty = True
+
     def write(self, message):
         event_log_text_box = self.__textbox
+
+        if self.__contents_empty:
+            message_wrapped = ""
+        else:
+            message_wrapped = "\n"
+
+        message_wrapped += self.__PREFIX + message
 
         # Make text box writable for a brief instant, write to it, then make it
         # read-only again
         event_log_text_box.config(state=NORMAL)
-        event_log_text_box.insert(END, self.__PREFIX + message + "\n")
+        event_log_text_box.insert(END, message_wrapped)
         event_log_text_box.config(state=DISABLED)
 
         # Scroll down as far as possible
         event_log_text_box.yview(END)
+
+        self.__contents_empty = False
 
     @staticmethod
     def __add_scrollable_readonly_textbox_to_subwindow(
