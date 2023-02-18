@@ -4,7 +4,7 @@
 # Dimensions such as width, height, and padding options
 ##############################################################################
 DIMENSIONS = {
-    "map": {"width": 900, "height": 500, "padx": 5},
+    "map": {"width": 850, "height": 500, "padx": 5},
     "side_bar": {"width": 250, "padx": 0, "pady": 5},
     "hp_gauge": {"height": 30},
     "hp_gauge_label": {"padx": 5},
