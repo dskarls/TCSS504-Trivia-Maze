@@ -151,36 +151,70 @@ class TextTriviaMazeView:
 
         # Create main menu
         self.__main_menu = self.__create_main_menu()
-        self.show_main_menu()
 
         # Prevent resizing
         self.__window.resizable(False, False)
 
         # Add separator lines to divide UI cleanly
-        self.__create_separators()
+        self.__separators = self.__create_separators()
+
+        # Show main menu and have it take focus
+        self.show_main_menu()
 
         # Intercept keystrokes from user
         self.__configure_keystroke_capture()
 
     def __create_separators(self):
+        """Creates a set of desired separators and their relevant dimensions,
+        packed as Separator-dict 2-tuples."""
+        separators = []
+
         # Vertical line along right edge of map
-        Separator(self.__window, orient=VERTICAL).place(
-            x=DIMENSIONS["map"]["width"],
-            height=DIMENSIONS["map"]["height"],
+        separators.append(
+            (
+                Separator(self.__window, orient=VERTICAL),
+                {
+                    "x": DIMENSIONS["map"]["width"],
+                    "height": DIMENSIONS["map"]["height"],
+                },
+            )
         )
 
         # Horizontal line along bottom edge of map
-        Separator(self.__window, orient=HORIZONTAL).place(
-            y=DIMENSIONS["map"]["height"], width=DIMENSIONS["map"]["width"]
+        separators.append(
+            (
+                Separator(self.__window, orient=HORIZONTAL),
+                {
+                    "y": DIMENSIONS["map"]["height"],
+                    "width": DIMENSIONS["map"]["width"],
+                },
+            )
         )
 
         # Horizonal line under hp gauge
-        Separator(self.__window, orient=HORIZONTAL).place(
-            x=DIMENSIONS["map"]["width"],
-            y=DIMENSIONS["hp_gauge"]["height"]
-            + DIMENSIONS["hp_gauge_bar"]["pady"],
-            width=DIMENSIONS["side_bar"]["width"],
+        separators.append(
+            (
+                Separator(self.__window, orient=HORIZONTAL),
+                {
+                    "x": DIMENSIONS["map"]["width"],
+                    "y": DIMENSIONS["hp_gauge"]["height"]
+                    + DIMENSIONS["hp_gauge_bar"]["pady"],
+                    "width": DIMENSIONS["side_bar"]["width"],
+                },
+            )
         )
+
+        return separators
+
+    def __show_separators(self):
+        for separator_and_place_params in self.__separators:
+            separator, place_params = separator_and_place_params
+            separator.place(**place_params)
+
+    def __hide_separators(self):
+        for separator_and_place_params in self.__separators:
+            separator, _ = separator_and_place_params
+            separator.place_forget()
 
     @staticmethod
     def __configure_styles():
@@ -209,9 +243,11 @@ class TextTriviaMazeView:
 
     def hide_main_menu(self):
         self.__main_menu.hide()
+        self.__show_separators()
 
     def show_main_menu(self):
         self.__main_menu.show()
+        self.__hide_separators()
 
     def __create_in_game_menu(self):
         options = (
@@ -401,8 +437,6 @@ if __name__ == "__main__":
 
     view.hide_main_menu()
     view.update_map()
-    view.show_game_lost_menu()
-    view.hide_game_lost_menu()
     view.write_to_event_log("Here is a message")
     view.write_to_event_log("And here is another message")
     view.write_to_event_log("One more time")
