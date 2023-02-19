@@ -19,14 +19,25 @@ from view_components import (
 )
 
 
+class TriviaMazeModelObserver(ABC):
+    def __init__(self, maze_model):
+        self._maze_model = maze_model
+
+    @abstractmethod
+    def update(self):
+        """Perform any necessary updates to self whenever the maze model emits
+        a notification."""
+
+
 class TriviaMazeView(ABC):
     """
     A view to display the trivia maze game to the user and gather input
     commands.
     """
 
-    def __init__(self, maze_controller):
-        self.__maze_controller = maze_controller
+    def __init__(self, maze_model, maze_controller):
+        super().__init__(maze_model)
+        self._maze_controller = maze_controller
 
     @abstractmethod
     def show_main_menu(self):
