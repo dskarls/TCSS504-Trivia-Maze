@@ -1,23 +1,4 @@
 import csv
-from aifc import Error
-
-"""
-Take a csv file of question and answer data and write the data to a .txt file
-"""
-# Open the input file
-with open('Lone Rangers QA DB.csv', 'r') as input_file:
-    reader = csv.reader(input_file)
-
-    # Open the output file
-    with open('LoneRangersQA_DB.txt', 'w') as output_file:
-        # Loop through each row in the input file
-        for row in reader:
-            # Join the columns in the row with a comma separator
-            line = ','.join(row)
-            # Write the line to the output file
-            output_file.write(line + '\n')
-
-import csv
 import sqlite3
 
 """
@@ -34,7 +15,7 @@ connection.execute('''CREATE TABLE IF NOT EXISTS questions
                  answer TEXT, hint TEXT)''')
 
 # Open the CSV file
-with open('Lone Rangers QA DB.csv', 'r') as csvfile:
+with open('Lone_Rangers_QA_DB.csv', 'r') as csvfile:
     reader = csv.reader(csvfile)
     # Skip the header row
     next(reader)
