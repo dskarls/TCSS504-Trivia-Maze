@@ -260,7 +260,8 @@ _________________________________________________
     }
 
     def __init__(self):
-        TriviaMazeModel.__init__(self)
+        super().__init__()
+        self.__event_log_buffer = []
         self.__print_instructions()
 
         num_rows, num_col = self.__get_num_rows_and_cols_from_user()
@@ -605,7 +606,8 @@ _________________________________________________
                 self.__adventurer_current_col += 1
             elif direction == Room.WEST:
                 self.__adventurer_current_col -= 1
-        self._event_log_buffer.append(f"Adventurer moved {direction}.")
+        self.__event_log_buffer.append(f"Adventurer moved {direction}.")
+        self.__notify_observers()
 
     def __can_adventurer_move(self, direction):
         """
@@ -636,7 +638,7 @@ _________________________________________________
             answer = input("Question?")
             if isinstance(answer, str):
                 self.__unlock_trivia_door(self.__get_adventurer_room(), direction)
-                self._event_log_buffer.append("Answered trivia question correctly.")
+                self.__event_log_buffer.append("Answered trivia question correctly.")
                 return True
             return False
 
@@ -705,7 +707,8 @@ _________________________________________________
             f"You fell into a pit and sustained {pit.damage_value} damage! "
             f"{self.__adventurer.hit_points} health remaining!"
         )
-        self._event_log_buffer.append(PIT_STR)
+        self.__event_log_buffer.append(PIT_STR)
+        self.__notify_observers()
 
     def get_rooms(self):
         """Returns a 2d list of the rooms in the maze."""
@@ -729,21 +732,21 @@ _________________________________________________
                     f"{hit_points_recovered} hit points! "
                     f"{self.__adventurer.hit_points} health remaining."
                 )
-                self._event_log_buffer.append(HEALTH_USE_STR)
+                self.__event_log_buffer.append(HEALTH_USE_STR)
         elif item == self.__ITEMS[self.__Items.VISION_POTION]:
             # Use vision potion
             vision_potion = self.__adventurer.consume_vision_potion()
             # Get set of adjacent rooms inside maze and add to maze map
             rooms_to_update_in_map = self.__get_adjacent_rooms_in_maze(self.__get_adventurer_room())
             self.__print_maze_map_and_legend()
-            self._event_log_buffer.append(f"You used a {str(vision_potion)}!")
+            self.__event_log_buffer.append(f"You used a {str(vision_potion)}!")
         elif item == self.__ITEMS[self.__Items.MAGIC_KEY]:
             # Use magic key
             magic_key = self.__adventurer.consume_magic_key()
             # unlock permanently locked door
             self.__unlock_perm_locked_door()
-            self._event_log_buffer.append(f"You used a {str(magic_key)}!")
-
+            self.__event_log_buffer.append(f"You used a {str(magic_key)}!")
+        self.__notify_observers()
     def __unlock_perm_locked_door(self):
         pass
 
@@ -769,12 +772,15 @@ _________________________________________________
     
     def register_observer(self, observer):
         self._maze_observers.append(observer)
-    
-    def __notify_observers(self):
-        return self._event_log_buffer
 
-    def flush_event_log_buffer(self):
-        self._event_log_buffer.clear()
+    def __notify_observers(self):
+        for observer in self._maze_observers:
+            observer.update()
+
+    def get_event_log_buffer_contents(self):
+        log_contents = self.__event_log_buffer.copy()
+        self.__event_log_buffer.clear()
+        return log_contents
 
 
 if __name__ == "__main__":

@@ -4,7 +4,6 @@ class TriviaMazeModel(ABC):
     
     def __init__(self):
         self._maze_observers = []
-        self._event_log_buffer = []
     """
     @abstractmethod
     def save_game(self):
