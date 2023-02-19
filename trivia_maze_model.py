@@ -3,8 +3,8 @@ from abc import ABC, abstractmethod
 class TriviaMazeModel(ABC):
     
     def __init__(self):
-        self.maze_observers = []
-        
+        self._maze_observers = []
+        self._event_log_buffer = []
     """
     @abstractmethod
     def save_game(self):
@@ -36,5 +36,5 @@ class TriviaMazeModel(ABC):
         pass
     
     @abstractmethod
-    def register_observer(observer):
+    def register_observer(self, observer):
         pass
