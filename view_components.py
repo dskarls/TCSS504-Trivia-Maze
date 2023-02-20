@@ -130,6 +130,7 @@ class MainMenu(SubWindow):
         # Attach focus to text menu of options
         self.__text_menu.focus()
         self.__text_menu.selected_option = 0
+        self.frame.update_idletasks()
 
     @property
     def selected_option(self):
@@ -465,6 +466,7 @@ class InGameMenu(PopUpWindow):
         self._place_pop_up_at_center_of_window(self._frm, self._width)
         self.__text_menu.focus()
         self.__text_menu.selected_option = 0
+        self._frm.update_idletasks()
 
     def hide(self):
         self._frm.place_forget()
