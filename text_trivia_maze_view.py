@@ -57,8 +57,8 @@ class TriviaMazeView(TriviaMazeModelObserver):
 
     @abstractmethod
     def pose_question_and_get_answer(self, question_and_answer):
-        """Show the user a question-and-answer pop-up and retrieve the
-        answer, then hide the pop-up."""
+        """Show the user a question-and-answer pop-up and retrieve the answer,
+        then hide the pop-up."""
 
     @abstractmethod
     def update_map(self):
@@ -444,9 +444,6 @@ class TextTriviaMazeView(TriviaMazeView):
         # FIXME: Implement this
         pass
 
-    view.hide_main_menu()
-    view.update_map()
-    view.write_to_event_log("Here is a message")
-    view.write_to_event_log("And here is another message")
-    view.write_to_event_log("One more time")
-    view.mainloop()
+    def pose_question_and_get_answer(self):
+        # FIXME: Implement this
+        pass
