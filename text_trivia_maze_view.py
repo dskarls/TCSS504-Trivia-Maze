@@ -89,6 +89,9 @@ class TriviaMazeView(TriviaMazeModelObserver):
     def hide_game_lost_menu(self):
         """Hide the pop-up to the user telling them they lost the game."""
 
+    @abstractmethod
+    def quit_entire_game(self):
+        """Destroy the entire game and close the window"""
 
 
 class TextTriviaMazeView(TriviaMazeView):
@@ -447,3 +450,6 @@ class TextTriviaMazeView(TriviaMazeView):
     def pose_question_and_get_answer(self):
         # FIXME: Implement this
         pass
+
+    def quit_entire_game(self):
+        self.__window.destroy()
