@@ -62,9 +62,21 @@ __YOU_DIED_MESSAGE = """
     |_|_|_|      | | (_) | |_| | | (_| | |  __/ (_| |
                  \_/\___/ \__,_|  \__,_|_|\___|\__,_|
 """
+__MAIN_HELP_MESSAGE = """
+Your goal is to collect all four pillars of OOP and safely reach the exit of
+the maze. The doors of many rooms will be locked and attempting to go through
+them will pose a question you must answer in order to unlock them. If you
+answer incorrectly, the door will be locked permanently and you must attempt to
+find a magic key to unlock it. A suggestion potion, if currently held, can be
+used to get hints to questions. Along the way, you may fall in pits and take
+damage. However, healing potions can also be found throughout the maze.
+
+Good luck!
+"""
 
 MESSAGES = {
     "main_menu": __WELCOME_MESSAGE,
+    "main_help_menu": __MAIN_HELP_MESSAGE,
     "game_won_menu": __YOU_WIN_MESSAGE,
     "game_lost_menu": __YOU_DIED_MESSAGE,
 }
