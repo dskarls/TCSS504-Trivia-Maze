@@ -323,10 +323,7 @@ class TextTriviaMazeView(TriviaMazeView):
         if key:
             # If keysym wasn't empty, forward it to controller. Otherwise, just
             # ignore it since it's not a supported key command.
-
-            # FIXME: This should really be sent to the controller. Just writing to
-            # the event log here for demonstration purposes.
-            self.write_to_event_log(f"You pressed {key}")
+            self._maze_controller.process_keystroke(key)
 
     def update_hp_gauge(self):
         # FIXME: Retrieve current adventurer HP from Model
