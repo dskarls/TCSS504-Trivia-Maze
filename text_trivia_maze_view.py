@@ -29,7 +29,7 @@ class TriviaMazeModelObserver(ABC):
         a notification."""
 
 
-class TriviaMazeView(ABC):
+class TriviaMazeView(TriviaMazeModelObserver):
     """
     A view to display the trivia maze game to the user and gather input
     commands.
@@ -90,7 +90,8 @@ class TriviaMazeView(ABC):
         """Hide the pop-up to the user telling them they lost the game."""
 
 
-class TextTriviaMazeView:
+
+class TextTriviaMazeView(TriviaMazeView):
     """A text-based view for the Trivia Maze application that uses tkinter
     (specifically, themed-tkinter aka "ttk").
 
@@ -101,7 +102,15 @@ class TextTriviaMazeView:
     primary interface then simply amounts to hiding the main menu (or pop-ups).
     """
 
-    def __init__(self, title, theme_path=None, theme_name=None):
+    def __init__(
+        self,
+        maze_model,
+        maze_controller,
+        title,
+        theme_path=None,
+        theme_name=None,
+    ):
+        super().__init__(maze_model, maze_controller)
         # Create primary tkinter window and bind mainloop method (might fit
         # better in the driver and we can just pass the main Tk window into the
         # view init?
@@ -431,9 +440,9 @@ class TextTriviaMazeView:
     def write_to_event_log(self, message):
         self.__event_log.write(message)
 
-
-if __name__ == "__main__":
-    view = TextTriviaMazeView("TriviaMaze")
+    def update(self):
+        # FIXME: Implement this
+        pass
 
     view.hide_main_menu()
     view.update_map()
