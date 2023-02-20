@@ -16,6 +16,7 @@ DIMENSIONS = {
     "inventory_title": {"ipady": 10},
     "pillars": {"padx": 10, "pady": 8},
     "pillars_title": {"ipady": 10},
+    "main_help_menu": {"pady": 5},
     "game_won_menu": {"pady": 5},
     "game_lost_menu": {"pady": 5},
 }
@@ -91,6 +92,7 @@ MESSAGES = {
 KEYS = {
     "game_won_menu": {"dismiss": "Return"},
     "game_lost_menu": {"dismiss": "Return"},
+    "main_help_menu": {"dismiss": "Return"},
 }
 
 

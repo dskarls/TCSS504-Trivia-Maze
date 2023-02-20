@@ -48,6 +48,15 @@ class TriviaMazeView(TriviaMazeModelObserver):
         """Hide the main menu"""
 
     @abstractmethod
+    def show_main_help_menu(self):
+        """Display the help menu accessible from the main menu. Explains rules
+        of the game."""
+
+    @abstractmethod
+    def hide_main_help_menu(self):
+        """hide the help menu accessible from the main menu."""
+
+    @abstractmethod
     def show_in_game_menu(self):
         """Show the in-game menu pop-up"""
 
@@ -161,8 +170,12 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__in_game_menu = self.__create_in_game_menu()
         self.hide_in_game_menu()
 
-        # Create main menu
+        # Create main menu and the help menu accessible from it
         self.__main_menu = self.__create_main_menu()
+
+        # Help menu accessible from main menu
+        self.__main_help_menu = self.__create_main_help_menu()
+        self.hide_main_help_menu()
 
         # Prevent resizing
         self.__window.resizable(False, False)
@@ -281,6 +294,21 @@ class TextTriviaMazeView(TriviaMazeView):
 
     def hide_in_game_menu(self):
         self.__in_game_menu.hide()
+
+    def __create_main_help_menu(self):
+        return DismissiblePopUp(
+            self.__window,
+            None,
+            textwrap.dedent(MESSAGES["main_help_menu"]),
+            DIMENSIONS["main_help_menu"]["pady"],
+            KEYS["main_help_menu"]["dismiss"],
+        )
+
+    def show_main_help_menu(self):
+        self.__main_help_menu.show()
+
+    def hide_main_help_menu(self):
+        self.__main_help_menu.hide()
 
     def __create_game_won_menu(self):
         return DismissiblePopUp(

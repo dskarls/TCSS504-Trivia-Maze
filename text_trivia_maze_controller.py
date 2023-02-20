@@ -132,6 +132,9 @@ class TextTriviaMazeController(TriviaMazeController):
         self.__main_menu_context = MainMenuCommandContext(
             self, self._maze_model, self.__maze_view
         )
+        self.__main_help_menu_context = MainHelpMenuCommandContext(
+            self, self._maze_model, self.__maze_view
+        )
 
         # Player starts out at the main menu, so make that the active context.
         # NOTE: This sets the `__active_context` instance attr
@@ -149,6 +152,8 @@ class TextTriviaMazeController(TriviaMazeController):
     def set_active_context(self, context_specifier):
         if context_specifier == "main_menu":
             self.__active_context = self.__main_menu_context
+        elif context_specifier == "main_help_menu":
+            self.__active_context = self.__main_help_menu_context
 
     def update(self):
         # FIXME: Implement what should happen here when model changes
@@ -197,9 +202,16 @@ class MainMenuCommandContext(CommandContext):
             self._maze_controller.set_active_context("primary_interface")
 
         elif selected_option == "Help":
-            self._maze_view.show_main_menu_help()
-            self._maze_controller.set_active_context("main_menu_help")
+            self._maze_view.show_main_help_menu()
+            self._maze_controller.set_active_context("main_help_menu")
 
         elif selected_option == "Quit game":
             # Exit out of everything and close the window
             self._maze_view.quit_entire_game()
+
+
+class MainHelpMenuCommandContext(CommandContext):
+    def process_keystroke(self, key):
+        if key == "Return":
+            self._maze_view.hide_main_help_menu()
+            self._maze_controller.set_active_context("main_menu")
