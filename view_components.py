@@ -510,6 +510,7 @@ class DismissiblePopUp(PopUpWindow):
 
     def show(self):
         self._place_pop_up_at_center_of_window(self._frm, self._width)
+        self._frm.update_idletasks()
 
     def hide(self):
         self._frm.place_forget()
