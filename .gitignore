@@ -131,3 +131,5 @@ dmypy.json
 
 # MacOS dir metadata files
 .DS_Store
+
+.idea/
