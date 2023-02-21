@@ -72,6 +72,9 @@ class TextTriviaMazeController(TriviaMazeController):
         self.__primary_interface_context = PrimaryInterfaceCommandContext(
             self, self._maze_model, self.__maze_view
         )
+        self.__question_and_answer_context = QuestionAndAnswerCommandContext(
+            self, self._maze_model, self.__maze_view
+        )
 
         # Player starts out at the main menu, so make that the active context.
         # NOTE: This sets the `__active_context` instance attr
@@ -93,6 +96,8 @@ class TextTriviaMazeController(TriviaMazeController):
             self.__active_context = self.__main_help_menu_context
         elif context_specifier == "primary_interface":
             self.__active_context = self.__primary_interface_context
+        elif context_specifier == "question_and_answer":
+            self.__active_context = self.__question_and_answer_context
 
     def update(self):
         # FIXME: Implement what should happen here when model changes
@@ -268,3 +273,47 @@ class PrimaryInterfaceCommandContext(CommandContext):
                 == self.__COMMANDS[Command.MOVE_SOUTH][self.__COMMAND_KEY_KEY]
             ):
                 self._maze_view.write_to_event_log("Moving adventurer south")
+
+
+class QuestionAndAnswerCommandContext(CommandContext):
+    # FIXME: Figure out what other keys need to be enabled for a player to
+    # answer questions
+    __COMMAND_DESC_KEY = "description"
+    __COMMAND_KEY_KEY = "key"
+    __COMMAND_TYPE = "type"
+    __COMMAND_TYPE_ITEM = "item"
+
+    __COMMANDS = {
+        # Item commands
+        Command.USE_SUGGESTION_POTION: {
+            __COMMAND_TYPE: __COMMAND_TYPE_ITEM,
+            __COMMAND_DESC_KEY: "Use suggestion potion",
+            __COMMAND_KEY_KEY: "s",
+        },
+        Command.USE_MAGIC_KEY: {
+            __COMMAND_TYPE: __COMMAND_TYPE_ITEM,
+            __COMMAND_DESC_KEY: "Use magic key",
+            __COMMAND_KEY_KEY: "k",
+        },
+    }
+
+    def process_keystroke(self, key):
+        if (
+            key
+            == self.__COMMANDS[Command.USE_MAGIC_KEY][self.__COMMAND_KEY_KEY]
+        ):
+            # FIXME: Display somewhere in the QA pop-up how many magic keys
+            # they have left and what button to press to use one
+            self._maze_view.write_to_event_log("Using magic key")
+        elif (
+            key
+            == self.__COMMANDS[Command.USE_SUGGESTION_POTION][
+                self.__COMMAND_KEY_KEY
+            ]
+        ):
+            # FIXME: Display somewhere in the QA pop-up how many suggestion
+            # potions they have left and what button to press to use one
+            self._maze_view.write_to_event_log("Using suggestion potion")
+        elif key == "Return":
+            # FIXME: Get current answer and check if it is correct
+            pass
