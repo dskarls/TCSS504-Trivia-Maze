@@ -4,6 +4,26 @@ from enum import Enum, auto
 from text_trivia_maze_view import TextTriviaMazeView
 
 
+class Command(Enum):
+    """Enumeration used to fix commands to a small finite support set."""
+
+    # Movement commands
+    MOVE_EAST = auto()
+    MOVE_NORTH = auto()
+    MOVE_WEST = auto()
+    MOVE_SOUTH = auto()
+
+    # Item commands
+    USE_HEALING_POTION = auto()
+    USE_VISION_POTION = auto()
+    USE_SUGGESTION_POTION = auto()
+    USE_MAGIC_KEY = auto()
+
+    # Other commands
+    SHOW_IN_GAME_MENU = auto()
+    QUIT_GAME = auto()
+
+
 class TriviaMazeModelObserver(ABC):
     def __init__(self, maze_model):
         self._maze_model = maze_model
@@ -36,92 +56,6 @@ class TextTriviaMazeController(TriviaMazeController):
     and get an answer.)
     """
 
-    __COMMAND_DESC_KEY = "description"
-    __COMMAND_KEY_KEY = "key"
-    __COMMAND_TYPE = "type"
-    __COMMAND_TYPE_MOVEMENT = "movement"
-    __COMMAND_TYPE_ITEM = "item"
-    __COMMAND_TYPE_OTHER = "other"
-    __COMMAND_TYPE_HIDDEN = "hidden"
-
-    class __Command(Enum):
-        """Enumeration used to fix commands to a small finite support set."""
-
-        # Movement commands
-        MOVE_EAST = auto()
-        MOVE_NORTH = auto()
-        MOVE_WEST = auto()
-        MOVE_SOUTH = auto()
-
-        # Item commands
-        USE_HEALING_POTION = auto()
-        USE_VISION_POTION = auto()
-        USE_MAGIC_KEY = auto()
-
-        # Other commands
-        PRINT_HELP_MENU = auto()
-        QUIT_GAME = auto()
-
-        # Hidden commands (don't show up in help menu)
-        SHOW_FULL_MAP = auto()
-
-    __COMMANDS = {
-        # Movement commands
-        __Command.MOVE_EAST: {
-            __COMMAND_TYPE: __COMMAND_TYPE_MOVEMENT,
-            __COMMAND_DESC_KEY: "Move east",
-            __COMMAND_KEY_KEY: "Right",
-        },
-        __Command.MOVE_NORTH: {
-            __COMMAND_TYPE: __COMMAND_TYPE_MOVEMENT,
-            __COMMAND_DESC_KEY: "Move north",
-            __COMMAND_KEY_KEY: "Up",
-        },
-        __Command.MOVE_WEST: {
-            __COMMAND_TYPE: __COMMAND_TYPE_MOVEMENT,
-            __COMMAND_DESC_KEY: "Move west",
-            __COMMAND_KEY_KEY: "Left",
-        },
-        __Command.MOVE_SOUTH: {
-            __COMMAND_TYPE: __COMMAND_TYPE_MOVEMENT,
-            __COMMAND_DESC_KEY: "Move south",
-            __COMMAND_KEY_KEY: "Down",
-        },
-        # Item commands
-        __Command.USE_HEALING_POTION: {
-            __COMMAND_TYPE: __COMMAND_TYPE_ITEM,
-            __COMMAND_DESC_KEY: "Use healing potion",
-            __COMMAND_KEY_KEY: "p",
-        },
-        __Command.USE_VISION_POTION: {
-            __COMMAND_TYPE: __COMMAND_TYPE_ITEM,
-            __COMMAND_DESC_KEY: "Use vision potion",
-            __COMMAND_KEY_KEY: "v",
-        },
-        __Command.USE_MAGIC_KEY: {
-            __COMMAND_TYPE: __COMMAND_TYPE_ITEM,
-            __COMMAND_DESC_KEY: "Use magic key",
-            __COMMAND_KEY_KEY: "k",
-        },
-        # Other commands
-        __Command.PRINT_HELP_MENU: {
-            __COMMAND_TYPE: __COMMAND_TYPE_OTHER,
-            __COMMAND_DESC_KEY: "Print help menu",
-            __COMMAND_KEY_KEY: "h",
-        },
-        __Command.QUIT_GAME: {
-            __COMMAND_TYPE: __COMMAND_TYPE_OTHER,
-            __COMMAND_DESC_KEY: "Quit game",
-            __COMMAND_KEY_KEY: "q",
-        },
-        # Hidden commands
-        __Command.SHOW_FULL_MAP: {
-            __COMMAND_TYPE: __COMMAND_TYPE_HIDDEN,
-            __COMMAND_DESC_KEY: "Display full map",
-            __COMMAND_KEY_KEY: "z",
-        },
-    }
-
     def __init__(self, maze_model):
         super().__init__(maze_model)
 
@@ -133,6 +67,9 @@ class TextTriviaMazeController(TriviaMazeController):
             self, self._maze_model, self.__maze_view
         )
         self.__main_help_menu_context = MainHelpMenuCommandContext(
+            self, self._maze_model, self.__maze_view
+        )
+        self.__primary_interface_context = PrimaryInterfaceCommandContext(
             self, self._maze_model, self.__maze_view
         )
 
@@ -154,9 +91,15 @@ class TextTriviaMazeController(TriviaMazeController):
             self.__active_context = self.__main_menu_context
         elif context_specifier == "main_help_menu":
             self.__active_context = self.__main_help_menu_context
+        elif context_specifier == "primary_interface":
+            self.__active_context = self.__primary_interface_context
 
     def update(self):
         # FIXME: Implement what should happen here when model changes
+
+        # game_status = self._maze_model.get_game_status()
+        # if game_status == "lose":
+        # elif game_status == "win":
         pass
 
 
@@ -215,3 +158,113 @@ class MainHelpMenuCommandContext(CommandContext):
         if key == "Return":
             self._maze_view.hide_main_help_menu()
             self._maze_controller.set_active_context("main_menu")
+
+
+class PrimaryInterfaceCommandContext(CommandContext):
+    __COMMAND_DESC_KEY = "description"
+    __COMMAND_KEY_KEY = "key"
+    __COMMAND_TYPE = "type"
+    __COMMAND_TYPE_MOVEMENT = "movement"
+    __COMMAND_TYPE_ITEM = "item"
+    __COMMAND_TYPE_OTHER = "other"
+
+    __COMMANDS = {
+        # Movement commands
+        Command.MOVE_EAST: {
+            __COMMAND_TYPE: __COMMAND_TYPE_MOVEMENT,
+            __COMMAND_DESC_KEY: "Move east",
+            __COMMAND_KEY_KEY: "Right",
+        },
+        Command.MOVE_NORTH: {
+            __COMMAND_TYPE: __COMMAND_TYPE_MOVEMENT,
+            __COMMAND_DESC_KEY: "Move north",
+            __COMMAND_KEY_KEY: "Up",
+        },
+        Command.MOVE_WEST: {
+            __COMMAND_TYPE: __COMMAND_TYPE_MOVEMENT,
+            __COMMAND_DESC_KEY: "Move west",
+            __COMMAND_KEY_KEY: "Left",
+        },
+        Command.MOVE_SOUTH: {
+            __COMMAND_TYPE: __COMMAND_TYPE_MOVEMENT,
+            __COMMAND_DESC_KEY: "Move south",
+            __COMMAND_KEY_KEY: "Down",
+        },
+        # Item commands
+        Command.USE_HEALING_POTION: {
+            __COMMAND_TYPE: __COMMAND_TYPE_ITEM,
+            __COMMAND_DESC_KEY: "Use healing potion",
+            __COMMAND_KEY_KEY: "h",
+        },
+        Command.USE_VISION_POTION: {
+            __COMMAND_TYPE: __COMMAND_TYPE_ITEM,
+            __COMMAND_DESC_KEY: "Use vision potion",
+            __COMMAND_KEY_KEY: "v",
+        },
+        Command.USE_SUGGESTION_POTION: {
+            __COMMAND_TYPE: __COMMAND_TYPE_ITEM,
+            __COMMAND_DESC_KEY: "Use suggestion potion",
+            __COMMAND_KEY_KEY: "s",
+        },
+        Command.USE_MAGIC_KEY: {
+            __COMMAND_TYPE: __COMMAND_TYPE_ITEM,
+            __COMMAND_DESC_KEY: "Use magic key",
+            __COMMAND_KEY_KEY: "k",
+        },
+        # Other commands
+        Command.SHOW_IN_GAME_MENU: {
+            __COMMAND_TYPE: __COMMAND_TYPE_OTHER,
+            __COMMAND_DESC_KEY: "Show in-game help menu",
+            __COMMAND_KEY_KEY: "Escape",
+        },
+    }
+
+    def process_keystroke(self, key):
+        # Non-movement commands
+        if (
+            key
+            == self.__COMMANDS[Command.SHOW_IN_GAME_MENU][
+                self.__COMMAND_KEY_KEY
+            ]
+        ):
+            self._maze_view.show_in_game_menu()
+        elif (
+            key
+            == self.__COMMANDS[Command.USE_HEALING_POTION][
+                self.__COMMAND_KEY_KEY
+            ]
+        ):
+            self._maze_view.write_to_event_log(
+                "Attempting to use healing potion (will do nothing if none held)"
+            )
+        elif (
+            key
+            == self.__COMMANDS[Command.USE_VISION_POTION][
+                self.__COMMAND_KEY_KEY
+            ]
+        ):
+            self._maze_view.write_to_event_log(
+                "Attempting to use vision potion (will do nothing if none held)"
+            )
+        else:
+            # Movement commands
+            if (
+                key
+                == self.__COMMANDS[Command.MOVE_WEST][self.__COMMAND_KEY_KEY]
+            ):
+                self._maze_view.write_to_event_log("Moving adventurer west")
+            elif (
+                key
+                == self.__COMMANDS[Command.MOVE_EAST][self.__COMMAND_KEY_KEY]
+            ):
+                self._maze_view.write_to_event_log("Moving adventurer east")
+            elif (
+                key
+                == self.__COMMANDS[Command.MOVE_NORTH][self.__COMMAND_KEY_KEY]
+            ):
+                self._maze_view.write_to_event_log("Moving adventurer north")
+            elif (
+                key
+                == self.__COMMANDS[Command.MOVE_SOUTH][self.__COMMAND_KEY_KEY]
+            ):
+                self._maze_view.write_to_event_log("Moving adventurer south")
