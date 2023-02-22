@@ -786,7 +786,7 @@ _________________________________________________
         directions = [Room.NORTH, Room.EAST, Room.SOUTH, Room.WEST]
         visited_rooms = []
         invalid_rooms = []
-        inaccesible_rooms = self.__get_inaccesible_rooms()
+        inaccesible_rooms = self.__get_inaccessible_rooms()
         current_room = self.__get_adventurer_room()
 
         while len(visited_rooms) + len(invalid_rooms) + len(inaccesible_rooms) < len(self.__maze.rooms):
@@ -832,7 +832,7 @@ _________________________________________________
             rooms that the adventurer will not have the ability to reach with out
             the use of a magic key
         """
-        inaccesible_rooms = []
+        inaccessible_rooms = []
         DIRECTIONS = [Room.NORTH, Room.EAST, Room.SOUTH, Room.WEST]
         for row in range(self.__maze.num_rows):
             for col in range(self.__maze.num_cols):
@@ -844,8 +844,8 @@ _________________________________________________
                     elif self.__maze.rooms[row][col].get_side(direction).perm_locked:
                         perm_door_count += 1
                 if wall_count + perm_door_count == 4:
-                    inaccesible_room.append(self.__maze.rooms[row][col])
-        return inaccesible_rooms
+                    inaccessible_rooms.append(self.__maze.rooms[row][col])
+        return inaccessible_rooms
     
     def __move_to_new_room(self, room, direction):
         """
