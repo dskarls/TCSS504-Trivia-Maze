@@ -54,13 +54,20 @@ class TextMenu:
         for ind, option in enumerate(self.__options):
             self.__list_box.insert(ind + 1, option)
 
+    def reset_selection(self):
+        """Unselects all lines and sets the first item as active"""
+        self.__list_box.selection_clear(0, END)
+        self.__list_box.activate(0)
+        self.selected_option = 0
+
     @property
     def selected_option(self):
         return self.__options[self.__list_box.curselection()[0]]
 
     @selected_option.setter
     def selected_option(self, index):
-        self.__list_box.select_set(index)
+        self.__list_box.selection_set(index)
+        self.__list_box.activate(index)
 
 
 class SubWindow:
@@ -130,7 +137,7 @@ class MainMenu(SubWindow):
 
         # Attach focus to text menu of options
         self.__text_menu.focus()
-        self.__text_menu.selected_option = 0
+        self.__text_menu.reset_selection()
         self.frame.update_idletasks()
 
     @property
@@ -466,7 +473,7 @@ class InGameMenu(PopUpWindow):
     def show(self):
         self._place_pop_up_at_center_of_window(self._frm, self._width)
         self.__text_menu.focus()
-        self.__text_menu.selected_option = 0
+        self.__text_menu.reset_selection()
         self._frm.update_idletasks()
 
     def hide(self):
