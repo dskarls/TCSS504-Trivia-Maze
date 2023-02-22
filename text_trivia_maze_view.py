@@ -187,6 +187,10 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__map_legend_menu = self.__create_map_legend_menu()
         self.hide_map_legend_menu()
 
+        # Create empty commands help menu
+        self.__commands_help_menu = self.__create_commands_help_menu()
+        self.hide_commands_help_menu()
+
         # Create main menu and the help menu accessible from it
         self.__main_menu = self.__create_main_menu()
 
@@ -529,6 +533,22 @@ class TextTriviaMazeView(TriviaMazeView):
 
     def hide_map_legend_menu(self):
         self.__map_legend_menu.hide()
+
+    def __create_commands_help_menu(self):
+        return DismissiblePopUp(
+            self.__window,
+            None,
+            None,
+            DIMENSIONS["commands_help_menu"]["pady"],
+            KEYS["commands_help_menu"]["dismiss"],
+        )
+
+    def show_commands_help_menu(self, text):
+        self.__commands_help_menu.set_text(text)
+        self.__commands_help_menu.show()
+
+    def hide_commands_help_menu(self):
+        self.__commands_help_menu.hide()
 
     def __create_event_log(self):
         dims = DIMENSIONS["event_log"]

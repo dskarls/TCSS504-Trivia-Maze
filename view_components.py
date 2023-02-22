@@ -498,14 +498,14 @@ class DismissiblePopUp(PopUpWindow):
         # Create the frame for the whole in-game menu
         super().__init__(window, width)
 
-        lbl = Label(
+        self.__lbl_primary = Label(
             master=self._frm,
             text=text,
             justify=CENTER,
             anchor=CENTER,
             style=STYLES["game_won_menu"]["style"],
         )
-        lbl.pack(fill=BOTH, pady=pady)
+        self.__lbl_primary.pack(fill=BOTH, pady=pady)
 
         # Put return to main menu option below
         lbl = Label(
@@ -524,3 +524,6 @@ class DismissiblePopUp(PopUpWindow):
 
     def hide(self):
         self._frm.place_forget()
+
+    def set_text(self, text):
+        self.__lbl_primary.configure(text=text)
