@@ -19,3 +19,6 @@ class TextTriviaMazeModel:
 
     def register_observer(self):
         pass
+
+    def reset(self):
+        pass
