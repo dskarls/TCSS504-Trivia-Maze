@@ -182,6 +182,13 @@ class MapLegendCommandContext(CommandContext):
             self._maze_controller.set_active_context("in_game_menu")
 
 
+class CommandsHelpCommandContext(CommandContext):
+    def process_keystroke(self, key):
+        if key == "Return":
+            self._maze_view.hide_commands_help_menu()
+            self._maze_controller.set_active_context("in_game_menu")
+
+
 class PrimaryInterfaceCommandContext(CommandContext):
     __COMMAND_DESC_KEY = "description"
     __COMMAND_KEY_KEY = "key"

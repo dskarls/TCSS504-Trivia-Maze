@@ -477,12 +477,12 @@ class TextTriviaMazeView(TriviaMazeView):
         self,
         num_cols=2,
     ):
-        val_overrides = {" ": "<space>"}
+        symbol_overrides = {" ": "<space>"}
         legend_rows = self.__generate_rows_for_multicolumn_display(
             symbols=ROOM_CONTENT_SYMBOLS.values(),
             descriptions=ROOM_CONTENT_SYMBOLS.keys(),
             num_cols=num_cols,
-            val_overrides=val_overrides,
+            symbol_overrides=symbol_overrides,
         )
 
         return DismissiblePopUp(
@@ -495,21 +495,23 @@ class TextTriviaMazeView(TriviaMazeView):
 
     @staticmethod
     def __generate_rows_for_multicolumn_display(
-        symbols, descriptions, num_cols, val_overrides
+        symbols, descriptions, num_cols, symbol_overrides
     ):
         # Determine longest description and symbol strings
-        symbol_max_len = max(
-            len(max(val_overrides.values(), key=len)),
-            len(max(descriptions, key=len)),
-        )
+        symbol_max_len = len(max(symbols, key=len))
+        if symbol_overrides:
+            symbol_max_len = max(
+                symbol_max_len,
+                len(max(symbol_overrides.values(), key=len)),
+            )
         description_max_len = len(max(descriptions, key=len))
 
         entries = deque()
 
         for symbol, description in zip(symbols, descriptions):
             # Special handling to account for space character (empty room)
-            if symbol in val_overrides:
-                symbol = val_overrides[symbol]
+            if symbol in symbol_overrides:
+                symbol = symbol_overrides[symbol]
 
             entries.append(
                 f"{symbol:>{symbol_max_len}}: {description:<{description_max_len}}"
