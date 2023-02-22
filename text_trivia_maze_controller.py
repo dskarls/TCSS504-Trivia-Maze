@@ -78,7 +78,7 @@ class TextTriviaMazeController(TriviaMazeController):
         self.__map_legend_menu_context = MapLegendCommandContext(
             self, self._maze_model, self.__maze_view
         )
-        self.__commands_help_menu_context = CommandsHelpCommandContext(
+        self.__command_legend_menu_context = CommandLegendCommandContext(
             self, self._maze_model, self.__maze_view
         )
         self.__question_and_answer_context = QuestionAndAnswerCommandContext(
@@ -109,8 +109,8 @@ class TextTriviaMazeController(TriviaMazeController):
             self.__active_context = self.__in_game_menu_context
         elif context_specifier == "map_legend_menu":
             self.__active_context = self.__map_legend_menu_context
-        elif context_specifier == "commands_help_menu":
-            self.__active_context = self.__commands_help_menu_context
+        elif context_specifier == "command_legend_menu":
+            self.__active_context = self.__command_legend_menu_context
         elif context_specifier == "question_and_answer":
             self.__active_context = self.__question_and_answer_context
 
@@ -187,10 +187,10 @@ class MapLegendCommandContext(CommandContext):
             self._maze_controller.set_active_context("in_game_menu")
 
 
-class CommandsHelpCommandContext(CommandContext):
+class CommandLegendCommandContext(CommandContext):
     def process_keystroke(self, key):
         if key == "Return":
-            self._maze_view.hide_commands_help_menu()
+            self._maze_view.hide_command_legend_menu()
             self._maze_controller.set_active_context("in_game_menu")
 
 
@@ -318,10 +318,10 @@ class InGameMenuCommandContext(CommandContext):
                 for entry in PrimaryInterfaceCommandContext.COMMANDS.values()
             )
 
-            self._maze_view.show_commands_help_menu(
+            self._maze_view.show_command_legend_menu(
                 symbols, descriptions, num_cols=2
             )
-            self._maze_controller.set_active_context("commands_help_menu")
+            self._maze_controller.set_active_context("command_legend_menu")
 
         elif selected_option == "return to main menu":
             # Have the model create a completely new map and reset all item

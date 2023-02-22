@@ -188,8 +188,8 @@ class TextTriviaMazeView(TriviaMazeView):
         self.hide_map_legend_menu()
 
         # Create empty commands help menu
-        self.__commands_help_menu = self.__create_commands_help_menu()
-        self.hide_commands_help_menu()
+        self.__command_legend_menu = self.__create_command_legend_menu()
+        self.hide_command_legend_menu()
 
         # Create main menu and the help menu accessible from it
         self.__main_menu = self.__create_main_menu()
@@ -547,16 +547,16 @@ class TextTriviaMazeView(TriviaMazeView):
     def hide_map_legend_menu(self):
         self.__map_legend_menu.hide()
 
-    def __create_commands_help_menu(self):
+    def __create_command_legend_menu(self):
         return DismissiblePopUp(
             self.__window,
             None,
             None,
-            DIMENSIONS["commands_help_menu"]["pady"],
-            KEYS["commands_help_menu"]["dismiss"],
+            DIMENSIONS["command_legend_menu"]["pady"],
+            KEYS["command_legend_menu"]["dismiss"],
         )
 
-    def show_commands_help_menu(self, symbols, descriptions, num_cols):
+    def show_command_legend_menu(self, symbols, descriptions, num_cols):
         """
         Fills the commands help pop-up based on a dict containing command
         keystrokes and their description, then displays it on top of the
@@ -576,11 +576,11 @@ class TextTriviaMazeView(TriviaMazeView):
             symbol_overrides={},
         )
 
-        self.__commands_help_menu.set_text(("\n").join(legend_rows))
-        self.__commands_help_menu.show()
+        self.__command_legend_menu.set_text(("\n").join(legend_rows))
+        self.__command_legend_menu.show()
 
-    def hide_commands_help_menu(self):
-        self.__commands_help_menu.hide()
+    def hide_command_legend_menu(self):
+        self.__command_legend_menu.hide()
 
     def __create_event_log(self):
         dims = DIMENSIONS["event_log"]

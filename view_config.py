@@ -18,7 +18,7 @@ DIMENSIONS = {
     "pillars_title": {"ipady": 10},
     "main_help_menu": {"pady": 5},
     "map_legend_menu": {"pady": 5},
-    "commands_help_menu": {"pady": 5},
+    "command_legend_menu": {"pady": 5},
     "game_won_menu": {"pady": 5},
     "game_lost_menu": {"pady": 5},
 }
@@ -115,7 +115,7 @@ KEYS = {
     "game_lost_menu": {"dismiss": "Return"},
     "main_help_menu": {"dismiss": "Return"},
     "map_legend_menu": {"dismiss": "Return"},
-    "commands_help_menu": {"dismiss": "Return"},
+    "command_legend_menu": {"dismiss": "Return"},
 }
 
 
