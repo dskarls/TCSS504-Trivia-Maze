@@ -257,40 +257,36 @@ class PrimaryInterfaceCommandContext(CommandContext):
                 self.__COMMAND_KEY_KEY
             ]
         ):
-            self._maze_view.write_to_event_log(
-                "Attempting to use healing potion (will do nothing if none held)"
-            )
+            self._maze_model.use_item("healing potion")
         elif (
             key
             == self.__COMMANDS[Command.USE_VISION_POTION][
                 self.__COMMAND_KEY_KEY
             ]
         ):
-            self._maze_view.write_to_event_log(
-                "Attempting to use vision potion (will do nothing if none held)"
-            )
+            self._maze_model.use_item("vision potion")
         else:
             # Movement commands
             if (
                 key
                 == self.__COMMANDS[Command.MOVE_WEST][self.__COMMAND_KEY_KEY]
             ):
-                self._maze_view.write_to_event_log("Moving adventurer west")
+                self._maze_model.move_adventurer("west")
             elif (
                 key
                 == self.__COMMANDS[Command.MOVE_EAST][self.__COMMAND_KEY_KEY]
             ):
-                self._maze_view.write_to_event_log("Moving adventurer east")
+                self._maze_model.move_adventurer("east")
             elif (
                 key
                 == self.__COMMANDS[Command.MOVE_NORTH][self.__COMMAND_KEY_KEY]
             ):
-                self._maze_view.write_to_event_log("Moving adventurer north")
+                self._maze_model.move_adventurer("north")
             elif (
                 key
                 == self.__COMMANDS[Command.MOVE_SOUTH][self.__COMMAND_KEY_KEY]
             ):
-                self._maze_view.write_to_event_log("Moving adventurer south")
+                self._maze_model.move_adventurer("south")
 
 
 class InGameMenuCommandContext(CommandContext):
@@ -361,7 +357,7 @@ class QuestionAndAnswerCommandContext(CommandContext):
         ):
             # FIXME: Display somewhere in the QA pop-up how many magic keys
             # they have left and what button to press to use one
-            self._maze_view.write_to_event_log("Using magic key")
+            self._maze_model.use_item("magic key")
         elif (
             key
             == self.__COMMANDS[Command.USE_SUGGESTION_POTION][
@@ -370,7 +366,7 @@ class QuestionAndAnswerCommandContext(CommandContext):
         ):
             # FIXME: Display somewhere in the QA pop-up how many suggestion
             # potions they have left and what button to press to use one
-            self._maze_view.write_to_event_log("Using suggestion potion")
+            self._maze_model.use_item("suggestion potion")
         elif key == "Return":
             # FIXME: Get current answer and check if it is correct
             pass
