@@ -465,6 +465,7 @@ _________________________________________________
             # vision potion is used, we automatically display the map and
             # legend.
             vision_potion_used = False
+            adv_moved = False
 
             # Separator to help user discriminate from previous input iteration
             print("\n" + "-" * self.__CONSOLE_WIDTH)
@@ -542,6 +543,7 @@ _________________________________________________
                 next_room.occupied_by_adventurer = True
                 rooms_to_update_in_map.append(current_room)
                 current_room = next_room
+                adv_moved = True
 
                 if next_room.get_pit():
                     # Apply damage to adventurer
@@ -583,6 +585,14 @@ _________________________________________________
                 print(self.__MAZE_MAP_FILLED_IN_MESSAGE)
                 print(self.__maze_map_filled_in)
                 sys.exit(0)
+            
+            #check for no path
+            if adv_moved and len(self.__adventurer.get_magic_keys()) < 1:
+                if not self.__check_loss():
+                    print(self.__YOU_ARE_TRAPPED_MESSAGE)
+                    print(self.__MAZE_MAP_FILLED_IN_MESSAGE)
+                    print(self.__maze_map_filled_in)
+                    sys.exit(0)
 
     def move_adventurer(self, direction):
         """
