@@ -114,6 +114,14 @@ class CommandContext(ABC):
         self._maze_model = maze_model
         self._maze_view = maze_view
 
+    def __init_subclass__(cls, *args, **kwargs):
+        """Force all subclasses to define a COMMANDS class attr"""
+        super().__init_subclass__(*args, **kwargs)
+        if not hasattr(cls, "COMMANDS"):
+            raise TypeError(
+                "Subclasses of {self.__class__.__name__} must define the COMMANDS class attr"
+            )
+
     @abstractmethod
     def process_keystroke(self, key):
         """Interpret a keystroke and perform the relevant actions on the model
