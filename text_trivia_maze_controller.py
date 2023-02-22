@@ -182,88 +182,46 @@ class MainMenuCommandContext(MenuCommandContext):
             self._maze_view.quit_entire_game()
 
 
-class MainHelpMenuCommandContext(CommandContext):
-    class __Command(Enum):
+class DismissibleCommandContext(CommandContext):
+    class _Command(Enum):
         """Enumeration used to fix commands to a small finite support set."""
 
         DISMISS = auto()
 
-    __COMMAND_DESC_KEY = "description"
-    __COMMAND_KEY_KEY = "key"
-    __COMMAND_TYPE = "type"
-    __COMMAND_TYPE_OTHER = "other"
+    _COMMAND_DESC_KEY = "description"
+    _COMMAND_KEY_KEY = "key"
+    _COMMAND_TYPE = "type"
+    _COMMAND_TYPE_OTHER = "other"
 
     COMMANDS = {
         # Movement commands
-        __Command.DISMISS: {
-            __COMMAND_TYPE: __COMMAND_TYPE_OTHER,
-            __COMMAND_DESC_KEY: "Dismiss",
-            __COMMAND_KEY_KEY: "Return",
+        _Command.DISMISS: {
+            _COMMAND_TYPE: _COMMAND_TYPE_OTHER,
+            _COMMAND_DESC_KEY: "Dismiss",
+            _COMMAND_KEY_KEY: "Return",
         }
     }
 
+
+class MainHelpMenuCommandContext(DismissibleCommandContext):
     def process_keystroke(self, key):
-        if (
-            key
-            == self.COMMANDS[self.__Command.DISMISS][self.__COMMAND_KEY_KEY]
-        ):
+        if key == self.COMMANDS[self._Command.DISMISS][self._COMMAND_KEY_KEY]:
             self._maze_view.hide_main_help_menu()
             self._maze_controller.set_active_context("main_menu")
 
 
-class MapLegendCommandContext(CommandContext):
-    class __Command(Enum):
-        """Enumeration used to fix commands to a small finite support set."""
-
-        DISMISS = auto()
-
-    __COMMAND_DESC_KEY = "description"
-    __COMMAND_KEY_KEY = "key"
-    __COMMAND_TYPE = "type"
-    __COMMAND_TYPE_OTHER = "other"
-
-    COMMANDS = {
-        # Movement commands
-        __Command.DISMISS: {
-            __COMMAND_TYPE: __COMMAND_TYPE_OTHER,
-            __COMMAND_DESC_KEY: "Dismiss",
-            __COMMAND_KEY_KEY: "Return",
-        }
-    }
-
+class MapLegendCommandContext(DismissibleCommandContext):
     def process_keystroke(self, key):
-        if (
-            key
-            == self.COMMANDS[self.__Command.DISMISS][self.__COMMAND_KEY_KEY]
-        ):
+        if key == self.COMMANDS[self._Command.DISMISS][self._COMMAND_KEY_KEY]:
             self._maze_view.hide_map_legend_menu()
             self._maze_controller.set_active_context("in_game_menu")
 
 
-class CommandLegendCommandContext(CommandContext):
-    class __Command(Enum):
-        """Enumeration used to fix commands to a small finite support set."""
-
-        DISMISS = auto()
-
-    __COMMAND_DESC_KEY = "description"
-    __COMMAND_KEY_KEY = "key"
-    __COMMAND_TYPE = "type"
-    __COMMAND_TYPE_OTHER = "other"
-
-    COMMANDS = {
-        # Movement commands
-        __Command.DISMISS: {
-            __COMMAND_TYPE: __COMMAND_TYPE_OTHER,
-            __COMMAND_DESC_KEY: "Dismiss",
-            __COMMAND_KEY_KEY: "Return",
-        }
-    }
-
+class CommandLegendCommandContext(DismissibleCommandContext):
     def process_keystroke(self, key):
         if (
             key
-            == self.COMMANDS[self.__Command.DISMISS][self.__COMMAND_KEY_KEY]
+            == self.COMMANDS[self._Command.DISMISS][self._COMMAND_KEY_KEY]
         ):
             self._maze_view.hide_command_legend_menu()
             self._maze_controller.set_active_context("in_game_menu")
