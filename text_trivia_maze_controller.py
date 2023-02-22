@@ -182,6 +182,63 @@ class MainMenuCommandContext(MenuCommandContext):
             self._maze_view.quit_entire_game()
 
 
+class InGameMenuCommandContext(MenuCommandContext):
+    def process_keystroke(self, key):
+        # NOTE: We ignore arrow keys here since the GUI is responsible for
+        # having arrow keys traverse the menu. In fact, we actually only care
+        # about the user hitting Return inside of this menu.
+        if key != self.COMMANDS[self._Command.SELECT][self._COMMAND_KEY_KEY]:
+            return
+
+        # Trigger the currently selected item in the main menu
+        selected_option = (
+            self._maze_view.get_in_game_menu_current_selection().lower()
+        )
+
+        # NOTE: One might choose to have the controller tell the view what options
+        # to add to the menu when it creates it in order to avoid duplication
+        if selected_option == "back to game":
+            self._maze_view.hide_in_game_menu()
+            self._maze_controller.set_active_context("primary_interface")
+
+        elif selected_option == "display map legend":
+            self._maze_view.show_map_legend_menu()
+            self._maze_controller.set_active_context("map_legend_menu")
+
+        elif selected_option == "display commands":
+            # Generate legend symbols/descriptions to display
+            # FIXME: Don't hard-code 'key' or 'description' here
+            symbols = tuple(
+                entry["key"]
+                for entry in PrimaryInterfaceCommandContext.COMMANDS.values()
+            )
+            descriptions = tuple(
+                entry["description"]
+                for entry in PrimaryInterfaceCommandContext.COMMANDS.values()
+            )
+
+            self._maze_view.show_command_legend_menu(
+                symbols, descriptions, num_cols=2
+            )
+            self._maze_controller.set_active_context("command_legend_menu")
+
+        elif selected_option == "return to main menu":
+            # Have the model create a completely new map and reset all item
+            # counters to zero, etc.
+            self._maze_model.reset()
+
+            # Get rid of the in-game menu and put main menu over the top of the
+            # reconstructed game
+            self._maze_view.hide_in_game_menu()
+            self._maze_view.show_main_menu()
+
+            self._maze_controller.set_active_context("main_menu")
+
+        elif selected_option == "quit game":
+            # Exit out of everything and close the window
+            self._maze_view.quit_entire_game()
+
+
 class DismissibleCommandContext(CommandContext):
     class _Command(Enum):
         """Enumeration used to fix commands to a small finite support set."""
@@ -219,10 +276,7 @@ class MapLegendCommandContext(DismissibleCommandContext):
 
 class CommandLegendCommandContext(DismissibleCommandContext):
     def process_keystroke(self, key):
-        if (
-            key
-            == self.COMMANDS[self._Command.DISMISS][self._COMMAND_KEY_KEY]
-        ):
+        if key == self.COMMANDS[self._Command.DISMISS][self._COMMAND_KEY_KEY]:
             self._maze_view.hide_command_legend_menu()
             self._maze_controller.set_active_context("in_game_menu")
 
@@ -347,63 +401,6 @@ class PrimaryInterfaceCommandContext(CommandContext):
                 ]
             ):
                 self._maze_model.move_adventurer("south")
-
-
-class InGameMenuCommandContext(MenuCommandContext):
-    def process_keystroke(self, key):
-        # NOTE: We ignore arrow keys here since the GUI is responsible for
-        # having arrow keys traverse the menu. In fact, we actually only care
-        # about the user hitting Return inside of this menu.
-        if key != self.COMMANDS[self._Command.SELECT][self._COMMAND_KEY_KEY]:
-            return
-
-        # Trigger the currently selected item in the main menu
-        selected_option = (
-            self._maze_view.get_in_game_menu_current_selection().lower()
-        )
-
-        # NOTE: One might choose to have the controller tell the view what options
-        # to add to the menu when it creates it in order to avoid duplication
-        if selected_option == "back to game":
-            self._maze_view.hide_in_game_menu()
-            self._maze_controller.set_active_context("primary_interface")
-
-        elif selected_option == "display map legend":
-            self._maze_view.show_map_legend_menu()
-            self._maze_controller.set_active_context("map_legend_menu")
-
-        elif selected_option == "display commands":
-            # Generate legend symbols/descriptions to display
-            # FIXME: Don't hard-code 'key' or 'description' here
-            symbols = tuple(
-                entry["key"]
-                for entry in PrimaryInterfaceCommandContext.COMMANDS.values()
-            )
-            descriptions = tuple(
-                entry["description"]
-                for entry in PrimaryInterfaceCommandContext.COMMANDS.values()
-            )
-
-            self._maze_view.show_command_legend_menu(
-                symbols, descriptions, num_cols=2
-            )
-            self._maze_controller.set_active_context("command_legend_menu")
-
-        elif selected_option == "return to main menu":
-            # Have the model create a completely new map and reset all item
-            # counters to zero, etc.
-            self._maze_model.reset()
-
-            # Get rid of the in-game menu and put main menu over the top of the
-            # reconstructed game
-            self._maze_view.hide_in_game_menu()
-            self._maze_view.show_main_menu()
-
-            self._maze_controller.set_active_context("main_menu")
-
-        elif selected_option == "quit game":
-            # Exit out of everything and close the window
-            self._maze_view.quit_entire_game()
 
 
 class QuestionAndAnswerCommandContext(CommandContext):
