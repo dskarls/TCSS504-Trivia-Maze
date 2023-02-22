@@ -805,7 +805,7 @@ _________________________________________________
                     continue
                 # if we havent been to that room...
                 # check if a side isnt a wall or permanently locked and continue in that direction
-                if not current_room.get_side(direction).perm_locked or current_room.get_side(direction) != Room.WALL:
+                if not self.__wall_or_perm(current_room, direction):
                     # mark current room has having been visited
                     visited_rooms.append(current_room)
                     # move to the next room based on direction
@@ -866,7 +866,7 @@ _________________________________________________
             given direction. Returns the same room if can't move in the given
             direction.
         """
-        if room.get_side(direction) == Room.WALL or room.get_side(direction).perm_locked:
+        if self.__wall_or_perm(room, direction):
             return room
             
         if direction == Room.NORTH:
