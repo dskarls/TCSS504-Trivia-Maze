@@ -1,3 +1,4 @@
+from collections import deque
 import os
 from abc import ABC, abstractmethod
 import textwrap
@@ -5,7 +6,13 @@ import textwrap
 from tkinter import *
 from tkinter.ttk import *
 
-from view_config import DIMENSIONS, MESSAGES, KEYS, STYLES
+from view_config import (
+    DIMENSIONS,
+    MESSAGES,
+    ROOM_CONTENT_SYMBOLS,
+    KEYS,
+    STYLES,
+)
 from view_components import (
     HPGauge,
     EnumeratedInventory,
@@ -152,6 +159,7 @@ class TextTriviaMazeView(TriviaMazeView):
         # widgets will always be "hidden" behind them. You could also get
         # around this by using the 'lift()' and 'lower()' methods of the frame
         # widgets, but it's simpler just to make them in order.
+
         self.__map = self.__create_map()
         (
             self.__hp_gauge,
@@ -160,15 +168,22 @@ class TextTriviaMazeView(TriviaMazeView):
         ) = self.__create_side_bar()
         self.__event_log = self.__create_event_log()
 
+        # Add separator lines to divide UI cleanly
+        self.__separators = self.__create_separators()
+
         # Create game won/lost menus
         self.__game_won_menu = self.__create_game_won_menu()
         self.hide_game_won_menu()
+
         self.__game_lost_menu = self.__create_game_lost_menu()
         self.hide_game_lost_menu()
 
         # Set up in-game menu
         self.__in_game_menu = self.__create_in_game_menu()
         self.hide_in_game_menu()
+
+        self.__map_legend_menu = self.__create_map_legend_menu()
+        self.hide_map_legend_menu()
 
         # Create main menu and the help menu accessible from it
         self.__main_menu = self.__create_main_menu()
@@ -179,9 +194,6 @@ class TextTriviaMazeView(TriviaMazeView):
 
         # Prevent resizing
         self.__window.resizable(False, False)
-
-        # Add separator lines to divide UI cleanly
-        self.__separators = self.__create_separators()
 
         # Show main menu and have it take focus
         self.show_main_menu()
@@ -454,6 +466,67 @@ class TextTriviaMazeView(TriviaMazeView):
         )
 
         return hp_gauge, inventory, pillars_inventory
+
+    def __create_map_legend_menu(
+        self,
+        num_cols=2,
+    ):
+        SPACE_SYMBOL = "<space>"
+
+        # Determine longest description and symbol strings
+        symbol_max_len = max(
+            len(SPACE_SYMBOL), len(max(ROOM_CONTENT_SYMBOLS.values(), key=len))
+        )
+        description_max_len = len(max(ROOM_CONTENT_SYMBOLS.keys(), key=len))
+
+        legend_entries = deque()
+
+        for description, symbol in ROOM_CONTENT_SYMBOLS.items():
+            # Special handling to account for space character (empty room)
+            if symbol == " ":
+                symbol = SPACE_SYMBOL
+
+            legend_entries.append(
+                f"{symbol:>{symbol_max_len}}: {description:<{description_max_len}}"
+            )
+
+        max_width_of_one_row = num_cols * len(legend_entries[0])
+
+        legend_rows = []
+        row = 0
+        while legend_entries:
+            # Pop off next element and put in next column
+            for col in range(num_cols):
+                if col == 0:
+                    # Begin string for this row
+                    legend_rows.append("")
+
+                legend_rows[row] += legend_entries.popleft()
+
+                if col == num_cols - 1:
+                    # Begin new row
+                    row += 1
+
+                # Pad the bottom row to the right with spaces
+                if not legend_entries:
+                    legend_rows[row] = legend_rows[row].ljust(
+                        max_width_of_one_row
+                    )
+                    break
+
+        return DismissiblePopUp(
+            self.__window,
+            None,
+            ("\n").join(legend_rows),
+            DIMENSIONS["map_legend_menu"]["pady"],
+            KEYS["map_legend_menu"]["dismiss"],
+        )
+
+    def show_map_legend_menu(self):
+        self.__map_legend_menu.show()
+
+    def hide_map_legend_menu(self):
+        self.__map_legend_menu.hide()
 
     def __create_event_log(self):
         dims = DIMENSIONS["event_log"]

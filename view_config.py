@@ -17,6 +17,7 @@ DIMENSIONS = {
     "pillars": {"padx": 10, "pady": 8},
     "pillars_title": {"ipady": 10},
     "main_help_menu": {"pady": 5},
+    "map_legend_menu": {"pady": 5},
     "game_won_menu": {"pady": 5},
     "game_lost_menu": {"pady": 5},
 }
@@ -83,6 +84,25 @@ MESSAGES = {
 }
 
 ##############################################################################
+# Symbols used to represent things in the map
+##############################################################################
+ROOM_CONTENT_SYMBOLS = {
+    "Entrance": "i",
+    "Exit": "o",
+    "Adventurer": "@",
+    "Pit": "X",
+    "Healing Potion": "H",
+    "Vision Potion": "V",
+    "Multiple Items": "M",
+    "Pillar of Abstraction": "A",
+    "Pillar of Inheritance": "I",
+    "Pillar of Encapsulation": "E",
+    "Pillar of Polymorphism": "P",
+    "Magic Key": "K",
+    "Empty room": " ",
+}
+
+##############################################################################
 # Keyboard sequences that need to be communicated to the user
 ##############################################################################
 # FIXME: This should be done away with. The controller should simply tell the
@@ -93,10 +113,13 @@ KEYS = {
     "game_won_menu": {"dismiss": "Return"},
     "game_lost_menu": {"dismiss": "Return"},
     "main_help_menu": {"dismiss": "Return"},
+    "map_legend_menu": {"dismiss": "Return"},
 }
 
 
+##############################################################################
 # All styles to register with tk
+##############################################################################
 STYLES = {
     "main_menu": {"style": "main_menu.TLabel", "font": ("Courier New", 16)},
     "map": {"style": "map.TLabel", "font": ("Courier New", 26, "bold")},
