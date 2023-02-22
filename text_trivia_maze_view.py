@@ -556,8 +556,27 @@ class TextTriviaMazeView(TriviaMazeView):
             KEYS["commands_help_menu"]["dismiss"],
         )
 
-    def show_commands_help_menu(self, text):
-        self.__commands_help_menu.set_text(text)
+    def show_commands_help_menu(self, symbols, descriptions, num_cols):
+        """
+        Fills the commands help pop-up based on a dict containing command
+        keystrokes and their description, then displays it on top of the
+        primary interface.
+
+        Parameters
+        ----------
+        commands_info : tuple of dict
+            Each entry is a dict containing the keys 'key' (which indicates the
+            command keystroke) and 'description' (which indicates the
+            description to display for that keystroke.)
+        """
+        legend_rows = self.__generate_rows_for_multicolumn_display(
+            symbols=symbols,
+            descriptions=descriptions,
+            num_cols=num_cols,
+            symbol_overrides={},
+        )
+
+        self.__commands_help_menu.set_text(("\n").join(legend_rows))
         self.__commands_help_menu.show()
 
     def hide_commands_help_menu(self):

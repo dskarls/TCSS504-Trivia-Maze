@@ -78,6 +78,9 @@ class TextTriviaMazeController(TriviaMazeController):
         self.__map_legend_menu_context = MapLegendCommandContext(
             self, self._maze_model, self.__maze_view
         )
+        self.__commands_help_menu_context = CommandsHelpCommandContext(
+            self, self._maze_model, self.__maze_view
+        )
         self.__question_and_answer_context = QuestionAndAnswerCommandContext(
             self, self._maze_model, self.__maze_view
         )
@@ -106,6 +109,8 @@ class TextTriviaMazeController(TriviaMazeController):
             self.__active_context = self.__in_game_menu_context
         elif context_specifier == "map_legend_menu":
             self.__active_context = self.__map_legend_menu_context
+        elif context_specifier == "commands_help_menu":
+            self.__active_context = self.__commands_help_menu_context
         elif context_specifier == "question_and_answer":
             self.__active_context = self.__question_and_answer_context
 
@@ -230,16 +235,6 @@ class PrimaryInterfaceCommandContext(CommandContext):
             __COMMAND_DESC_KEY: "Use vision potion",
             __COMMAND_KEY_KEY: "v",
         },
-        Command.USE_SUGGESTION_POTION: {
-            __COMMAND_TYPE: __COMMAND_TYPE_ITEM,
-            __COMMAND_DESC_KEY: "Use suggestion potion",
-            __COMMAND_KEY_KEY: "s",
-        },
-        Command.USE_MAGIC_KEY: {
-            __COMMAND_TYPE: __COMMAND_TYPE_ITEM,
-            __COMMAND_DESC_KEY: "Use magic key",
-            __COMMAND_KEY_KEY: "k",
-        },
         # Other commands
         Command.SHOW_IN_GAME_MENU: {
             __COMMAND_TYPE: __COMMAND_TYPE_OTHER,
@@ -312,8 +307,20 @@ class InGameMenuCommandContext(CommandContext):
             self._maze_controller.set_active_context("map_legend_menu")
 
         elif selected_option == "display commands":
-            # FIXME: Implement this in the view
-            self._maze_view.show_commands_help_menu()
+            # Generate legend symbols/descriptions to display
+            # FIXME: Don't hard-code 'key' or 'description' here
+            symbols = tuple(
+                entry["key"]
+                for entry in PrimaryInterfaceCommandContext.COMMANDS.values()
+            )
+            descriptions = tuple(
+                entry["description"]
+                for entry in PrimaryInterfaceCommandContext.COMMANDS.values()
+            )
+
+            self._maze_view.show_commands_help_menu(
+                symbols, descriptions, num_cols=2
+            )
             self._maze_controller.set_active_context("commands_help_menu")
 
         elif selected_option == "return to main menu":
