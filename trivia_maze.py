@@ -810,7 +810,7 @@ _________________________________________________
                     # mark current room has having been visited
                     visited_rooms.append(current_room)
                     # move to the next room based on direction
-                    current_room = self.__move_to_new_room(current_room, direction)
+                    current_room = next_room
                     break
             # went through all directions this room has no valid paths
             # need to backtrack and try new path
