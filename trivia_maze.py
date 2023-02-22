@@ -788,8 +788,9 @@ _________________________________________________
         invalid_rooms = []
         inaccesible_rooms = self.__get_inaccessible_rooms()
         current_room = self.__get_adventurer_room()
-
-        while len(visited_rooms) + len(invalid_rooms) + len(inaccesible_rooms) < len(self.__maze.rooms):
+        TOTAL_ROOMS =  len(self.__maze.num_rows * self.__maze.num_cols)
+        
+        while len(visited_rooms) + len(invalid_rooms) + len(inaccessible_rooms) < TOTAL_ROOMS::
             # check if the room has a key
             if current_room.contains_magic_key():
                 return True
