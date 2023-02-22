@@ -814,8 +814,12 @@ _________________________________________________
                     break
             # went through all directions this room has no valid paths
             # need to backtrack and try new path
-            invalid_rooms.append(current_room)
-            current_room = visited_rooms.pop()
+            if len(visited_rooms) > 0:
+                invalid_rooms.append(current_room)
+                current_room = visited_rooms.pop()
+            else:
+                #no other possible paths forward
+                return False
         #if all rooms have been considered no possible path to victory
         return False
     
