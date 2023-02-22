@@ -783,7 +783,7 @@ _________________________________________________
             the current state of the maze. Otherwise False if no possibilty to 
             win.
         """
-        directions = [Room.NORTH, Room.EAST, Room.SOUTH, Room.WEST]
+        DIRECTIONS = [Room.NORTH, Room.EAST, Room.SOUTH, Room.WEST]
         visited_rooms = []
         invalid_rooms = []
         inaccesible_rooms = self.__get_inaccessible_rooms()
