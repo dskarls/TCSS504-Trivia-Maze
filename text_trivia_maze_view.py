@@ -279,6 +279,7 @@ class TextTriviaMazeView(TriviaMazeView):
             "Back to Game",
             "Display Map Legend",
             "Display Commands",
+            "Return to Main Menu",
             "Quit Game",
         )
         return InGameMenu(
@@ -288,6 +289,9 @@ class TextTriviaMazeView(TriviaMazeView):
             DIMENSIONS["in_game_menu_title"]["pady"],
             options,
         )
+
+    def get_in_game_menu_current_selection(self):
+        return self.__in_game_menu.selected_option
 
     def show_in_game_menu(self):
         self.__in_game_menu.show()
