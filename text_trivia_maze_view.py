@@ -477,48 +477,13 @@ class TextTriviaMazeView(TriviaMazeView):
         self,
         num_cols=2,
     ):
-        SPACE_SYMBOL = "<space>"
-
-        # Determine longest description and symbol strings
-        symbol_max_len = max(
-            len(SPACE_SYMBOL), len(max(ROOM_CONTENT_SYMBOLS.values(), key=len))
+        val_overrides = {" ": "<space>"}
+        legend_rows = self.__generate_rows_for_multicolumn_display(
+            symbols=ROOM_CONTENT_SYMBOLS.values(),
+            descriptions=ROOM_CONTENT_SYMBOLS.keys(),
+            num_cols=num_cols,
+            val_overrides=val_overrides,
         )
-        description_max_len = len(max(ROOM_CONTENT_SYMBOLS.keys(), key=len))
-
-        legend_entries = deque()
-
-        for description, symbol in ROOM_CONTENT_SYMBOLS.items():
-            # Special handling to account for space character (empty room)
-            if symbol == " ":
-                symbol = SPACE_SYMBOL
-
-            legend_entries.append(
-                f"{symbol:>{symbol_max_len}}: {description:<{description_max_len}}"
-            )
-
-        max_width_of_one_row = num_cols * len(legend_entries[0])
-
-        legend_rows = []
-        row = 0
-        while legend_entries:
-            # Pop off next element and put in next column
-            for col in range(num_cols):
-                if col == 0:
-                    # Begin string for this row
-                    legend_rows.append("")
-
-                legend_rows[row] += legend_entries.popleft()
-
-                if col == num_cols - 1:
-                    # Begin new row
-                    row += 1
-
-                # Pad the bottom row to the right with spaces
-                if not legend_entries:
-                    legend_rows[row] = legend_rows[row].ljust(
-                        max_width_of_one_row
-                    )
-                    break
 
         return DismissiblePopUp(
             self.__window,
@@ -527,6 +492,52 @@ class TextTriviaMazeView(TriviaMazeView):
             DIMENSIONS["map_legend_menu"]["pady"],
             KEYS["map_legend_menu"]["dismiss"],
         )
+
+    @staticmethod
+    def __generate_rows_for_multicolumn_display(
+        symbols, descriptions, num_cols, val_overrides
+    ):
+        # Determine longest description and symbol strings
+        symbol_max_len = max(
+            len(max(val_overrides.values(), key=len)),
+            len(max(descriptions, key=len)),
+        )
+        description_max_len = len(max(descriptions, key=len))
+
+        entries = deque()
+
+        for symbol, description in zip(symbols, descriptions):
+            # Special handling to account for space character (empty room)
+            if symbol in val_overrides:
+                symbol = val_overrides[symbol]
+
+            entries.append(
+                f"{symbol:>{symbol_max_len}}: {description:<{description_max_len}}"
+            )
+
+        max_width_of_one_row = num_cols * len(entries[0])
+
+        rows = []
+        row = 0
+        while entries:
+            # Pop off next element and put in next column
+            for col in range(num_cols):
+                if col == 0:
+                    # Begin string for this row
+                    rows.append("")
+
+                rows[row] += entries.popleft()
+
+                if col == num_cols - 1:
+                    # Begin new row
+                    row += 1
+
+                # Pad the bottom row to the right with spaces
+                if not entries:
+                    rows[row] = rows[row].ljust(max_width_of_one_row)
+                    break
+
+        return rows
 
     def show_map_legend_menu(self):
         self.__map_legend_menu.show()
