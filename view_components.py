@@ -36,6 +36,7 @@ class TextMenu:
             selectforeground=selected_foreground_color,
             selectbackground=selected_background_color,
             justify=justify,
+            activestyle="none",
         )
         self.__add_options()
 
