@@ -808,14 +808,19 @@ __   __             ___             _____                              _   _
         inaccessible_rooms = self.__get_inaccessible_rooms()
         current_room = self.__get_adventurer_room()
         TOTAL_ROOMS =  self.__maze.num_rows * self.__maze.num_cols
+        pillars_found = self.__adventurer.get_pillars_found()
         
         while len(visited_rooms) + len(invalid_rooms) + len(inaccessible_rooms) < TOTAL_ROOMS:
             moved_to_new_room = False
             # check if the room has a key
             if current_room.contains_magic_key():
                 return True
-            # check if the room is the exit
-            if current_room.is_exit():
+            # check if room has a pillar
+            if current_room.contains_pillar():
+                # add pillar to found list
+                pillars_found.append(current_room.get_pillar())
+            # check if the room is the exit and all pillars have been found
+            if current_room.is_exit() and len(pillars_found) == 4:
                 return True
             # check if adv has locked themselves in a room
             if self.__get_adventurer_room() in inaccessible_rooms:
@@ -832,10 +837,11 @@ __   __             ___             _____                              _   _
                 if not self.__wall_or_perm(current_room, direction):
                     # mark current room has having been visited
                     visited_rooms.append(current_room)
-                    # move to the next room based on direction
+                    # move to the next room
                     current_room = next_room
                     moved_to_new_room = True
                     break
+            # continue loop if successfully moved to a new room
             if moved_to_new_room:
                 continue
             # went through all directions this room has no valid paths
