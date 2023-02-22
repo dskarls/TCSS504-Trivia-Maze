@@ -159,7 +159,6 @@ class TextTriviaMazeView(TriviaMazeView):
         # widgets will always be "hidden" behind them. You could also get
         # around this by using the 'lift()' and 'lower()' methods of the frame
         # widgets, but it's simpler just to make them in order.
-
         self.__map = self.__create_map()
         (
             self.__hp_gauge,
@@ -169,6 +168,9 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__event_log = self.__create_event_log()
 
         # Add separator lines to divide UI cleanly
+        # NOTE: The separators need to be created after the primary interface
+        # components but before any of the pop-up widgets that can show up on
+        # top of it.
         self.__separators = self.__create_separators()
 
         # Create game won/lost menus
