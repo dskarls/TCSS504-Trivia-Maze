@@ -882,10 +882,9 @@ _________________________________________________
     
     def __wall_or_perm(self, room, direction):
         side = room.get_side(direction)
-        if side == Room.DOOR:
-            if side.perm_locked:
-                return True
         if side == Room.WALL:
+            return True
+        elif side.perm_locked:
             return True
         return False
     
