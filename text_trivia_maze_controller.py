@@ -318,10 +318,14 @@ class InGameMenuCommandContext(CommandContext):
             self._maze_controller.set_active_context("commands_help_menu")
 
         elif selected_option == "return to main menu":
+            # Have the model create a completely new map and reset all item
+            # counters to zero, etc.
             self._maze_model.reset()
 
             # Put main menu over the top of the reconstructed game
             self._maze_view.show_main_menu()
+
+            self._maze_controller.set_active_context("main_menu")
 
         elif selected_option == "quit game":
             # Exit out of everything and close the window
