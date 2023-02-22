@@ -786,17 +786,21 @@ _________________________________________________
         DIRECTIONS = [Room.NORTH, Room.EAST, Room.SOUTH, Room.WEST]
         visited_rooms = []
         invalid_rooms = []
-        inaccesible_rooms = self.__get_inaccessible_rooms()
+        inaccessible_rooms = self.__get_inaccessible_rooms()
         current_room = self.__get_adventurer_room()
         TOTAL_ROOMS =  self.__maze.num_rows * self.__maze.num_cols
         
-        while len(visited_rooms) + len(invalid_rooms) + len(inaccessible_rooms) < TOTAL_ROOMS::
+        while len(visited_rooms) + len(invalid_rooms) + len(inaccessible_rooms) < TOTAL_ROOMS:
+            moved_to_new_room = False
             # check if the room has a key
             if current_room.contains_magic_key():
                 return True
             # check if the room is the exit
             if current_room.is_exit():
                 return True
+            # check if adv has locked themselves in a room
+            if self.__get_adventurer_room() in inaccessible_rooms:
+                return False
             # loop through to find a valid direction to move into another room
             for direction in DIRECTIONS:
                 #check direction won't put us into a visited room
@@ -811,7 +815,10 @@ _________________________________________________
                     visited_rooms.append(current_room)
                     # move to the next room based on direction
                     current_room = next_room
+                    moved_to_new_room = True
                     break
+            if moved_to_new_room:
+                continue
             # went through all directions this room has no valid paths
             # need to backtrack and try new path
             if len(visited_rooms) > 0:
