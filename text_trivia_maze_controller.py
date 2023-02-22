@@ -322,7 +322,9 @@ class InGameMenuCommandContext(CommandContext):
             # counters to zero, etc.
             self._maze_model.reset()
 
-            # Put main menu over the top of the reconstructed game
+            # Get rid of the in-game menu and put main menu over the top of the
+            # reconstructed game
+            self._maze_view.hide_in_game_menu()
             self._maze_view.show_main_menu()
 
             self._maze_controller.set_active_context("main_menu")
