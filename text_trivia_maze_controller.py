@@ -72,6 +72,12 @@ class TextTriviaMazeController(TriviaMazeController):
         self.__primary_interface_context = PrimaryInterfaceCommandContext(
             self, self._maze_model, self.__maze_view
         )
+        self.__in_game_menu_context = InGameMenuCommandContext(
+            self, self._maze_model, self.__maze_view
+        )
+        self.__map_legend_menu_context = MapLegendCommandContext(
+            self, self._maze_model, self.__maze_view
+        )
         self.__question_and_answer_context = QuestionAndAnswerCommandContext(
             self, self._maze_model, self.__maze_view
         )
@@ -96,6 +102,10 @@ class TextTriviaMazeController(TriviaMazeController):
             self.__active_context = self.__main_help_menu_context
         elif context_specifier == "primary_interface":
             self.__active_context = self.__primary_interface_context
+        elif context_specifier == "in_game_menu":
+            self.__active_context = self.__in_game_menu_context
+        elif context_specifier == "map_legend_menu":
+            self.__active_context = self.__map_legend_menu_context
         elif context_specifier == "question_and_answer":
             self.__active_context = self.__question_and_answer_context
 
@@ -163,6 +173,13 @@ class MainHelpMenuCommandContext(CommandContext):
         if key == "Return":
             self._maze_view.hide_main_help_menu()
             self._maze_controller.set_active_context("main_menu")
+
+
+class MapLegendCommandContext(CommandContext):
+    def process_keystroke(self, key):
+        if key == "Return":
+            self._maze_view.hide_map_legend_menu()
+            self._maze_controller.set_active_context("in_game_menu")
 
 
 class PrimaryInterfaceCommandContext(CommandContext):
@@ -233,6 +250,7 @@ class PrimaryInterfaceCommandContext(CommandContext):
             ]
         ):
             self._maze_view.show_in_game_menu()
+            self._maze_controller.set_active_context("in_game_menu")
         elif (
             key
             == self.__COMMANDS[Command.USE_HEALING_POTION][
@@ -273,6 +291,45 @@ class PrimaryInterfaceCommandContext(CommandContext):
                 == self.__COMMANDS[Command.MOVE_SOUTH][self.__COMMAND_KEY_KEY]
             ):
                 self._maze_view.write_to_event_log("Moving adventurer south")
+
+
+class InGameMenuCommandContext(CommandContext):
+    def process_keystroke(self, key):
+        # NOTE: We ignore arrow keys here since the GUI is responsible for
+        # having arrow keys traverse the menu. In fact, we actually only care
+        # about the user hitting Return inside of this menu.
+        if key != "Return":
+            return
+
+        # Trigger the currently selected item in the main menu
+        selected_option = (
+            self._maze_view.get_in_game_menu_current_selection().lower()
+        )
+
+        # NOTE: One might choose to have the controller tell the view what options
+        # to add to the menu when it creates it in order to avoid duplication
+        if selected_option == "back to game":
+            self._maze_view.hide_in_game_menu()
+            self._maze_controller.set_active_context("primary_interface")
+
+        elif selected_option == "display map legend":
+            self._maze_view.show_map_legend_menu()
+            self._maze_controller.set_active_context("map_legend_menu")
+
+        elif selected_option == "display commands":
+            # FIXME: Implement this in the view
+            self._maze_view.show_commands_help_menu()
+            self._maze_controller.set_active_context("commands_help_menu")
+
+        elif selected_option == "return to main menu":
+            self._maze_model.reset()
+
+            # Put main menu over the top of the reconstructed game
+            self._maze_view.show_main_menu()
+
+        elif selected_option == "quit game":
+            # Exit out of everything and close the window
+            self._maze_view.quit_entire_game()
 
 
 class QuestionAndAnswerCommandContext(CommandContext):
