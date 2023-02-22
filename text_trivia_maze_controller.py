@@ -4,26 +4,6 @@ from enum import Enum, auto
 from text_trivia_maze_view import TextTriviaMazeView
 
 
-class Command(Enum):
-    """Enumeration used to fix commands to a small finite support set."""
-
-    # Movement commands
-    MOVE_EAST = auto()
-    MOVE_NORTH = auto()
-    MOVE_WEST = auto()
-    MOVE_SOUTH = auto()
-
-    # Item commands
-    USE_HEALING_POTION = auto()
-    USE_VISION_POTION = auto()
-    USE_SUGGESTION_POTION = auto()
-    USE_MAGIC_KEY = auto()
-
-    # Other commands
-    SHOW_IN_GAME_MENU = auto()
-    QUIT_GAME = auto()
-
-
 class TriviaMazeModelObserver(ABC):
     def __init__(self, maze_model):
         self._maze_model = maze_model
@@ -195,6 +175,23 @@ class CommandLegendCommandContext(CommandContext):
 
 
 class PrimaryInterfaceCommandContext(CommandContext):
+    class __Command(Enum):
+        """Enumeration used to fix commands to a small finite support set."""
+
+        # Movement commands
+        MOVE_EAST = auto()
+        MOVE_NORTH = auto()
+        MOVE_WEST = auto()
+        MOVE_SOUTH = auto()
+
+        # Item commands
+        USE_HEALING_POTION = auto()
+        USE_VISION_POTION = auto()
+
+        # Other commands
+        SHOW_IN_GAME_MENU = auto()
+        QUIT_GAME = auto()
+
     __COMMAND_DESC_KEY = "description"
     __COMMAND_KEY_KEY = "key"
     __COMMAND_TYPE = "type"
@@ -204,39 +201,39 @@ class PrimaryInterfaceCommandContext(CommandContext):
 
     COMMANDS = {
         # Movement commands
-        Command.MOVE_EAST: {
+        __Command.MOVE_EAST: {
             __COMMAND_TYPE: __COMMAND_TYPE_MOVEMENT,
             __COMMAND_DESC_KEY: "Move east",
             __COMMAND_KEY_KEY: "Right",
         },
-        Command.MOVE_NORTH: {
+        __Command.MOVE_NORTH: {
             __COMMAND_TYPE: __COMMAND_TYPE_MOVEMENT,
             __COMMAND_DESC_KEY: "Move north",
             __COMMAND_KEY_KEY: "Up",
         },
-        Command.MOVE_WEST: {
+        __Command.MOVE_WEST: {
             __COMMAND_TYPE: __COMMAND_TYPE_MOVEMENT,
             __COMMAND_DESC_KEY: "Move west",
             __COMMAND_KEY_KEY: "Left",
         },
-        Command.MOVE_SOUTH: {
+        __Command.MOVE_SOUTH: {
             __COMMAND_TYPE: __COMMAND_TYPE_MOVEMENT,
             __COMMAND_DESC_KEY: "Move south",
             __COMMAND_KEY_KEY: "Down",
         },
         # Item commands
-        Command.USE_HEALING_POTION: {
+        __Command.USE_HEALING_POTION: {
             __COMMAND_TYPE: __COMMAND_TYPE_ITEM,
             __COMMAND_DESC_KEY: "Use healing potion",
             __COMMAND_KEY_KEY: "h",
         },
-        Command.USE_VISION_POTION: {
+        __Command.USE_VISION_POTION: {
             __COMMAND_TYPE: __COMMAND_TYPE_ITEM,
             __COMMAND_DESC_KEY: "Use vision potion",
             __COMMAND_KEY_KEY: "v",
         },
         # Other commands
-        Command.SHOW_IN_GAME_MENU: {
+        __Command.SHOW_IN_GAME_MENU: {
             __COMMAND_TYPE: __COMMAND_TYPE_OTHER,
             __COMMAND_DESC_KEY: "Show in-game help menu",
             __COMMAND_KEY_KEY: "Escape",
@@ -247,38 +244,54 @@ class PrimaryInterfaceCommandContext(CommandContext):
         # Non-movement commands
         if (
             key
-            == self.COMMANDS[Command.SHOW_IN_GAME_MENU][self.__COMMAND_KEY_KEY]
+            == self.COMMANDS[self.__Command.SHOW_IN_GAME_MENU][
+                self.__COMMAND_KEY_KEY
+            ]
         ):
             self._maze_view.show_in_game_menu()
             self._maze_controller.set_active_context("in_game_menu")
         elif (
             key
-            == self.COMMANDS[Command.USE_HEALING_POTION][
+            == self.COMMANDS[self.__Command.USE_HEALING_POTION][
                 self.__COMMAND_KEY_KEY
             ]
         ):
             self._maze_model.use_item("healing potion")
         elif (
             key
-            == self.COMMANDS[Command.USE_VISION_POTION][self.__COMMAND_KEY_KEY]
+            == self.COMMANDS[self.__Command.USE_VISION_POTION][
+                self.__COMMAND_KEY_KEY
+            ]
         ):
             self._maze_model.use_item("vision potion")
         else:
             # Movement commands
-            if key == self.COMMANDS[Command.MOVE_WEST][self.__COMMAND_KEY_KEY]:
+            if (
+                key
+                == self.COMMANDS[self.__Command.MOVE_WEST][
+                    self.__COMMAND_KEY_KEY
+                ]
+            ):
                 self._maze_model.move_adventurer("west")
             elif (
-                key == self.COMMANDS[Command.MOVE_EAST][self.__COMMAND_KEY_KEY]
+                key
+                == self.COMMANDS[self.__Command.MOVE_EAST][
+                    self.__COMMAND_KEY_KEY
+                ]
             ):
                 self._maze_model.move_adventurer("east")
             elif (
                 key
-                == self.COMMANDS[Command.MOVE_NORTH][self.__COMMAND_KEY_KEY]
+                == self.COMMANDS[self.__Command.MOVE_NORTH][
+                    self.__COMMAND_KEY_KEY
+                ]
             ):
                 self._maze_model.move_adventurer("north")
             elif (
                 key
-                == self.COMMANDS[Command.MOVE_SOUTH][self.__COMMAND_KEY_KEY]
+                == self.COMMANDS[self.__Command.MOVE_SOUTH][
+                    self.__COMMAND_KEY_KEY
+                ]
             ):
                 self._maze_model.move_adventurer("south")
 
@@ -343,6 +356,13 @@ class InGameMenuCommandContext(CommandContext):
 class QuestionAndAnswerCommandContext(CommandContext):
     # FIXME: Figure out what other keys need to be enabled for a player to
     # answer questions
+    class __Command(Enum):
+        """Enumeration used to fix commands to a small finite support set."""
+
+        # Item commands
+        USE_SUGGESTION_POTION = auto()
+        USE_MAGIC_KEY = auto()
+
     __COMMAND_DESC_KEY = "description"
     __COMMAND_KEY_KEY = "key"
     __COMMAND_TYPE = "type"
@@ -350,12 +370,12 @@ class QuestionAndAnswerCommandContext(CommandContext):
 
     __COMMANDS = {
         # Item commands
-        Command.USE_SUGGESTION_POTION: {
+        __Command.USE_SUGGESTION_POTION: {
             __COMMAND_TYPE: __COMMAND_TYPE_ITEM,
             __COMMAND_DESC_KEY: "Use suggestion potion",
             __COMMAND_KEY_KEY: "s",
         },
-        Command.USE_MAGIC_KEY: {
+        __Command.USE_MAGIC_KEY: {
             __COMMAND_TYPE: __COMMAND_TYPE_ITEM,
             __COMMAND_DESC_KEY: "Use magic key",
             __COMMAND_KEY_KEY: "k",
@@ -365,14 +385,16 @@ class QuestionAndAnswerCommandContext(CommandContext):
     def process_keystroke(self, key):
         if (
             key
-            == self.__COMMANDS[Command.USE_MAGIC_KEY][self.__COMMAND_KEY_KEY]
+            == self.__COMMANDS[self.__Command.USE_MAGIC_KEY][
+                self.__COMMAND_KEY_KEY
+            ]
         ):
             # FIXME: Display somewhere in the QA pop-up how many magic keys
             # they have left and what button to press to use one
             self._maze_model.use_item("magic key")
         elif (
             key
-            == self.__COMMANDS[Command.USE_SUGGESTION_POTION][
+            == self.__COMMANDS[self.__Command.USE_SUGGESTION_POTION][
                 self.__COMMAND_KEY_KEY
             ]
         ):
