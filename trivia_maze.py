@@ -870,9 +870,9 @@ _________________________________________________
             return room
             
         if direction == Room.NORTH:
-            new_room = self.__maze.rooms[room.coords[0] + 1][room.coords[1]]
-        elif direction == Room.SOUTH:
             new_room = self.__maze.rooms[room.coords[0] - 1][room.coords[1]]
+        elif direction == Room.SOUTH:
+            new_room = self.__maze.rooms[room.coords[0] + 1][room.coords[1]]
         elif direction == Room.EAST:
             new_room = self.__maze.rooms[room.coords[0]][room.coords[1] + 1]
         elif direction == Room.WEST:
