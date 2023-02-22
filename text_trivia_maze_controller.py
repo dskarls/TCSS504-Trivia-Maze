@@ -197,7 +197,7 @@ class PrimaryInterfaceCommandContext(CommandContext):
     __COMMAND_TYPE_ITEM = "item"
     __COMMAND_TYPE_OTHER = "other"
 
-    __COMMANDS = {
+    COMMANDS = {
         # Movement commands
         Command.MOVE_EAST: {
             __COMMAND_TYPE: __COMMAND_TYPE_MOVEMENT,
@@ -252,46 +252,38 @@ class PrimaryInterfaceCommandContext(CommandContext):
         # Non-movement commands
         if (
             key
-            == self.__COMMANDS[Command.SHOW_IN_GAME_MENU][
-                self.__COMMAND_KEY_KEY
-            ]
+            == self.COMMANDS[Command.SHOW_IN_GAME_MENU][self.__COMMAND_KEY_KEY]
         ):
             self._maze_view.show_in_game_menu()
             self._maze_controller.set_active_context("in_game_menu")
         elif (
             key
-            == self.__COMMANDS[Command.USE_HEALING_POTION][
+            == self.COMMANDS[Command.USE_HEALING_POTION][
                 self.__COMMAND_KEY_KEY
             ]
         ):
             self._maze_model.use_item("healing potion")
         elif (
             key
-            == self.__COMMANDS[Command.USE_VISION_POTION][
-                self.__COMMAND_KEY_KEY
-            ]
+            == self.COMMANDS[Command.USE_VISION_POTION][self.__COMMAND_KEY_KEY]
         ):
             self._maze_model.use_item("vision potion")
         else:
             # Movement commands
-            if (
-                key
-                == self.__COMMANDS[Command.MOVE_WEST][self.__COMMAND_KEY_KEY]
-            ):
+            if key == self.COMMANDS[Command.MOVE_WEST][self.__COMMAND_KEY_KEY]:
                 self._maze_model.move_adventurer("west")
             elif (
-                key
-                == self.__COMMANDS[Command.MOVE_EAST][self.__COMMAND_KEY_KEY]
+                key == self.COMMANDS[Command.MOVE_EAST][self.__COMMAND_KEY_KEY]
             ):
                 self._maze_model.move_adventurer("east")
             elif (
                 key
-                == self.__COMMANDS[Command.MOVE_NORTH][self.__COMMAND_KEY_KEY]
+                == self.COMMANDS[Command.MOVE_NORTH][self.__COMMAND_KEY_KEY]
             ):
                 self._maze_model.move_adventurer("north")
             elif (
                 key
-                == self.__COMMANDS[Command.MOVE_SOUTH][self.__COMMAND_KEY_KEY]
+                == self.COMMANDS[Command.MOVE_SOUTH][self.__COMMAND_KEY_KEY]
             ):
                 self._maze_model.move_adventurer("south")
 
