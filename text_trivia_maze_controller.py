@@ -128,31 +128,33 @@ class CommandContext(ABC):
         and view based on the current context."""
 
 
-class MainMenuCommandContext(CommandContext):
-    class __Command(Enum):
+class MenuCommandContext(CommandContext):
+    class _Command(Enum):
         """Enumeration used to fix commands to a small finite support set."""
 
         SELECT = auto()
 
-    __COMMAND_DESC_KEY = "description"
-    __COMMAND_KEY_KEY = "key"
-    __COMMAND_TYPE = "type"
-    __COMMAND_TYPE_OTHER = "other"
+    _COMMAND_DESC_KEY = "description"
+    _COMMAND_KEY_KEY = "key"
+    _COMMAND_TYPE = "type"
+    _COMMAND_TYPE_OTHER = "other"
 
     COMMANDS = {
         # Movement commands
-        __Command.SELECT: {
-            __COMMAND_TYPE: __COMMAND_TYPE_OTHER,
-            __COMMAND_DESC_KEY: "Select",
-            __COMMAND_KEY_KEY: "Return",
+        _Command.SELECT: {
+            _COMMAND_TYPE: _COMMAND_TYPE_OTHER,
+            _COMMAND_DESC_KEY: "Select",
+            _COMMAND_KEY_KEY: "Return",
         }
     }
 
+
+class MainMenuCommandContext(MenuCommandContext):
     def process_keystroke(self, key):
         # NOTE: We ignore arrow keys here since the GUI is responsible for
         # having arrow keys traverse the menu. In fact, we actually only care
         # about the user hitting Return inside of this menu.
-        if key != self.COMMANDS[self.__Command.SELECT][self.__COMMAND_KEY_KEY]:
+        if key != self.COMMANDS[self._Command.SELECT][self._COMMAND_KEY_KEY]:
             return
 
         # Trigger the currently selected item in the main menu
@@ -389,31 +391,12 @@ class PrimaryInterfaceCommandContext(CommandContext):
                 self._maze_model.move_adventurer("south")
 
 
-class InGameMenuCommandContext(CommandContext):
-    class __Command(Enum):
-        """Enumeration used to fix commands to a small finite support set."""
-
-        SELECT = auto()
-
-    __COMMAND_DESC_KEY = "description"
-    __COMMAND_KEY_KEY = "key"
-    __COMMAND_TYPE = "type"
-    __COMMAND_TYPE_OTHER = "other"
-
-    COMMANDS = {
-        # Movement commands
-        __Command.SELECT: {
-            __COMMAND_TYPE: __COMMAND_TYPE_OTHER,
-            __COMMAND_DESC_KEY: "Select",
-            __COMMAND_KEY_KEY: "Return",
-        }
-    }
-
+class InGameMenuCommandContext(MenuCommandContext):
     def process_keystroke(self, key):
         # NOTE: We ignore arrow keys here since the GUI is responsible for
         # having arrow keys traverse the menu. In fact, we actually only care
         # about the user hitting Return inside of this menu.
-        if key != self.COMMANDS[self.__Command.SELECT][self.__COMMAND_KEY_KEY]:
+        if key != self.COMMANDS[self._Command.SELECT][self._COMMAND_KEY_KEY]:
             return
 
         # Trigger the currently selected item in the main menu
@@ -480,7 +463,7 @@ class QuestionAndAnswerCommandContext(CommandContext):
     __COMMAND_TYPE = "type"
     __COMMAND_TYPE_ITEM = "item"
 
-    __COMMANDS = {
+    COMMANDS = {
         # Item commands
         __Command.USE_SUGGESTION_POTION: {
             __COMMAND_TYPE: __COMMAND_TYPE_ITEM,
@@ -497,7 +480,7 @@ class QuestionAndAnswerCommandContext(CommandContext):
     def process_keystroke(self, key):
         if (
             key
-            == self.__COMMANDS[self.__Command.USE_MAGIC_KEY][
+            == self.COMMANDS[self.__Command.USE_MAGIC_KEY][
                 self.__COMMAND_KEY_KEY
             ]
         ):
@@ -506,7 +489,7 @@ class QuestionAndAnswerCommandContext(CommandContext):
             self._maze_model.use_item("magic key")
         elif (
             key
-            == self.__COMMANDS[self.__Command.USE_SUGGESTION_POTION][
+            == self.COMMANDS[self.__Command.USE_SUGGESTION_POTION][
                 self.__COMMAND_KEY_KEY
             ]
         ):
