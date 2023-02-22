@@ -363,11 +363,15 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__game_lost_menu.hide()
 
     def __forward_keystroke_to_controller(self, event):
+        NEWLINE = 13
+        ESCAPE = 27
+        LINEFEED = 10
+
         # For regular keys
         key = event.char
 
         # If char was empty, check to see if it was an arrow key
-        if not key or key in os.linesep:
+        if not key or event.keycode in (NEWLINE, ESCAPE, LINEFEED):
             key = event.keysym
 
         if key:
