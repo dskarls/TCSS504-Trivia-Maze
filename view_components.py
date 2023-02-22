@@ -243,26 +243,6 @@ class EventLog(SubWindow):
         return scrltxt
 
 
-class PopUpWindow:
-    def __init__(self, window, width):
-        self._frm = Frame(
-            master=window,
-        )
-        self._place_pop_up_at_center_of_window(self._frm, width)
-        self._width = width
-
-    @staticmethod
-    def _place_pop_up_at_center_of_window(frame, width):
-        frame.place(
-            relx=0.5,
-            rely=0.5,
-            anchor=CENTER,
-            width=width,
-        )
-
-    # FIXME: Make show and hide abstract methods? Would the map etc really be a subwindow then?
-
-
 class EnumeratedInventory:
     def __init__(self, window, title, title_ipady, padx, pady, item_labels):
         self.__window = window
@@ -427,6 +407,26 @@ class HPGauge:
 
     def set(self, value):
         self.__bar_hp_gauge["value"] = value
+
+
+class PopUpWindow:
+    def __init__(self, window, width):
+        self._frm = Frame(
+            master=window,
+        )
+        self._place_pop_up_at_center_of_window(self._frm, width)
+        self._width = width
+
+    @staticmethod
+    def _place_pop_up_at_center_of_window(frame, width):
+        frame.place(
+            relx=0.5,
+            rely=0.5,
+            anchor=CENTER,
+            width=width,
+        )
+
+    # FIXME: Make show and hide abstract methods? Would the map etc really be a subwindow then?
 
 
 class InGameMenu(PopUpWindow):
