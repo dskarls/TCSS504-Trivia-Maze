@@ -494,7 +494,7 @@ class DismissiblePopUp(PopUpWindow):
     dismiss it by entering a specific key.
     """
 
-    def __init__(self, window, width, text, pady, dismiss_key):
+    def __init__(self, window, width, text, pady, bottom_label):
         # Create the frame for the whole in-game menu
         super().__init__(window, width)
 
@@ -510,7 +510,7 @@ class DismissiblePopUp(PopUpWindow):
         # Put return to main menu option below
         lbl = Label(
             master=self._frm,
-            text=f"Press [{dismiss_key}] to return to main menu",
+            text=bottom_label,
             justify=CENTER,
             anchor=CENTER,
         )
