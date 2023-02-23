@@ -135,10 +135,12 @@ class CommandContext(ABC):
     def __init_subclass__(cls, *args, **kwargs):
         """Force all subclasses to define a COMMANDS class attr"""
         super().__init_subclass__(*args, **kwargs)
-        if not hasattr(cls, "COMMANDS"):
-            raise TypeError(
-                "Subclasses of {self.__class__.__name__} must define the COMMANDS class attr"
-            )
+        required_attrs = ("Command", "COMMANDS")
+        for attr in required_attrs:
+            if not hasattr(cls, attr):
+                raise TypeError(
+                    f"Subclasses of must define the {attr} class attr"
+                )
 
     @abstractmethod
     def process_keystroke(self, key):
