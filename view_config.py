@@ -103,21 +103,6 @@ ROOM_CONTENT_SYMBOLS = {
     "Empty room": " ",
 }
 
-##############################################################################
-# Keyboard sequences that need to be communicated to the user
-##############################################################################
-# FIXME: This should be done away with. The controller should simply tell the
-# view to display the relevant components' strings with the keys it expects to
-# be pressed. Or, since the view has a reference to the controller, it could
-# just access the keys for different actions directly.
-KEYS = {
-    "game_won_menu": {"dismiss": "Return"},
-    "game_lost_menu": {"dismiss": "Return"},
-    "main_help_menu": {"dismiss": "Return"},
-    "map_legend_menu": {"dismiss": "Return"},
-    "command_legend_menu": {"dismiss": "Return"},
-}
-
 
 ##############################################################################
 # All styles to register with tk

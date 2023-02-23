@@ -10,7 +10,6 @@ from view_config import (
     DIMENSIONS,
     MESSAGES,
     ROOM_CONTENT_SYMBOLS,
-    KEYS,
     STYLES,
 )
 from view_components import (
@@ -126,10 +125,13 @@ class TextTriviaMazeView(TriviaMazeView):
         maze_model,
         maze_controller,
         title,
+        dismiss_keys,
         theme_path=None,
         theme_name=None,
     ):
         super().__init__(maze_model, maze_controller)
+        self.__dismiss_keys = dismiss_keys
+
         # Create primary tkinter window and bind mainloop method (might fit
         # better in the driver and we can just pass the main Tk window into the
         # view init?
@@ -318,12 +320,16 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__in_game_menu.hide()
 
     def __create_main_help_menu(self):
+        dismiss_message = (
+            f"Press {' or '.join(self.__dismiss_keys)} to return to the main "
+            "menu"
+        )
         return DismissiblePopUp(
             self.__window,
             None,
             textwrap.dedent(MESSAGES["main_help_menu"]),
             DIMENSIONS["main_help_menu"]["pady"],
-            KEYS["main_help_menu"]["dismiss"],
+            dismiss_message,
         )
 
     def show_main_help_menu(self):
@@ -333,12 +339,16 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__main_help_menu.hide()
 
     def __create_game_won_menu(self):
+        dismiss_message = (
+            f"Press {' or '.join(self.__dismiss_keys)} to return to the main "
+            "menu"
+        )
         return DismissiblePopUp(
             self.__window,
             None,
             textwrap.dedent(MESSAGES["game_won_menu"]),
             DIMENSIONS["game_won_menu"]["pady"],
-            KEYS["game_won_menu"]["dismiss"],
+            dismiss_message,
         )
 
     def show_game_won_menu(self):
@@ -348,12 +358,16 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__game_won_menu.hide()
 
     def __create_game_lost_menu(self):
+        dismiss_message = (
+            f"Press {' or '.join(self.__dismiss_keys)} to return to the main "
+            "menu"
+        )
         return DismissiblePopUp(
             self.__window,
             None,
             textwrap.dedent(MESSAGES["game_lost_menu"]),
             DIMENSIONS["game_lost_menu"]["pady"],
-            KEYS["game_lost_menu"]["dismiss"],
+            dismiss_message,
         )
 
     def show_game_lost_menu(self):
@@ -489,12 +503,16 @@ class TextTriviaMazeView(TriviaMazeView):
             symbol_overrides=symbol_overrides,
         )
 
+        dismiss_message = (
+            f"Press {' or '.join(self.__dismiss_keys)} to return to the "
+            "in-game menu"
+        )
         return DismissiblePopUp(
             self.__window,
             None,
             ("\n").join(legend_rows),
             DIMENSIONS["map_legend_menu"]["pady"],
-            KEYS["map_legend_menu"]["dismiss"],
+            dismiss_message,
         )
 
     @staticmethod
@@ -552,12 +570,16 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__map_legend_menu.hide()
 
     def __create_command_legend_menu(self):
+        dismiss_message = (
+            f"Press {' or '.join(self.__dismiss_keys)} to return to the "
+            "in-game menu"
+        )
         return DismissiblePopUp(
             self.__window,
             None,
             None,
             DIMENSIONS["command_legend_menu"]["pady"],
-            KEYS["command_legend_menu"]["dismiss"],
+            dismiss_message,
         )
 
     def show_command_legend_menu(self, symbols, descriptions, num_cols):

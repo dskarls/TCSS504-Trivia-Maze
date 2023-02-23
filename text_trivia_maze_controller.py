@@ -47,7 +47,14 @@ class TextTriviaMazeController(TriviaMazeController):
         super().__init__(maze_model)
 
         # Create a view object
-        self.__maze_view = TextTriviaMazeView(maze_model, self, "Trivia Maze")
+        dismiss_keys = (
+            DismissibleCommandContext.COMMANDS[
+                DismissibleCommandContext.Command.DISMISS
+            ][_COMMAND_KEY_KEY],
+        )
+        self.__maze_view = TextTriviaMazeView(
+            maze_model, self, "Trivia Maze", dismiss_keys
+        )
 
         # Initialize command interpretation contexts
         self.__main_menu_context = MainMenuCommandContext(
