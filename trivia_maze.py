@@ -529,7 +529,12 @@ __   __             ___             _____                              _   _
             ):
                 print(self.__MAZE_MAP_FILLED_IN_MESSAGE)
                 print(self.__maze_map_filled_in)
-
+            # place holder to test magic key functionality
+            elif (
+                option
+                == self.__COMMANDS[self.__Command.USE_MAGIC_KEY][self.__COMMAND_KEY_KEY]
+            ):
+                self.use_item("magic key")
             # If selected to move a direction
             else:
                 # Check to see if move is valid (e.g. can't move west from a
