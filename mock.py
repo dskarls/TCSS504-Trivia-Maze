@@ -1,3 +1,15 @@
+class QuestionAndAnswer:
+    def __init__(self, question, question_type, hint, options, answer):
+        self.question = question
+        self.question_type = question_type
+        self.hint = hint
+        self.options = options
+        self.__answer = answer
+
+    def answer_is_correct(self, user_answer):
+        return user_answer.lower() == self.__answer.lower()
+
+
 class TextTriviaMazeModel:
     def save_game(self):
         pass
