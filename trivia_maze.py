@@ -808,7 +808,7 @@ __   __             ___             _____                              _   _
         inaccessible_rooms = self.__get_inaccessible_rooms()
         current_room = self.__get_adventurer_room()
         TOTAL_ROOMS =  self.__maze.num_rows * self.__maze.num_cols
-        pillars_found = self.__adventurer.get_pillars_found()
+        pillars_found = list(self.__adventurer.get_pillars_found())
         
         while len(visited_rooms) + len(invalid_rooms) + len(inaccessible_rooms) < TOTAL_ROOMS:
             moved_to_new_room = False
