@@ -99,24 +99,18 @@ class TextTriviaMazeController(TriviaMazeController):
         return self.__active_context
 
     def set_active_context(self, context_specifier):
-        if context_specifier == "main_menu":
-            self.__active_context = self.__main_menu_context
-        elif context_specifier == "main_help_menu":
-            self.__active_context = self.__main_help_menu_context
-        elif context_specifier == "primary_interface":
-            self.__active_context = self.__primary_interface_context
-        elif context_specifier == "in_game_menu":
-            self.__active_context = self.__in_game_menu_context
-        elif context_specifier == "map_legend_menu":
-            self.__active_context = self.__map_legend_menu_context
-        elif context_specifier == "command_legend_menu":
-            self.__active_context = self.__command_legend_menu_context
-        elif context_specifier == "game_won_menu":
-            self.__active_context = self.__game_won_menu_context
-        elif context_specifier == "game_lost_menu":
-            self.__active_context = self.__game_lost_menu_context
-        elif context_specifier == "question_and_answer":
-            self.__active_context = self.__question_and_answer_context
+        contexts = {
+            "main_menu": self.__main_menu_context,
+            "main_help_menu": self.__main_help_menu_context,
+            "primary_interface": self.__primary_interface_context,
+            "in_game_menu": self.__in_game_menu_context,
+            "map_legend_menu": self.__map_legend_menu_context,
+            "command_legend_menu": self.__command_legend_menu_context,
+            "game_won_menu": self.__game_won_menu_context,
+            "game_lost_menu": self.__game_lost_menu_context,
+            "question_and_answer": self.__question_and_answer_context,
+        }
+        self.__active_context = contexts[context_specifier]
 
     def update(self):
         # FIXME: Implement what should happen here when model changes
