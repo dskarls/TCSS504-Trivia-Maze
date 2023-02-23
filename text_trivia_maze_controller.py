@@ -401,7 +401,7 @@ class PrimaryInterfaceCommandContext(CommandContext):
 class QuestionAndAnswerCommandContext(CommandContext):
     # FIXME: Figure out what other keys need to be enabled for a player to
     # answer questions
-    class __Command(Enum):
+    class Command(Enum):
         """Enumeration used to fix commands to a small finite support set."""
 
         # Item commands
@@ -410,12 +410,12 @@ class QuestionAndAnswerCommandContext(CommandContext):
 
     COMMANDS = {
         # Item commands
-        __Command.USE_SUGGESTION_POTION: {
+        Command.USE_SUGGESTION_POTION: {
             _COMMAND_TYPE: _COMMAND_TYPE_ITEM,
             _COMMAND_DESC_KEY: "Use suggestion potion",
             _COMMAND_KEY_KEY: "s",
         },
-        __Command.USE_MAGIC_KEY: {
+        Command.USE_MAGIC_KEY: {
             _COMMAND_TYPE: _COMMAND_TYPE_ITEM,
             _COMMAND_DESC_KEY: "Use magic key",
             _COMMAND_KEY_KEY: "k",
@@ -423,16 +423,13 @@ class QuestionAndAnswerCommandContext(CommandContext):
     }
 
     def process_keystroke(self, key):
-        if (
-            key
-            == self.COMMANDS[self.__Command.USE_MAGIC_KEY][_COMMAND_KEY_KEY]
-        ):
+        if key == self.COMMANDS[self.Command.USE_MAGIC_KEY][_COMMAND_KEY_KEY]:
             # FIXME: Display somewhere in the QA pop-up how many magic keys
             # they have left and what button to press to use one
             self._maze_model.use_item("magic key")
         elif (
             key
-            == self.COMMANDS[self.__Command.USE_SUGGESTION_POTION][
+            == self.COMMANDS[self.Command.USE_SUGGESTION_POTION][
                 _COMMAND_KEY_KEY
             ]
         ):
