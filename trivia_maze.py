@@ -136,7 +136,16 @@ _________________________________________________
   |_|_|_|      | | (_) | |_| | | (_| | |  __/ (_| |
                \_/\___/ \__,_|  \__,_|_|\___|\__,_|
     """
-
+    __YOU_ARE_TRAPPED_MESSAGE = """
+__   __             ___             _____                              _   _ 
+\ \ / /            / _ \           |_   _|                            | | | |
+ \ V /___  _   _  / /_\ \_ __ ___    | |_ __ __ _ _ __  _ __   ___  __| | | |
+  \ // _ \| | | | |  _  | '__/ _ \   | | '__/ _` | '_ \| '_ \ / _ \/ _` | | |
+  | | (_) | |_| | | | | | | |  __/   | | | | (_| | |_) | |_) |  __/ (_| | |_|
+  \_/\___/ \__,_| \_| |_/_|  \___|   \_/_|  \__,_| .__/| .__/ \___|\__,_| (_)
+                                                 | |   | |                   
+                                                 |_|   |_|                   
+    """
     __MAZE_MAP_FILLED_IN_MESSAGE = "Here's what the whole maze looked like:"
 
     # How many char columns we have in the terminal. Used for choosing length
@@ -460,11 +469,7 @@ _________________________________________________
             # Initialize adjacent rooms to empty (will be populated if vision
             # potion is used)
             rooms_to_update_in_map = []
-
-            # Initialize this iter assuming no vision potion was used. If a
-            # vision potion is used, we automatically display the map and
-            # legend.
-            vision_potion_used = False
+            adv_moved = False
 
             # Separator to help user discriminate from previous input iteration
             print("\n" + "-" * self.__CONSOLE_WIDTH)
@@ -524,7 +529,12 @@ _________________________________________________
             ):
                 print(self.__MAZE_MAP_FILLED_IN_MESSAGE)
                 print(self.__maze_map_filled_in)
-
+            # place holder to test magic key functionality
+            elif (
+                option
+                == self.__COMMANDS[self.__Command.USE_MAGIC_KEY][self.__COMMAND_KEY_KEY]
+            ):
+                self.use_item("magic key")
             # If selected to move a direction
             else:
                 # Check to see if move is valid (e.g. can't move west from a
@@ -536,12 +546,17 @@ _________________________________________________
                 for val in self.__COMMANDS.values():
                     if val[self.__COMMAND_KEY_KEY] == option:
                         direction = val[self.__COMMAND_DESC_KEY]
-                self.move_adventurer(direction)
+                #place holder exception handling
+                try:
+                    self.move_adventurer(direction)
+                except:
+                    print("An item was attempted to be used.")
                 next_room = self.__get_adventurer_room()
                 current_room.occupied_by_adventurer = False
                 next_room.occupied_by_adventurer = True
                 rooms_to_update_in_map.append(current_room)
                 current_room = next_room
+                adv_moved = True
 
                 if next_room.get_pit():
                     # Apply damage to adventurer
@@ -583,6 +598,14 @@ _________________________________________________
                 print(self.__MAZE_MAP_FILLED_IN_MESSAGE)
                 print(self.__maze_map_filled_in)
                 sys.exit(0)
+            
+            #check for no path
+            if adv_moved and len(self.__adventurer.get_magic_keys()) < 1:
+                if not self.__check_loss():
+                    print(self.__YOU_ARE_TRAPPED_MESSAGE)
+                    print(self.__MAZE_MAP_FILLED_IN_MESSAGE)
+                    print(self.__maze_map_filled_in)
+                    sys.exit(0)
 
     def move_adventurer(self, direction):
         """
@@ -636,10 +659,13 @@ _________________________________________________
         else:
             print("This door is locked. Answer a trivia question.")
             answer = input("Question?")
-            if isinstance(answer, str):
+            #place holder to allow the setting of perm_locked doors
+            if answer == "a":
                 self.__unlock_trivia_door(self.__get_adventurer_room(), direction)
                 self.__event_log_buffer.append("Answered trivia question correctly.")
                 return True
+            else:
+                current_room.get_side(direction).perm_locked = True
             return False
 
     def __get_adventurer_room(self):
@@ -747,8 +773,30 @@ _________________________________________________
             self.__unlock_perm_locked_door()
             self.__event_log_buffer.append(f"You used a {str(magic_key)}!")
         self.__notify_observers()
+
     def __unlock_perm_locked_door(self):
-        pass
+        """Unlocks a permanently locked trivia door in the room 
+        the adventurer is attempting to move out.
+        Parameters
+        ----------
+        current_room : Room
+            Room the adventurer is currently in.
+        direction : str
+            Direction (N,E,S,W) the adventurer is trying to go.
+        """
+        current_room = self.__get_adventurer_room()
+        #prompt to decide what door to use on
+        input_key = input("Enter the corresponding direction to unlock door.")
+        for val in self.__COMMANDS.values():
+            if val[self.__COMMAND_KEY_KEY] == input_key:
+                direction = val[self.__COMMAND_DESC_KEY]
+        #check to make sure its not already unlocked and key is not wasted
+        while True:
+            if not current_room.get_side(direction).perm_locked:
+                print("That door is not permanently locked. Please choose another direction.")
+            else:
+                break
+        current_room.get_side(direction).perm_locked = False
 
     def __unlock_trivia_door(self, current_room, direction):
         """Unlocks a locked trivia door in the room the adventurer
@@ -769,6 +817,141 @@ _________________________________________________
     def get_adventurer_coords(self):
         """Returns a tuple of the adventurer's current coordinates in the maze."""
         return self.__adventurer_current_row, self.__adventurer_current_col
+    
+    def __check_loss(self):
+        """
+        Checks to see if there is a traversable path from the adventurer's current
+        location to the exit. Adventurer can still win if within their possible 
+        path there is a magic key. 
+        
+        Returns
+        -------
+        bool
+            Will return True if the adventurer still has the ability to win with
+            the current state of the maze. Otherwise False if no possibilty to 
+            win.
+        """
+        DIRECTIONS = [Room.NORTH, Room.EAST, Room.SOUTH, Room.WEST]
+        visited_rooms = []
+        invalid_rooms = []
+        inaccessible_rooms = self.__get_inaccessible_rooms()
+        current_room = self.__get_adventurer_room()
+        TOTAL_ROOMS =  self.__maze.num_rows * self.__maze.num_cols
+        pillars_found = list(self.__adventurer.get_pillars_found())
+        
+        while len(visited_rooms) + len(invalid_rooms) + len(inaccessible_rooms) < TOTAL_ROOMS:
+            moved_to_new_room = False
+            # check if the room has a key
+            if current_room.contains_magic_key():
+                return True
+            # check if room has a pillar
+            if current_room.contains_pillar():
+                # add pillar to found list
+                pillars_found.append(current_room.get_pillar())
+            # check if the room is the exit and all pillars have been found
+            if current_room.is_exit() and len(pillars_found) == 4:
+                return True
+            # check if adv has locked themselves in a room
+            if self.__get_adventurer_room() in inaccessible_rooms:
+                return False
+            # loop through to find a valid direction to move into another room
+            for direction in DIRECTIONS:
+                #check direction won't put us into a visited room
+                next_room = self.__move_to_new_room(current_room, direction)
+                if next_room in visited_rooms or next_room in invalid_rooms:
+                    # if so continue direction loop to find new direction
+                    continue
+                # if we havent been to that room...
+                # check if a side isnt a wall or permanently locked and continue in that direction
+                if not self.__wall_or_perm(current_room, direction):
+                    # mark current room has having been visited
+                    visited_rooms.append(current_room)
+                    # move to the next room
+                    current_room = next_room
+                    moved_to_new_room = True
+                    break
+            # continue loop if successfully moved to a new room
+            if moved_to_new_room:
+                continue
+            # went through all directions this room has no valid paths
+            # need to backtrack and try new path
+            if len(visited_rooms) > 0:
+                invalid_rooms.append(current_room)
+                current_room = visited_rooms.pop()
+            else:
+                #no other possible paths forward
+                return False
+        #if all rooms have been considered no possible path to victory
+        return False
+    
+    def __get_inaccessible_rooms(self):
+        """
+        Helper method that scans through the whole maze and checks if the room is 
+        blocked from being accessed through normal means. Locked trivia doors are
+        not considered as blocking obstacles as the player may answer correctly.
+        Does not consider magic key's ability to open perm locked doors as this is 
+        handled in the check_loss method.
+        
+        Returns
+        -------
+        inaccesible_rooms : list
+            rooms that the adventurer will not have the ability to reach with out
+            the use of a magic key
+        """
+        inaccessible_rooms = []
+        DIRECTIONS = [Room.NORTH, Room.EAST, Room.SOUTH, Room.WEST]
+        for row in range(self.__maze.num_rows):
+            for col in range(self.__maze.num_cols):
+                wall_count = 0
+                perm_door_count = 0
+                for direction in DIRECTIONS:
+                    if self.__maze.rooms[row][col].get_side(direction) == Room.WALL:
+                        wall_count += 1
+                    elif self.__maze.rooms[row][col].get_side(direction).perm_locked:
+                        perm_door_count += 1
+                if wall_count + perm_door_count == 4:
+                    inaccessible_rooms.append(self.__maze.rooms[row][col])
+        return inaccessible_rooms
+    
+    def __move_to_new_room(self, room, direction):
+        """
+        Will move a room pointer to an adjacent room based on the given direction
+        and the ability to move to the next room.
+        
+        Parameters
+        ----------
+        room : Room
+            A Room object used as a current room pointer
+        direction : str
+            Direction the room pointer will move in the maze
+        
+        Returns
+        -------
+        new_room : Room
+            Will return a new room that is adjacent in the maze based off the
+            given direction. Returns the same room if can't move in the given
+            direction.
+        """
+        if self.__wall_or_perm(room, direction):
+            return room
+            
+        if direction == Room.NORTH:
+            new_room = self.__maze.rooms[room.coords[0] - 1][room.coords[1]]
+        elif direction == Room.SOUTH:
+            new_room = self.__maze.rooms[room.coords[0] + 1][room.coords[1]]
+        elif direction == Room.EAST:
+            new_room = self.__maze.rooms[room.coords[0]][room.coords[1] + 1]
+        elif direction == Room.WEST:
+            new_room = self.__maze.rooms[room.coords[0]][room.coords[1] - 1]
+        return new_room
+    
+    def __wall_or_perm(self, room, direction):
+        side = room.get_side(direction)
+        if side == Room.WALL:
+            return True
+        elif side.perm_locked:
+            return True
+        return False
     
     def register_observer(self, observer):
         self._maze_observers.append(observer)

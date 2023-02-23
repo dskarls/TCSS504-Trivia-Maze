@@ -294,3 +294,14 @@ class Adventurer:
         """
         if self.__magic_keys:
             return self.__magic_keys.pop()
+
+    def get_magic_keys(self):
+        """
+        Return a list of magic keys the adventurer has in their inventory.
+
+        Returns
+        -------
+        list
+            A list containing MagicKey objects.
+        """
+        return self.__magic_keys

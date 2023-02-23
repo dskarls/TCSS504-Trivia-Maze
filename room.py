@@ -88,6 +88,8 @@ class Room:
         Remove and return all maze items, if any, held by the room.
     contains_pillar
         Return whether the room contains a pillar or not.
+    contains_magic_key
+        Return whether the room contains a magic key or not.
     get_pillar
         Get the pillar, if any, held by the room.
     get_side
@@ -234,7 +236,10 @@ class Room:
         self.__north_side = self.WALL
         self.__west_side = self.WALL
         self.__south_side = self.WALL
-
+    
+    def __eq__(self, other):
+        return self.coords == other.coords
+    
     def place_item(self, item):
         """Put a MazeItem in this room.
 
@@ -261,7 +266,18 @@ class Room:
             all_items_from_room.append(self.__items.pop())
 
         return all_items_from_room
-
+    
+    def contains_magic_key(self):
+        """If this room contains a magic key, return True; otherwise, return
+        False. 
+        
+        Returns
+        -------
+        bool
+            True if the room contains a magic key; otherwise False.
+        """
+        return any(isinstance(item, MagicKey) for item in self.__items)
+    
     def contains_pillar(self):
         """If this room contains a pillar, return True; otherwise, return
         False. Note that a given room will only ever contain at most one pillar.
