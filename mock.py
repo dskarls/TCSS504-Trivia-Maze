@@ -45,7 +45,7 @@ class TextTriviaMazeModel:
     def use_item(self, item_name):
         # NOTE: This should return False or None if the user did not hold any
         # of the item
-        pass
+        self.__notify_observers()
 
     def register_observer(self, observer):
         self.__observers.append(observer)
