@@ -75,6 +75,12 @@ class TextTriviaMazeController(TriviaMazeController):
         self.__command_legend_menu_context = CommandLegendCommandContext(
             self, self._maze_model, self.__maze_view
         )
+        self.__game_won_menu_context = GameWonCommandContext(
+            self, self._maze_model, self.__maze_view
+        )
+        self.__game_lost_menu_context = GameLostCommandContext(
+            self, self._maze_model, self.__maze_view
+        )
         self.__question_and_answer_context = QuestionAndAnswerCommandContext(
             self, self._maze_model, self.__maze_view
         )
@@ -105,6 +111,10 @@ class TextTriviaMazeController(TriviaMazeController):
             self.__active_context = self.__map_legend_menu_context
         elif context_specifier == "command_legend_menu":
             self.__active_context = self.__command_legend_menu_context
+        elif context_specifier == "game_won_menu":
+            self.__active_context = self.__game_won_menu_context
+        elif context_specifier == "game_lost_menu":
+            self.__active_context = self.__game_lost_menu_context
         elif context_specifier == "question_and_answer":
             self.__active_context = self.__question_and_answer_context
 
@@ -283,6 +293,20 @@ class CommandLegendCommandContext(DismissibleCommandContext):
         if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
             self._maze_view.hide_command_legend_menu()
             self._maze_controller.set_active_context("in_game_menu")
+
+
+class GameWonCommandContext(DismissibleCommandContext):
+    def process_keystroke(self, key):
+        if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
+            self._maze_view.hide_game_won_menu()
+            self._maze_controller.set_active_context("main_menu")
+
+
+class GameLostCommandContext(DismissibleCommandContext):
+    def process_keystroke(self, key):
+        if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
+            self._maze_view.hide_game_lost_menu()
+            self._maze_controller.set_active_context("main_menu")
 
 
 class PrimaryInterfaceCommandContext(CommandContext):
