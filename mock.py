@@ -12,6 +12,8 @@ class QuestionAndAnswer:
 
 class TextTriviaMazeModel:
     def __init__(self):
+        self.__observers = []
+
         self.__question_and_answer_buffer = []
 
         # Artificially add a Q&A to the buffer (pretend the user just walked
@@ -38,18 +40,22 @@ class TextTriviaMazeModel:
         pass
 
     def move_adventurer(self, direction):
-        pass
+        self.__notify_observers()
 
     def use_item(self, item_name):
         # NOTE: This should return False or None if the user did not hold any
         # of the item
         pass
 
-    def register_observer(self):
-        pass
+    def register_observer(self, observer):
+        self.__observers.append(observer)
 
     def reset(self):
         pass
 
     def flush_question_and_answer_buffer(self):
         return self.__question_and_answer_buffer.pop()
+
+    def __notify_observers(self):
+        for observer in self.__observers:
+            observer.update()

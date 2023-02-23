@@ -55,6 +55,7 @@ class TextTriviaMazeController(TriviaMazeController):
         self.__maze_view = TextTriviaMazeView(
             maze_model, self, "Trivia Maze", dismiss_keys
         )
+        self._maze_model.register_observer(self.__maze_view)
 
         # Initialize command interpretation contexts
         self.__main_menu_context = MainMenuCommandContext(
