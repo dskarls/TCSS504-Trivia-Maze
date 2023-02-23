@@ -422,6 +422,10 @@ class QuestionAndAnswerCommandContext(CommandContext):
         USE_SUGGESTION_POTION = auto()
         USE_MAGIC_KEY = auto()
 
+    # FIXME: We need a different way to allow users to use a suggestion potion
+    # aside from just having them press a specific key. Otherwise they wouldn't
+    # be able to type those keys when writing their response to a short answer
+    # question. Perhaps tkinter buttons?
     COMMANDS = {
         # Item commands
         Command.USE_SUGGESTION_POTION: {
@@ -437,19 +441,8 @@ class QuestionAndAnswerCommandContext(CommandContext):
     }
 
     def process_keystroke(self, key):
-        if key == self.COMMANDS[self.Command.USE_MAGIC_KEY][_COMMAND_KEY_KEY]:
-            # FIXME: Display somewhere in the QA pop-up how many magic keys
-            # they have left and what button to press to use one
-            self._maze_model.use_item("magic key")
-        elif (
-            key
-            == self.COMMANDS[self.Command.USE_SUGGESTION_POTION][
-                _COMMAND_KEY_KEY
-            ]
-        ):
-            # FIXME: Display somewhere in the QA pop-up how many suggestion
-            # potions they have left and what button to press to use one
-            self._maze_model.use_item("suggestion potion")
-        elif key == "Return":
+        # FIXME: Display somewhere in the QA pop-up how many suggestion
+        # potions they have left and what button to press to use one
+        if key == "Return":
             # FIXME: Get current answer and check if it is correct
             pass
