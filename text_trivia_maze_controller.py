@@ -3,6 +3,14 @@ from enum import Enum, auto
 
 from text_trivia_maze_view import TextTriviaMazeView
 
+__COMMAND_DESC_KEY = "description"
+__COMMAND_KEY_KEY = "key"
+__COMMAND_TYPE = "type"
+__COMMAND_TYPE_OTHER = "other"
+__COMMAND_TYPE_ITEM = "item"
+__COMMAND_TYPE_MOVEMENT = "movement"
+__COMMAND_TYPE_ITEM = "item"
+
 
 class TriviaMazeModelObserver(ABC):
     def __init__(self, maze_model):
@@ -134,17 +142,12 @@ class MenuCommandContext(CommandContext):
 
         SELECT = auto()
 
-    _COMMAND_DESC_KEY = "description"
-    _COMMAND_KEY_KEY = "key"
-    _COMMAND_TYPE = "type"
-    _COMMAND_TYPE_OTHER = "other"
-
     COMMANDS = {
         # Movement commands
         _Command.SELECT: {
-            _COMMAND_TYPE: _COMMAND_TYPE_OTHER,
-            _COMMAND_DESC_KEY: "Select",
-            _COMMAND_KEY_KEY: "Return",
+            __COMMAND_TYPE: __COMMAND_TYPE_OTHER,
+            __COMMAND_DESC_KEY: "Select",
+            __COMMAND_KEY_KEY: "Return",
         }
     }
 
@@ -154,7 +157,7 @@ class MainMenuCommandContext(MenuCommandContext):
         # NOTE: We ignore arrow keys here since the GUI is responsible for
         # having arrow keys traverse the menu. In fact, we actually only care
         # about the user hitting Return inside of this menu.
-        if key != self.COMMANDS[self._Command.SELECT][self._COMMAND_KEY_KEY]:
+        if key != self.COMMANDS[self._Command.SELECT][__COMMAND_KEY_KEY]:
             return
 
         # Trigger the currently selected item in the main menu
@@ -187,7 +190,7 @@ class InGameMenuCommandContext(MenuCommandContext):
         # NOTE: We ignore arrow keys here since the GUI is responsible for
         # having arrow keys traverse the menu. In fact, we actually only care
         # about the user hitting Return inside of this menu.
-        if key != self.COMMANDS[self._Command.SELECT][self._COMMAND_KEY_KEY]:
+        if key != self.COMMANDS[self._Command.SELECT][__COMMAND_KEY_KEY]:
             return
 
         # Trigger the currently selected item in the main menu
@@ -245,38 +248,33 @@ class DismissibleCommandContext(CommandContext):
 
         DISMISS = auto()
 
-    _COMMAND_DESC_KEY = "description"
-    _COMMAND_KEY_KEY = "key"
-    _COMMAND_TYPE = "type"
-    _COMMAND_TYPE_OTHER = "other"
-
     COMMANDS = {
         # Movement commands
         _Command.DISMISS: {
-            _COMMAND_TYPE: _COMMAND_TYPE_OTHER,
-            _COMMAND_DESC_KEY: "Dismiss",
-            _COMMAND_KEY_KEY: "Return",
+            __COMMAND_TYPE: __COMMAND_TYPE_OTHER,
+            __COMMAND_DESC_KEY: "Dismiss",
+            __COMMAND_KEY_KEY: "Return",
         }
     }
 
 
 class MainHelpMenuCommandContext(DismissibleCommandContext):
     def process_keystroke(self, key):
-        if key == self.COMMANDS[self._Command.DISMISS][self._COMMAND_KEY_KEY]:
+        if key == self.COMMANDS[self._Command.DISMISS][__COMMAND_KEY_KEY]:
             self._maze_view.hide_main_help_menu()
             self._maze_controller.set_active_context("main_menu")
 
 
 class MapLegendCommandContext(DismissibleCommandContext):
     def process_keystroke(self, key):
-        if key == self.COMMANDS[self._Command.DISMISS][self._COMMAND_KEY_KEY]:
+        if key == self.COMMANDS[self._Command.DISMISS][__COMMAND_KEY_KEY]:
             self._maze_view.hide_map_legend_menu()
             self._maze_controller.set_active_context("in_game_menu")
 
 
 class CommandLegendCommandContext(DismissibleCommandContext):
     def process_keystroke(self, key):
-        if key == self.COMMANDS[self._Command.DISMISS][self._COMMAND_KEY_KEY]:
+        if key == self.COMMANDS[self._Command.DISMISS][__COMMAND_KEY_KEY]:
             self._maze_view.hide_command_legend_menu()
             self._maze_controller.set_active_context("in_game_menu")
 
@@ -298,13 +296,6 @@ class PrimaryInterfaceCommandContext(CommandContext):
         # Other commands
         SHOW_IN_GAME_MENU = auto()
         QUIT_GAME = auto()
-
-    __COMMAND_DESC_KEY = "description"
-    __COMMAND_KEY_KEY = "key"
-    __COMMAND_TYPE = "type"
-    __COMMAND_TYPE_MOVEMENT = "movement"
-    __COMMAND_TYPE_ITEM = "item"
-    __COMMAND_TYPE_OTHER = "other"
 
     COMMANDS = {
         # Movement commands
@@ -352,7 +343,7 @@ class PrimaryInterfaceCommandContext(CommandContext):
         if (
             key
             == self.COMMANDS[self.__Command.SHOW_IN_GAME_MENU][
-                self.__COMMAND_KEY_KEY
+                __COMMAND_KEY_KEY
             ]
         ):
             self._maze_view.show_in_game_menu()
@@ -360,14 +351,14 @@ class PrimaryInterfaceCommandContext(CommandContext):
         elif (
             key
             == self.COMMANDS[self.__Command.USE_HEALING_POTION][
-                self.__COMMAND_KEY_KEY
+                __COMMAND_KEY_KEY
             ]
         ):
             self._maze_model.use_item("healing potion")
         elif (
             key
             == self.COMMANDS[self.__Command.USE_VISION_POTION][
-                self.__COMMAND_KEY_KEY
+                __COMMAND_KEY_KEY
             ]
         ):
             self._maze_model.use_item("vision potion")
@@ -375,30 +366,22 @@ class PrimaryInterfaceCommandContext(CommandContext):
             # Movement commands
             if (
                 key
-                == self.COMMANDS[self.__Command.MOVE_WEST][
-                    self.__COMMAND_KEY_KEY
-                ]
+                == self.COMMANDS[self.__Command.MOVE_WEST][__COMMAND_KEY_KEY]
             ):
                 self._maze_model.move_adventurer("west")
             elif (
                 key
-                == self.COMMANDS[self.__Command.MOVE_EAST][
-                    self.__COMMAND_KEY_KEY
-                ]
+                == self.COMMANDS[self.__Command.MOVE_EAST][__COMMAND_KEY_KEY]
             ):
                 self._maze_model.move_adventurer("east")
             elif (
                 key
-                == self.COMMANDS[self.__Command.MOVE_NORTH][
-                    self.__COMMAND_KEY_KEY
-                ]
+                == self.COMMANDS[self.__Command.MOVE_NORTH][__COMMAND_KEY_KEY]
             ):
                 self._maze_model.move_adventurer("north")
             elif (
                 key
-                == self.COMMANDS[self.__Command.MOVE_SOUTH][
-                    self.__COMMAND_KEY_KEY
-                ]
+                == self.COMMANDS[self.__Command.MOVE_SOUTH][__COMMAND_KEY_KEY]
             ):
                 self._maze_model.move_adventurer("south")
 
@@ -412,11 +395,6 @@ class QuestionAndAnswerCommandContext(CommandContext):
         # Item commands
         USE_SUGGESTION_POTION = auto()
         USE_MAGIC_KEY = auto()
-
-    __COMMAND_DESC_KEY = "description"
-    __COMMAND_KEY_KEY = "key"
-    __COMMAND_TYPE = "type"
-    __COMMAND_TYPE_ITEM = "item"
 
     COMMANDS = {
         # Item commands
@@ -435,9 +413,7 @@ class QuestionAndAnswerCommandContext(CommandContext):
     def process_keystroke(self, key):
         if (
             key
-            == self.COMMANDS[self.__Command.USE_MAGIC_KEY][
-                self.__COMMAND_KEY_KEY
-            ]
+            == self.COMMANDS[self.__Command.USE_MAGIC_KEY][__COMMAND_KEY_KEY]
         ):
             # FIXME: Display somewhere in the QA pop-up how many magic keys
             # they have left and what button to press to use one
@@ -445,7 +421,7 @@ class QuestionAndAnswerCommandContext(CommandContext):
         elif (
             key
             == self.COMMANDS[self.__Command.USE_SUGGESTION_POTION][
-                self.__COMMAND_KEY_KEY
+                __COMMAND_KEY_KEY
             ]
         ):
             # FIXME: Display somewhere in the QA pop-up how many suggestion
