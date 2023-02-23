@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 import functools
 
 from tkinter import *
@@ -417,7 +418,7 @@ class HPGauge:
         self.__bar_hp_gauge["value"] = value
 
 
-class PopUpWindow:
+class PopUpWindow(ABC):
     def __init__(self, window, width):
         self._frm = Frame(
             master=window,
@@ -434,7 +435,13 @@ class PopUpWindow:
             width=width,
         )
 
-    # FIXME: Make show and hide abstract methods? Would the map etc really be a subwindow then?
+    @abstractmethod
+    def show(self):
+        pass
+
+    @abstractmethod
+    def hide(self):
+        pass
 
 
 class InGameMenu(PopUpWindow):
@@ -527,3 +534,84 @@ class DismissiblePopUp(PopUpWindow):
 
     def set_text(self, text):
         self.__lbl_primary.configure(text=text)
+
+
+class QuestionAndAnswerMenu(PopUpWindow):
+    """
+    A pop-up window with a question and answer.
+    """
+
+    def __init__(self, window, width, title, pady):
+        # Create the frame for the whole in-game menu
+        super().__init__(window, width)
+
+        # Create header with title in it
+        frm_title = Frame(master=self._frm, width=width)
+        frm_title.pack(fill=BOTH, anchor=CENTER)
+        lbl = Label(
+            master=frm_title,
+            text=title,
+            justify=CENTER,
+            anchor=CENTER,
+        )
+        lbl.pack(fill=BOTH, pady=pady)
+
+        # Add an empty text section to hold the question itself
+        self._question_lbl = Label(
+            master=self._frm, text="", justify=CENTER, anchor=CENTER
+        )
+        self._question_lbl.pack(fill=BOTH, pady=pady)
+
+        # TODO: Also display how many suggestion potions the user has
+        # somewhere?
+
+    def set_question(self, text):
+        self._question_lbl.configure(text=text)
+
+    @abstractmethod
+    def set_hint(self, text):
+        pass
+
+    @abstractmethod
+    def get_user_answer(self):
+        pass
+
+    @abstractmethod
+    def set_options(self, text):
+        pass
+
+
+class ShortAnswerQuestionAndAnswer(QuestionAndAnswerMenu):
+    def __init__(self, window, width, title, pady):
+        super().__init__(window, width, title, pady)
+
+        self.__options_lbl = Label(
+            master=self._frm, text="", justify=CENTER, anchor=CENTER
+        )
+        self.__options_lbl.pack(fill=BOTH, pady=pady)
+
+        self.__user_input = Entry(master=self._frm, justify=CENTER)
+        self.__user_input.pack(fill=BOTH, pady=pady)
+
+        # Add an empty text section to hold a hint
+        self.__hint_lbl = Label(
+            master=self._frm, text="", justify=CENTER, anchor=CENTER
+        )
+        self.__hint_lbl.pack(fill=BOTH, pady=pady)
+
+    def show(self):
+        self._place_pop_up_at_center_of_window(self._frm, self._width)
+        self.__user_input.focus()
+        self._frm.update_idletasks()
+
+    def hide(self):
+        self._frm.place_forget()
+
+    def get_user_answer(self):
+        return self.__user_input.get()
+
+    def set_options(self, text):
+        return self.__options_lbl.configure(text=text)
+
+    def set_hint(self, text):
+        self.__hint_lbl.configure(text=text)

@@ -21,6 +21,7 @@ DIMENSIONS = {
     "command_legend_menu": {"pady": 5},
     "game_won_menu": {"pady": 5},
     "game_lost_menu": {"pady": 5},
+    "question_and_answer_menu": {"pady": 5},
 }
 
 ##############################################################################

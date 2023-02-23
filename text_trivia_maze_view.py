@@ -20,6 +20,7 @@ from view_components import (
     InGameMenu,
     DismissiblePopUp,
     Map,
+    ShortAnswerQuestionAndAnswer,
     EventLog,
     SubWindow,
 )
@@ -193,6 +194,12 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__command_legend_menu = self.__create_command_legend_menu()
         self.hide_command_legend_menu()
 
+        # Creat empty question & answer menu
+        self.__question_and_answer_menu = (
+            self.__create_question_and_answer_menu()
+        )
+        self.hide_question_and_answer_menu()
+
         # Create main menu and the help menu accessible from it
         self.__main_menu = self.__create_main_menu()
 
@@ -318,6 +325,25 @@ class TextTriviaMazeView(TriviaMazeView):
 
     def hide_in_game_menu(self):
         self.__in_game_menu.hide()
+
+    def __create_question_and_answer_menu(self):
+        return ShortAnswerQuestionAndAnswer(
+            self.__window,
+            None,
+            "Q & A",
+            DIMENSIONS["question_and_answer_menu"]["pady"],
+        )
+
+    def set_question(self, question, options, hint):
+        self.__question_and_answer_menu.set_question(question)
+        self.__question_and_answer_menu.set_options(options)
+        self.__question_and_answer_menu.set_hint(hint)
+
+    def show_question_and_answer_menu(self):
+        self.__question_and_answer_menu.show()
+
+    def hide_question_and_answer_menu(self):
+        self.__question_and_answer_menu.hide()
 
     def __create_main_help_menu(self):
         dismiss_message = (
