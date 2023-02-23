@@ -469,11 +469,6 @@ __   __             ___             _____                              _   _
             # Initialize adjacent rooms to empty (will be populated if vision
             # potion is used)
             rooms_to_update_in_map = []
-
-            # Initialize this iter assuming no vision potion was used. If a
-            # vision potion is used, we automatically display the map and
-            # legend.
-            vision_potion_used = False
             adv_moved = False
 
             # Separator to help user discriminate from previous input iteration
