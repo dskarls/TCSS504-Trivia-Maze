@@ -659,10 +659,13 @@ __   __             ___             _____                              _   _
         else:
             print("This door is locked. Answer a trivia question.")
             answer = input("Question?")
-            if isinstance(answer, str):
+            #place holder to allow the setting of perm_locked doors
+            if answer == "a":
                 self.__unlock_trivia_door(self.__get_adventurer_room(), direction)
                 self.__event_log_buffer.append("Answered trivia question correctly.")
                 return True
+            else:
+                current_room.get_side(direction).perm_locked = True
             return False
 
     def __get_adventurer_room(self):
