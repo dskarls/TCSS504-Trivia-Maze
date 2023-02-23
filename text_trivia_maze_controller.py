@@ -85,6 +85,9 @@ class TextTriviaMazeController(TriviaMazeController):
         self.__question_and_answer_context = QuestionAndAnswerCommandContext(
             self, self._maze_model, self.__maze_view
         )
+        self.__magic_key_context = MagicKeyCommandContext(
+            self, self._maze_model, self.__maze_view
+        )
 
         # Player starts out at the main menu, so make that the active context.
         # NOTE: This sets the `__active_context` instance attr
@@ -110,6 +113,7 @@ class TextTriviaMazeController(TriviaMazeController):
             "game_won_menu": self.__game_won_menu_context,
             "game_lost_menu": self.__game_lost_menu_context,
             "question_and_answer": self.__question_and_answer_context,
+            "magic_key": self.__magic_key_context,
         }
         self.__active_context = contexts[context_specifier]
 
@@ -421,7 +425,6 @@ class QuestionAndAnswerCommandContext(CommandContext):
 
         # Item commands
         USE_SUGGESTION_POTION = auto()
-        USE_MAGIC_KEY = auto()
 
     # FIXME: We need a different way to allow users to use a suggestion potion
     # aside from just having them press a specific key. Otherwise they wouldn't
@@ -434,11 +437,6 @@ class QuestionAndAnswerCommandContext(CommandContext):
             _COMMAND_DESC_KEY: "Use suggestion potion",
             _COMMAND_KEY_KEY: "s",
         },
-        Command.USE_MAGIC_KEY: {
-            _COMMAND_TYPE: _COMMAND_TYPE_ITEM,
-            _COMMAND_DESC_KEY: "Use magic key",
-            _COMMAND_KEY_KEY: "k",
-        },
     }
 
     def process_keystroke(self, key):
@@ -447,3 +445,39 @@ class QuestionAndAnswerCommandContext(CommandContext):
         if key == "Return":
             # FIXME: Get current answer and check if it is correct
             pass
+
+
+class MagicKeyCommandContext(CommandContext):
+    class Command(Enum):
+        """Enumeration used to fix commands to a small finite support set."""
+
+        # Item commands
+        USE_MAGIC_KEY = auto()
+
+        # Other commands
+        DISMISS = auto()
+
+    COMMANDS = {
+        # Item commands
+        Command.USE_MAGIC_KEY: {
+            _COMMAND_TYPE: _COMMAND_TYPE_ITEM,
+            _COMMAND_DESC_KEY: "Use magic key",
+            _COMMAND_KEY_KEY: "y",
+        },
+        Command.DISMISS: {
+            _COMMAND_TYPE: _COMMAND_TYPE_OTHER,
+            _COMMAND_DESC_KEY: "Dismiss",
+            _COMMAND_KEY_KEY: "Return",
+        },
+    }
+
+    def process_keystroke(self, key):
+        # FIXME: Display somewhere in the QA pop-up how many suggestion
+        # potions they have left and what button to press to use one
+        if key == self.COMMANDS[self.Command.USE_MAGIC_KEY][_COMMAND_KEY_KEY]:
+            self._maze_model.use_item("magic_key")
+            self._maze_controller.set_active_context("primary_interface")
+        elif key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
+            self._maze_controller.set_active_context("primary_interface")
+
+        self._maze_view.hide_magic_key_menu()
