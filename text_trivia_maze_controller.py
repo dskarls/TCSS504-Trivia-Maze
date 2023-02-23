@@ -127,6 +127,7 @@ class TextTriviaMazeController(TriviaMazeController):
                 question_and_answer.hint,
             )
             self.__maze_view.show_question_and_answer_menu()
+            self.set_active_context("question_and_answer")
 
         # game_status = self._maze_model.get_game_status()
         # if game_status == "lose":
