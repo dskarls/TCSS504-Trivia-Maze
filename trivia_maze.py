@@ -541,7 +541,11 @@ __   __             ___             _____                              _   _
                 for val in self.__COMMANDS.values():
                     if val[self.__COMMAND_KEY_KEY] == option:
                         direction = val[self.__COMMAND_DESC_KEY]
-                self.move_adventurer(direction)
+                #place holder exception handling
+                try:
+                    self.move_adventurer(direction)
+                except:
+                    print("An item was attempted to be used.")
                 next_room = self.__get_adventurer_room()
                 current_room.occupied_by_adventurer = False
                 next_room.occupied_by_adventurer = True
