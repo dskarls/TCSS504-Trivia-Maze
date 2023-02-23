@@ -771,7 +771,7 @@ __   __             ___             _____                              _   _
             self.__event_log_buffer.append(f"You used a {str(magic_key)}!")
         self.__notify_observers()
 
-    def __unlock_perm_locked_door(self, current_room, direction):
+    def __unlock_perm_locked_door(self):
         """Unlocks a permanently locked trivia door in the room 
         the adventurer is attempting to move out.
         Parameters
@@ -781,6 +781,18 @@ __   __             ___             _____                              _   _
         direction : str
             Direction (N,E,S,W) the adventurer is trying to go.
         """
+        current_room = self.__get_adventurer_room()
+        #prompt to decide what door to use on
+        input_key = input("Enter the corresponding direction to unlock door.")
+        for val in self.__COMMANDS.values():
+            if val[self.__COMMAND_KEY_KEY] == input_key:
+                direction = val[self.__COMMAND_DESC_KEY]
+        #check to make sure its not already unlocked and key is not wasted
+        while True:
+            if not current_room.get_side(direction).perm_locked:
+                print("That door is not permanently locked. Please choose another direction.")
+            else:
+                break
         current_room.get_side(direction).perm_locked = False
 
     def __unlock_trivia_door(self, current_room, direction):
