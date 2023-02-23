@@ -11,6 +11,20 @@ class QuestionAndAnswer:
 
 
 class TextTriviaMazeModel:
+    def __init__(self):
+        self.__question_and_answer_buffer = []
+
+        # Artificially add a Q&A to the buffer (pretend the user just walked
+        # into a locked door)
+        question = "This is the text of a question"
+        question_type = "multiple_choice"
+        hint = "This is the text of a hint"
+        options = ("option1", "option2", "option3", "option4")
+        answer = "option3"
+        self.__question_and_answer_buffer.append(
+            QuestionAndAnswer(question, question_type, hint, options, answer)
+        )
+
     def save_game(self):
         pass
 
@@ -36,3 +50,6 @@ class TextTriviaMazeModel:
 
     def reset(self):
         pass
+
+    def flush_question_and_answer_buffer(self):
+        return self.__question_and_answer_buffer.pop()
