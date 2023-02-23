@@ -176,6 +176,7 @@ class Map(SubWindow):
 
     @contents.setter
     def contents(self, text):
+        self.__text = text
         self.frame.children["!label"].configure(text=text)
 
 
