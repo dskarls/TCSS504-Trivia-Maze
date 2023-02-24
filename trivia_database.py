@@ -83,7 +83,4 @@ class SQLiteTriviaDatabase(TriviaDatabase):
             SELECT question, correct_answer, option_1, option_2, option_3,
             option_4 FROM {self.__TABLE_NAME} ORDER BY RANDOM() LIMIT 1;
         """
-        # query = f"""
-        #    SELECT * FROM {self.__TABLE_NAME} ORDER BY RANDOM() LIMIT 1;
-        # """
         return [s.strip() for s in cursor.execute(query).fetchone()]
