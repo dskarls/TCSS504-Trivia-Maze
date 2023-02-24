@@ -27,9 +27,6 @@ class SQLiteTriviaDatabase(TriviaDatabase):
     as the underlying database.
     """
 
-    # Path of file to write sqlite db file to
-    __DB_FILE_PATH = pathlib.Path("db") / "trivia_maze.db"
-
     # The one table that holds all data
     __TABLE_NAME = "question_and_answer"
 
@@ -39,13 +36,8 @@ class SQLiteTriviaDatabase(TriviaDatabase):
         :param file_path: the path to the CSV file to load into the database.
         """
 
-        # Ensure path for db file exists
-        parent_dir = self.__DB_FILE_PATH.parent
-        if not parent_dir.exists():
-            parent_dir.mkdir()
-
-        # Open connection to file and recreate table
-        self.__db_connection = sqlite3.connect(self.__DB_FILE_PATH)
+        # Open connection to file in memory and recreate table
+        self.__db_connection = sqlite3.connect(":memory:")
         self.__db_connection.execute(
             f"DROP TABLE IF EXISTS {self.__TABLE_NAME}"
         )
@@ -82,10 +74,6 @@ class SQLiteTriviaDatabase(TriviaDatabase):
                     f"INSERT INTO {self.__TABLE_NAME} VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     row,
                 )
-
-    def __del__(self):
-        """Delete the db file during garbage collection"""
-        self.__DB_FILE_PATH.unlink()
 
     def get_question(self):
         """
