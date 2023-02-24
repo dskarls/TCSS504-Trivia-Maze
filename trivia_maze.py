@@ -99,6 +99,8 @@ class TriviaMaze(TriviaMazeModel):
         self.__adventurer = self.__create_adventurer()
         
         (self.__adventurer_current_row, self.__adventurer_current_col) = self.__maze.entrance
+        
+        self.__direction_attempt = None
 
     def __get_num_rows_and_cols_from_user(self):
         """Prompt user for desired number of rows and columns. If user skips
@@ -162,6 +164,7 @@ class TriviaMaze(TriviaMazeModel):
         direction : str
             direction the adventurer is trying to move.
         """
+        self.__direction_attempt = direction
         # first check if door is perm locked
         if self.__is_door_perm_locked(direction):
             # check if they have a key in inventory
