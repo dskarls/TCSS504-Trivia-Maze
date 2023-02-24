@@ -9,6 +9,7 @@ class QuestionAndAnswer(ABC):
         question: (str) The question.
         correct_answer: (str) The correct answer to the question.
         category: (str) The category of the question.
+        options : (list) The options for the user to choose from (may be None).
     """
 
     def __init__(self, question, correct_answer, category, options):
