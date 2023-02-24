@@ -42,8 +42,11 @@ class SQLiteTriviaDatabase(TriviaDatabase):
         if not parent_dir.exists():
             parent_dir.mkdir()
 
-        # Open connection to file and overwrite table
+        # Open connection to file and recreate table
         self.__db_connection = sqlite3.connect(self.__DB_FILE_PATH)
+        self.__db_connection.execute(
+            f"DROP TABLE IF EXISTS {self.__TABLE_NAME}"
+        )
         self.__db_connection.execute(
             f"""CREATE TABLE {self.__TABLE_NAME}
             (category TEXT, qa_type TEXT, difficulty TEXT, question TEXT,
