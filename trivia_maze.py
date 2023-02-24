@@ -317,6 +317,7 @@ class TriviaMaze(TriviaMazeModel):
             self.__event_log_buffer.append(f"You used a {str(vision_potion)}!")
         elif item == self.__ITEMS[self.__Items.MAGIC_KEY]:
             magic_key = self.__adventurer.consume_magic_key()
+            # I don't think there is any way for __direction_attempt to be none at this point
             self.__unlock_perm_locked_door()
             self.__event_log_buffer.append(f"You used a {str(magic_key)}!")
         self.__notify_observers()
@@ -326,7 +327,7 @@ class TriviaMaze(TriviaMazeModel):
         the adventurer is attempting to move out.
         """
         current_room = self.__get_adventurer_room()
-        current_room.get_side(direction).perm_locked = False
+        current_room.get_side(self.__direction_attempt).perm_locked = False
 
     def __unlock_trivia_door(self, current_room, direction):
         """Unlocks a locked trivia door in the room the adventurer
