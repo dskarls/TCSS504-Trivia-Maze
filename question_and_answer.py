@@ -11,7 +11,7 @@ class QuestionAndAnswer(ABC):
         category: (str) The category of the question.
     """
 
-    def __init__(self, question, correct_answer, category):
+    def __init__(self, question, correct_answer, category, options):
         self.question = question
         self.correct_answer = correct_answer
         self.category = category
@@ -33,19 +33,13 @@ class QuestionAndAnswer(ABC):
 class TrueOrFalseQA(QuestionAndAnswer):
     """Represents a true or false question and answer."""
 
-    def __init__(self, question, correct_answer, category, option_1, option_2):
+    def __init__(self, question, correct_answer, category):
         """
         :param question: (str) The question.
         :param correct_answer: (str) The correct answer to the question.
         :param category: (str) The category of the question.
-        :param option_1: (str) The first (True) choice for the user to choose from.
-        :param option_2: (str) The second (False) choice for the user to choose from.
         """
-        super().__init__(question, correct_answer, category)
-        self.option_1 = option_1
-        self.option_2 = option_2
-
-        self.is_true = correct_answer.lower() == "true"
+        super().__init__(question, correct_answer, category, ["True", "False"])
 
     def answer_is_correct(self, user_answer):
         """Check if the user's answer is correct.
@@ -88,11 +82,12 @@ class MultipleChoiceQA(HintableQuestionAndAnswer):
         :param option_3 (str): The third of the list of choices for the user to choose from.
         :param option_4 (str): The fourth of the list of choices for the user to choose from.
         """
-        super().__init__(question, correct_answer, category)
-        self.option_1 = option_1
-        self.option_2 = option_2
-        self.option_3 = option_3
-        self.option_4 = option_4
+        super().__init__(
+            question,
+            correct_answer,
+            category,
+            [option_1, option_2, option_3, option_4],
+        )
 
     def answer_is_correct(self, user_answer):
         """Check if the user's answer is correct.
@@ -108,14 +103,7 @@ class MultipleChoiceQA(HintableQuestionAndAnswer):
         """
         hint = "The correct answer is NOT one of the following choices: \n"
         incorrect_options = [
-            o
-            for o in [
-                self.option_1,
-                self.option_2,
-                self.option_3,
-                self.option_4,
-            ]
-            if o != self.correct_answer
+            o for o in self.options if o != self.correct_answer
         ]
         hint += "- " + incorrect_options[0] + "\n"
         hint += "- " + incorrect_options[1] + "\n"
@@ -140,6 +128,8 @@ class ShortAnswerQA(HintableQuestionAndAnswer):
         hint = "Hint: "
         words = self.correct_answer.split()
         num_words = len(words)
+
+        # Randomly decide which letters of the correct answer to expose
         for i in range(num_words):
             word = words[i]
             length = len(word)
