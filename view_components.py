@@ -52,6 +52,8 @@ class TextMenu:
         self.__list_box.focus()
 
     def __add_options(self):
+        """Add the options supplied during initialization to the list of
+        options in the menu."""
         for ind, option in enumerate(self.__options):
             self.__list_box.insert(ind + 1, option)
 
@@ -63,10 +65,12 @@ class TextMenu:
 
     @property
     def selected_option(self):
+        """Used to expose which option in the menu the user has selected."""
         return self.__options[self.__list_box.curselection()[0]]
 
     @selected_option.setter
     def selected_option(self, index):
+        """Used to set which option in the menu the user has selected."""
         self.__list_box.selection_set(index)
         self.__list_box.activate(index)
 
@@ -82,6 +86,9 @@ class SubWindow:
         rowspan=1,
         columnspan=1,
     ):
+        """A wrapper around tk.Frame to represent a subsection of the
+        application master frame, specified via its grid, wherein widgets can
+        be inserted."""
         frm = Frame(master=window, width=width, height=height)
 
         frm.grid(
@@ -96,13 +103,14 @@ class SubWindow:
         # objects, e.g. HP Gauge, as a master
         self.frame = frm
 
-    # FIXME: Make show and hide abstract methods? Would the map etc really be a subwindow then?
-
 
 class MainMenu(SubWindow):
+    """The main menu widget that is displayed before the player begins the
+    game. Contains a banner message and an arrow-scrollable text menu."""
+
     def __init__(self, window, banner_text, menu_options):
-        """Create a frame inside of `window` that fills up its entire row and
-        column span"""
+        """Create a frame inside of the frame specified by `window` that fills
+        up its entire row and column span."""
         super().__init__(window, None, None, 0, 0, *window.grid_size())
 
         # Add banner message
@@ -131,9 +139,11 @@ class MainMenu(SubWindow):
         )
 
     def hide(self):
+        """Hide this widget."""
         self.frame.grid_remove()
 
     def show(self):
+        """Show this widget."""
         self.frame.grid()
 
         # Attach focus to text menu of options
@@ -143,14 +153,18 @@ class MainMenu(SubWindow):
 
     @property
     def selected_option(self):
+        """Used to expose which option in the menu the user has selected."""
         return self.__text_menu.selected_option
 
     @selected_option.setter
     def selected_option(self, index):
+        """Used to set which option in the menu the user has selected."""
         self.__text_menu.selected_option = index
 
 
 class Map(SubWindow):
+    """The map that shows the maze to the player."""
+
     def __init__(self, window, width, height, row, column, padx, text):
         super().__init__(
             window,
@@ -173,15 +187,22 @@ class Map(SubWindow):
 
     @property
     def contents(self):
+        """Used to expose the text string underlying the maze map."""
         return self.__text
 
     @contents.setter
     def contents(self, text):
+        """Used to set the text string underlying the maze map."""
         self.__text = text
         self.frame.children["!label"].configure(text=text)
 
 
 class EventLog(SubWindow):
+    """
+    The text box that logs notable events for the player to see.
+    """
+
+    # String prefixed to all log entries
     __PREFIX = "> "
 
     def __init__(
@@ -208,6 +229,7 @@ class EventLog(SubWindow):
         self.__contents_empty = True
 
     def write(self, message):
+        """Write a message in a new line of the event log."""
         event_log_text_box = self.__textbox
 
         if self.__contents_empty:
@@ -232,6 +254,8 @@ class EventLog(SubWindow):
     def __add_scrollable_readonly_textbox_to_subwindow(
         subwindow, num_lines, padx, pady
     ):
+        """Creates and embeds into the event log frame a read-only scrollable
+        text box with scroll bar."""
         frm = subwindow
         scrlbar = Scrollbar(master=frm, orient=VERTICAL)
         scrlbar.pack(side=RIGHT, pady=pady, fill=Y, padx=padx)
@@ -254,6 +278,9 @@ class EventLog(SubWindow):
 
 
 class EnumeratedInventory:
+    """An inventory of items that have an positive integer count value
+    associated with them."""
+
     def __init__(self, window, title, title_ipady, padx, pady, item_labels):
         self.__window = window
         self.__padx = padx
@@ -276,6 +303,8 @@ class EnumeratedInventory:
         self.__item_quantity_labels = self.__create_inventory_item_labels()
 
     def __create_inventory_item_labels(self):
+        """Create and pack the labels that hold the names of all of the items
+        and their respective quantities."""
         item_quantity_labels = {}
 
         for item in self.__item_labels:
@@ -306,10 +335,14 @@ class EnumeratedInventory:
         return item_quantity_labels
 
     def update_item_quantity(self, item_name, quantity):
+        """Set the quantity associated with an item based on its name."""
         self.__item_quantity_labels[item_name].configure(text=str(quantity))
 
 
 class CheckboxInventory:
+    """An inventory of items that can either be held or not held, with
+    checkboxes reflecting this state."""
+
     def __init__(self, window, title, title_ipady, padx, pady, item_labels):
         self.__window = window
         self.__padx = padx
@@ -334,6 +367,8 @@ class CheckboxInventory:
         )
 
     def __create_inventory_item_labels(self):
+        """Create and pack the labels that hold the names of all of the items
+        and their respective checkboxes."""
         item_check_button_control_vars = {}
 
         control_vars = [IntVar() for _ in range(len(self.__item_labels))]
@@ -379,10 +414,14 @@ class CheckboxInventory:
         return item_check_button_control_vars
 
     def check_item(self, item_name):
+        """Set an item as being held, checking its box."""
         self.__item_check_button_control_vars[item_name].set(1)
 
 
 class HPGauge:
+    """A widget consisting of an 'HP' label and a bar indicating the value of
+    the adventurer's hit points."""
+
     def __init__(
         self,
         window,
@@ -416,10 +455,14 @@ class HPGauge:
         self.set(100)
 
     def set(self, value):
+        """Set the value of HP to reflect in the gauge."""
         self.__bar_hp_gauge["value"] = value
 
 
 class PopUpWindow(ABC):
+    """A pop-up window that does not belong to a frame's grid, but is rather
+    displayed over the top of it."""
+
     def __init__(self, window, width):
         self._frm = Frame(
             master=window,
@@ -429,6 +472,8 @@ class PopUpWindow(ABC):
 
     @staticmethod
     def _place_pop_up_at_center_of_window(frame, width):
+        """Position the pop-up window at the middle of the specified frame,
+        occupying the specified width."""
         frame.place(
             relx=0.5,
             rely=0.5,
@@ -438,16 +483,19 @@ class PopUpWindow(ABC):
 
     @abstractmethod
     def show(self):
+        """Show the pop-up window."""
         pass
 
     @abstractmethod
     def hide(self):
+        """Hide the pop-up window."""
         pass
 
 
 class InGameMenu(PopUpWindow):
     """
-    A pop-up window with a text-based menu inside.
+    A pop-up window with a text-based menu inside. To be accessed from the
+    primary interface.
     """
 
     def __init__(self, window, width, title, pady, menu_options):
@@ -479,20 +527,24 @@ class InGameMenu(PopUpWindow):
         )
 
     def show(self):
+        """Show the in-game menu's window."""
         self._place_pop_up_at_center_of_window(self._frm, self._width)
         self.__text_menu.focus()
         self.__text_menu.reset_selection()
         self._frm.update_idletasks()
 
     def hide(self):
+        """Hide the in-game menu's window."""
         self._frm.place_forget()
 
     @property
     def selected_option(self):
+        """Used to expose which option in the menu the user has selected."""
         return self.__text_menu.selected_option
 
     @selected_option.setter
     def selected_option(self, index):
+        """Used to set which option in the menu the user has selected."""
         self.__text_menu.selected_option = index
 
 
@@ -511,7 +563,9 @@ class DismissiblePopUp(PopUpWindow):
             text=text,
             justify=CENTER,
             anchor=CENTER,
-            style=STYLES["game_won_menu"]["style"],
+            style=STYLES["game_won_menu"][
+                "style"
+            ],  # TODO: Don't hard-code styling
         )
         self.__lbl_primary.pack(fill=BOTH, pady=pady)
 
@@ -527,19 +581,26 @@ class DismissiblePopUp(PopUpWindow):
         )
 
     def show(self):
+        """Show the pop-up at the center of the parent frame."""
         self._place_pop_up_at_center_of_window(self._frm, self._width)
         self._frm.update_idletasks()
 
     def hide(self):
+        """Hide the pop-up."""
         self._frm.place_forget()
 
     def set_text(self, text):
+        """Set the underlying text content of the pop-up to the specified
+        value."""
         self.__lbl_primary.configure(text=text)
 
 
 class QuestionAndAnswerMenu(PopUpWindow):
     """
-    A pop-up window with a question and answer.
+    An pop-up window with a question and answer prompt that displays a question
+    and its options, and provides a way for the player to submit an answer.
+    Should indicate to the user how to use a SuggestionPotion. Should also be
+    capable of displaying a hint.
     """
 
     def __init__(self, window, width, title, pady):
@@ -567,22 +628,34 @@ class QuestionAndAnswerMenu(PopUpWindow):
         # somewhere?
 
     def set_question(self, text):
+        """Sets the content of the question text to the specified value."""
         self._question_lbl.configure(text=text)
 
     @abstractmethod
     def set_hint(self, text):
+        """Sets the content of the hint text to the specified value."""
         pass
 
     @abstractmethod
     def get_user_answer(self):
+        """Fetch and return the player's answer."""
         pass
 
     @abstractmethod
     def set_options(self, text):
+        """Sets the content of the options text, if any, that the user can
+        choose from to the specified value."""
+        # TODO: This could be expanded to allow for options that exist in the
+        # form of clickable buttons. This could be done by taking a list of
+        # strings as an argument and then creating a desired graphical
+        # interface to them.
         pass
 
 
 class ShortAnswerQuestionAndAnswer(QuestionAndAnswerMenu):
+    """A question and answer widget that the user can respond to with a
+    free-form text answer."""
+
     def __init__(self, window, width, title, pady):
         super().__init__(window, width, title, pady)
 
@@ -601,11 +674,14 @@ class ShortAnswerQuestionAndAnswer(QuestionAndAnswerMenu):
         self.__hint_lbl.pack(fill=BOTH, pady=pady)
 
     def show(self):
+        """Show the widget in the middle of the center of the parent frame and
+        take focus."""
         self._place_pop_up_at_center_of_window(self._frm, self._width)
         self.__user_input.focus()
         self._frm.update_idletasks()
 
     def hide(self):
+        """Hide the widget."""
         self._frm.place_forget()
 
     def get_user_answer(self):
