@@ -17,7 +17,7 @@ class TriviaDatabase(ABC):
         """
 
     @abstractmethod
-    def db_loader(self, file_path):
+    def load_from_file(self, file_path):
         """
         Load the contents of a CSV file into the database.
         :param file_path: the path to the CSV file to load into the database.
@@ -51,7 +51,7 @@ class SQLiteTriviaDatabase(TriviaDatabase):
         """
         self.__db_connection = sqlite3.connect(connection)
 
-    def db_loader(self, file_path):
+    def load_from_file(self, file_path):
         """
         Load the contents of a CSV file into the SQLite database.
         :param file_path: the path to the CSV file to load into the database.
