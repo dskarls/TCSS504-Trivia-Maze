@@ -19,7 +19,8 @@ class TriviaDatabase(ABC):
 
 class SQLiteTriviaDatabase(TriviaDatabase):
     """
-    A concrete implementation of the TriviaDatabase interface that uses SQLite as the underlying database.
+    A concrete implementation of the TriviaDatabase interface that uses SQLite
+    as the underlying database.
     """
 
     # Path of file to write sqlite db file to
