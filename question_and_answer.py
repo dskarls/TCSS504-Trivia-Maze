@@ -193,6 +193,7 @@ class ShortAnswerQA(HintableQuestionAndAnswer):
         return hint
 
 
+# TODO: Remove all useful content below here and put inside unit tests
 # sample testing code
 if __name__ == "__main__":
     # create an instance of each subclass and test the methods
