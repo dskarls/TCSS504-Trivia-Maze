@@ -17,7 +17,7 @@ class QuestionAndAnswer(ABC):
         self.category = category
 
     def __hash__(self):
-        # Compute the hash value based on the question, correct answer, and category
+        """Compute the hash value based on the question, correct answer, and category"""
         return hash((self.question, self.correct_answer, self.category))
 
     @abstractmethod
@@ -25,7 +25,6 @@ class QuestionAndAnswer(ABC):
         """Get a hint for the question.
         :return: (str) A hint for the question.
         """
-        pass
 
     @abstractmethod
     def answer_is_correct(self, user_answer):
@@ -65,14 +64,19 @@ class TrueOrFalseQA(QuestionAndAnswer):
         """
         return user_answer.lower() == self.correct_answer.lower()
 
+
+class HintableQuestionAndAnswer(QuestionAndAnswer):
+    """A question and answer that provides a method for getting a hint of the
+    correct answer."""
+
+    @abstractmethod
     def get_hint(self):
-        """Show that no hints are available for true and false questions.
-        :return (str): A message that no hint is available.
+        """Get a hint for the question.
+        :return: (str) A hint for the question.
         """
-        return "Sorry, no hints available for true or false questions."
 
 
-class MultipleChoiceQA(QuestionAndAnswer):
+class MultipleChoiceQA(HintableQuestionAndAnswer):
     """Represents a multiple choice question and answer."""
 
     def __init__(
@@ -141,7 +145,7 @@ class MultipleChoiceQA(QuestionAndAnswer):
         return hint
 
 
-class ShortAnswerQA(QuestionAndAnswer):
+class ShortAnswerQA(HintableQuestionAndAnswer):
     """Represents a short answer question and answer."""
 
     def __init__(self, question, correct_answer, category):
