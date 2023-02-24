@@ -183,6 +183,7 @@ class TriviaMaze(TriviaMazeModel):
                 self.__adventurer_current_col += 1
             elif direction == Room.WEST:
                 self.__adventurer_current_col -= 1
+        self.__notify_observers()
 
     def __can_adventurer_move(self, direction):
         """
