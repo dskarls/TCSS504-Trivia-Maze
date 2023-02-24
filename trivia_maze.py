@@ -170,6 +170,8 @@ class TriviaMaze(TriviaMazeModel):
             # check if they have a key in inventory
             if len(self.__adventurer.get_magic_keys()) < 1:
                 return
+            # value to be returned to the controller
+            return "Use magic key"
         if self.__can_adventurer_move(direction):
             if direction == Room.NORTH:
                 self.__adventurer_current_row -= 1
