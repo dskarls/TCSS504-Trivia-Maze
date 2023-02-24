@@ -152,9 +152,6 @@ class TriviaMaze(TriviaMazeModel):
         """
         self.__maze_map.update_room(room)
         self.__maze_map_filled_in.update_room(room)
-
-    def __adventurer_has_keys(self):
-        return len(self.__adventurer.get_magic_keys) > 0
     
     def move_adventurer(self, direction):
         """
