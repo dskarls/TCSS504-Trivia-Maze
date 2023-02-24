@@ -10,13 +10,10 @@ class TriviaDatabase(ABC):
     """
 
     @abstractmethod
-    def get_question(self, qa_type, difficulty):
+    def get_question(self):
         """
         Retrieve a trivia question, answer and hint by its ID.
-        :param qa_type: The type of question (true/false, multiple choice, or short answer)
-        :param difficulty: the difficulty of the trivia question to retrieve.
         :return: a tuple of the form (question, answer, hint).
-        :raise NotImplementedError: this method must be overridden by a concrete implementation.
         """
 
 
@@ -74,20 +71,18 @@ class SQLiteTriviaDatabase(TriviaDatabase):
         """Delete the db file during garbage collection"""
         self.__DB_FILE_PATH.unlink()
 
-    def get_question(self, qa_type, difficulty):
+    def get_question(self):
         """
-        Retrieve a trivia question, answer and hint by its ID from an SQLite database.
-        :param qa_type: The type of question (true/false, multiple choice, or short answer)
-        :param difficulty: the difficulty of the trivia question to retrieve.
-        :return: a tuple of the form (question, correct_answer, option_1, option,_2, option_3, option_4).
+        Retrieve a random trivia question, its correct answer, and its options.
+        :return: a tuple of the form (question, correct_answer, option_1,
+                 option,_2, option_3, option_4).
         """
         cursor = self.__db_connection.cursor()
-        (
-            question,
-            correct_answer,
-            option_1,
-            option_2,
-            option_3,
-            option_4,
-        ) = cursor.fetchone()
-        return question, correct_answer, option_1, option_2, option_3, option_4
+        query = f"""
+            SELECT question, correct_answer, option_1, option_2, option_3,
+            option_4 FROM {self.__TABLE_NAME} ORDER BY RANDOM() LIMIT 1;
+        """
+        # query = f"""
+        #    SELECT * FROM {self.__TABLE_NAME} ORDER BY RANDOM() LIMIT 1;
+        # """
+        return [s.strip() for s in cursor.execute(query).fetchone()]
