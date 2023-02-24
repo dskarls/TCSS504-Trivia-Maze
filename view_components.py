@@ -554,7 +554,17 @@ class DismissiblePopUp(PopUpWindow):
     dismiss it by entering a specific key.
     """
 
-    def __init__(self, window, width, text, bottom_label, ipadx, ipady):
+    def __init__(
+        self,
+        window,
+        width,
+        text,
+        bottom_label,
+        ipadx,
+        ipady,
+        text_style,
+        bottom_label_style,
+    ):
         # Create the frame for the whole in-game menu
         super().__init__(window, width)
 
@@ -563,9 +573,8 @@ class DismissiblePopUp(PopUpWindow):
             text=text,
             justify=CENTER,
             anchor=CENTER,
-            style=STYLES["game_won_menu"][
-                "style"
-            ],  # TODO: Don't hard-code styling
+            style=text_style,
+            relief=RIDGE,
         )
         self.__lbl_primary.pack(fill=BOTH, ipadx=ipadx, ipady=ipady)
 
@@ -575,6 +584,8 @@ class DismissiblePopUp(PopUpWindow):
             text=bottom_label,
             justify=CENTER,
             anchor=CENTER,
+            style=bottom_label_style,
+            relief=SUNKEN,
         )
         lbl.pack(fill=BOTH, ipadx=ipadx, ipady=ipady)
 

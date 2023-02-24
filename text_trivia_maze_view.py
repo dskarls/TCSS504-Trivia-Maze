@@ -387,6 +387,8 @@ class TextTriviaMazeView(TriviaMazeView):
             dismiss_message,
             DIMENSIONS["main_help_menu"]["ipadx"],
             DIMENSIONS["main_help_menu"]["ipady"],
+            STYLES["dismiss_text"]["style"],
+            STYLES["dismiss_bottom_label"]["style"],
         )
 
     def show_main_help_menu(self):
@@ -411,6 +413,8 @@ class TextTriviaMazeView(TriviaMazeView):
             dismiss_message,
             DIMENSIONS["need_magic_key_menu"]["ipadx"],
             DIMENSIONS["need_magic_key_menu"]["ipady"],
+            STYLES["dismiss_text"]["style"],
+            STYLES["dismiss_bottom_label"]["style"],
         )
 
     def show_need_magic_key_menu(self):
@@ -436,6 +440,8 @@ class TextTriviaMazeView(TriviaMazeView):
             dismiss_message,
             DIMENSIONS["game_won_menu"]["ipadx"],
             DIMENSIONS["game_won_menu"]["ipady"],
+            STYLES["dismiss_text"]["style"],
+            STYLES["dismiss_bottom_label"]["style"],
         )
 
     def show_game_won_menu(self):
@@ -459,6 +465,8 @@ class TextTriviaMazeView(TriviaMazeView):
             dismiss_message,
             DIMENSIONS["game_lost_menu"]["ipadx"],
             DIMENSIONS["game_lost_menu"]["ipady"],
+            STYLES["dismiss_text"]["style"],
+            STYLES["dismiss_bottom_label"]["style"],
         )
 
     def show_game_lost_menu(self):
@@ -616,6 +624,8 @@ class TextTriviaMazeView(TriviaMazeView):
             dismiss_message,
             DIMENSIONS["map_legend_menu"]["ipadx"],
             DIMENSIONS["map_legend_menu"]["ipady"],
+            STYLES["dismiss_text"]["style"],
+            STYLES["dismiss_bottom_label"]["style"],
         )
 
     @staticmethod
@@ -696,6 +706,8 @@ class TextTriviaMazeView(TriviaMazeView):
             dismiss_message,
             DIMENSIONS["command_legend_menu"]["ipadx"],
             DIMENSIONS["command_legend_menu"]["ipady"],
+            STYLES["dismiss_text"]["style"],
+            STYLES["dismiss_bottom_label"]["style"],
         )
 
     def show_command_legend_menu(self, symbols, descriptions, num_cols):

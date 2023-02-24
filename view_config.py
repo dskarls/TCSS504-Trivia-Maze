@@ -17,7 +17,7 @@ DIMENSIONS = {
     "pillars": {"padx": 10, "pady": 8},
     "pillars_title": {"ipady": 10},
     # Dismissible popups
-    "main_help_menu": {"ipadx": 10, "ipady": 10},
+    "main_help_menu": {"ipadx": 10, "ipady": 8},
     "map_legend_menu": {"ipadx": 10, "ipady": 10},
     "command_legend_menu": {"ipadx": 10, "ipady": 10},
     "need_magic_key_menu": {"ipadx": 10, "ipady": 10},
@@ -114,7 +114,6 @@ ROOM_CONTENT_SYMBOLS = {
 STYLES = {
     "main_menu": {"style": "main_menu.TLabel", "font": ("Courier New", 16)},
     "map": {"style": "map.TLabel", "font": ("Courier New", 26, "bold")},
-    "game_won_menu": {"style": "game_won.TLabel", "font": ("Courier New", 16)},
     "hp_gauge_label": {
         "style": "hp_gauge_label.TLabel",
         "font": ("Arial", 16, "bold"),
@@ -134,5 +133,14 @@ STYLES = {
     "pillars_item": {
         "style": "pillars_item.TLabel",
         "font": ("Arial", 15, "bold"),
+    },
+    # Dismissible popups
+    "dismiss_text": {
+        "style": "dismissible_text.TLabel",
+        "font": ("Courier New", 18, "bold"),
+    },
+    "dismiss_bottom_label": {
+        "style": "dismiss_bottom_label.TLabel",
+        "font": ("Arial", 15),
     },
 }
