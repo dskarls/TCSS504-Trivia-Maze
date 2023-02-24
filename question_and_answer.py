@@ -15,6 +15,7 @@ class QuestionAndAnswer(ABC):
         self.question = question
         self.correct_answer = correct_answer
         self.category = category
+        self.options = options
 
     def __hash__(self):
         """Compute the hash value based on its (globally unique) question content"""
