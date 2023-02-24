@@ -148,14 +148,6 @@ class MultipleChoiceQA(HintableQuestionAndAnswer):
 class ShortAnswerQA(HintableQuestionAndAnswer):
     """Represents a short answer question and answer."""
 
-    def __init__(self, question, correct_answer, category):
-        """
-        :param question (str): The question.
-        :param correct_answer (str): The correct answer to the question.
-        :param category (str): The category of the question.
-        """
-        super().__init__(question, correct_answer, category)
-
     def __hash__(self):
         return hash((self.question, self.correct_answer, self.category))
 
