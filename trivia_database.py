@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-import pathlib
 import sqlite3
 import csv
 
