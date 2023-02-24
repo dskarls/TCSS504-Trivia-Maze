@@ -426,24 +426,33 @@ class QuestionAndAnswerCommandContext(CommandContext):
         # Item commands
         USE_SUGGESTION_POTION = auto()
 
-    # FIXME: We need a different way to allow users to use a suggestion potion
-    # aside from just having them press a specific key. Otherwise they wouldn't
-    # be able to type those keys when writing their response to a short answer
-    # question. Perhaps tkinter buttons?
+        # Other commands
+        SUBMIT_ANSWER = auto()
+
     COMMANDS = {
         # Item commands
         Command.USE_SUGGESTION_POTION: {
             _COMMAND_TYPE: _COMMAND_TYPE_ITEM,
             _COMMAND_DESC_KEY: "Use suggestion potion",
-            _COMMAND_KEY_KEY: "s",
+            _COMMAND_KEY_KEY: "F1",
+        },
+        # Other commands
+        Command.SUBMIT_ANSWER: {
+            _COMMAND_TYPE: _COMMAND_TYPE_OTHER,
+            _COMMAND_DESC_KEY: "Submit answer",
+            _COMMAND_KEY_KEY: "Return",
         },
     }
 
     def process_keystroke(self, key):
         # FIXME: Display somewhere in the QA pop-up how many suggestion
         # potions they have left and what button to press to use one
-        if key == "Return":
+        if key == self.COMMANDS[self.Command.SUBMIT_ANSWER]:
             # FIXME: Get current answer and check if it is correct
+            pass
+        elif key == self.COMMANDS[self.Command.USE_SUGGESTION_POTION]:
+            # TODO: Check if user has a suggestion potion. If so, use it and
+            # update the Q&A widget to display its hint
             pass
 
 
