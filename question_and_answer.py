@@ -21,12 +21,6 @@ class QuestionAndAnswer(ABC):
         return hash((self.question, self.correct_answer, self.category))
 
     @abstractmethod
-    def get_hint(self):
-        """Get a hint for the question.
-        :return: (str) A hint for the question.
-        """
-
-    @abstractmethod
     def answer_is_correct(self, user_answer):
         """Check if the user's answer is correct.
         :param user_answer: (str) The user's answer.
