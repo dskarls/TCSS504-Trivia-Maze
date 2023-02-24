@@ -472,12 +472,19 @@ class MagicKeyCommandContext(CommandContext):
     }
 
     def process_keystroke(self, key):
-        # FIXME: Display somewhere in the QA pop-up how many suggestion
-        # potions they have left and what button to press to use one
         if key == self.COMMANDS[self.Command.USE_MAGIC_KEY][_COMMAND_KEY_KEY]:
             self._maze_model.use_item("magic_key")
+            # TODO: Before any controller code switches to this command
+            # context, it should first check whether the user actually had a
+            # magic key. If not, then it should actually instead display a
+            # different widget (a dismissible context) telling the user that
+            # they need to find a magic key to unlock the door.
+
+            # TODO: Make sure the model unlocks the correct door somehow
+
             self._maze_controller.set_active_context("primary_interface")
+            self._maze_view.hide_magic_key_menu()
+
         elif key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
             self._maze_controller.set_active_context("primary_interface")
-
-        self._maze_view.hide_magic_key_menu()
+            self._maze_view.hide_magic_key_menu()
