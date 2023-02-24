@@ -78,7 +78,7 @@ class SQLiteTriviaDatabase(TriviaDatabase):
         :param difficulty: the difficulty of the trivia question to retrieve.
         :return: a tuple of the form (question, correct_answer, option_1, option,_2, option_3, option_4).
         """
-        cursor = self._sqlite.cursor()
+        cursor = self.__db_connection.cursor()
         (
             question,
             correct_answer,
