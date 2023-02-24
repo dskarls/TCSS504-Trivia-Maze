@@ -17,8 +17,8 @@ class QuestionAndAnswer(ABC):
         self.category = category
 
     def __hash__(self):
-        """Compute the hash value based on the question, correct answer, and category"""
-        return hash((self.question, self.correct_answer, self.category))
+        """Compute the hash value based on its (globally unique) question content"""
+        return hash(self.question)
 
     @abstractmethod
     def answer_is_correct(self, user_answer):
@@ -45,11 +45,6 @@ class TrueOrFalseQA(QuestionAndAnswer):
         self.option_2 = option_2
 
         self.is_true = correct_answer.lower() == "true"
-
-    def __hash__(self):
-        return hash(
-            (self.question, self.correct_answer, self.category, self.is_true)
-        )
 
     def answer_is_correct(self, user_answer):
         """Check if the user's answer is correct.
@@ -98,19 +93,6 @@ class MultipleChoiceQA(HintableQuestionAndAnswer):
         self.option_3 = option_3
         self.option_4 = option_4
 
-    def __hash__(self):
-        return hash(
-            (
-                self.question,
-                self.correct_answer,
-                self.category,
-                self.option_1,
-                self.option_2,
-                self.option_3,
-                self.option_4,
-            )
-        )
-
     def answer_is_correct(self, user_answer):
         """Check if the user's answer is correct.
         :param user_answer: (str) The user's answer.
@@ -141,9 +123,6 @@ class MultipleChoiceQA(HintableQuestionAndAnswer):
 
 class ShortAnswerQA(HintableQuestionAndAnswer):
     """Represents a short answer question and answer."""
-
-    def __hash__(self):
-        return hash((self.question, self.correct_answer, self.category))
 
     def answer_is_correct(self, user_answer):
         """Check if the user's answer is correct.
