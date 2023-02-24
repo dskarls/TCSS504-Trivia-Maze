@@ -83,4 +83,20 @@ class SQLiteTriviaDatabase(TriviaDatabase):
             SELECT question, correct_answer, option_1, option_2, option_3,
             option_4 FROM {self.__TABLE_NAME} ORDER BY RANDOM() LIMIT 1;
         """
-        return [s.strip() for s in cursor.execute(query).fetchone()]
+        res = cursor.execute(query).fetchone()
+        return self.__postprocess_record(res)
+
+    @staticmethod
+    def __postprocess_record(record):
+        """Clean up a single record returned from the database"""
+        # Strip leading and trailing spaces
+        record = [col.strip() for col in record]
+
+        # Convert "null" strings to None
+        for ind, col in enumerate(record):
+            if col.lower() == "null":
+                record[ind] = None
+
+            # TODO: Also convert "true" and "false" strings to True and False?
+
+        return record
