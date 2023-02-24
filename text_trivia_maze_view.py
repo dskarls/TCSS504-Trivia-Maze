@@ -183,6 +183,10 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__game_lost_menu = self.__create_game_lost_menu()
         self.hide_game_lost_menu()
 
+        # Create dialog for needing magic key
+        self.__need_magic_key_menu = self.__create_need_magic_key_menu()
+        self.hide_need_magic_key_menu()
+
         # Set up in-game menu
         self.__in_game_menu = self.__create_in_game_menu()
         self.hide_in_game_menu()
@@ -363,6 +367,26 @@ class TextTriviaMazeView(TriviaMazeView):
 
     def hide_main_help_menu(self):
         self.__main_help_menu.hide()
+
+    def __create_need_magic_key_menu(self):
+        """This menu is displayed to the player when they attempt to pass
+        through a permanently locked door and do not hold any magic keys."""
+        dismiss_message = (
+            f"Press {' or '.join(self.__dismiss_keys)} to return to the game"
+        )
+        return DismissiblePopUp(
+            self.__window,
+            None,
+            textwrap.dedent(MESSAGES["need_magic_key_menu"]),
+            DIMENSIONS["need_magic_key_menu"]["pady"],
+            dismiss_message,
+        )
+
+    def show_need_magic_key_menu(self):
+        self.__need_magic_key_menu.show()
+
+    def hide_need_magic_key_menu(self):
+        self.__need_magic_key_menu.hide()
 
     def __create_game_won_menu(self):
         dismiss_message = (

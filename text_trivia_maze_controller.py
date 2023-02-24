@@ -88,6 +88,9 @@ class TextTriviaMazeController(TriviaMazeController):
         self.__magic_key_context = MagicKeyCommandContext(
             self, self._maze_model, self.__maze_view
         )
+        self.__need_magic_key_context = NeedMagicKeyCommandContext(
+            self, self._maze_model, self.__maze_view
+        )
 
         # Player starts out at the main menu, so make that the active context.
         # NOTE: This sets the `__active_context` instance attr
@@ -114,6 +117,7 @@ class TextTriviaMazeController(TriviaMazeController):
             "game_lost_menu": self.__game_lost_menu_context,
             "question_and_answer": self.__question_and_answer_context,
             "magic_key": self.__magic_key_context,
+            "need_magic_key": self.__need_magic_key_context,
         }
         self.__active_context = contexts[context_specifier]
 
@@ -320,6 +324,13 @@ class GameLostCommandContext(DismissibleCommandContext):
         if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
             self._maze_view.hide_game_lost_menu()
             self._maze_controller.set_active_context("main_menu")
+
+
+class NeedMagicKeyCommandContext(DismissibleCommandContext):
+    def process_keystroke(self, key):
+        if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
+            self._maze_view.hide_need_magic_key_menu()
+            self._maze_controller.set_active_context("primary_interface")
 
 
 class PrimaryInterfaceCommandContext(CommandContext):
