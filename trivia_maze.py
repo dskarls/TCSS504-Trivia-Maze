@@ -165,7 +165,7 @@ class TriviaMaze(TriviaMazeModel):
         # first check if door is perm locked
         if self.__is_door_perm_locked(direction):
             # check if they have a key in inventory
-            if not self.__adventurer_has_keys():
+            if len(self.__adventurer.get_magic_keys()) < 1:
                 return
         if self.__can_adventurer_move(direction):
             if direction == Room.NORTH:
