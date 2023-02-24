@@ -12,8 +12,12 @@ class TriviaDatabase(ABC):
     @abstractmethod
     def get_question(self):
         """
-        Retrieve a trivia question, answer and hint by its ID.
-        :return: a tuple of the form (question, answer, hint).
+        Retrieve a random trivia question type, its question, its correct
+        answer, and its options.
+        :return: a dict containing the keys "qa_type", "category", "question",
+                 "correct_answer", "category", "option_1", "option_2",
+                 "option_3", "option_4". See db table docs for meaning of
+                 these.
         """
 
 
@@ -51,9 +55,20 @@ class SQLiteTriviaDatabase(TriviaDatabase):
             option_1 TEXT, option_2 TEXT, option_3 TEXT, option_4 TEXT,
             correct_answer TEXT)"""
         )
+        # Allow for dict returns from cursors using this connection
+        self.__db_connection.row_factory = self.__dict_factory
 
         # Populate the database with the file content
         self.__load_from_file(file_path)
+
+    @staticmethod
+    def __dict_factory(cursor, row):
+        """Factory for converting a row of the database as a dict. Taken from
+        https://docs.python.org/3/library/sqlite3.html#sqlite3-howto-row-factory
+        (Zero Clause BSD license).
+        """
+        fields = [column[0] for column in cursor.description]
+        return {key: value for key, value in zip(fields, row)}
 
     def __load_from_file(self, file_path):
         """
@@ -74,28 +89,36 @@ class SQLiteTriviaDatabase(TriviaDatabase):
 
     def get_question(self):
         """
-        Retrieve a random trivia question, its correct answer, and its options.
-        :return: a tuple of the form (question, correct_answer, option_1,
-                 option,_2, option_3, option_4).
+        Retrieve a random trivia question type, its question, its correct
+        answer, and its options.
+        :return: a dict containing the keys "qa_type", "category", "question",
+                 "correct_answer", "category", "option_1", "option_2",
+                 "option_3", "option_4". See db table docs for meaning of
+                 these.
         """
         cursor = self.__db_connection.cursor()
         query = f"""
-            SELECT question, correct_answer, option_1, option_2, option_3,
-            option_4 FROM {self.__TABLE_NAME} ORDER BY RANDOM() LIMIT 1;
+            SELECT qa_type, question, category, correct_answer, option_1, option_2,
+            option_3, option_4 FROM {self.__TABLE_NAME} ORDER BY RANDOM() LIMIT
+            1;
         """
         res = cursor.execute(query).fetchone()
+
         return self.__postprocess_record(res)
 
     @staticmethod
     def __postprocess_record(record):
-        """Clean up a single record returned from the database"""
+        """Clean up a single record dict returned from the database by doing
+        string normalizations of its values."""
         # Strip leading and trailing spaces
-        record = [col.strip() for col in record]
+        record = {
+            col_name: col_val.strip() for col_name, col_val in record.items()
+        }
 
         # Convert "null" strings to None
-        for ind, col in enumerate(record):
-            if col.lower() == "null":
-                record[ind] = None
+        for col_name, col_val in record.items():
+            if col_val.lower() == "null":
+                record[col_name] = None
 
             # TODO: Also convert "true" and "false" strings to True and False?
 
