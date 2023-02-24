@@ -355,7 +355,7 @@ class TextTriviaMazeView(TriviaMazeView):
             self.__window,
             None,
             "Q & A",
-            DIMENSIONS["question_and_answer_menu"]["pady"],
+            DIMENSIONS["question_and_answer_menu"]["ipady"],
         )
 
     def set_question(self, question, options, hint):
@@ -384,8 +384,9 @@ class TextTriviaMazeView(TriviaMazeView):
             self.__window,
             None,
             textwrap.dedent(MESSAGES["main_help_menu"]),
-            DIMENSIONS["main_help_menu"]["pady"],
             dismiss_message,
+            DIMENSIONS["main_help_menu"]["ipadx"],
+            DIMENSIONS["main_help_menu"]["ipady"],
         )
 
     def show_main_help_menu(self):
@@ -407,8 +408,9 @@ class TextTriviaMazeView(TriviaMazeView):
             self.__window,
             None,
             textwrap.dedent(MESSAGES["need_magic_key_menu"]),
-            DIMENSIONS["need_magic_key_menu"]["pady"],
             dismiss_message,
+            DIMENSIONS["need_magic_key_menu"]["ipadx"],
+            DIMENSIONS["need_magic_key_menu"]["ipady"],
         )
 
     def show_need_magic_key_menu(self):
@@ -431,8 +433,9 @@ class TextTriviaMazeView(TriviaMazeView):
             self.__window,
             None,
             textwrap.dedent(MESSAGES["game_won_menu"]),
-            DIMENSIONS["game_won_menu"]["pady"],
             dismiss_message,
+            DIMENSIONS["game_won_menu"]["ipadx"],
+            DIMENSIONS["game_won_menu"]["ipady"],
         )
 
     def show_game_won_menu(self):
@@ -453,8 +456,9 @@ class TextTriviaMazeView(TriviaMazeView):
             self.__window,
             None,
             textwrap.dedent(MESSAGES["game_lost_menu"]),
-            DIMENSIONS["game_lost_menu"]["pady"],
             dismiss_message,
+            DIMENSIONS["game_lost_menu"]["ipadx"],
+            DIMENSIONS["game_lost_menu"]["ipady"],
         )
 
     def show_game_lost_menu(self):
@@ -609,8 +613,9 @@ class TextTriviaMazeView(TriviaMazeView):
             self.__window,
             None,
             ("\n").join(legend_rows),
-            DIMENSIONS["map_legend_menu"]["pady"],
             dismiss_message,
+            DIMENSIONS["map_legend_menu"]["ipadx"],
+            DIMENSIONS["map_legend_menu"]["ipady"],
         )
 
     @staticmethod
@@ -688,8 +693,9 @@ class TextTriviaMazeView(TriviaMazeView):
             self.__window,
             None,
             None,
-            DIMENSIONS["command_legend_menu"]["pady"],
             dismiss_message,
+            DIMENSIONS["command_legend_menu"]["ipadx"],
+            DIMENSIONS["command_legend_menu"]["ipady"],
         )
 
     def show_command_legend_menu(self, symbols, descriptions, num_cols):

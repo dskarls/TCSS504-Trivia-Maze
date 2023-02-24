@@ -554,7 +554,7 @@ class DismissiblePopUp(PopUpWindow):
     dismiss it by entering a specific key.
     """
 
-    def __init__(self, window, width, text, pady, bottom_label):
+    def __init__(self, window, width, text, bottom_label, ipadx, ipady):
         # Create the frame for the whole in-game menu
         super().__init__(window, width)
 
@@ -567,7 +567,7 @@ class DismissiblePopUp(PopUpWindow):
                 "style"
             ],  # TODO: Don't hard-code styling
         )
-        self.__lbl_primary.pack(fill=BOTH, pady=pady)
+        self.__lbl_primary.pack(fill=BOTH, ipadx=ipadx, ipady=ipady)
 
         # Put return to main menu option below
         lbl = Label(
@@ -576,9 +576,7 @@ class DismissiblePopUp(PopUpWindow):
             justify=CENTER,
             anchor=CENTER,
         )
-        lbl.pack(
-            fill=BOTH,
-        )
+        lbl.pack(fill=BOTH, ipadx=ipadx, ipady=ipady)
 
     def show(self):
         """Show the pop-up at the center of the parent frame."""
