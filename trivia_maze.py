@@ -99,6 +99,8 @@ class TriviaMaze(TriviaMazeModel):
         self.__adventurer = self.__create_adventurer()
         
         (self.__adventurer_current_row, self.__adventurer_current_col) = self.__maze.entrance
+        
+        self.__direction_attempt = None
 
     def __get_num_rows_and_cols_from_user(self):
         """Prompt user for desired number of rows and columns. If user skips
@@ -152,9 +154,6 @@ class TriviaMaze(TriviaMazeModel):
         """
         self.__maze_map.update_room(room)
         self.__maze_map_filled_in.update_room(room)
-
-    def __adventurer_has_keys(self):
-        return len(self.__adventurer.get_magic_keys) > 0
     
     def move_adventurer(self, direction):
         """
@@ -165,11 +164,14 @@ class TriviaMaze(TriviaMazeModel):
         direction : str
             direction the adventurer is trying to move.
         """
+        self.__direction_attempt = direction
         # first check if door is perm locked
         if self.__is_door_perm_locked(direction):
             # check if they have a key in inventory
-            if not self.__adventurer_has_keys():
+            if len(self.__adventurer.get_magic_keys()) < 1:
                 return
+            # value to be returned to the controller
+            return "Use magic key"
         if self.__can_adventurer_move(direction):
             if direction == Room.NORTH:
                 self.__adventurer_current_row -= 1
@@ -317,6 +319,7 @@ class TriviaMaze(TriviaMazeModel):
             self.__event_log_buffer.append(f"You used a {str(vision_potion)}!")
         elif item == self.__ITEMS[self.__Items.MAGIC_KEY]:
             magic_key = self.__adventurer.consume_magic_key()
+            # I don't think there is any way for __direction_attempt to be none at this point
             self.__unlock_perm_locked_door()
             self.__event_log_buffer.append(f"You used a {str(magic_key)}!")
         self.__notify_observers()
@@ -326,7 +329,7 @@ class TriviaMaze(TriviaMazeModel):
         the adventurer is attempting to move out.
         """
         current_room = self.__get_adventurer_room()
-        current_room.get_side(direction).perm_locked = False
+        current_room.get_side(self.__direction_attempt).perm_locked = False
 
     def __unlock_trivia_door(self, current_room, direction):
         """Unlocks a locked trivia door in the room the adventurer
