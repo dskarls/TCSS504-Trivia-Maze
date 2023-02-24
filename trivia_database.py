@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import pathlib
 import sqlite3
 import csv
 
@@ -7,22 +8,6 @@ class TriviaDatabase(ABC):
     """
     This is an abstract base class for accessing a trivia database.
     """
-
-    @abstractmethod
-    def connect(self, connection):
-        """
-        Connect to the database using the specified connection string.
-        :param connection: the connection string to use when connecting to the database.
-        :raise NotImplementedError: this method must be overridden by a concrete implementation.
-        """
-
-    @abstractmethod
-    def load_from_file(self, file_path):
-        """
-        Load the contents of a CSV file into the database.
-        :param file_path: the path to the CSV file to load into the database.
-        :raise NotImplementedError: this method must be overridden by a concrete implementation.
-        """
 
     @abstractmethod
     def get_question(self, qa_type, difficulty):
@@ -40,29 +25,51 @@ class SQLiteTriviaDatabase(TriviaDatabase):
     A concrete implementation of the TriviaDatabase interface that uses SQLite as the underlying database.
     """
 
-    def __init__(self):  # PyCharm's suggestion to make __db_connection work
-        super().__init__()
-        self.__db_connection = None
+    # Path of file to write sqlite db file to
+    __DB_FILE_PATH = pathlib.Path("db") / "trivia_maze.db"
 
-    def connect(self, connection):
-        """
-        Connect to an SQLite database using the specified connection.
-        :param connection: the connection string to use when connecting to the SQLite database.
-        """
-        self.__db_connection = sqlite3.connect(connection)
+    # The one table that holds all data
+    __TABLE_NAME = "question_and_answer"
 
-    def load_from_file(self, file_path):
+    def __init__(self, file_path):
         """
-        Load the contents of a CSV file into the SQLite database.
+        Create the database from the contents of a CSV file.
+        :param file_path: the path to the CSV file to load into the database.
+        """
+
+        # Ensure path for db file exists
+        parent_dir = self.__DB_FILE_PATH.parent
+        if not parent_dir.exists():
+            parent_dir.mkdir()
+
+        # Open connection to file and overwrite table
+        self.__db_connection = sqlite3.connect(self.__DB_FILE_PATH)
+        self.__db_connection.execute(
+            f"""CREATE TABLE {self.__TABLE_NAME}
+            (category TEXT, qa_type TEXT, difficulty TEXT, question TEXT,
+            option_1 TEXT, option_2 TEXT, option_3 TEXT, option_4 TEXT,
+            correct_answer TEXT)"""
+        )
+
+        # Populate the database with the file content
+        self.__load_from_file(file_path)
+
+    def __load_from_file(self, file_path):
+        """
+        Load the contents of a CSV file into the database.
         :param file_path: the path to the CSV file to load into the database.
         """
         with open(file_path, newline="") as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
                 self.__db_connection.execute(
-                    "INSERT INTO Lone_Rangers_QA_DB VALUES (?, ?, ?, ?, ?, ?)",
+                    f"INSERT INTO {self.__TABLE_NAME} VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     row,
                 )
+
+    def __del__(self):
+        """Delete the db file during garbage collection"""
+        self.__DB_FILE_PATH.unlink()
 
     def get_question(self, qa_type, difficulty):
         """
