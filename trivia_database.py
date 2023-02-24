@@ -15,7 +15,6 @@ class TriviaDatabase(ABC):
         :param connection: the connection string to use when connecting to the database.
         :raise NotImplementedError: this method must be overridden by a concrete implementation.
         """
-        pass
 
     @abstractmethod
     def db_loader(self, file_path):
@@ -24,7 +23,6 @@ class TriviaDatabase(ABC):
         :param file_path: the path to the CSV file to load into the database.
         :raise NotImplementedError: this method must be overridden by a concrete implementation.
         """
-        pass
 
     @abstractmethod
     def get_question(self, qa_type, difficulty):
@@ -35,7 +33,6 @@ class TriviaDatabase(ABC):
         :return: a tuple of the form (question, answer, hint).
         :raise NotImplementedError: this method must be overridden by a concrete implementation.
         """
-        pass
 
 
 class SQLiteTriviaDatabase(TriviaDatabase):
@@ -59,10 +56,13 @@ class SQLiteTriviaDatabase(TriviaDatabase):
         Load the contents of a CSV file into the SQLite database.
         :param file_path: the path to the CSV file to load into the database.
         """
-        with open(file_path, newline='') as csvfile:
+        with open(file_path, newline="") as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
-                self.__db_connection.execute("INSERT INTO Lone_Rangers_QA_DB VALUES (?, ?, ?, ?, ?, ?)", row)
+                self.__db_connection.execute(
+                    "INSERT INTO Lone_Rangers_QA_DB VALUES (?, ?, ?, ?, ?, ?)",
+                    row,
+                )
 
     def get_question(self, qa_type, difficulty):
         """
@@ -72,5 +72,12 @@ class SQLiteTriviaDatabase(TriviaDatabase):
         :return: a tuple of the form (question, correct_answer, option_1, option,_2, option_3, option_4).
         """
         cursor = self._sqlite.cursor()
-        question, correct_answer, option_1, option_2, option_3, option_4 = cursor.fetchone()
+        (
+            question,
+            correct_answer,
+            option_1,
+            option_2,
+            option_3,
+            option_4,
+        ) = cursor.fetchone()
         return question, correct_answer, option_1, option_2, option_3, option_4
