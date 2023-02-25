@@ -146,17 +146,6 @@ class TriviaMaze(TriviaMazeModel):
 
         return adv
 
-    def __update_room_in_maze_maps(self, room):
-        """Update the specified room in both the maze map the adventurer
-        sees, as well as the hidden maze map that's fully revealed.
-        Parameters
-        ----------
-        room : Room
-            An arbitrary room that the adventurer has passed through.
-        """
-        self.__maze_map.update_room(room)
-        self.__maze_map_filled_in.update_room(room)
-
     def move_adventurer(self, direction):
         """
         Given a directional command will attempt to move the adventurer that direction
