@@ -644,6 +644,9 @@ class TextTriviaMazeView(TriviaMazeView):
         a specified number of formatted columns so that they can be displayed
         as a giant string. Symbols can be overridden using a dictionary
         parameter."""
+        # Separation to place between columns
+        COL_SEP = "   "
+
         # Determine longest description and symbol strings
         symbol_max_len = len(max(symbols, key=len))
         if symbol_overrides:
@@ -675,7 +678,7 @@ class TextTriviaMazeView(TriviaMazeView):
                     # Begin string for this row
                     rows.append("")
 
-                rows[row] += entries.popleft()
+                rows[row] += COL_SEP + entries.popleft()
 
                 # Pad the bottom row to the right with spaces
                 if not entries:
