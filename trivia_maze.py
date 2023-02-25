@@ -35,8 +35,6 @@ class TriviaMaze(TriviaMazeModel):
 
     Methods
     -------
-    __create_adventurer
-        Create an adventurer
     __get_adjacent_rooms_in_maze
         Get a list of all rooms in the maze that are adjacent to the
         adventurer's current room.
@@ -78,7 +76,7 @@ class TriviaMaze(TriviaMazeModel):
 
         self.__maze = Maze(num_rows, num_cols)
 
-        self.__adventurer = self.__create_adventurer()
+        self.__adventurer = Adventurer()
 
         (
             self.__adventurer_current_row,
@@ -86,24 +84,6 @@ class TriviaMaze(TriviaMazeModel):
         ) = self.__maze.entrance
 
         self.__direction_attempt = None
-
-    def __create_adventurer(self):
-        """Ask for player name input and return an Adventurer.
-        Returns
-        -------
-        adv : Adventurer
-            An adventurer initialized with the name inputted by the user.
-        """
-        while True:
-            name = input("Enter adventurer name (non-empty): ")
-            try:
-                adv = Adventurer(name)
-            except InvalidAdventurerName:
-                continue
-            else:
-                break
-
-        return adv
 
     def move_adventurer(self, direction):
         """

@@ -5,11 +5,6 @@ from maze_items import HealingPotion, PillarOfOOP, VisionPotion, MagicKey
 from util import generate_random_int
 
 
-class InvalidAdventurerName(ValueError):
-    """Raised if one attempts to instantiate an Adventurer object with a name
-    that is not a non-empty string."""
-
-
 class InvalidHitPointsArgs(ValueError):
     """Raised if the hit point parameters passed into Adventurer initialization
     are inconsistent."""
@@ -31,8 +26,6 @@ class Adventurer:
     hit_points : int
         The health level of the adventurer; has a minimum value of 0 and a
         maximum value of 100.
-    __name : str
-        The name of the adventurer.
     __healing_potions : list
         The list of health potions held by the adventurer.
     __vision_potions : list
@@ -63,32 +56,26 @@ class Adventurer:
 
     def __init__(
         self,
-        name,
         initial_hit_points_min=75,
         initial_hit_points_max=100,
         hit_points_max=100,
     ):
         """
-        Create an adventurer with the specified name and a random number of hit
-        points in a reasonable range. The adventurer begins with no healing
-        potions, vision potions, or pillars.
+        Create an adventurer with a random number of hit points in the
+        specified range. The adventurer begins with no healing potions, vision
+        potions, or pillars.
 
         Parameters
         ----------
-        name : str
-            A non-empty string indicating the player's chosen name.
+        initial_hit_points_min : int
+            The minimum number of hit points the adventurer can start out with.
+        initial_hit_points_max : int
+            The maximum number of hit points the adventurer can start out with.
+        hit_points_max : int
+            The maximum number of hit points the adventurer can ever possibly
+            have.
 
-        Raises
-        ------
-        InvalidAdventurerName
-            If the name supplied for the adventurer was invalid.
         """
-        if not isinstance(name, str) or not name:
-            raise InvalidAdventurerName(
-                "A valid adventurer name must be a non-empty string."
-            )
-
-        self.__name = name
         self.__healing_potions = []
         self.__vision_potions = []
         self.__pillars_found = []
@@ -103,18 +90,6 @@ class Adventurer:
         self.__hit_points_max = hit_points_max
         self.__hit_points = generate_random_int(
             initial_hit_points_min, initial_hit_points_max
-        )
-
-    def __str__(self):
-        """Print the adventurer's name and hit points, as well as how many
-        potions they hold and how many pillars they've found."""
-        return (
-            f"Name: {self.__name}, Hit Points: {self.hit_points}, "
-            f"Number of Healing Potions: {len(self.__healing_potions)}, "
-            f"Healing Potions: {[str(hp) for hp in self.__healing_potions]}, "
-            f"Number of Vision Potions: {len(self.__vision_potions)}, "
-            f"Pillars found: {[str(pillar) for pillar in self.__pillars_found]}, "
-            f"Number of Magic Keys: {len(self.__magic_keys)}"
         )
 
     def __verify_hit_point_args(
