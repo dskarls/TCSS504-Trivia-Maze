@@ -311,9 +311,13 @@ class TriviaMaze(TriviaMazeModel):
             vision_potion = self.__adventurer.consume_vision_potion()
 
             # Get set of adjacent rooms inside maze and add to maze map
+            # FIXME: If we want to support vision potions, we'll need to come
+            # up for a way to tell the view which rooms to display and which
+            # not to.
             rooms_to_update_in_map = self.__get_adjacent_rooms_in_maze(
                 self.__get_adventurer_room()
             )
+
             self.__event_log_buffer.append(f"You used a {str(vision_potion)}!")
 
         elif item == self.__ITEMS[self.__Items.MAGIC_KEY]:
