@@ -236,10 +236,10 @@ class Room:
         self.__north_side = self.WALL
         self.__west_side = self.WALL
         self.__south_side = self.WALL
-    
+
     def __eq__(self, other):
         return self.coords == other.coords
-    
+
     def place_item(self, item):
         """Put a MazeItem in this room.
 
@@ -266,18 +266,18 @@ class Room:
             all_items_from_room.append(self.__items.pop())
 
         return all_items_from_room
-    
+
     def contains_magic_key(self):
         """If this room contains a magic key, return True; otherwise, return
-        False. 
-        
+        False.
+
         Returns
         -------
         bool
             True if the room contains a magic key; otherwise False.
         """
         return any(isinstance(item, MagicKey) for item in self.__items)
-    
+
     def contains_pillar(self):
         """If this room contains a pillar, return True; otherwise, return
         False. Note that a given room will only ever contain at most one pillar.
@@ -361,7 +361,7 @@ class Room:
                 f"{(', ').join((self.DOOR, self.WALL))}"
             )
 
-        if door_or_wall == "door":
+        if door_or_wall == self.DOOR:
             door_or_wall = Door(locked)
 
         direction = direction.lower()
@@ -433,7 +433,9 @@ class Room:
         only_item = self.__items[0]
         for item_type, enum_val in item_types_to_room_contents_enum.items():
             if isinstance(only_item, item_type):
-                return self.ROOM_CONTENT_SYMBOLS[enum_val][self.ROOM_CONTENT_SYMBOL_KEY]
+                return self.ROOM_CONTENT_SYMBOLS[enum_val][
+                    self.ROOM_CONTENT_SYMBOL_KEY
+                ]
 
     def __str__(self):
         """The string representation of a room consists of three rows of
@@ -467,7 +469,9 @@ class Room:
         if self.__west_side == self.WALL:
             room_str += "*"
         elif self.__west_side.perm_locked:
-            room_str += "P"  # place holder string for a permanently locked door
+            room_str += (
+                "P"  # place holder string for a permanently locked door
+            )
         elif self.__west_side.locked:
             room_str += "T"  # place holder string for a locked door
         else:
@@ -481,9 +485,9 @@ class Room:
             elif len(self.STR_REPR_PADDING) >= 2:
                 after_adventurer_symbol = self.STR_REPR_PADDING[1]
 
-            adventurer_symbol = self.ROOM_CONTENT_SYMBOLS[self.RoomContents.ADVENTURER][
-                self.ROOM_CONTENT_SYMBOL_KEY
-            ]
+            adventurer_symbol = self.ROOM_CONTENT_SYMBOLS[
+                self.RoomContents.ADVENTURER
+            ][self.ROOM_CONTENT_SYMBOL_KEY]
             room_str += f"{adventurer_symbol}{after_adventurer_symbol}"
         else:
             room_str += f"{self.STR_REPR_PADDING}"
