@@ -2,7 +2,6 @@ from enum import Enum, auto
 
 from adventurer import Adventurer, InvalidAdventurerName
 from maze import Maze
-from maze_map import MazeMap
 from room import Room
 from trivia_maze_model import TriviaMazeModel
 
@@ -12,12 +11,14 @@ class TriviaMaze(TriviaMazeModel):
     Driver for maze adventure game
     NOTE: There is a hidden command, currently set to the key 'z' that can be
     used to display the entire maze at any iteration of the game.
+
     Class Attributes
     ------------------
     __DEFAULT_NUM_ROWS : int
         Number of rows to use if user skips through rows prompt.
     __DEFAULT_NUM_COLS: int
         Number of columns to use if user skips through rows prompt.
+
     Instance Attributes
     ------------------
     __adventurer : Adventurer
@@ -31,11 +32,7 @@ class TriviaMaze(TriviaMazeModel):
         located in the array according to their two-dimensional coords, e.g. the
         Room at indices [1][2] corresponds to row 1, column 2 (both zero-based
         indexing).
-    __maze_map : MazeMap
-        A map of the maze that displays what rooms the adventurer has either
-        visited or revealed using a vision potion.
-    __maze_map_filled_in : MazeMap
-        A map of the maze that displays all current rooms and items.
+
     Methods
     -------
     __create_adventurer
@@ -84,14 +81,6 @@ class TriviaMaze(TriviaMazeModel):
 
         num_rows, num_col = self.__get_num_rows_and_cols_from_user()
         self.__maze = Maze(num_rows, num_col)
-        self.__maze_map = MazeMap(num_rows, num_col)
-
-        # Also keep a maze map that is filled in entirely here and gets
-        # updated as the adventurer walks through the maze
-        self.__maze_map_filled_in = MazeMap(num_rows, num_col)
-        for room_row in self.__maze.rooms:
-            for room in room_row:
-                self.__maze_map_filled_in.update_room(room)
 
         self.__adventurer = self.__create_adventurer()
 
