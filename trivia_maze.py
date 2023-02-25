@@ -1,13 +1,11 @@
-from collections import deque
 from enum import Enum, auto
-import sys
-import textwrap
 
 from adventurer import Adventurer, InvalidAdventurerName
 from maze import Maze
 from maze_map import MazeMap
 from room import Room
 from trivia_maze_model import TriviaMazeModel
+
 
 class TriviaMaze(TriviaMazeModel):
     """
@@ -65,7 +63,7 @@ class TriviaMaze(TriviaMazeModel):
     get_adventurer_coords
         Returns a tuple of the room's coordinates the adventurer is in.
     """
-    
+
     __DEFAULT_NUM_ROWS = 3
     __DEFAULT_NUM_COLS = 3
 
@@ -97,9 +95,12 @@ class TriviaMaze(TriviaMazeModel):
                 self.__maze_map_filled_in.update_room(room)
 
         self.__adventurer = self.__create_adventurer()
-        
-        (self.__adventurer_current_row, self.__adventurer_current_col) = self.__maze.entrance
-        
+
+        (
+            self.__adventurer_current_row,
+            self.__adventurer_current_col,
+        ) = self.__maze.entrance
+
         self.__direction_attempt = None
 
     def __get_num_rows_and_cols_from_user(self):
@@ -110,7 +111,9 @@ class TriviaMaze(TriviaMazeModel):
         tuple
             The number of rows and columns to use to create maze maze.
         """
-        row_str = input("Enter the desired number of rows in the maze (default: 3): ")
+        row_str = input(
+            "Enter the desired number of rows in the maze (default: 3): "
+        )
         try:
             num_rows = int(row_str.strip())
         except ValueError:
@@ -154,7 +157,7 @@ class TriviaMaze(TriviaMazeModel):
         """
         self.__maze_map.update_room(room)
         self.__maze_map_filled_in.update_room(room)
-    
+
     def move_adventurer(self, direction):
         """
         Given a directional command will attempt to move the adventurer that direction
@@ -206,19 +209,23 @@ class TriviaMaze(TriviaMazeModel):
         else:
             print("This door is locked. Answer a trivia question.")
             answer = input("Question?")
-            #place holder to allow the setting of perm_locked doors
+            # place holder to allow the setting of perm_locked doors
             if answer == "a":
-                self.__unlock_trivia_door(self.__get_adventurer_room(), direction)
-                self.__event_log_buffer.append("Answered trivia question correctly.")
+                self.__unlock_trivia_door(
+                    self.__get_adventurer_room(), direction
+                )
+                self.__event_log_buffer.append(
+                    "Answered trivia question correctly."
+                )
                 return True
             else:
                 current_room.get_side(direction).perm_locked = True
             return False
-    
+
     def __is_door_perm_locked(self, direction):
         current_room = self.__get_adventurer_room()
         return current_room.get_side(direction).perm_locked
-    
+
     def __get_adventurer_room(self):
         """Returns the room the adventurer is currently in the maze."""
         return self.__maze.rooms[self.__adventurer_current_row][
@@ -314,7 +321,9 @@ class TriviaMaze(TriviaMazeModel):
             # Use vision potion
             vision_potion = self.__adventurer.consume_vision_potion()
             # Get set of adjacent rooms inside maze and add to maze map
-            rooms_to_update_in_map = self.__get_adjacent_rooms_in_maze(self.__get_adventurer_room())
+            rooms_to_update_in_map = self.__get_adjacent_rooms_in_maze(
+                self.__get_adventurer_room()
+            )
             self.__print_maze_map_and_legend()
             self.__event_log_buffer.append(f"You used a {str(vision_potion)}!")
         elif item == self.__ITEMS[self.__Items.MAGIC_KEY]:
@@ -325,7 +334,7 @@ class TriviaMaze(TriviaMazeModel):
         self.__notify_observers()
 
     def __unlock_perm_locked_door(self):
-        """Unlocks a permanently locked trivia door in the room 
+        """Unlocks a permanently locked trivia door in the room
         the adventurer is attempting to move out.
         """
         current_room = self.__get_adventurer_room()
@@ -350,18 +359,18 @@ class TriviaMaze(TriviaMazeModel):
     def get_adventurer_coords(self):
         """Returns a tuple of the adventurer's current coordinates in the maze."""
         return self.__adventurer_current_row, self.__adventurer_current_col
-    
+
     def __check_loss(self):
         """
         Checks to see if there is a traversable path from the adventurer's current
-        location to the exit. Adventurer can still win if within their possible 
-        path there is a magic key. 
-        
+        location to the exit. Adventurer can still win if within their possible
+        path there is a magic key.
+
         Returns
         -------
         bool
             Will return True if the adventurer still has the ability to win with
-            the current state of the maze. Otherwise False if no possibilty to 
+            the current state of the maze. Otherwise False if no possibilty to
             win.
         """
         DIRECTIONS = [Room.NORTH, Room.EAST, Room.SOUTH, Room.WEST]
@@ -369,10 +378,13 @@ class TriviaMaze(TriviaMazeModel):
         invalid_rooms = []
         inaccessible_rooms = self.__get_inaccessible_rooms()
         current_room = self.__get_adventurer_room()
-        TOTAL_ROOMS =  self.__maze.num_rows * self.__maze.num_cols
+        TOTAL_ROOMS = self.__maze.num_rows * self.__maze.num_cols
         pillars_found = list(self.__adventurer.get_pillars_found())
-        
-        while len(visited_rooms) + len(invalid_rooms) + len(inaccessible_rooms) < TOTAL_ROOMS:
+
+        while (
+            len(visited_rooms) + len(invalid_rooms) + len(inaccessible_rooms)
+            < TOTAL_ROOMS
+        ):
             moved_to_new_room = False
             # check if the room has a key
             if current_room.contains_magic_key():
@@ -389,7 +401,7 @@ class TriviaMaze(TriviaMazeModel):
                 return False
             # loop through to find a valid direction to move into another room
             for direction in DIRECTIONS:
-                #check direction won't put us into a visited room
+                # check direction won't put us into a visited room
                 next_room = self.__move_to_new_room(current_room, direction)
                 if next_room in visited_rooms or next_room in invalid_rooms:
                     # if so continue direction loop to find new direction
@@ -412,19 +424,19 @@ class TriviaMaze(TriviaMazeModel):
                 invalid_rooms.append(current_room)
                 current_room = visited_rooms.pop()
             else:
-                #no other possible paths forward
+                # no other possible paths forward
                 return False
-        #if all rooms have been considered no possible path to victory
+        # if all rooms have been considered no possible path to victory
         return False
-    
+
     def __get_inaccessible_rooms(self):
         """
-        Helper method that scans through the whole maze and checks if the room is 
+        Helper method that scans through the whole maze and checks if the room is
         blocked from being accessed through normal means. Locked trivia doors are
         not considered as blocking obstacles as the player may answer correctly.
-        Does not consider magic key's ability to open perm locked doors as this is 
+        Does not consider magic key's ability to open perm locked doors as this is
         handled in the check_loss method.
-        
+
         Returns
         -------
         inaccesible_rooms : list
@@ -438,26 +450,33 @@ class TriviaMaze(TriviaMazeModel):
                 wall_count = 0
                 perm_door_count = 0
                 for direction in DIRECTIONS:
-                    if self.__maze.rooms[row][col].get_side(direction) == Room.WALL:
+                    if (
+                        self.__maze.rooms[row][col].get_side(direction)
+                        == Room.WALL
+                    ):
                         wall_count += 1
-                    elif self.__maze.rooms[row][col].get_side(direction).perm_locked:
+                    elif (
+                        self.__maze.rooms[row][col]
+                        .get_side(direction)
+                        .perm_locked
+                    ):
                         perm_door_count += 1
                 if wall_count + perm_door_count == 4:
                     inaccessible_rooms.append(self.__maze.rooms[row][col])
         return inaccessible_rooms
-    
+
     def __move_to_new_room(self, room, direction):
         """
         Will move a room pointer to an adjacent room based on the given direction
         and the ability to move to the next room.
-        
+
         Parameters
         ----------
         room : Room
             A Room object used as a current room pointer
         direction : str
             Direction the room pointer will move in the maze
-        
+
         Returns
         -------
         new_room : Room
@@ -467,7 +486,7 @@ class TriviaMaze(TriviaMazeModel):
         """
         if self.__wall_or_perm(room, direction):
             return room
-            
+
         if direction == Room.NORTH:
             new_room = self.__maze.rooms[room.coords[0] - 1][room.coords[1]]
         elif direction == Room.SOUTH:
@@ -477,7 +496,7 @@ class TriviaMaze(TriviaMazeModel):
         elif direction == Room.WEST:
             new_room = self.__maze.rooms[room.coords[0]][room.coords[1] - 1]
         return new_room
-    
+
     def __wall_or_perm(self, room, direction):
         side = room.get_side(direction)
         if side == Room.WALL:
@@ -485,7 +504,7 @@ class TriviaMaze(TriviaMazeModel):
         elif side.perm_locked:
             return True
         return False
-    
+
     def register_observer(self, observer):
         self._maze_observers.append(observer)
 
