@@ -108,22 +108,22 @@ def depth_first_search(
     visited.append((row, col))
 
     # Try moving east
-    if this_room.get_side(Room.EAST) == Room.DOOR:
+    if this_room.get_side(Room.EAST) != Room.WALL:
         if depth_first_search(maze, row, col + 1, visited, goal):
             return True
 
     # Try moving north
-    if this_room.get_side(Room.NORTH) == Room.DOOR:
+    if this_room.get_side(Room.NORTH) != Room.WALL:
         if depth_first_search(maze, row - 1, col, visited, goal):
             return True
 
     # Try moving west
-    if this_room.get_side(Room.WEST) == Room.DOOR:
+    if this_room.get_side(Room.WEST) != Room.WALL:
         if depth_first_search(maze, row, col - 1, visited, goal):
             return True
 
     # Try moving south
-    if this_room.get_side(Room.SOUTH) == Room.DOOR:
+    if this_room.get_side(Room.SOUTH) != Room.WALL:
         if depth_first_search(maze, row + 1, col, visited, goal):
             return True
 
