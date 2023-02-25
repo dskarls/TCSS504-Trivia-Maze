@@ -323,7 +323,6 @@ class TriviaMaze(TriviaMazeModel):
             rooms_to_update_in_map = self.__get_adjacent_rooms_in_maze(
                 self.__get_adventurer_room()
             )
-            self.__print_maze_map_and_legend()
             self.__event_log_buffer.append(f"You used a {str(vision_potion)}!")
         elif item == self.__ITEMS[self.__Items.MAGIC_KEY]:
             magic_key = self.__adventurer.consume_magic_key()
