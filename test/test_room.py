@@ -1,3 +1,4 @@
+from door import Door
 from maze_items import AbstractionPillar, HealingPotion, VisionPotion, Pit
 from room import Room
 
@@ -95,6 +96,6 @@ def test_set_side(default_room):
     for direction in (Room.EAST, Room.NORTH, Room.WEST, Room.SOUTH):
         assert default_room.get_side(direction) == Room.WALL
         default_room.set_side(direction, Room.DOOR)
-        assert default_room.get_side(direction) == Room.DOOR
+        assert isinstance(default_room.get_side(direction), Door)
         default_room.set_side(direction, Room.WALL)
         assert default_room.get_side(direction) == Room.WALL
