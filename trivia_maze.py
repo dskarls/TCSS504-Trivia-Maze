@@ -1,6 +1,6 @@
 from enum import Enum, auto
 
-from adventurer import Adventurer, InvalidAdventurerName
+from adventurer import Adventurer
 from maze import Maze
 from room import Room
 from trivia_maze_model import TriviaMazeModel
