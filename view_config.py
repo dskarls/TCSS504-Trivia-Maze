@@ -1,4 +1,5 @@
 """Used to define dimensions, messages, and styles for view"""
+from enum import Enum, auto
 
 ##############################################################################
 # Dimensions such as width, height, and padding options
@@ -88,23 +89,134 @@ MESSAGES = {
     "need_magic_key_menu": "This door is permanently locked. To open it, find a magic key!",
 }
 
+
 ##############################################################################
 # Symbols used to represent things in the map
 ##############################################################################
+class RoomContents(Enum):
+    """Enumeration of the different contents of a room: entrance, exit,
+    pit, potions, pillars, or nothing. This is defined in lieu of using
+    global variables so that the same variables can be used throughout all
+    calling modules and herein to refer to this finite set of possible
+    values."""
+
+    ENTRANCE = auto()
+    EXIT = auto()
+
+    ADVENTURER = auto()
+
+    PIT = auto()
+
+    HEALING_POTION = auto()
+    VISION_POTION = auto()
+    SUGGESTION_POTION = auto()
+    MULTIPLE_ITEMS = auto()
+    ABSTRACTION_PILLAR = auto()
+    INHERITANCE_PILLAR = auto()
+    ENCAPSULATION_PILLAR = auto()
+    POLYMORPHISM_PILLAR = auto()
+    MAGIC_KEY = auto()
+
+    EMPTY = auto()
+
+
+# Symbols that are placed in the string representation of a room to
+# indicate its contents
+ROOM_CONTENT_SYMBOL_KEY = "symbol"
+ROOM_CONTENT_DESC_KEY = "description"
 ROOM_CONTENT_SYMBOLS = {
-    "Entrance": "i",
-    "Exit": "o",
-    "Adventurer": "@",
-    "Pit": "X",
-    "Healing Potion": "H",
-    "Vision Potion": "V",
-    "Multiple Items": "M",
-    "Pillar of Abstraction": "A",
-    "Pillar of Inheritance": "I",
-    "Pillar of Encapsulation": "E",
-    "Pillar of Polymorphism": "P",
-    "Magic Key": "K",
-    "Empty room": " ",
+    RoomContents.ENTRANCE: {
+        ROOM_CONTENT_SYMBOL_KEY: "i",
+        ROOM_CONTENT_DESC_KEY: "Entrance",
+    },
+    RoomContents.EXIT: {
+        ROOM_CONTENT_SYMBOL_KEY: "O",
+        ROOM_CONTENT_DESC_KEY: "Exit",
+    },
+    RoomContents.ADVENTURER: {
+        ROOM_CONTENT_SYMBOL_KEY: "@",
+        ROOM_CONTENT_DESC_KEY: "Adventurer",
+    },
+    RoomContents.PIT: {
+        ROOM_CONTENT_SYMBOL_KEY: "X",
+        ROOM_CONTENT_DESC_KEY: "Pit",
+    },
+    RoomContents.HEALING_POTION: {
+        ROOM_CONTENT_SYMBOL_KEY: "H",
+        ROOM_CONTENT_DESC_KEY: "Healing Potion",
+    },
+    RoomContents.VISION_POTION: {
+        ROOM_CONTENT_SYMBOL_KEY: "V",
+        ROOM_CONTENT_DESC_KEY: "Vision Potion",
+    },
+    RoomContents.SUGGESTION_POTION: {
+        ROOM_CONTENT_SYMBOL_KEY: "S",
+        ROOM_CONTENT_DESC_KEY: "Suggestion Potion",
+    },
+    RoomContents.MULTIPLE_ITEMS: {
+        ROOM_CONTENT_SYMBOL_KEY: "M",
+        ROOM_CONTENT_DESC_KEY: "Multiple items",
+    },
+    RoomContents.ABSTRACTION_PILLAR: {
+        ROOM_CONTENT_SYMBOL_KEY: "A",
+        ROOM_CONTENT_DESC_KEY: "Abstraction Pillar",
+    },
+    RoomContents.INHERITANCE_PILLAR: {
+        ROOM_CONTENT_SYMBOL_KEY: "I",
+        ROOM_CONTENT_DESC_KEY: "Inheritance Pillar",
+    },
+    RoomContents.ENCAPSULATION_PILLAR: {
+        ROOM_CONTENT_SYMBOL_KEY: "E",
+        ROOM_CONTENT_DESC_KEY: "Encapsulation Pillar",
+    },
+    RoomContents.POLYMORPHISM_PILLAR: {
+        ROOM_CONTENT_SYMBOL_KEY: "P",
+        ROOM_CONTENT_DESC_KEY: "Polymorphism Pillar",
+    },
+    RoomContents.MAGIC_KEY: {
+        ROOM_CONTENT_SYMBOL_KEY: "K",
+        ROOM_CONTENT_DESC_KEY: "Magic Key",
+    },
+    RoomContents.EMPTY: {
+        ROOM_CONTENT_SYMBOL_KEY: " ",
+        ROOM_CONTENT_DESC_KEY: "Empty room",
+    },
+}
+
+
+class RoomSides(Enum):
+    WALL = auto()
+    DOOR_NORTH_SOUTH = auto()
+    DOOR_EAST_WEST = auto()
+    DOOR_LOCKED = auto()
+    DOOR_PERMANENTLY_LOCKED = auto()
+
+
+# Symbols that are placed in the string representation of a room to
+# indicate its contents
+ROOM_SIDE_SYMBOL_KEY = "symbol"
+ROOM_SIDE_DESC_KEY = "description"
+ROOM_SIDE_SYMBOLS = {
+    RoomSides.WALL: {
+        ROOM_SIDE_SYMBOL_KEY: "*",
+        ROOM_SIDE_DESC_KEY: "Wall",
+    },
+    RoomSides.DOOR_NORTH_SOUTH: {
+        ROOM_SIDE_SYMBOL_KEY: "_",
+        ROOM_SIDE_DESC_KEY: "Door",
+    },
+    RoomSides.DOOR_EAST_WEST: {
+        ROOM_SIDE_SYMBOL_KEY: "|",
+        ROOM_SIDE_DESC_KEY: "Door",
+    },
+    RoomSides.DOOR_LOCKED: {
+        ROOM_SIDE_SYMBOL_KEY: "L",
+        ROOM_SIDE_DESC_KEY: "Locked Door",
+    },
+    RoomSides.DOOR_PERMANENTLY_LOCKED: {
+        ROOM_SIDE_SYMBOL_KEY: "P",
+        ROOM_SIDE_DESC_KEY: "Permanently Door",
+    },
 }
 
 

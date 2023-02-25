@@ -132,7 +132,9 @@ class HealingPotion(Potion):
         name and a randomly chosen hit point healing value in the range
         [min_healing_value, _max_healing_value]."""
         super().__init__("Healing")
-        self.healing_value = generate_random_int(min_healing_value, max_healing_value)
+        self.healing_value = generate_random_int(
+            min_healing_value, max_healing_value
+        )
 
     def __lt__(self, other):
         """Define a healing potion to be less than another healing potion if
@@ -150,6 +152,21 @@ class VisionPotion(Potion):
     navigate to a containing room. When consumed, prints all rooms adjacent to
     the current room (horizontally, vertically, and diagonally) to the console,
     up to 8 rooms if the adventurer is in an interior room of the maze."""
+
+    def __init__(self):
+        """Create a vision potion maze item with a nicely formatted name."""
+        super().__init__("Vision")
+
+    def __str__(self):
+        """Return a human-readable string indicating this is a vision
+        potion."""
+        return "VisionPotion"
+
+
+class SuggestionPotion(Potion):
+    """A potion that is automatically picked up by an adventurer when they
+    navigate to a containing room. When held and inside a question-and-answer
+    session, it may be consumed to reveal a hint."""
 
     def __init__(self):
         """Create a vision potion maze item with a nicely formatted name."""
