@@ -305,19 +305,23 @@ class TriviaMaze(TriviaMazeModel):
                     f"{self.__adventurer.hit_points} health remaining."
                 )
                 self.__event_log_buffer.append(HEALTH_USE_STR)
+
         elif item == self.__ITEMS[self.__Items.VISION_POTION]:
             # Use vision potion
             vision_potion = self.__adventurer.consume_vision_potion()
+
             # Get set of adjacent rooms inside maze and add to maze map
             rooms_to_update_in_map = self.__get_adjacent_rooms_in_maze(
                 self.__get_adventurer_room()
             )
             self.__event_log_buffer.append(f"You used a {str(vision_potion)}!")
+
         elif item == self.__ITEMS[self.__Items.MAGIC_KEY]:
             magic_key = self.__adventurer.consume_magic_key()
-            # I don't think there is any way for __direction_attempt to be none at this point
+
             self.__unlock_perm_locked_door()
             self.__event_log_buffer.append(f"You used a {str(magic_key)}!")
+
         self.__notify_observers()
 
     def __unlock_perm_locked_door(self):
