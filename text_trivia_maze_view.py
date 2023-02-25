@@ -8,6 +8,8 @@ from tkinter.ttk import *
 from view_config import (
     DIMENSIONS,
     MESSAGES,
+    ROOM_CONTENT_DESC_KEY,
+    ROOM_CONTENT_SYMBOL_KEY,
     ROOM_CONTENT_SYMBOLS,
     STYLES,
 )
@@ -605,10 +607,16 @@ class TextTriviaMazeView(TriviaMazeView):
     ):
         """Create the widget that can be accessed from the in-game menu to
         display the legend of symbols used in the map."""
+        symbols = []
+        descriptions = []
+        for _, entry in ROOM_CONTENT_SYMBOLS.items():
+            symbols.append(entry[ROOM_CONTENT_SYMBOL_KEY])
+            descriptions.append(entry[ROOM_CONTENT_DESC_KEY])
+
         symbol_overrides = {" ": "<space>"}
         legend_rows = self.__generate_rows_for_multicolumn_display(
-            symbols=ROOM_CONTENT_SYMBOLS.values(),
-            descriptions=ROOM_CONTENT_SYMBOLS.keys(),
+            symbols=symbols,
+            descriptions=descriptions,
             num_cols=num_cols,
             symbol_overrides=symbol_overrides,
         )
