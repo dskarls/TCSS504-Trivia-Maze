@@ -145,13 +145,20 @@ class TriviaMaze(TriviaMazeModel):
             direction the adventurer is trying to move.
         """
         self.__direction_attempt = direction
+
         # first check if door is perm locked
         if self.__is_door_perm_locked(direction):
             # check if they have a key in inventory
             if len(self.__adventurer.get_magic_keys()) < 1:
+                # FIXME: Tell controller to display the NeedMagicKey context
                 return
+
             # value to be returned to the controller
             return "Use magic key"
+
+        # FIXME: Check if door is regular-locked and find a way to get the
+        # relevant QuestionAndAnswer obj to the controller
+
         if self.__can_adventurer_move(direction):
             if direction == Room.NORTH:
                 self.__adventurer_current_row -= 1
@@ -161,6 +168,9 @@ class TriviaMaze(TriviaMazeModel):
                 self.__adventurer_current_col += 1
             elif direction == Room.WEST:
                 self.__adventurer_current_col -= 1
+
+        # FIXME: Have adventurer pick up items and fall in pits
+
         self.__notify_observers()
 
     def __can_adventurer_move(self, direction):
