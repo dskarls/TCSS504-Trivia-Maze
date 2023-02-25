@@ -81,7 +81,6 @@ class TriviaMaze(TriviaMazeModel):
     def __init__(self):
         super().__init__()
         self.__event_log_buffer = []
-        self.__print_instructions()
 
         num_rows, num_col = self.__get_num_rows_and_cols_from_user()
         self.__maze = Maze(num_rows, num_col)
