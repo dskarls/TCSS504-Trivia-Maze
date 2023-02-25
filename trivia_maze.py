@@ -40,9 +40,6 @@ class TriviaMaze(TriviaMazeModel):
     __get_adjacent_rooms_in_maze
         Get a list of all rooms in the maze that are adjacent to the
         adventurer's current room.
-    __get_num_rows_and_cols_from_user
-        Get the number of rows and columns from the user that they want to use
-        to build the maze.
     __apply_pit_damage_to_adventurer
         Apply the damage value of a pit to an adventurer when they step into it.
     move_adventurer
@@ -61,9 +58,6 @@ class TriviaMaze(TriviaMazeModel):
         Returns a tuple of the room's coordinates the adventurer is in.
     """
 
-    __DEFAULT_NUM_ROWS = 3
-    __DEFAULT_NUM_COLS = 3
-
     class __Items(Enum):
         HEALING_POTION = auto()
         VISION_POTION = auto()
@@ -75,12 +69,14 @@ class TriviaMaze(TriviaMazeModel):
         __Items.MAGIC_KEY: "magic key",
     }
 
-    def __init__(self):
+    def __init__(self, num_rows, num_cols):
         super().__init__()
         self.__event_log_buffer = []
 
-        num_rows, num_col = self.__get_num_rows_and_cols_from_user()
-        self.__maze = Maze(num_rows, num_col)
+        self.num_rows = num_rows
+        self.num_cols = num_cols
+
+        self.__maze = Maze(num_rows, num_cols)
 
         self.__adventurer = self.__create_adventurer()
 
@@ -90,32 +86,6 @@ class TriviaMaze(TriviaMazeModel):
         ) = self.__maze.entrance
 
         self.__direction_attempt = None
-
-    def __get_num_rows_and_cols_from_user(self):
-        """Prompt user for desired number of rows and columns. If user skips
-        through dialogue, use default values.
-        Returns
-        -------
-        tuple
-            The number of rows and columns to use to create maze maze.
-        """
-        row_str = input(
-            "Enter the desired number of rows in the maze (default: 3): "
-        )
-        try:
-            num_rows = int(row_str.strip())
-        except ValueError:
-            num_rows = self.__DEFAULT_NUM_ROWS
-
-        col_str = input(
-            "Enter the desired number of columns in the maze (default: 3): "
-        )
-        try:
-            num_columns = int(col_str.strip())
-        except ValueError:
-            num_columns = self.__DEFAULT_NUM_COLS
-
-        return num_rows, num_columns
 
     def __create_adventurer(self):
         """Ask for player name input and return an Adventurer.
@@ -368,11 +338,12 @@ class TriviaMaze(TriviaMazeModel):
             win.
         """
         DIRECTIONS = [Room.NORTH, Room.EAST, Room.SOUTH, Room.WEST]
+        TOTAL_ROOMS = self.__maze.num_rows * self.__maze.num_cols
+
         visited_rooms = []
         invalid_rooms = []
         inaccessible_rooms = self.__get_inaccessible_rooms()
         current_room = self.__get_adventurer_room()
-        TOTAL_ROOMS = self.__maze.num_rows * self.__maze.num_cols
         pillars_found = list(self.__adventurer.get_pillars_found())
 
         while (
