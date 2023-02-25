@@ -1,25 +1,5 @@
 import pytest
 
-from adventurer import Adventurer
-
-
-def test_adventurer_init_valid_name():
-    """Ensure that an adventurer can be created with a valid name"""
-    Adventurer("Indy")  # pylint: disable=expression-not-assigned
-
-
-def test_adventurer_init_invalid_name():
-    """Ensure we can't create an adventurer with an empty name"""
-    try:
-        Adventurer("")
-    except:  # pylint: disable=bare-except
-        # Some kind of exception was raised. Correct behavior.
-        pass
-    else:
-        raise AssertionError(
-            "Shouldn't be able to create an Adventurer with an empty name"
-        )
-
 
 def test_adventurer_set_hit_points(adventurer):
     """Make sure we can successfully add hit points"""

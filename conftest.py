@@ -31,6 +31,7 @@ MAZE_MAX_NUM_COLS = MAZE_MAX_NUM_ROWS
 # How many random maze fixtures to generate with the above parameters
 NUM_MAZES_TO_GENERATE = 10
 
+
 ###############################################################################
 # Helper methods
 ###############################################################################
@@ -142,11 +143,10 @@ def generate_healing_potion_pairs(
 ###############################################################################
 # Fixtures
 ###############################################################################
-@pytest.fixture(params=("Indy", "Indiana", "Han", "Luke", "Bob"))
-def adventurer(request):
-    """An adventurer named with the requested name. Has randomly initialized
-    hit points."""
-    return Adventurer(request.param)
+@pytest.fixture
+def adventurer():
+    """An adventurer with randomly initialized hit points."""
+    return Adventurer()
 
 
 @pytest.fixture(
