@@ -677,14 +677,14 @@ class TextTriviaMazeView(TriviaMazeView):
 
                 rows[row] += entries.popleft()
 
-                if col == num_cols - 1:
-                    # Begin new row
-                    row += 1
-
                 # Pad the bottom row to the right with spaces
                 if not entries:
                     rows[row] = rows[row].ljust(max_width_of_one_row)
                     break
+
+                if col == num_cols - 1:
+                    # Begin new row
+                    row += 1
 
         return rows
 
