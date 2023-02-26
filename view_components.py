@@ -503,7 +503,11 @@ class InGameMenu(PopUpWindow):
         super().__init__(window, width)
 
         # Create header with title in it
-        frm_title = Frame(master=self._frm, width=width)
+        frm_title = Frame(
+            master=self._frm,
+            width=width,
+            relief=RIDGE,
+        )
         frm_title.pack(fill=BOTH, anchor=CENTER)
         lbl = Label(
             master=frm_title,
