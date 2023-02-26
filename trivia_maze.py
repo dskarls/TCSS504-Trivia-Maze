@@ -464,3 +464,10 @@ class TriviaMaze(TriviaMazeModel):
         log_contents = self.__event_log_buffer.copy()
         self.__event_log_buffer.clear()
         return log_contents
+
+    def reset(self):
+        """If the user returns to the main menu after starting a game and then
+        starts a new game, the model should regenerate a new maze and a new
+        adventurer, etc."""
+        # FIXME: Implement this!
+        pass
