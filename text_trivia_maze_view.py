@@ -645,51 +645,80 @@ class TextTriviaMazeView(TriviaMazeView):
         as a giant string. Symbols can be overridden using a dictionary
         parameter."""
         # Separation to place between columns
-        COL_SEP = "   "
+        COL_SEP = "  "
 
-        # Determine longest description and symbol strings
-        symbol_max_len = len(max(symbols, key=len))
-        if symbol_overrides:
-            symbol_max_len = max(
-                symbol_max_len,
-                len(max(symbol_overrides.values(), key=len)),
-            )
-        description_max_len = len(max(descriptions, key=len))
-
-        entries = deque()
-
+        # Initialize 2D array that will contain some number of display rows
+        # (depending on the length of symbols and descriptions), each of which
+        # will contain 2*num_cols entries corresponding to the symbol and
+        # description of each column.
+        rows = []
+        row = -1
+        col = 0
         for symbol, description in zip(symbols, descriptions):
-            # Special handling to account for space character (empty room)
             if symbol in symbol_overrides:
                 symbol = symbol_overrides[symbol]
 
-            entries.append(
-                f"{symbol:>{symbol_max_len}}: {description:<{description_max_len}}"
+            if col == 0:
+                # Begin list for this row
+                rows.append([])
+                row += 1
+
+            rows[row].append([symbol, description])
+
+            col += 1
+
+            if col == num_cols:
+                # Reset column counter
+                col = 0
+
+        # Find the longest symbol string in each symbol subcolumn
+        symbol_max_len_by_col = []
+        description_max_len_by_col = []
+        total_width = 0  # Maximum possible width of a given row of chars
+        for col in range(num_cols):
+            # For this column, assemble all symbols for it by looping over all
+            # of the rows
+            symbols_in_col = []
+            descriptions_in_col = []
+            for row in rows:
+                # If this row doesn't have an entry for all columns, append
+                # empty string entries.
+                if col >= len(row):
+                    symbols_in_col.append("")
+                    descriptions_in_col.append("")
+                else:
+                    symbols_in_col.append(row[col][0])
+                    descriptions_in_col.append(row[col][1])
+                    pass
+
+            symbol_max_len_in_this_col = len(max(symbols_in_col, key=len))
+            description_max_len_in_this_col = len(
+                max(descriptions_in_col, key=len)
+            )
+            description_max_len_by_col.append(description_max_len_in_this_col)
+            symbol_max_len_by_col.append(symbol_max_len_in_this_col)
+
+            total_width += (
+                symbol_max_len_in_this_col + description_max_len_in_this_col
             )
 
-        max_width_of_one_row = num_cols * len(entries[0])
+        row_entries = []
+        for row in rows:
+            row_str = ""
+            for col, (symbol, description) in enumerate(row):
+                row_str += (
+                    f"{symbol:>{symbol_max_len_by_col[col]}}: "
+                    f"{description:<{description_max_len_by_col[col]}}"
+                )
+                if col < len(row) - 1:
+                    row_str += COL_SEP
 
-        rows = []
-        row = 0
-        while entries:
-            # Pop off next element and put in next column
-            for col in range(num_cols):
-                if col == 0:
-                    # Begin string for this row
-                    rows.append("")
+            row_entries.append(row_str)
 
-                rows[row] += COL_SEP + entries.popleft()
+        # Pad the bottom row to the right with spaces
+        row_entries[-1] = row_entries[-1].ljust(total_width)
 
-                # Pad the bottom row to the right with spaces
-                if not entries:
-                    rows[row] = rows[row].ljust(max_width_of_one_row)
-                    break
-
-                if col == num_cols - 1:
-                    # Begin new row
-                    row += 1
-
-        return rows
+        return row_entries
 
     def show_map_legend_menu(self):
         """Show the widget that can be accessed from the in-game menu to
