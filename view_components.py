@@ -183,7 +183,7 @@ class Map(SubWindow):
             justify=CENTER,
             anchor=CENTER,
         )
-        lbl.pack(padx=padx, fill=BOTH)
+        lbl.pack(padx=padx, fill=BOTH, expand=True)
 
     @property
     def contents(self):
