@@ -14,7 +14,7 @@ class TriviaDatabase(ABC):
         Retrieve a random trivia question type, its question, its correct
         answer, and its options.
         :return: a dict containing the keys "qa_type", "category", "question",
-                 "correct_answer", "category", "option_1", "option_2",
+                 "correct_answer", "option_1", "option_2",
                  "option_3", "option_4". See db table docs for meaning of
                  these.
         """
@@ -79,7 +79,7 @@ class SQLiteTriviaDatabase(TriviaDatabase):
         Retrieve a random trivia question type, its question, its correct
         answer, and its options.
         :return: a dict containing the keys "qa_type", "category", "question",
-                 "correct_answer", "category", "option_1", "option_2",
+                 "correct_answer", "option_1", "option_2",
                  "option_3", "option_4". See db table docs for meaning of
                  these.
         """
