@@ -2,6 +2,11 @@ from abc import ABC, abstractmethod
 import random
 
 
+class InvalidQuestionAndAnswerType(ValueError):
+    """An invalid question type was used to try to instantiate a concrete
+    QuestionAndAnswer object."""
+
+
 class QuestionAndAnswer(ABC):
     """Abstract base class representing a question and answer.
 
@@ -148,3 +153,36 @@ class ShortAnswerQA(HintableQuestionAndAnswer):
             if i < num_words - 1:
                 hint += " "
         return hint
+
+
+def question_and_answer_factory(
+    qa_type,
+    category,
+    question,
+    correct_answer,
+    option_1,
+    option_2,
+    option_3,
+    option_4,
+):
+    """
+    Construct an appropriate QuestionAndAnswer object based on strings related
+    to its attributes.
+    """
+    qa_type = qa_type.lower()
+    if qa_type == "true or false":
+        return TrueOrFalseQA(question, correct_answer, category)
+    elif qa_type == "multiple choice":
+        return MultipleChoiceQA(
+            question,
+            correct_answer,
+            category,
+            option_1,
+            option_2,
+            option_3,
+            option_4,
+        )
+    elif qa_type == "short answer":
+        return ShortAnswerQA(question, correct_answer, category, options=None)
+
+    raise InvalidQuestionAndAnswerType("")
