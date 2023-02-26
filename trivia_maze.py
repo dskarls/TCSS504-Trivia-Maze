@@ -81,10 +81,16 @@ class TriviaMaze(TriviaMazeModel):
 
         self.__adventurer = Adventurer()
 
+        # Place adventurer in entrance room
         (
             self.__adventurer_current_row,
             self.__adventurer_current_col,
         ) = self.__maze.entrance
+
+        # Set entrance room as visited
+        self.__maze.rooms[self.__maze.entrance[0]][
+            self.__maze.entrance[1]
+        ].visited = True
 
         self.__direction_attempt = None
 
@@ -121,6 +127,11 @@ class TriviaMaze(TriviaMazeModel):
                 self.__adventurer_current_col += 1
             elif direction == Room.WEST:
                 self.__adventurer_current_col -= 1
+
+        # Mark the new room the adventurer has moved into as visited
+        self.__maze.rooms[self.__adventurer_current_row][
+            self.__adventurer_current_col
+        ].visited = True
 
         # FIXME: Have adventurer pick up items and fall in pits
 
