@@ -689,7 +689,6 @@ class TextTriviaMazeView(TriviaMazeView):
                 else:
                     symbols_in_col.append(row[col][0])
                     descriptions_in_col.append(row[col][1])
-                    pass
 
             symbol_max_len_in_this_col = len(max(symbols_in_col, key=len))
             description_max_len_in_this_col = len(
