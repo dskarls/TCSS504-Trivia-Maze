@@ -1,3 +1,4 @@
+import pathlib
 import random
 
 import pytest
@@ -6,6 +7,7 @@ from adventurer import Adventurer
 from maze import Maze
 from maze_items import HealingPotion
 from room import Room
+from trivia_database import SQLiteTriviaDatabase
 
 # Fix random seed so tests always run the same way
 random.seed(99)
@@ -168,6 +170,12 @@ def healing_potion_pair(request):
     return request.param
 
 
+@pytest.fixture
+def trivia_database():
+    DB_FILE_PATH = pathlib.Path("db") / "Lone_Rangers_QA_DB.csv"
+    return SQLiteTriviaDatabase(DB_FILE_PATH)
+
+
 @pytest.fixture(
     params=get_random_maze_shape(
         MAZE_MIN_NUM_ROWS,
@@ -177,10 +185,10 @@ def healing_potion_pair(request):
         NUM_MAZES_TO_GENERATE,
     )
 )
-def maze(request):
+def maze(trivia_database, request):
     """A (randomly constructed) maze of the specified size"""
     num_rows, num_cols = request.param
-    return Maze(num_rows, num_cols)
+    return Maze(num_rows, num_cols, trivia_database)
 
 
 @pytest.fixture
