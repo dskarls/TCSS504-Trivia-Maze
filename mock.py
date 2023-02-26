@@ -56,6 +56,9 @@ class TextTriviaMazeModel:
     def flush_question_and_answer_buffer(self):
         return self.__question_and_answer_buffer.pop()
 
+    def flush_event_log_buffer(self):
+        pass
+
     def inform_user_answer_correct_or_incorrect(self, answer_was_correct):
         pass
 
