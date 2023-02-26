@@ -106,7 +106,9 @@ class MazeMap:
     def update_room(self, room):
         """
         Updates the character rows and columns for a room in the map using
-        using its string representation.
+        using its string representation. If the room has been visited already,
+        it will be added to the map; if not, its all-spaces placeholder will
+        remain in place.
 
         Parameters
         ----------
@@ -115,8 +117,9 @@ class MazeMap:
             coordinates in maze, as well as a str representation.
         """
         # Go to element in room strings corresponding to this room
-        room_row, room_col = room.coords
-        self.__room_strings[room_row][room_col] = self.__get_room_str(room)
+        if room.visited:
+            room_row, room_col = room.coords
+            self.__room_strings[room_row][room_col] = self.__get_room_str(room)
 
     def __get_room_symbol(self, room):
         """
