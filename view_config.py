@@ -12,12 +12,11 @@ DIMENSIONS = {
     "hp_gauge_bar": {"width": int(0.7 * 250), "padx": 5, "pady": 15},
     "event_log": {"height": 10, "padx": 3, "pady": 5},
     "in_game_menu": {"width": 400},
-    "in_game_menu_title": {"pady": 5},
+    "in_game_menu_title": {"padx": 10, "pady": 10},
     "inventory": {"padx": 10, "pady": 8},
     "inventory_title": {"ipady": 10},
     "pillars": {"padx": 10, "pady": 8},
     "pillars_title": {"ipady": 10},
-
     # Dismissible popups
     "main_help_menu": {"ipadx": 10, "ipady": 8},
     "map_legend_menu": {"ipadx": 30, "ipady": 10},

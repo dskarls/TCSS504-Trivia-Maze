@@ -498,7 +498,7 @@ class InGameMenu(PopUpWindow):
     primary interface.
     """
 
-    def __init__(self, window, width, title, pady, menu_options):
+    def __init__(self, window, width, title, padx, pady, menu_options):
         # Create the frame for the whole in-game menu
         super().__init__(window, width)
 
@@ -511,7 +511,7 @@ class InGameMenu(PopUpWindow):
             justify=CENTER,
             anchor=CENTER,
         )
-        lbl.pack(fill=BOTH, pady=pady)
+        lbl.pack(fill=BOTH, padx=padx, pady=pady)
 
         self.__text_menu = TextMenu(
             options=menu_options,

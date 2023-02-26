@@ -339,6 +339,7 @@ class TextTriviaMazeView(TriviaMazeView):
             self.__window,
             DIMENSIONS["in_game_menu"]["width"],
             "In-Game Menu",
+            DIMENSIONS["in_game_menu_title"]["padx"],
             DIMENSIONS["in_game_menu_title"]["pady"],
             options,
         )
