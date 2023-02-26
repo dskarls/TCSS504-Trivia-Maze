@@ -1,10 +1,16 @@
+import pathlib
 from trivia_maze import TriviaMaze
 from text_trivia_maze_controller import TextTriviaMazeController
 
 if __name__ == "__main__":
+    # Dimensions of maze
     NUM_ROWS = 5
     NUM_COLS = 7
-    maze_model = TriviaMaze(NUM_ROWS, NUM_COLS)
+
+    # The file containing the raw data used to initialize the database
+    DB_FILE_PATH = pathlib.Path("db") / "Lone_Rangers_QA_DB.csv"
+
+    maze_model = TriviaMaze(NUM_ROWS, NUM_COLS, DB_FILE_PATH)
 
     # NOTE: The controller will create a view object internally
     maze_controller = TextTriviaMazeController(maze_model)

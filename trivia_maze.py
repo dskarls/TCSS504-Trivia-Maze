@@ -4,6 +4,7 @@ from adventurer import Adventurer
 from maze import Maze
 from room import Room
 from trivia_maze_model import TriviaMazeModel
+from trivia_database import SQLiteTriviaDatabase
 
 
 class TriviaMaze(TriviaMazeModel):
@@ -67,7 +68,7 @@ class TriviaMaze(TriviaMazeModel):
         __Items.MAGIC_KEY: "magic key",
     }
 
-    def __init__(self, num_rows, num_cols):
+    def __init__(self, num_rows, num_cols, db_file_path):
         super().__init__()
         self.__event_log_buffer = []
 
@@ -76,6 +77,7 @@ class TriviaMaze(TriviaMazeModel):
 
         self.__maze = Maze(num_rows, num_cols)
 
+        self.__db = SQLiteTriviaDatabase(db_file_path)
         self.__adventurer = Adventurer()
 
         (
