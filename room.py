@@ -44,6 +44,9 @@ class Room:
         Whether the adventurer occupies this room.
     coords : tuple of int
         The coordinates of the room, i.e. (row, col).
+    visited : bool
+        Whether the adventurer has been in or is currently in this room. Should
+        be set to True by the caller.
     __entrance : bool
         Whether the room is an entrance.
     __exit : bool
@@ -122,6 +125,8 @@ class Room:
 
         # Set coords attr to specified row/col
         self.coords = (row, col)
+
+        self.visited = False
 
         # Initialize all sides to be walls (rather than doors)
         self.__east_side = self.WALL
