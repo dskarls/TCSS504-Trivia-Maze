@@ -170,12 +170,12 @@ class SuggestionPotion(Potion):
 
     def __init__(self):
         """Create a vision potion maze item with a nicely formatted name."""
-        super().__init__("Vision")
+        super().__init__("Suggestion")
 
     def __str__(self):
         """Return a human-readable string indicating this is a vision
         potion."""
-        return "VisionPotion"
+        return "SuggestionPotion"
 
 
 class Pit:
