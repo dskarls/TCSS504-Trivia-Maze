@@ -17,10 +17,11 @@ DIMENSIONS = {
     "inventory_title": {"ipady": 10},
     "pillars": {"padx": 10, "pady": 8},
     "pillars_title": {"ipady": 10},
+
     # Dismissible popups
     "main_help_menu": {"ipadx": 10, "ipady": 8},
-    "map_legend_menu": {"ipadx": 10, "ipady": 10},
-    "command_legend_menu": {"ipadx": 10, "ipady": 10},
+    "map_legend_menu": {"ipadx": 30, "ipady": 10},
+    "command_legend_menu": {"ipadx": 30, "ipady": 10},
     "need_magic_key_menu": {"ipadx": 10, "ipady": 10},
     "game_won_menu": {"ipadx": 10, "ipady": 10},
     "game_lost_menu": {"ipadx": 10, "ipady": 10},
