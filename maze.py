@@ -16,7 +16,7 @@ from maze_items import (
     VisionPotion,
     MagicKey,
 )
-
+from question_and_answer import question_and_answer_factory
 from room import Room
 from util import generate_random_int, randomly_choose_between_two_outcomes
 
@@ -232,6 +232,10 @@ class Maze:
             PillarOfOOP: 0,
             MagicKey: 0,
         }
+
+        # Keep track of which questions we've attached to doors to avoid
+        # repetition
+        self.__used_question_and_answer_hashes = set({})
 
         self.build_maze(trivia_db)
 
@@ -604,11 +608,31 @@ class Maze:
             previous_room_side = Room.WEST
             this_room_side = Room.EAST
 
-        question_and_answer = trivia_db.get_question()
+        question_and_answer = self.__get_new_question_and_answer_from_db(
+            trivia_db
+        )
+
         previous_room.set_side(
             previous_room_side, Room.DOOR, question_and_answer
         )
         this_room.set_side(this_room_side, Room.DOOR)
+
+    def __get_new_question_and_answer_from_db(self, trivia_db):
+        """Get a new random question from the database and make sure we haven't
+        already used it."""
+        # FIXME: This could, in principle, run forever if we have exhausted the
+        # database. Should check to see if the number of doors we've generated
+        # is still less than the number of questions in the database...or just
+        # allow repetition at that point.
+        question_and_answer_info = trivia_db.get_question()
+        qa_obj = question_and_answer_factory(**question_and_answer_info)
+
+        while hash(qa_obj) in self.__used_question_and_answer_hashes:
+            question_and_answer_info = trivia_db.get_question()
+            qa_obj = question_and_answer_factory(**question_and_answer_info)
+        self.__used_question_and_answer_hashes.add(hash(qa_obj))
+
+        return qa_obj
 
     def __set_room_sides_to_doors_during_random_depth_first_traversal(
         self, row, col, previous_room, cumulative_visited, trivia_db
