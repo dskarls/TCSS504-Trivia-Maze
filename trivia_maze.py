@@ -75,9 +75,10 @@ class TriviaMaze(TriviaMazeModel):
         self.num_rows = num_rows
         self.num_cols = num_cols
 
-        self.__maze = Maze(num_rows, num_cols)
-
         self.__db = SQLiteTriviaDatabase(db_file_path)
+
+        self.__maze = Maze(num_rows, num_cols, self.__db)
+
         self.__adventurer = Adventurer()
 
         (

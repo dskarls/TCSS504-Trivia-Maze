@@ -231,7 +231,7 @@ class Room:
                 f"'{self.WEST}', or '{self.SOUTH}'."
             )
 
-    def set_side(self, direction, door_or_wall, locked=False):
+    def set_side(self, direction, door_or_wall, question_and_answer=None):
         """
         Set one side of a room ("east", "north", "west", or "south") to be
         either a Door object or a wall.
@@ -243,8 +243,8 @@ class Room:
             "north", "west", or "south".
         door_or_wall : str
             What to set the side of the room as. Options are "door" or "wall".
-        locked : bool
-            Sets lock state when placing a Door.
+        question_and_answer : QuestionAndAnswer
+            Only used if ``door_or_wall``==Room.DOOR. Sets lock state when placing a Door.
         """
         door_or_wall = door_or_wall.lower()
         if door_or_wall not in {self.DOOR, self.WALL}:
@@ -254,7 +254,7 @@ class Room:
             )
 
         if door_or_wall == self.DOOR:
-            door_or_wall = Door(locked)
+            door_or_wall = Door(question_and_answer)
 
         direction = direction.lower()
         if direction == self.EAST:
