@@ -11,7 +11,11 @@ class QuestionAndAnswer:
 
 
 class TextTriviaMazeModel:
-    def __init__(self):
+    def __init__(self, num_rows, num_cols, db_file_path):
+        self.num_rows = num_rows
+        self.num_cols = num_cols
+        self.db_file_path = db_file_path
+
         self.__observers = []
 
         self.__question_and_answer_buffer = []
