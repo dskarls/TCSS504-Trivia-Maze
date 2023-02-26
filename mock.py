@@ -39,6 +39,9 @@ class TextTriviaMazeModel:
     def get_adventurer_hp(self):
         pass
 
+    def get_adventurer_coords(self):
+        pass
+
     def move_adventurer(self, direction):
         self.__notify_observers()
 
