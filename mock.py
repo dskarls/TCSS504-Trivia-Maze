@@ -59,6 +59,9 @@ class TextTriviaMazeModel:
     def inform_user_answer_correct_or_incorrect(self, answer_was_correct):
         pass
 
+    def get_game_status(self):
+        pass
+
     def __notify_observers(self):
         for observer in self.__observers:
             observer.update()
