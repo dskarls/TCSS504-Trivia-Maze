@@ -1,3 +1,8 @@
+import pathlib
+from maze import Maze
+from trivia_database import SQLiteTriviaDatabase
+
+
 class QuestionAndAnswer:
     def __init__(self, question, question_type, hint, options, answer):
         self.question = question
@@ -14,8 +19,10 @@ class TextTriviaMazeModel:
     def __init__(self, num_rows, num_cols, db_file_path):
         self.num_rows = num_rows
         self.num_cols = num_cols
-        self.db_file_path = db_file_path
 
+        self.__db = SQLiteTriviaDatabase(db_file_path)
+
+        self.__maze = Maze(num_rows, num_cols, self.__db)
         self.__observers = []
 
         self.__question_and_answer_buffer = []
@@ -38,7 +45,7 @@ class TextTriviaMazeModel:
         pass
 
     def get_rooms(self):
-        pass
+        return self.__maze.rooms
 
     def get_adventurer_hp(self):
         pass
