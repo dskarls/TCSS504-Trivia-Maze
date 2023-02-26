@@ -4,6 +4,7 @@ import textwrap
 
 from tkinter import *
 from tkinter.ttk import *
+from maze_map import MazeMap
 
 from view_config import (
     DIMENSIONS,
@@ -76,10 +77,6 @@ class TriviaMazeView(TriviaMazeModelObserver):
     def pose_question_and_get_answer(self, question_and_answer):
         """Show the user a question-and-answer pop-up and retrieve the answer,
         then hide the pop-up."""
-
-    @abstractmethod
-    def update_map(self):
-        """Update the map according to the latest state of the Model."""
 
     @abstractmethod
     def update_hp_gauge(self):
@@ -170,6 +167,15 @@ class TextTriviaMazeView(TriviaMazeView):
             self.__pillars_inventory,
         ) = self.__create_side_bar()
         self.__event_log = self.__create_event_log()
+
+        # Create a MazeMap object that can be used to generate map context
+        self.__maze_map = MazeMap(
+            self._maze_model.num_rows,
+            self._maze_model.num_cols,
+            3,
+            padding_col="  ",
+        )
+        self.__update_map()
 
         # Add separator lines to divide UI cleanly
         # NOTE: The separators need to be created after the primary interface
@@ -519,26 +525,13 @@ class TextTriviaMazeView(TriviaMazeView):
             "",
         )
 
-    def update_map(self):
-        # FIXME: Grab the Rooms objects from the model here
-        MAP_EXAMPLE = """
-        *  *  **  *  **  *  **  *  **  *  **  *  **  *  *
-        *  P  ||     ||     ||     ||  I  **@ i  **     *
-        *  -  **  *  **  *  **  *  **  -  **  -  **  -  *
-        *  -  **  *  **  *  **  *  **  -  **  -  **  -  *
-        *  X  ||  V  ||  X  **  V  ||     **     ||     *
-        *  *  **  *  **  -  **  -  **  -  **  *  **  -  *
-        *  *  **  *  **  -  **  -  **  -  **  *  **  -  *
-        *  H  ||  M  **  H  **  O  **     ||  H  **     *
-        *  -  **  *  **  -  **  -  **  *  **  *  **  -  *
-        *  -  **  *  **  -  **  -  **  *  **  *  **  -  *
-        *  A  ||     **     **     **     ||  H  **     *
-        *  -  **  -  **  -  **  -  **  -  **  -  **  -  *
-        *  -  **  -  **  -  **  -  **  -  **  -  **  -  *
-        *     **     ||  H  **     ||     **  H  ||  H  *
-        *  *  **  *  **  *  **  *  **  *  **  *  **  *  *
-        """
-        self.__map.contents = textwrap.dedent(MAP_EXAMPLE)
+    def __update_map(self):
+        """Update the contents of the map by looping over all rooms in the maze
+        and redrawing them."""
+        for room_row in self._maze_model.get_rooms():
+            for room in room_row:
+                self.__maze_map.update_room(room)
+        self.__map.contents = str(self.__maze_map)
 
     def __create_side_bar(self):
         """Create the sidebar frame that holds the hp gauge, inventory, and
@@ -799,8 +792,13 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__event_log.write(message)
 
     def update(self):
-        # FIXME: Implement this
-        pass
+        # Update map
+        self.__update_map()
+
+        # FIXME: Update HP gauge
+        # FIXME: Update inventory
+        # FIXME: Update pillar inventory
+        # FIXME: Write
 
     def pose_question_and_get_answer(self):
         # FIXME: Implement this
