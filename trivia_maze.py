@@ -448,6 +448,7 @@ class TriviaMaze(TriviaMazeModel):
         return log_contents
 
     def flush_question_and_answer_buffer(self):
+        """If a question is in the Q&A buffer, remove and return it."""
         if self.__question_and_answer_buffer:
             return self.__question_and_answer_buffer.pop()
 
