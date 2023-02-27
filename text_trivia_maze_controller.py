@@ -426,7 +426,7 @@ class PrimaryInterfaceCommandContext(CommandContext):
 
                 elif self._maze_model.move_adventurer("west") == "Need magic key":
                     self._maze_controller.set_active_context("need_magic_key")
-
+                    self._maze_view.show_need_magic_key_menu()
             elif (
                 key == self.COMMANDS[self.Command.MOVE_EAST][_COMMAND_KEY_KEY]
             ):
@@ -435,6 +435,7 @@ class PrimaryInterfaceCommandContext(CommandContext):
 
                 elif self._maze_model.move_adventurer("east") == "Need magic key":
                     self._maze_controller.set_active_context("need_magic_key")
+                    self._maze_view.show_need_magic_key_menu()
             elif (
                 key == self.COMMANDS[self.Command.MOVE_NORTH][_COMMAND_KEY_KEY]
             ):
@@ -443,6 +444,7 @@ class PrimaryInterfaceCommandContext(CommandContext):
 
                 elif self._maze_model.move_adventurer("north") == "Need magic key":
                     self._maze_controller.set_active_context("need_magic_key")
+                    self._maze_view.show_need_magic_key_menu()
             elif (
                 key == self.COMMANDS[self.Command.MOVE_SOUTH][_COMMAND_KEY_KEY]
             ):
@@ -450,6 +452,7 @@ class PrimaryInterfaceCommandContext(CommandContext):
                     self._maze_controller.set_active_context("magic_key")
                 elif self._maze_model.move_adventurer("south") == "Need magic key":
                     self._maze_controller.set_active_context("need_magic_key")
+                    self._maze_view.show_need_magic_key_menu()
 
 
 class QuestionAndAnswerCommandContext(CommandContext):
