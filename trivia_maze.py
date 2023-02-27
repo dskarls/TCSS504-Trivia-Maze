@@ -115,10 +115,7 @@ class TriviaMaze(TriviaMazeModel):
 
         elif door_or_wall.perm_locked:
             if len(self.__adventurer.get_magic_keys()) < 1:
-                # FIXME: Tell controller to display the NeedMagicKey context
                 return "Need magic key"
-
-            # value to be returned to the controller
             return "Use magic key"
 
         elif door_or_wall.locked:
@@ -258,7 +255,7 @@ class TriviaMaze(TriviaMazeModel):
             magic_key = self.__adventurer.consume_magic_key()
 
             self.__unlock_perm_locked_door()
-            # TODO: Move adventurer into correct room after unlocking door
+            self.move_adventurer(self.__direction_attempt)
             self.__event_log_buffer.append(f"You used a {str(magic_key)}!")
 
         self.__notify_observers()
