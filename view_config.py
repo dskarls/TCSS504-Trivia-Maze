@@ -87,6 +87,7 @@ MESSAGES = {
     "game_won_menu": __YOU_WIN_MESSAGE,
     "game_lost_menu": __YOU_DIED_MESSAGE,
     "need_magic_key_menu": "This door is permanently locked. To open it, find a magic key!",
+    "use_magic_key_menu": "This door is permanently locked. To open it, use a magic key."
 }
 
 

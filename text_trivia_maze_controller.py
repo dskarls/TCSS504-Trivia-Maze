@@ -426,6 +426,7 @@ class PrimaryInterfaceCommandContext(CommandContext):
 
                 elif self._maze_model.move_adventurer("west") == "Need magic key":
                     self._maze_controller.set_active_context("need_magic_key")
+
             elif (
                 key == self.COMMANDS[self.Command.MOVE_EAST][_COMMAND_KEY_KEY]
             ):

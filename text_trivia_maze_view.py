@@ -435,6 +435,34 @@ class TextTriviaMazeView(TriviaMazeView):
         unlock a permanently locked door."""
         self.__need_magic_key_menu.hide()
 
+    def __create_use_magic_key_menu(self):
+        """Create the widget for when the player tries to pass through a
+        permanently locked door and holds a magic key. It asks them if they
+        would like to use a magic key or not."""
+        dismiss_message = (
+            f"Press 'y' to use a magic key if not press 'n'"
+        )
+        return DismissiblePopUp(
+            self.__window,
+            None,
+            textwrap.dedent(MESSAGES["use_magic_key_menu"]),
+            dismiss_message,
+            DIMENSIONS["use_magic_key_menu"]["ipadx"],
+            DIMENSIONS["use_magic_key_menu"]["ipady"],
+            STYLES["dismiss_text"]["style"],
+            STYLES["dismiss_bottom_label"]["style"],
+        )
+
+    def show_use_magic_key_menu(self):
+        """Show the widget that tells the player they can use a magic key to
+        unlock a permanently locked door."""
+        self.__use_magic_key_menu.show()
+
+    def hide_use_magic_key_menu(self):
+        """Hide the widget that tells the player they can use a magic key to
+        unlock a permanently locked door."""
+        self.__use_magic_key_menu.hide()
+
     def __create_game_won_menu(self):
         """Create the widget telling the player they won the game."""
         dismiss_message = (
