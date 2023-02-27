@@ -423,7 +423,7 @@ class PrimaryInterfaceCommandContext(CommandContext):
             if key == self.COMMANDS[self.Command.MOVE_WEST][_COMMAND_KEY_KEY]:
                 if self._maze_model.move_adventurer("west") == "Use magic key":
                     self._maze_controller.set_active_context("magic_key")
-
+                    self._maze_view.show_magic_key_menu()
                 elif self._maze_model.move_adventurer("west") == "Need magic key":
                     self._maze_controller.set_active_context("need_magic_key")
                     self._maze_view.show_need_magic_key_menu()
@@ -432,7 +432,7 @@ class PrimaryInterfaceCommandContext(CommandContext):
             ):
                 if self._maze_model.move_adventurer("east") == "Use magic key":
                     self._maze_controller.set_active_context("magic_key")
-
+                    self._maze_view.show_magic_key_menu()
                 elif self._maze_model.move_adventurer("east") == "Need magic key":
                     self._maze_controller.set_active_context("need_magic_key")
                     self._maze_view.show_need_magic_key_menu()
@@ -441,7 +441,7 @@ class PrimaryInterfaceCommandContext(CommandContext):
             ):
                 if self._maze_model.move_adventurer("north") == "Use magic key":
                     self._maze_controller.set_active_context("magic_key")
-
+                    self._maze_view.show_magic_key_menu()
                 elif self._maze_model.move_adventurer("north") == "Need magic key":
                     self._maze_controller.set_active_context("need_magic_key")
                     self._maze_view.show_need_magic_key_menu()
@@ -450,6 +450,7 @@ class PrimaryInterfaceCommandContext(CommandContext):
             ):
                 if self._maze_model.move_adventurer("south") == "Use magic key":
                     self._maze_controller.set_active_context("magic_key")
+                    self._maze_view.show_magic_key_menu()
                 elif self._maze_model.move_adventurer("south") == "Need magic key":
                     self._maze_controller.set_active_context("need_magic_key")
                     self._maze_view.show_need_magic_key_menu()
