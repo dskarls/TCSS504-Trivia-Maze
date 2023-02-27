@@ -375,7 +375,7 @@ class TriviaMaze(TriviaMazeModel):
             else:
                 # no other possible paths forward
                 return False
-        # check if the room is the exit and all pillars have been found
+        # check if the exit and all pillars have been found
         if exit_found and len(pillars_found) == 4:
             return True
         # if all rooms have been considered no possible path to victory
