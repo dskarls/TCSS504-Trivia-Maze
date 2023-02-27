@@ -451,8 +451,8 @@ class TextTriviaMazeView(TriviaMazeView):
             None,
             textwrap.dedent(MESSAGES["use_magic_key_menu"]),
             dismiss_message,
-            DIMENSIONS["use_magic_key_menu"]["ipadx"],
-            DIMENSIONS["use_magic_key_menu"]["ipady"],
+            DIMENSIONS["magic_key_menu"]["ipadx"],
+            DIMENSIONS["magic_key_menu"]["ipady"],
             STYLES["dismiss_text"]["style"],
             STYLES["dismiss_bottom_label"]["style"],
         )
