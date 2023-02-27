@@ -192,6 +192,10 @@ class TextTriviaMazeView(TriviaMazeView):
         # Create dialog for needing magic key
         self.__need_magic_key_menu = self.__create_need_magic_key_menu()
         self.hide_need_magic_key_menu()
+        
+        # Create dialog for using magic key
+        self.__use_magic_key_menu = self.__create_use_magic_key_menu()
+        self.hide_use_magic_key_menu()
 
         # Set up in-game menu
         self.__in_game_menu = self.__create_in_game_menu()
