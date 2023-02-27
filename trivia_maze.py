@@ -263,23 +263,42 @@ class TriviaMaze(TriviaMazeModel):
         self.__notify_observers()
 
     def __unlock_perm_locked_door(self):
-        """Unlocks a permanently locked trivia door in the room
-        the adventurer is attempting to move out.
+        """Unlocks a permanently locked trivia door in the room the adventurer
+        is in along the direction they tried to move. This should be called if
+        the player used a magic key.
         """
         current_room = self.__get_adventurer_room()
         current_room.get_side(self.__direction_attempt).perm_locked = False
 
-    def __unlock_trivia_door(self, current_room, direction):
-        """Unlocks a locked trivia door in the room the adventurer
-        is attempting to move out.
-        Parameters
-        ----------
-        current_room : Room
-            Room the adventurer is currently in.
-        direction : str
-            Direction (N,E,S,W) the adventurer is trying to go.
+    def __unlock_trivia_door(self):
+        """Unlocks a locked trivia door in the room the adventurer is in along
+        the direction they tried to move. This should be called if they answer
+        a Q&A correctly.
         """
-        current_room.get_side(direction).locked = False
+        current_room = self.__get_adventurer_room()
+        current_room.get_side(self.__direction_attempt).locked = False
+
+    def __perm_lock_trivia_door(self):
+        """Permanently locks a trivia door in the room the adventurer is in
+        along the direction they tried to move. This should be called if they
+        answer a Q&A incorrectly.
+        """
+        current_room = self.__get_adventurer_room()
+        current_room.get_side(self.__direction_attempt).perm_locked = True
+
+    def inform_player_answer_correct_or_incorrect(self, answer_was_correct):
+        """Informs the model whether the player's response to the latest
+        question pulled from the Q&A buffer was correct or not. If it was,
+        unlock the relevant door and move the adventurer into the room on the
+        other side of the door. If not, permanently lock that door."""
+        if answer_was_correct:
+            # Unlock the relevant door
+            self.__unlock_trivia_door()
+
+            # Move adventurer
+            self.move_adventurer(self.__direction_attempt)
+        else:
+            self.__perm_lock_trivia_door()
 
     def get_adventurer_hp(self):
         """Returns the adventurer's current hit points"""
