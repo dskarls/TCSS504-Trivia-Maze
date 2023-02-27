@@ -71,6 +71,7 @@ class TriviaMaze(TriviaMazeModel):
     def __init__(self, num_rows, num_cols, db_file_path):
         super().__init__()
         self.__event_log_buffer = []
+        self.__question_and_answer_buffer = []
 
         self.num_rows = num_rows
         self.num_cols = num_cols
@@ -96,8 +97,10 @@ class TriviaMaze(TriviaMazeModel):
 
     def move_adventurer(self, direction):
         """
-        Given a directional command will attempt to move the adventurer that direction
-        if the move is legal (not a wall, not a locked/perm locked door).
+        Given a directional command will attempt to move the adventurer that
+        direction if the move is legal (not a wall, not a locked/perm locked
+        door).
+
         Parameters
         ----------
         direction : str
@@ -105,9 +108,12 @@ class TriviaMaze(TriviaMazeModel):
         """
         self.__direction_attempt = direction
 
-        # first check if door is perm locked
-        if self.__is_door_perm_locked(direction):
-            # check if they have a key in inventory
+        door_or_wall = self.__get_adventurer_room().get_side(direction)
+
+        if door_or_wall == Room.WALL:
+            return
+
+        elif door_or_wall.perm_locked:
             if len(self.__adventurer.get_magic_keys()) < 1:
                 # FIXME: Tell controller to display the NeedMagicKey context
                 return
@@ -115,10 +121,16 @@ class TriviaMaze(TriviaMazeModel):
             # value to be returned to the controller
             return "Use magic key"
 
-        # FIXME: Check if door is regular-locked and find a way to get the
-        # relevant QuestionAndAnswer obj to the controller
+        elif door_or_wall.locked:
+            # Door is not permanently locked, but is locked by a question and
+            # answer. Put it in the question and buffer.
+            self.__question_and_answer_buffer.append(
+                door_or_wall.question_and_answer
+            )
 
-        if self.__can_adventurer_move(direction):
+        else:
+            # Passable door -- either wasn't locked to begin with or was
+            # unlocked with a correct response to a question and answer
             if direction == Room.NORTH:
                 self.__adventurer_current_row -= 1
             elif direction == Room.SOUTH:
@@ -128,54 +140,14 @@ class TriviaMaze(TriviaMazeModel):
             elif direction == Room.WEST:
                 self.__adventurer_current_col -= 1
 
-        # Mark the new room the adventurer has moved into as visited
-        self.__maze.rooms[self.__adventurer_current_row][
-            self.__adventurer_current_col
-        ].visited = True
+            # Mark the new room the adventurer has moved into as visited
+            self.__maze.rooms[self.__adventurer_current_row][
+                self.__adventurer_current_col
+            ].visited = True
 
-        # FIXME: Have adventurer pick up items and fall in pits
+            # FIXME: Have adventurer pick up items and fall in pits
 
         self.__notify_observers()
-
-    def __can_adventurer_move(self, direction):
-        """
-        Checks if the adventurer can move in a given direction.
-        Parameters
-        ----------
-        direction : str
-            Direction (N,E,S,W) the adventurer is trying to go.
-        Returns
-        -------
-        bool
-            Returns False if the adventurer is blocked from moving to another room.
-            Returns True if the adventurer can move from one room to next.
-        """
-        current_room = self.__get_adventurer_room()
-        if current_room.get_side(direction) == Room.WALL:
-            return False
-        elif not current_room.get_side(direction).locked:
-            return True
-        # If not attempting to walk through a wall, an open door, or perm lock door
-        # ask a question and allow walk through by unlocking door if answer is "correct"
-        else:
-            print("This door is locked. Answer a trivia question.")
-            answer = input("Question?")
-            # place holder to allow the setting of perm_locked doors
-            if answer == "a":
-                self.__unlock_trivia_door(
-                    self.__get_adventurer_room(), direction
-                )
-                self.__event_log_buffer.append(
-                    "Answered trivia question correctly."
-                )
-                return True
-            else:
-                current_room.get_side(direction).perm_locked = True
-            return False
-
-    def __is_door_perm_locked(self, direction):
-        current_room = self.__get_adventurer_room()
-        return current_room.get_side(direction).perm_locked
 
     def __get_adventurer_room(self):
         """Returns the room the adventurer is currently in the maze."""
@@ -475,6 +447,10 @@ class TriviaMaze(TriviaMazeModel):
         log_contents = self.__event_log_buffer.copy()
         self.__event_log_buffer.clear()
         return log_contents
+
+    def flush_question_and_answer_buffer(self):
+        if self.__question_and_answer_buffer:
+            return self.__question_and_answer_buffer.pop()
 
     def reset(self):
         """If the user returns to the main menu after starting a game and then

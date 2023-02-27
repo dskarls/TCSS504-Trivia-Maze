@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum, auto
+from question_and_answer import HintableQuestionAndAnswer
 
 from text_trivia_maze_view import TextTriviaMazeView
 
@@ -124,22 +125,29 @@ class TextTriviaMazeController(TriviaMazeController):
     def update(self):
         # FIXME: Implement what should happen here when model changes
 
-        # FIXME: Remove this. Debug content for making Q&A widgets
-        question_and_answer = (
-            self._maze_model.flush_question_and_answer_buffer()
-        )
-        if question_and_answer:
-            self.__maze_view.set_question(
-                question_and_answer.question,
-                question_and_answer.options,
-                question_and_answer.hint,
-            )
-            self.__maze_view.show_question_and_answer_menu()
-            self.set_active_context("question_and_answer")
+        self.__process_question_and_answer_buffer()
 
         # game_status = self._maze_model.get_game_status()
         # if game_status == "lose":
         # elif game_status == "win":
+
+    def __process_question_and_answer_buffer(self):
+        question_and_answer = (
+            self._maze_model.flush_question_and_answer_buffer()
+        )
+        if question_and_answer:
+            hint = None
+            if isinstance(question_and_answer, HintableQuestionAndAnswer):
+                hint = question_and_answer.get_hint()
+
+            if question_and_answer:
+                self.__maze_view.set_question(
+                    question_and_answer.question,
+                    question_and_answer.options,
+                    hint,
+                )
+                self.__maze_view.show_question_and_answer_menu()
+                self.set_active_context("question_and_answer")
 
 
 class CommandContext(ABC):
