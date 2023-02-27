@@ -192,10 +192,10 @@ class TextTriviaMazeView(TriviaMazeView):
         # Create dialog for needing magic key
         self.__need_magic_key_menu = self.__create_need_magic_key_menu()
         self.hide_need_magic_key_menu()
-        
+
         # Create dialog for using magic key
-        self.__use_magic_key_menu = self.__create_use_magic_key_menu()
-        self.hide_use_magic_key_menu()
+        self.__magic_key_menu = self.__create_magic_key_menu()
+        self.hide_magic_key_menu()
 
         # Set up in-game menu
         self.__in_game_menu = self.__create_in_game_menu()
@@ -439,7 +439,7 @@ class TextTriviaMazeView(TriviaMazeView):
         unlock a permanently locked door."""
         self.__need_magic_key_menu.hide()
 
-    def __create_use_magic_key_menu(self):
+    def __create_magic_key_menu(self):
         """Create the widget for when the player tries to pass through a
         permanently locked door and holds a magic key. It asks them if they
         would like to use a magic key or not."""
@@ -457,15 +457,15 @@ class TextTriviaMazeView(TriviaMazeView):
             STYLES["dismiss_bottom_label"]["style"],
         )
 
-    def show_use_magic_key_menu(self):
+    def show_magic_key_menu(self):
         """Show the widget that tells the player they can use a magic key to
         unlock a permanently locked door."""
-        self.__use_magic_key_menu.show()
+        self.__magic_key_menu.show()
 
-    def hide_use_magic_key_menu(self):
+    def hide_magic_key_menu(self):
         """Hide the widget that tells the player they can use a magic key to
         unlock a permanently locked door."""
-        self.__use_magic_key_menu.hide()
+        self.__magic_key_menu.hide()
 
     def __create_game_won_menu(self):
         """Create the widget telling the player they won the game."""

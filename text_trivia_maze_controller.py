@@ -514,7 +514,7 @@ class MagicKeyCommandContext(CommandContext):
         Command.DISMISS: {
             _COMMAND_TYPE: _COMMAND_TYPE_OTHER,
             _COMMAND_DESC_KEY: "Dismiss",
-            _COMMAND_KEY_KEY: "Return",
+            _COMMAND_KEY_KEY: "n",
         },
     }
 
