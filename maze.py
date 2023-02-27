@@ -170,6 +170,7 @@ class Maze:
     __HEALING_POTION_PROBABILITY = 0.15
     __VISION_POTION_PROBABILITY = 0.15
     __MAGIC_KEY_PROBABILITY = 0.05
+    __LOCKED_DOOR_PROBABILITY = 0.5
 
     # Min and max amount that a healing potion can restore to hit points
     __MIN_HEALING_POTION_VALUE = 5
@@ -437,7 +438,7 @@ class Maze:
 
                 # Roll to see if we should place a pillar here
                 if pillars_to_place:
-                    if self.__roll_to_place_item_or_pit(
+                    if self.__roll_to_place_item_or_pit_or_door(
                         self.__PILLAR_PROBABILITY
                     ):
                         self.__unfound_items_counter[PillarOfOOP] += 1
@@ -445,7 +446,7 @@ class Maze:
                         placed_potion_pillar_or_key = True
 
                 # Roll to see if we should place a healing potion
-                if self.__roll_to_place_item_or_pit(
+                if self.__roll_to_place_item_or_pit_or_door(
                     self.__HEALING_POTION_PROBABILITY
                 ):
                     this_room.place_item(
@@ -458,7 +459,7 @@ class Maze:
                     placed_potion_pillar_or_key = True
 
                 # Roll to see if we should place a vision potion
-                if self.__roll_to_place_item_or_pit(
+                if self.__roll_to_place_item_or_pit_or_door(
                     self.__VISION_POTION_PROBABILITY
                 ):
                     this_room.place_item(VisionPotion())
@@ -466,7 +467,7 @@ class Maze:
                     placed_potion_pillar_or_key = True
 
                 # Roll to see if we should place a magic key
-                if self.__roll_to_place_item_or_pit(
+                if self.__roll_to_place_item_or_pit_or_door(
                     self.__MAGIC_KEY_PROBABILITY
                 ):
                     this_room.place_item(MagicKey())
@@ -476,7 +477,7 @@ class Maze:
                 # If we did not place a pillar or potion, roll to see if we
                 # should place a pit.
                 if not placed_potion_pillar_or_key:
-                    if self.__roll_to_place_item_or_pit(
+                    if self.__roll_to_place_item_or_pit_or_door(
                         self.__PIT_PROBABILITY
                     ):
                         this_room.set_pit(
@@ -516,17 +517,17 @@ class Maze:
                         continue
 
                     # Roll to see if we should place a pillar here
-                    if self.__roll_to_place_item_or_pit(
+                    if self.__roll_to_place_item_or_pit_or_door(
                         self.__PILLAR_PROBABILITY
                     ):
                         this_room.place_item(pillars_to_place.pop())
                         self.__unfound_items_counter[PillarOfOOP] += 1
 
     @staticmethod
-    def __roll_to_place_item_or_pit(placement_probability):
-        """Decide whether to place an item or not by doing a random sampling
-        using its placement probability. Return True if the item should be
-        placed or False if it should not.
+    def __roll_to_place_item_or_pit_or_door(placement_probability):
+        """Decide whether to place an item/pit/door or not by doing a random
+        sampling using its placement probability. Return True if the item
+        should be placed or False if it should not.
 
         Parameters
         ----------
@@ -608,9 +609,17 @@ class Maze:
             previous_room_side = Room.WEST
             this_room_side = Room.EAST
 
-        question_and_answer = self.__get_new_question_and_answer_from_db(
-            trivia_db
-        )
+        # Assume we will create an unlocked door
+        question_and_answer = None
+
+        if self.__roll_to_place_item_or_pit_or_door(
+            self.__LOCKED_DOOR_PROBABILITY
+        ):
+            # If we rolled to create a locked door, create a question and
+            # answer. Creating a Door with it will make the door locked.
+            question_and_answer = self.__get_new_question_and_answer_from_db(
+                trivia_db
+            )
 
         previous_room.set_side(
             previous_room_side, Room.DOOR, question_and_answer

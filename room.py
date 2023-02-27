@@ -259,6 +259,8 @@ class Room:
             )
 
         if door_or_wall == self.DOOR:
+            # If `question_and_answer` is None, put an unlocked door.
+            # Otherwise, lock the door with the given question-and-answer.
             door_or_wall = Door(question_and_answer)
 
         direction = direction.lower()
