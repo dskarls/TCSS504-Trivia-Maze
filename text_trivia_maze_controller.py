@@ -421,19 +421,34 @@ class PrimaryInterfaceCommandContext(CommandContext):
         else:
             # Movement commands
             if key == self.COMMANDS[self.Command.MOVE_WEST][_COMMAND_KEY_KEY]:
-                self._maze_model.move_adventurer("west")
+                if self._maze_model.move_adventurer("west") == "Use magic key":
+                    self._maze_controller.set_active_context("magic_key")
+
+                elif self._maze_model.move_adventurer("west") == "Need magic key":
+                    self._maze_controller.set_active_context("need_magic_key")
             elif (
                 key == self.COMMANDS[self.Command.MOVE_EAST][_COMMAND_KEY_KEY]
             ):
-                self._maze_model.move_adventurer("east")
+                if self._maze_model.move_adventurer("east") == "Use magic key":
+                    self._maze_controller.set_active_context("magic_key")
+
+                elif self._maze_model.move_adventurer("east") == "Need magic key":
+                    self._maze_controller.set_active_context("need_magic_key")
             elif (
                 key == self.COMMANDS[self.Command.MOVE_NORTH][_COMMAND_KEY_KEY]
             ):
-                self._maze_model.move_adventurer("north")
+                if self._maze_model.move_adventurer("north") == "Use magic key":
+                    self._maze_controller.set_active_context("magic_key")
+
+                elif self._maze_model.move_adventurer("north") == "Need magic key":
+                    self._maze_controller.set_active_context("need_magic_key")
             elif (
                 key == self.COMMANDS[self.Command.MOVE_SOUTH][_COMMAND_KEY_KEY]
             ):
-                self._maze_model.move_adventurer("south")
+                if self._maze_model.move_adventurer("south") == "Use magic key":
+                    self._maze_controller.set_active_context("magic_key")
+                elif self._maze_model.move_adventurer("south") == "Need magic key":
+                    self._maze_controller.set_active_context("need_magic_key")
 
 
 class QuestionAndAnswerCommandContext(CommandContext):
@@ -507,8 +522,6 @@ class MagicKeyCommandContext(CommandContext):
             # magic key. If not, then it should actually instead display a
             # different widget (a dismissible context) telling the user that
             # they need to find a magic key to unlock the door.
-
-            # TODO: Make sure the model unlocks the correct door somehow
 
             self._maze_controller.set_active_context("primary_interface")
             self._maze_view.hide_magic_key_menu()
