@@ -436,6 +436,8 @@ class TriviaMaze(TriviaMazeModel):
         return False
 
     def register_observer(self, observer):
+        """Add a TriviaMazeModelObserver object to the registered list of
+        observers tracked by the model."""
         self._maze_observers.append(observer)
 
     def __notify_observers(self):
@@ -443,6 +445,8 @@ class TriviaMaze(TriviaMazeModel):
             observer.update()
 
     def get_event_log_buffer_contents(self):
+        """If there are any entries in the event log buffer, remove and return
+        them."""
         log_contents = self.__event_log_buffer.copy()
         self.__event_log_buffer.clear()
         return log_contents
