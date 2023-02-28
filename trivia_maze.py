@@ -308,38 +308,24 @@ class TriviaMaze(TriviaMazeModel):
         """Returns a tuple of the adventurer's current coordinates in the maze."""
         return self.__adventurer_current_row, self.__adventurer_current_col
     
-    def game_win(self):
+    def game_status(self):
         """
-        Checks if the win conditions have been met. Adventurer has to have collected
-        all 4 pillars of OOP and be in the exit room.
+        Checks if the win or loss conditions have been met. If adventurer has to collected
+        all 4 pillars of OOP and be in the exit room they will win. They lose if the adventurer's 
+        hit points reach 0 or have no possible way to reach exit with all four pillars of OOP.
         
         Returns
         -------
-        bool
-            Returns true if the game has reached win conditions, false otherwise.
+        str
+            'win' if the win conditions have been met and 'lose' if loss conditions are met.
         """
         adv_room = self.get_adventurer_room()
-        return adv_room.is_exit() and self.__adventurer.get_pillars_found() == 4:
-
-    def game_loss(self):
-        """
-        Checks the loss conditions of the Trivia Maze game. The player will lose if
-        there is no way to get all 4 OO pillars and the exit or if they adventurer 
-        reaches 0 hit points.
-        
-        Returns
-        -------
-        bool
-            Returns true if the game has reached the conditions to end, false otherwise.
-        """
-        
-        # no path possible to win
-        if not self.__open_path_check():
-            # can return some special str for controller if we want different end game messages
-            return True
-        if self.__adventurer.hit_points == 0:
-            return True
-        return False
+        # reached exit with all pillars. Win!
+        if adv_room.is_exit() and self.__adventurer.get_pillars_found() == 4:
+            return "win"
+        # no path possible to win or no more hit points
+        if not self.__open_path_check() or self.__adventurer.hit_points == 0:
+            return "lose"
     
     def __open_path_check(self):
         """
