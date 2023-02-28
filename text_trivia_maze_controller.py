@@ -134,7 +134,7 @@ class TextTriviaMazeController(TriviaMazeController):
         # FIXME: Implement what should happen here when model changes
         # Model update calls
         game_status = self._maze_model.game_status()
-        if game_status not None:
+        if game_status:
             if game_status == "lose":
                 self.__maze_view.show_game_lost_menu()
                 self.set_active_context("game_lost_menu")
