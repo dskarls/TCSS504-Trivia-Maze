@@ -438,7 +438,8 @@ class PrimaryInterfaceCommandContext(CommandContext):
             if direction:
                 # key was a movement command
                 directive = self._maze_model.move_adventurer(direction)
-                directive = directive.lower()
+                directive = directive.lower() if directive else None
+
                 if directive == "use magic key":
                     self._maze_controller.set_active_context("magic_key")
                     self._maze_view.show_magic_key_menu()
