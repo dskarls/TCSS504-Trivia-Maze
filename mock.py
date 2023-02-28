@@ -1,4 +1,3 @@
-import pathlib
 from maze import Maze
 from trivia_database import SQLiteTriviaDatabase
 
