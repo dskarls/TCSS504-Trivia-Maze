@@ -15,7 +15,7 @@ class QuestionAndAnswer:
         return user_answer.lower() == self.__answer.lower()
 
 
-class TextTriviaMazeModel:
+class TriviaMaze:
     def __init__(self, num_rows, num_cols, db_file_path):
         self.num_rows = num_rows
         self.num_cols = num_cols
