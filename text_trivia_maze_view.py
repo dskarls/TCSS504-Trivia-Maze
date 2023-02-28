@@ -444,9 +444,7 @@ class TextTriviaMazeView(TriviaMazeView):
         """Create the widget for when the player tries to pass through a
         permanently locked door and holds a magic key. It asks them if they
         would like to use a magic key or not."""
-        dismiss_message = (
-            f"Press 'y' to use a magic key if not press 'n'"
-        )
+        dismiss_message = f"Press 'y' to use a magic key if not press 'n'"
         return DismissiblePopUp(
             self.__window,
             None,
@@ -689,6 +687,7 @@ class TextTriviaMazeView(TriviaMazeView):
         parameter."""
         # Separation to place between columns
         COL_SEP = "  "
+        SYMBOL_DESC_SEP = ": "
 
         # Initialize 2D array that will contain some number of display rows
         # (depending on the length of symbols and descriptions), each of which
@@ -717,7 +716,10 @@ class TextTriviaMazeView(TriviaMazeView):
         # Find the longest symbol string in each symbol subcolumn
         symbol_max_len_by_col = []
         description_max_len_by_col = []
-        total_width = 0  # Maximum possible width of a given row of chars
+
+        # Maximum possible width of a given row of chars
+        total_width = len(COL_SEP) * (num_cols - 1)
+
         for col in range(num_cols):
             # For this column, assemble all symbols for it by looping over all
             # of the rows
@@ -741,7 +743,9 @@ class TextTriviaMazeView(TriviaMazeView):
             symbol_max_len_by_col.append(symbol_max_len_in_this_col)
 
             total_width += (
-                symbol_max_len_in_this_col + description_max_len_in_this_col
+                symbol_max_len_in_this_col
+                + len(SYMBOL_DESC_SEP)
+                + description_max_len_in_this_col
             )
 
         row_entries = []
@@ -749,7 +753,7 @@ class TextTriviaMazeView(TriviaMazeView):
             row_str = ""
             for col, (symbol, description) in enumerate(row):
                 row_str += (
-                    f"{symbol:>{symbol_max_len_by_col[col]}}: "
+                    f"{symbol:>{symbol_max_len_by_col[col]}}{SYMBOL_DESC_SEP}"
                     f"{description:<{description_max_len_by_col[col]}}"
                 )
                 if col < len(row) - 1:
