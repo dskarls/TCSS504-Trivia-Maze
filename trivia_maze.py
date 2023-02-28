@@ -148,7 +148,7 @@ class TriviaMaze(TriviaMazeModel):
             
             # pit damage
             if adventurer_room.get_pit() is not None:
-                self.__adventurer.hit_points -= adventurer_room.get_pit().damage_value
+                self.__apply_pit_damage_to_adventurer(adventurer_room.get_pit())
 
         self.__notify_observers()
 
