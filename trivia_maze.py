@@ -138,11 +138,17 @@ class TriviaMaze(TriviaMazeModel):
                 self.__adventurer_current_col -= 1
 
             # Mark the new room the adventurer has moved into as visited
-            self.__maze.rooms[self.__adventurer_current_row][
-                self.__adventurer_current_col
-            ].visited = True
+            adventurer_room = self.__get_adventurer_room()
+            adventurer_room.visited = True
 
-            # FIXME: Have adventurer pick up items and fall in pits
+            # pick up and remove all items from room
+            items_in_room =  adventurer_room.remove_items()
+            for item in items_in_room
+                self.__adventurer.pick_up_item(item)
+            
+            # pit damage
+            if adventurer_room.get_pit() is not None:
+                self.__adventurer.hit_points -= adventurer_room.get_pit().damage_value
 
         self.__notify_observers()
 
