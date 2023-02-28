@@ -333,11 +333,11 @@ class TriviaMaze(TriviaMazeModel):
         if adv_room.is_exit() and len(self.__adventurer.get_pillars_found()) == 4:
             return "win"
         # no path possible to win or no more hit points
-        if not self.__open_path_check() or self.__adventurer.hit_points == 0:
+        if not self.__adventurer_can_navigate_maze_to_win() or self.__adventurer.hit_points == 0:
             return "lose"
         return None
     
-    def __open_path_check(self):
+    def __adventurer_can_navigate_maze_to_win(self):
         """
         Checks to see if there is a traversable path from the adventurer's current
         location to the exit. Adventurer can still win if within their possible
