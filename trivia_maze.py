@@ -298,6 +298,8 @@ class TriviaMaze(TriviaMazeModel):
         else:
             self.__perm_lock_trivia_door()
 
+        self.__notify_observers()
+
     def get_adventurer_hp(self):
         """Returns the adventurer's current hit points"""
         return self.__adventurer.hit_points
