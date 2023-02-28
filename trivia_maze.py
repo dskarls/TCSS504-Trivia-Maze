@@ -330,7 +330,7 @@ class TriviaMaze(TriviaMazeModel):
         """
         adv_room = self.get_adventurer_room()
         # reached exit with all pillars. Win!
-        if adv_room.is_exit() and self.__adventurer.get_pillars_found() == 4:
+        if adv_room.is_exit() and len(self.__adventurer.get_pillars_found()) == 4:
             return "win"
         # no path possible to win or no more hit points
         if not self.__open_path_check() or self.__adventurer.hit_points == 0:
