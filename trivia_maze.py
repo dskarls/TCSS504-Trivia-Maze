@@ -318,6 +318,7 @@ class TriviaMaze(TriviaMazeModel):
         -------
         str
             'win' if the win conditions have been met and 'lose' if loss conditions are met.
+            Empty string if neither conditions are met.
         """
         adv_room = self.get_adventurer_room()
         # reached exit with all pillars. Win!
@@ -326,6 +327,7 @@ class TriviaMaze(TriviaMazeModel):
         # no path possible to win or no more hit points
         if not self.__open_path_check() or self.__adventurer.hit_points == 0:
             return "lose"
+        return ""
     
     def __open_path_check(self):
         """
