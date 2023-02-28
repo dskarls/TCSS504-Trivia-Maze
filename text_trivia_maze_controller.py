@@ -132,7 +132,14 @@ class TextTriviaMazeController(TriviaMazeController):
 
     def update(self):
         # FIXME: Implement what should happen here when model changes
-
+        # Model update calls
+        game_status = self._maze_model.game_status()
+        if game_status == "lose":
+            self._maze_view.show_game_lost_menu()
+            self.set_active_context("game_lost_menu")
+        elif game_status == "win":
+            self._maze_view.show_game_won_menu()
+            self.set_active_context("game_won_menu")
         self.__process_question_and_answer_buffer()
 
         # game_status = self._maze_model.get_game_status()
