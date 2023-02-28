@@ -517,10 +517,8 @@ class TriviaMaze(TriviaMazeModel):
         #Clears buffer data and creates new Maze and adv obj
         self.__event_log_buffer.clear()
         self.__question_and_answer_buffer.clear()
-        new_maze = Maze(self.num_rows, self.num_cols, self.__db)
-        new_adv = Adventurer()
-        self.__maze = new_maze
-        self.__adventurer = new_adv
+        self.__maze = Maze(self.num_rows, self.num_cols, self.__db)
+        self.__adventurer = Adventurer()
         # place adv into entrance room in new maze
         (
             self.__adventurer_current_row,
