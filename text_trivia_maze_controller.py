@@ -53,9 +53,17 @@ class TextTriviaMazeController(TriviaMazeController):
                 DismissibleCommandContext.Command.DISMISS
             ][_COMMAND_KEY_KEY],
         )
+        # Create view and do initial configuration based on recognized keystrokes
         self.__maze_view = TextTriviaMazeView(
             maze_model, self, "Trivia Maze", dismiss_keys
         )
+        in_game_menu_key = PrimaryInterfaceCommandContext.COMMANDS[
+            PrimaryInterfaceCommandContext.Command.SHOW_IN_GAME_MENU
+        ][_COMMAND_KEY_KEY]
+        self.__maze_view.populate_menu_access_label(
+            f"Press <{in_game_menu_key}> to access the in-game menu"
+        )
+
         self._maze_model.register_observer(self.__maze_view)
 
         # Initialize command interpretation contexts

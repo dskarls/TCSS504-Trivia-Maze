@@ -17,6 +17,7 @@ DIMENSIONS = {
     "inventory_title": {"ipady": 10},
     "pillars": {"padx": 10, "pady": 8},
     "pillars_title": {"ipady": 10},
+    "menu_access_label": {"ipadx": 25, "ipady": 10},
     # Dismissible popups
     "main_help_menu": {"ipadx": 10, "ipady": 8},
     "map_legend_menu": {"ipadx": 30, "ipady": 10},
@@ -245,6 +246,10 @@ STYLES = {
     "pillars_item": {
         "style": "pillars_item.TLabel",
         "font": ("Arial", 15, "bold"),
+    },
+    "menu_access_label": {
+        "style": "menu_access_label.TLabel",
+        "font": ("Arial", 13, "bold"),
     },
     # Dismissible popups
     "dismiss_text": {

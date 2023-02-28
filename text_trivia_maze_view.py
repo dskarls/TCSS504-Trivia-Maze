@@ -164,6 +164,7 @@ class TextTriviaMazeView(TriviaMazeView):
             self.__hp_gauge,
             self.__inventory,
             self.__pillars_inventory,
+            self.__menu_access_label,
         ) = self.__create_side_bar()
         self.__event_log = self.__create_event_log()
 
@@ -592,7 +593,24 @@ class TextTriviaMazeView(TriviaMazeView):
             item_labels=pillars_item_labels,
         )
 
-        return hp_gauge, inventory, pillars_inventory
+        menu_access_label = Label(
+            master=side_bar.frame,
+            text="",
+            justify=CENTER,
+            anchor=CENTER,
+            style=STYLES["menu_access_label"]["style"],
+        )
+        menu_access_label.pack(
+            side=BOTTOM,
+            ipadx=DIMENSIONS["menu_access_label"]["ipadx"],
+            ipady=DIMENSIONS["menu_access_label"]["ipady"],
+        )
+        return hp_gauge, inventory, pillars_inventory, menu_access_label
+
+    def populate_menu_access_label(self, text):
+        """Fills in the content of the help message at the bottom of the side
+        bar."""
+        self.__menu_access_label.configure(text=text)
 
     def __create_map_legend_menu(
         self,
