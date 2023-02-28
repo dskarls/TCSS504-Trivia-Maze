@@ -143,7 +143,7 @@ class TriviaMaze(TriviaMazeModel):
 
             # pick up and remove all items from room
             items_in_room =  adventurer_room.remove_items()
-            for item in items_in_room
+            for item in items_in_room:
                 self.__adventurer.pick_up_item(item)
                 ITEM_ADDED = f"You picked up {item}."
                 self.__event_log_buffer.append(ITEM_ADDED)
