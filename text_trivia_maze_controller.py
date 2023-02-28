@@ -411,28 +411,37 @@ class PrimaryInterfaceCommandContext(CommandContext):
     def process_keystroke(self, key):
         # Non-movement commands
         if (
-                key
-                == self.COMMANDS[self.Command.SHOW_IN_GAME_MENU][_COMMAND_KEY_KEY]
+            key
+            == self.COMMANDS[self.Command.SHOW_IN_GAME_MENU][_COMMAND_KEY_KEY]
         ):
             self._maze_view.show_in_game_menu()
             self._maze_controller.set_active_context("in_game_menu")
         elif (
-                key
-                == self.COMMANDS[self.Command.USE_HEALING_POTION][_COMMAND_KEY_KEY]
+            key
+            == self.COMMANDS[self.Command.USE_HEALING_POTION][_COMMAND_KEY_KEY]
         ):
             self._maze_model.use_item("healing potion")
         elif (
-                key
-                == self.COMMANDS[self.Command.USE_VISION_POTION][_COMMAND_KEY_KEY]
+            key
+            == self.COMMANDS[self.Command.USE_VISION_POTION][_COMMAND_KEY_KEY]
         ):
             self._maze_model.use_item("vision potion")
         else:
             # Movement commands
-            KEY_TO_DIRECTION = {self.COMMANDS[self.Command.MOVE_WEST][_COMMAND_KEY_KEY]: "west",
-                                self.COMMANDS[self.Command.MOVE_EAST][_COMMAND_KEY_KEY]: "east",
-                                self.COMMANDS[self.Command.MOVE_NORTH][_COMMAND_KEY_KEY]: "north",
-                                self.COMMANDS[self.Command.MOVE_SOUTH][_COMMAND_KEY_KEY]: "south",
-                                }
+            KEY_TO_DIRECTION = {
+                self.COMMANDS[self.Command.MOVE_WEST][
+                    _COMMAND_KEY_KEY
+                ]: "west",
+                self.COMMANDS[self.Command.MOVE_EAST][
+                    _COMMAND_KEY_KEY
+                ]: "east",
+                self.COMMANDS[self.Command.MOVE_NORTH][
+                    _COMMAND_KEY_KEY
+                ]: "north",
+                self.COMMANDS[self.Command.MOVE_SOUTH][
+                    _COMMAND_KEY_KEY
+                ]: "south",
+            }
             direction = KEY_TO_DIRECTION.get(key)
 
             if direction:
