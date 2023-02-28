@@ -335,7 +335,7 @@ class TriviaMaze(TriviaMazeModel):
         # no path possible to win or no more hit points
         if not self.__open_path_check() or self.__adventurer.hit_points == 0:
             return "lose"
-        return ""
+        return None
     
     def __open_path_check(self):
         """
