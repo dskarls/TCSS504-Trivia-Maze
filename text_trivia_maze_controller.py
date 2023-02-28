@@ -411,37 +411,40 @@ class PrimaryInterfaceCommandContext(CommandContext):
     def process_keystroke(self, key):
         # Non-movement commands
         if (
-            key
-            == self.COMMANDS[self.Command.SHOW_IN_GAME_MENU][_COMMAND_KEY_KEY]
+                key
+                == self.COMMANDS[self.Command.SHOW_IN_GAME_MENU][_COMMAND_KEY_KEY]
         ):
             self._maze_view.show_in_game_menu()
             self._maze_controller.set_active_context("in_game_menu")
         elif (
-            key
-            == self.COMMANDS[self.Command.USE_HEALING_POTION][_COMMAND_KEY_KEY]
+                key
+                == self.COMMANDS[self.Command.USE_HEALING_POTION][_COMMAND_KEY_KEY]
         ):
             self._maze_model.use_item("healing potion")
         elif (
-            key
-            == self.COMMANDS[self.Command.USE_VISION_POTION][_COMMAND_KEY_KEY]
+                key
+                == self.COMMANDS[self.Command.USE_VISION_POTION][_COMMAND_KEY_KEY]
         ):
             self._maze_model.use_item("vision potion")
         else:
             # Movement commands
-            if key == self.COMMANDS[self.Command.MOVE_WEST][_COMMAND_KEY_KEY]:
-                self._maze_model.move_adventurer("west")
-            elif (
-                key == self.COMMANDS[self.Command.MOVE_EAST][_COMMAND_KEY_KEY]
-            ):
-                self._maze_model.move_adventurer("east")
-            elif (
-                key == self.COMMANDS[self.Command.MOVE_NORTH][_COMMAND_KEY_KEY]
-            ):
-                self._maze_model.move_adventurer("north")
-            elif (
-                key == self.COMMANDS[self.Command.MOVE_SOUTH][_COMMAND_KEY_KEY]
-            ):
-                self._maze_model.move_adventurer("south")
+            KEY_TO_DIRECTION = {self.COMMANDS[self.Command.MOVE_WEST][_COMMAND_KEY_KEY]: "west",
+                                self.COMMANDS[self.Command.MOVE_EAST][_COMMAND_KEY_KEY]: "east",
+                                self.COMMANDS[self.Command.MOVE_NORTH][_COMMAND_KEY_KEY]: "north",
+                                self.COMMANDS[self.Command.MOVE_SOUTH][_COMMAND_KEY_KEY]: "south",
+                                }
+            direction = KEY_TO_DIRECTION.get(key)
+
+            if direction:
+                # key was a movement command
+                directive = self._maze_model.move_adventurer(direction)
+                directive = directive.lower()
+                if directive == "use magic key":
+                    self._maze_controller.set_active_context("magic_key")
+                    self._maze_view.show_magic_key_menu()
+                elif directive == "need magic key":
+                    self._maze_controller.set_active_context("need_magic_key")
+                    self._maze_view.show_need_magic_key_menu()
 
 
 class QuestionAndAnswerCommandContext(CommandContext):
@@ -503,7 +506,7 @@ class MagicKeyCommandContext(CommandContext):
         Command.DISMISS: {
             _COMMAND_TYPE: _COMMAND_TYPE_OTHER,
             _COMMAND_DESC_KEY: "Dismiss",
-            _COMMAND_KEY_KEY: "Return",
+            _COMMAND_KEY_KEY: "n",
         },
     }
 
@@ -515,8 +518,6 @@ class MagicKeyCommandContext(CommandContext):
             # magic key. If not, then it should actually instead display a
             # different widget (a dismissible context) telling the user that
             # they need to find a magic key to unlock the door.
-
-            # TODO: Make sure the model unlocks the correct door somehow
 
             self._maze_controller.set_active_context("primary_interface")
             self._maze_view.hide_magic_key_menu()

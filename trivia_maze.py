@@ -115,10 +115,7 @@ class TriviaMaze(TriviaMazeModel):
 
         elif door_or_wall.perm_locked:
             if len(self.__adventurer.get_magic_keys()) < 1:
-                # FIXME: Tell controller to display the NeedMagicKey context
-                return
-
-            # value to be returned to the controller
+                return "Need magic key"
             return "Use magic key"
 
         elif door_or_wall.locked:
@@ -258,6 +255,7 @@ class TriviaMaze(TriviaMazeModel):
             magic_key = self.__adventurer.consume_magic_key()
 
             self.__unlock_perm_locked_door()
+            self.move_adventurer(self.__direction_attempt)
             self.__event_log_buffer.append(f"You used a {str(magic_key)}!")
 
         self.__notify_observers()
@@ -329,12 +327,16 @@ class TriviaMaze(TriviaMazeModel):
         inaccessible_rooms = self.__get_inaccessible_rooms()
         current_room = self.__get_adventurer_room()
         pillars_found = list(self.__adventurer.get_pillars_found())
+        exit_found = False
 
         while (
             len(visited_rooms) + len(invalid_rooms) + len(inaccessible_rooms)
             < TOTAL_ROOMS
         ):
             moved_to_new_room = False
+            # check if we have moved into the exit room
+            if current_room.is_exit():
+                exit_found = True
             # check if the room has a key
             if current_room.contains_magic_key():
                 return True
@@ -342,9 +344,7 @@ class TriviaMaze(TriviaMazeModel):
             if current_room.contains_pillar():
                 # add pillar to found list
                 pillars_found.append(current_room.get_pillar())
-            # check if the room is the exit and all pillars have been found
-            if current_room.is_exit() and len(pillars_found) == 4:
-                return True
+
             # check if adv has locked themselves in a room
             if self.__get_adventurer_room() in inaccessible_rooms:
                 return False
@@ -375,6 +375,9 @@ class TriviaMaze(TriviaMazeModel):
             else:
                 # no other possible paths forward
                 return False
+        # check if the exit and all pillars have been found
+        if exit_found and len(pillars_found) == 4:
+            return True
         # if all rooms have been considered no possible path to victory
         return False
 

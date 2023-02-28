@@ -194,6 +194,10 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__need_magic_key_menu = self.__create_need_magic_key_menu()
         self.hide_need_magic_key_menu()
 
+        # Create dialog for using magic key
+        self.__magic_key_menu = self.__create_magic_key_menu()
+        self.hide_magic_key_menu()
+
         # Set up in-game menu
         self.__in_game_menu = self.__create_in_game_menu()
         self.hide_in_game_menu()
@@ -435,6 +439,34 @@ class TextTriviaMazeView(TriviaMazeView):
         """Hide the widget that tells the player they need a magic key to
         unlock a permanently locked door."""
         self.__need_magic_key_menu.hide()
+
+    def __create_magic_key_menu(self):
+        """Create the widget for when the player tries to pass through a
+        permanently locked door and holds a magic key. It asks them if they
+        would like to use a magic key or not."""
+        dismiss_message = (
+            f"Press 'y' to use a magic key if not press 'n'"
+        )
+        return DismissiblePopUp(
+            self.__window,
+            None,
+            textwrap.dedent(MESSAGES["use_magic_key_menu"]),
+            dismiss_message,
+            DIMENSIONS["magic_key_menu"]["ipadx"],
+            DIMENSIONS["magic_key_menu"]["ipady"],
+            STYLES["dismiss_text"]["style"],
+            STYLES["dismiss_bottom_label"]["style"],
+        )
+
+    def show_magic_key_menu(self):
+        """Show the widget that tells the player they can use a magic key to
+        unlock a permanently locked door."""
+        self.__magic_key_menu.show()
+
+    def hide_magic_key_menu(self):
+        """Hide the widget that tells the player they can use a magic key to
+        unlock a permanently locked door."""
+        self.__magic_key_menu.hide()
 
     def __create_game_won_menu(self):
         """Create the widget telling the player they won the game."""
