@@ -119,7 +119,7 @@ class Room:
         """
         self.__exit = False
         self.__entrance = False
-        self.__pit = False
+        self.__pit = None
         self.__items = []
         self.occupied_by_adventurer = False
 
