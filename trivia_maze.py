@@ -513,5 +513,22 @@ class TriviaMaze(TriviaMazeModel):
         """If the user returns to the main menu after starting a game and then
         starts a new game, the model should regenerate a new maze and a new
         adventurer, etc."""
-        # FIXME: Implement this!
-        pass
+        
+        #Clears buffer data and creates new Maze and adv obj
+        self.__event_log_buffer.clear()
+        self.__question_and_answer_buffer.clear()
+        new_maze = Maze(num_rows, num_cols, self.__db)) 
+        new_adv = Adventurer()
+        self.__maze = new_maze
+        self.__adventurer = new_adv
+        # place adv into entrance room in new maze
+        (
+            self.__adventurer_current_row,
+            self.__adventurer_current_col,
+        ) = self.__maze.entrance
+
+        self.__maze.rooms[self.__maze.entrance[0]][
+            self.__maze.entrance[1]
+        ].visited = True
+        # reset direction attempt
+        self.__direction_attempt = None
