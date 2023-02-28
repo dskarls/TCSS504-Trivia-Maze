@@ -403,55 +403,38 @@ class PrimaryInterfaceCommandContext(CommandContext):
     def process_keystroke(self, key):
         # Non-movement commands
         if (
-            key
-            == self.COMMANDS[self.Command.SHOW_IN_GAME_MENU][_COMMAND_KEY_KEY]
+                key
+                == self.COMMANDS[self.Command.SHOW_IN_GAME_MENU][_COMMAND_KEY_KEY]
         ):
             self._maze_view.show_in_game_menu()
             self._maze_controller.set_active_context("in_game_menu")
         elif (
-            key
-            == self.COMMANDS[self.Command.USE_HEALING_POTION][_COMMAND_KEY_KEY]
+                key
+                == self.COMMANDS[self.Command.USE_HEALING_POTION][_COMMAND_KEY_KEY]
         ):
             self._maze_model.use_item("healing potion")
         elif (
-            key
-            == self.COMMANDS[self.Command.USE_VISION_POTION][_COMMAND_KEY_KEY]
+                key
+                == self.COMMANDS[self.Command.USE_VISION_POTION][_COMMAND_KEY_KEY]
         ):
             self._maze_model.use_item("vision potion")
         else:
             # Movement commands
-            if key == self.COMMANDS[self.Command.MOVE_WEST][_COMMAND_KEY_KEY]:
-                if self._maze_model.move_adventurer("west") == "Use magic key":
+            KEY_TO_DIRECTION = {self.COMMANDS[self.Command.MOVE_WEST][_COMMAND_KEY_KEY]: "west",
+                                self.COMMANDS[self.Command.MOVE_EAST][_COMMAND_KEY_KEY]: "east",
+                                self.COMMANDS[self.Command.MOVE_NORTH][_COMMAND_KEY_KEY]: "north",
+                                self.COMMANDS[self.Command.MOVE_SOUTH][_COMMAND_KEY_KEY]: "south",
+                                }
+            direction = KEY_TO_DIRECTION.get(key)
+
+            if direction:
+                # key was a movement command
+                directive = self._maze_model.move_adventurer(direction)
+                directive = directive.lower()
+                if directive == "use magic key":
                     self._maze_controller.set_active_context("magic_key")
                     self._maze_view.show_magic_key_menu()
-                elif self._maze_model.move_adventurer("west") == "Need magic key":
-                    self._maze_controller.set_active_context("need_magic_key")
-                    self._maze_view.show_need_magic_key_menu()
-            elif (
-                key == self.COMMANDS[self.Command.MOVE_EAST][_COMMAND_KEY_KEY]
-            ):
-                if self._maze_model.move_adventurer("east") == "Use magic key":
-                    self._maze_controller.set_active_context("magic_key")
-                    self._maze_view.show_magic_key_menu()
-                elif self._maze_model.move_adventurer("east") == "Need magic key":
-                    self._maze_controller.set_active_context("need_magic_key")
-                    self._maze_view.show_need_magic_key_menu()
-            elif (
-                key == self.COMMANDS[self.Command.MOVE_NORTH][_COMMAND_KEY_KEY]
-            ):
-                if self._maze_model.move_adventurer("north") == "Use magic key":
-                    self._maze_controller.set_active_context("magic_key")
-                    self._maze_view.show_magic_key_menu()
-                elif self._maze_model.move_adventurer("north") == "Need magic key":
-                    self._maze_controller.set_active_context("need_magic_key")
-                    self._maze_view.show_need_magic_key_menu()
-            elif (
-                key == self.COMMANDS[self.Command.MOVE_SOUTH][_COMMAND_KEY_KEY]
-            ):
-                if self._maze_model.move_adventurer("south") == "Use magic key":
-                    self._maze_controller.set_active_context("magic_key")
-                    self._maze_view.show_magic_key_menu()
-                elif self._maze_model.move_adventurer("south") == "Need magic key":
+                elif directive == "need magic key":
                     self._maze_controller.set_active_context("need_magic_key")
                     self._maze_view.show_need_magic_key_menu()
 
