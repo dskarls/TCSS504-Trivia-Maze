@@ -308,7 +308,27 @@ class TriviaMaze(TriviaMazeModel):
         """Returns a tuple of the adventurer's current coordinates in the maze."""
         return self.__adventurer_current_row, self.__adventurer_current_col
 
-    def __check_loss(self):
+    def game_loss(self):
+        """
+        Checks the loss conditions of the Trivia Maze game. The player will lose if
+        there is no way to get all 4 OO pillars and the exit or if they adventurer 
+        reaches 0 hit points.
+        
+        Returns
+        -------
+        bool
+            Returns true if the game has reached the conditions to end, false otherwise.
+        """
+        
+        # no path possible to win
+        if not self.__open_path_check():
+            # can return some special str for controller if we want different end game messages
+            return True
+        if self.__adventurer.hit_points == 0:
+            return True
+        return False
+    
+    def __open_path_check(self):
         """
         Checks to see if there is a traversable path from the adventurer's current
         location to the exit. Adventurer can still win if within their possible
