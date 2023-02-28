@@ -307,6 +307,19 @@ class TriviaMaze(TriviaMazeModel):
     def get_adventurer_coords(self):
         """Returns a tuple of the adventurer's current coordinates in the maze."""
         return self.__adventurer_current_row, self.__adventurer_current_col
+    
+    def game_win(self):
+        """
+        Checks if the win conditions have been met. Adventurer has to have collected
+        all 4 pillars of OOP and be in the exit room.
+        
+        Returns
+        -------
+        bool
+            Returns true if the game has reached win conditions, false otherwise.
+        """
+        adv_room = self.get_adventurer_room()
+        return adv_room.is_exit() and self.__adventurer.get_pillars_found() == 4:
 
     def game_loss(self):
         """
