@@ -136,15 +136,17 @@ class TriviaMaze(TriviaMazeModel):
             adventurer_room.visited = True
 
             # pick up and remove all items from room
-            items_in_room =  adventurer_room.remove_items()
+            items_in_room = adventurer_room.remove_items()
             for item in items_in_room:
                 self.__adventurer.pick_up_item(item)
                 ITEM_ADDED = f"You picked up {item}."
                 self.__event_log_buffer.append(ITEM_ADDED)
-            
+
             # pit damage
             if adventurer_room.get_pit() is not None:
-                self.__apply_pit_damage_to_adventurer(adventurer_room.get_pit())
+                self.__apply_pit_damage_to_adventurer(
+                    adventurer_room.get_pit()
+                )
 
         self.__notify_observers()
 
@@ -309,13 +311,13 @@ class TriviaMaze(TriviaMazeModel):
     def get_adventurer_coords(self):
         """Returns a tuple of the adventurer's current coordinates in the maze."""
         return self.__adventurer_current_row, self.__adventurer_current_col
-    
+
     def game_status(self):
         """
         Checks if the win or loss conditions have been met. If adventurer has to collected
-        all 4 pillars of OOP and be in the exit room they will win. They lose if the adventurer's 
+        all 4 pillars of OOP and be in the exit room they will win. They lose if the adventurer's
         hit points reach 0 or have no possible way to reach exit with all four pillars of OOP.
-        
+
         Returns
         -------
         str
@@ -324,13 +326,19 @@ class TriviaMaze(TriviaMazeModel):
         """
         adv_room = self.__get_adventurer_room()
         # reached exit with all pillars. Win!
-        if adv_room.is_exit() and len(self.__adventurer.get_pillars_found()) == 4:
+        if (
+            adv_room.is_exit()
+            and len(self.__adventurer.get_pillars_found()) == 4
+        ):
             return "win"
         # no path possible to win or no more hit points
-        if not self.__adventurer_can_navigate_maze_to_win() or self.__adventurer.hit_points == 0:
+        if (
+            not self.__adventurer_can_navigate_maze_to_win()
+            or self.__adventurer.hit_points == 0
+        ):
             return "lose"
         return None
-    
+
     def __adventurer_can_navigate_maze_to_win(self):
         """
         Checks to see if there is a traversable path from the adventurer's current
@@ -504,6 +512,6 @@ class TriviaMaze(TriviaMazeModel):
         starts a new game, the model should regenerate a new maze and a new
         adventurer, etc."""
         self.__maze, self.__adventurer = self.__reset_maze_and_adventurer()
-    
+
     def __reset_maze_and_adventurer(self):
         return Maze(self.num_rows, self.num_cols, self.__db), Adventurer()
