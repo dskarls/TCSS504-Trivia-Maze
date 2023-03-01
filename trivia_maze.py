@@ -12,14 +12,12 @@ class TriviaMaze(TriviaMazeModel):
     Driver for maze adventure game
     NOTE: There is a hidden command, currently set to the key 'z' that can be
     used to display the entire maze at any iteration of the game.
-
     Class Attributes
     ------------------
     __DEFAULT_NUM_ROWS : int
         Number of rows to use if user skips through rows prompt.
     __DEFAULT_NUM_COLS: int
         Number of columns to use if user skips through rows prompt.
-
     Instance Attributes
     ------------------
     __adventurer : Adventurer
@@ -33,7 +31,6 @@ class TriviaMaze(TriviaMazeModel):
         located in the array according to their two-dimensional coords, e.g. the
         Room at indices [1][2] corresponds to row 1, column 2 (both zero-based
         indexing).
-
     Methods
     -------
     __get_adjacent_rooms_in_maze
@@ -78,9 +75,7 @@ class TriviaMaze(TriviaMazeModel):
 
         self.__db = SQLiteTriviaDatabase(db_file_path)
 
-        self.__maze = Maze(num_rows, num_cols, self.__db)
-
-        self.__adventurer = Adventurer()
+        self.__maze, self.__adventurer = self.__reset_maze_and_adventurer()
 
         # Place adventurer in entrance room
         (
@@ -100,7 +95,6 @@ class TriviaMaze(TriviaMazeModel):
         Given a directional command will attempt to move the adventurer that
         direction if the move is legal (not a wall, not a locked/perm locked
         door).
-
         Parameters
         ----------
         direction : str
@@ -138,11 +132,21 @@ class TriviaMaze(TriviaMazeModel):
                 self.__adventurer_current_col -= 1
 
             # Mark the new room the adventurer has moved into as visited
-            self.__maze.rooms[self.__adventurer_current_row][
-                self.__adventurer_current_col
-            ].visited = True
+            adventurer_room = self.__get_adventurer_room()
+            adventurer_room.visited = True
 
-            # FIXME: Have adventurer pick up items and fall in pits
+            # pick up and remove all items from room
+            items_in_room = adventurer_room.remove_items()
+            for item in items_in_room:
+                self.__adventurer.pick_up_item(item)
+                ITEM_ADDED = f"You picked up {item}."
+                self.__event_log_buffer.append(ITEM_ADDED)
+
+            # pit damage
+            if adventurer_room.get_pit() is not None:
+                self.__apply_pit_damage_to_adventurer(
+                    adventurer_room.get_pit()
+                )
 
         self.__notify_observers()
 
@@ -308,12 +312,38 @@ class TriviaMaze(TriviaMazeModel):
         """Returns a tuple of the adventurer's current coordinates in the maze."""
         return self.__adventurer_current_row, self.__adventurer_current_col
 
-    def __check_loss(self):
+    def game_status(self):
+        """
+        Checks if the win or loss conditions have been met. If adventurer has to collected
+        all 4 pillars of OOP and be in the exit room they will win. They lose if the adventurer's
+        hit points reach 0 or have no possible way to reach exit with all four pillars of OOP.
+
+        Returns
+        -------
+        str
+            'win' if the win conditions have been met and 'lose' if loss conditions are met.
+            Empty string if neither conditions are met.
+        """
+        adv_room = self.__get_adventurer_room()
+        # reached exit with all pillars. Win!
+        if (
+            adv_room.is_exit()
+            and len(self.__adventurer.get_pillars_found()) == 4
+        ):
+            return "win"
+        # no path possible to win or no more hit points
+        if (
+            not self.__adventurer_can_navigate_maze_to_win()
+            or self.__adventurer.hit_points == 0
+        ):
+            return "lose"
+        return None
+
+    def __adventurer_can_navigate_maze_to_win(self):
         """
         Checks to see if there is a traversable path from the adventurer's current
         location to the exit. Adventurer can still win if within their possible
         path there is a magic key.
-
         Returns
         -------
         bool
@@ -390,7 +420,6 @@ class TriviaMaze(TriviaMazeModel):
         not considered as blocking obstacles as the player may answer correctly.
         Does not consider magic key's ability to open perm locked doors as this is
         handled in the check_loss method.
-
         Returns
         -------
         inaccesible_rooms : list
@@ -423,14 +452,12 @@ class TriviaMaze(TriviaMazeModel):
         """
         Will move a room pointer to an adjacent room based on the given direction
         and the ability to move to the next room.
-
         Parameters
         ----------
         room : Room
             A Room object used as a current room pointer
         direction : str
             Direction the room pointer will move in the maze
-
         Returns
         -------
         new_room : Room
@@ -484,5 +511,7 @@ class TriviaMaze(TriviaMazeModel):
         """If the user returns to the main menu after starting a game and then
         starts a new game, the model should regenerate a new maze and a new
         adventurer, etc."""
-        # FIXME: Implement this!
-        pass
+        self.__maze, self.__adventurer = self.__reset_maze_and_adventurer()
+
+    def __reset_maze_and_adventurer(self):
+        return Maze(self.num_rows, self.num_cols, self.__db), Adventurer()
