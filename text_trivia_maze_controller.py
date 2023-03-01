@@ -131,7 +131,6 @@ class TextTriviaMazeController(TriviaMazeController):
         self.__active_context = contexts[context_specifier]
 
     def update(self):
-        # FIXME: Implement what should happen here when model changes
         # Model update calls
         game_status = self._maze_model.game_status()
         if game_status:
