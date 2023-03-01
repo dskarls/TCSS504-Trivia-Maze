@@ -193,8 +193,11 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__game_won_menu = self.__create_game_won_menu()
         self.hide_game_won_menu()
 
-        self.__game_lost_menu = self.__create_game_lost_menu()
-        self.hide_game_lost_menu()
+        self.__game_lost_died_menu = self.__create_game_lost_died_menu()
+        self.hide_game_lost_died_menu()
+        
+        self.__game_lost_trapped_menu = self.__create_game_lost_trapped_menu()
+        self.hide_game_lost_trapped_menu()
 
         # Create dialog for needing magic key
         self.__need_magic_key_menu = self.__create_need_magic_key_menu()
