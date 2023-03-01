@@ -564,7 +564,7 @@ class TextTriviaMazeView(TriviaMazeView):
         from getting trapped."""
         self.__game_lost_trapped_menu.show()
 
-    def hide_game_lost_died_menu(self):
+    def hide_game_lost_trapped_menu(self):
         """Hide the widget telling the player they lost the game
         from getting trapped."""
         self.__game_lost_trapped_menu.hide()
