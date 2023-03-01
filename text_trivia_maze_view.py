@@ -101,12 +101,32 @@ class TriviaMazeView(TriviaMazeModelObserver):
         """Hide the pop-up to the user telling them they won the game."""
 
     @abstractmethod
-    def show_game_lost_menu(self):
-        """Display a pop-up to the user telling them they lost the game."""
+    def show_game_lost_died_menu(self):
+        """
+        Display a pop-up to the user telling them they lost the game 
+        from reaching 0 hitpoints.
+        """
 
     @abstractmethod
-    def hide_game_lost_menu(self):
-        """Hide the pop-up to the user telling them they lost the game."""
+    def hide_game_lost_died_menu(self):
+        """
+        Hide the pop-up to the user telling them they lost the game 
+        from reaching 0 hitpoints.
+        """
+    
+    @abstractmethod
+    def show_game_lost_trapped_menu(self):
+        """
+        Display a pop-up to the user telling them they lost the game
+        from getting trapped in the maze.
+        """
+
+    @abstractmethod
+    def hide_game_lost_trapped_menu(self):
+        """
+        Hide the pop-up to the user telling them they lost the game
+        from getting trapped in the maze.
+        """
 
     @abstractmethod
     def quit_entire_game(self):
