@@ -25,7 +25,8 @@ DIMENSIONS = {
     "need_magic_key_menu": {"ipadx": 10, "ipady": 10},
     "magic_key_menu": {"ipadx": 10, "ipady": 10},
     "game_won_menu": {"ipadx": 10, "ipady": 10},
-    "game_lost_menu": {"ipadx": 10, "ipady": 10},
+    "game_lost_died_menu": {"ipadx": 10, "ipady": 10},
+    "game_lost_trapped_menu": {"ipadx": 10, "ipady": 10},
     "question_and_answer_menu": {"ipadx": 10, "ipady": 10},
 }
 
@@ -71,6 +72,16 @@ __YOU_DIED_MESSAGE = """
     |_|_|_|      | | (_) | |_| | | (_| | |  __/ (_| |
                  \_/\___/ \__,_|  \__,_|_|\___|\__,_|
 """
+__YOU_ARE_TRAPPED_MESSAGE = """
+__   __             ___             _____                              _   _ 
+\ \ / /            / _ \           |_   _|                            | | | |
+ \ V /___  _   _  / /_\ \_ __ ___    | |_ __ __ _ _ __  _ __   ___  __| | | |
+  \ // _ \| | | | |  _  | '__/ _ \   | | '__/ _` | '_ \| '_ \ / _ \/ _` | | |
+  | | (_) | |_| | | | | | | |  __/   | | | | (_| | |_) | |_) |  __/ (_| | |_|
+  \_/\___/ \__,_| \_| |_/_|  \___|   \_/_|  \__,_| .__/| .__/ \___|\__,_| (_)
+                                                 | |   | |                   
+                                                 |_|   |_|                   
+"""
 __MAIN_HELP_MESSAGE = """
 Your goal is to collect all four pillars of OOP and safely reach the exit of
 the maze. The doors of many rooms will be locked and attempting to go through
@@ -87,7 +98,8 @@ MESSAGES = {
     "main_menu": __WELCOME_MESSAGE,
     "main_help_menu": __MAIN_HELP_MESSAGE,
     "game_won_menu": __YOU_WIN_MESSAGE,
-    "game_lost_menu": __YOU_DIED_MESSAGE,
+    "game_lost_died_menu": __YOU_DIED_MESSAGE,
+    "game_lost_trapped_menu": __YOU_ARE_TRAPPED_MESSAGE,
     "need_magic_key_menu": "This door is permanently locked. To open it, find a magic key!",
     "use_magic_key_menu": "This door is permanently locked. To open it, use a magic key."
 }
