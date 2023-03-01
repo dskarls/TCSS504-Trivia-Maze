@@ -545,6 +545,34 @@ class TextTriviaMazeView(TriviaMazeView):
     def hide_game_lost_died_menu(self):
         """Hide the widget telling the player they lost the game."""
         self.__game_lost_died_menu.hide()
+        
+    def __create_game_lost_trapped_menu(self):
+        """Create the widget telling the player they lost the game by 
+        getting trapped in the maze."""
+        dismiss_message = (
+            f"Press {' or '.join(self.__dismiss_keys)} to return to the main "
+            "menu"
+        )
+        return DismissiblePopUp(
+            self.__window,
+            None,
+            textwrap.dedent(MESSAGES["game_lost_trapped_menu"]),
+            dismiss_message,
+            DIMENSIONS["game_lost_trapped_menu"]["ipadx"],
+            DIMENSIONS["game_lost_trapped_menu"]["ipady"],
+            STYLES["dismiss_text"]["style"],
+            STYLES["dismiss_bottom_label"]["style"],
+        )
+
+    def show_game_lost_trapped_menu(self):
+        """Show the widget telling the player they lost the game
+        from getting trapped."""
+        self.__game_lost_trapped_menu.show()
+
+    def hide_game_lost_died_menu(self):
+        """Hide the widget telling the player they lost the game
+        from getting trapped."""
+        self.__game_lost_trapped_menu.hide()
 
     def __forward_keystroke_to_controller(self, event):
         """Given a tkinter event, attempt to map it to a corresponding
