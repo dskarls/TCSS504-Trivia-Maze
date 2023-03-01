@@ -629,6 +629,8 @@ class TextTriviaMazeView(TriviaMazeView):
             justify=CENTER,
             anchor=CENTER,
             style=STYLES["menu_access_label"]["style"],
+            wraplength=DIMENSIONS["side_bar"]["width"]
+            - DIMENSIONS["menu_access_label"]["ipadx"],
         )
         menu_access_label.pack(
             side=BOTTOM,
