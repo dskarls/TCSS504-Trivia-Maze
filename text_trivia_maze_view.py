@@ -1,16 +1,14 @@
 from collections import deque
+import os
 from abc import ABC, abstractmethod
 import textwrap
 
 from tkinter import *
 from tkinter.ttk import *
-from maze_map import MazeMap
 
 from view_config import (
     DIMENSIONS,
     MESSAGES,
-    ROOM_CONTENT_DESC_KEY,
-    ROOM_CONTENT_SYMBOL_KEY,
     ROOM_CONTENT_SYMBOLS,
     STYLES,
 )
@@ -77,6 +75,10 @@ class TriviaMazeView(TriviaMazeModelObserver):
     def pose_question_and_get_answer(self, question_and_answer):
         """Show the user a question-and-answer pop-up and retrieve the answer,
         then hide the pop-up."""
+
+    @abstractmethod
+    def update_map(self):
+        """Update the map according to the latest state of the Model."""
 
     @abstractmethod
     def update_hp_gauge(self):
@@ -168,15 +170,6 @@ class TextTriviaMazeView(TriviaMazeView):
         ) = self.__create_side_bar()
         self.__event_log = self.__create_event_log()
 
-        # Create a MazeMap object that can be used to generate map context
-        self.__maze_map = MazeMap(
-            self._maze_model.num_rows,
-            self._maze_model.num_cols,
-            3,
-            padding_col="  ",
-        )
-        self.__update_map()
-
         # Add separator lines to divide UI cleanly
         # NOTE: The separators need to be created after the primary interface
         # components but before any of the pop-up widgets that can show up on
@@ -189,10 +182,6 @@ class TextTriviaMazeView(TriviaMazeView):
 
         self.__game_lost_menu = self.__create_game_lost_menu()
         self.hide_game_lost_menu()
-
-        # Create dialog for needing magic key
-        self.__need_magic_key_menu = self.__create_need_magic_key_menu()
-        self.hide_need_magic_key_menu()
 
         # Set up in-game menu
         self.__in_game_menu = self.__create_in_game_menu()
@@ -270,23 +259,17 @@ class TextTriviaMazeView(TriviaMazeView):
         return separators
 
     def __show_separators(self):
-        """Show the separator lines in the application master frame (intended
-        to show up in the primary interface)."""
         for separator_and_place_params in self.__separators:
             separator, place_params = separator_and_place_params
             separator.place(**place_params)
 
     def __hide_separators(self):
-        """Hide the separator lines in the application master frame (intended
-        to show up in the primary interface)."""
         for separator_and_place_params in self.__separators:
             separator, _ = separator_and_place_params
             separator.place_forget()
 
     @staticmethod
     def __configure_styles():
-        """Loop over the themed-tk (ttk) styles defined in the view config and
-        make sure they're registered in ttk's style namespace."""
         for style in STYLES.values():
             Style().configure(**style)
 
@@ -304,30 +287,21 @@ class TextTriviaMazeView(TriviaMazeView):
             )
 
     def __create_main_menu(self):
-        """Create a main menu widget, insert it into the application master
-        frame, and return it."""
         options = ("Start game", "Help", "Quit game")
         return MainMenu(self.__window, MESSAGES["main_menu"], options)
 
     def get_main_menu_current_selection(self):
-        """Return the currently selected option in the main menu."""
         return self.__main_menu.selected_option
 
     def hide_main_menu(self):
-        """Hide the main menu widget and show the primary interface
-        separators"""
         self.__main_menu.hide()
         self.__show_separators()
 
     def show_main_menu(self):
-        """Show the main menu widget and hide the primary interface
-        separators"""
         self.__main_menu.show()
         self.__hide_separators()
 
     def __create_in_game_menu(self):
-        """Create the in-game menu widget, which is accessible to the user from
-        the primary interface while they're actually playing the game."""
         options = (
             "Back to Game",
             "Display Map Legend",
@@ -344,46 +318,34 @@ class TextTriviaMazeView(TriviaMazeView):
         )
 
     def get_in_game_menu_current_selection(self):
-        """Return the currently selected option in the in-game menu."""
         return self.__in_game_menu.selected_option
 
     def show_in_game_menu(self):
-        """Show the in-game menu."""
         self.__in_game_menu.show()
 
     def hide_in_game_menu(self):
-        """Hide the in-game menu."""
         self.__in_game_menu.hide()
 
     def __create_question_and_answer_menu(self):
-        """Create a generic question and answer widget that doesn't hold any
-        content yet. Its content can be populated by the controller using the
-        `set_question` method."""
         return ShortAnswerQuestionAndAnswer(
             self.__window,
             None,
             "Q & A",
-            DIMENSIONS["question_and_answer_menu"]["ipady"],
+            DIMENSIONS["question_and_answer_menu"]["pady"],
         )
 
     def set_question(self, question, options, hint):
-        """Populate the question and answer widget with the question
-        contents."""
         self.__question_and_answer_menu.set_question(question)
         self.__question_and_answer_menu.set_options(options)
         self.__question_and_answer_menu.set_hint(hint)
 
     def show_question_and_answer_menu(self):
-        """Show the question and answer widget."""
         self.__question_and_answer_menu.show()
 
     def hide_question_and_answer_menu(self):
-        """Hide the question and answer widget."""
         self.__question_and_answer_menu.hide()
 
     def __create_main_help_menu(self):
-        """Create the main help menu. This is the help menu that is accessed
-        from the main menu."""
         dismiss_message = (
             f"Press {' or '.join(self.__dismiss_keys)} to return to the main "
             "menu"
@@ -392,51 +354,17 @@ class TextTriviaMazeView(TriviaMazeView):
             self.__window,
             None,
             textwrap.dedent(MESSAGES["main_help_menu"]),
+            DIMENSIONS["main_help_menu"]["pady"],
             dismiss_message,
-            DIMENSIONS["main_help_menu"]["ipadx"],
-            DIMENSIONS["main_help_menu"]["ipady"],
-            STYLES["dismiss_text"]["style"],
-            STYLES["dismiss_bottom_label"]["style"],
         )
 
     def show_main_help_menu(self):
-        """Show the main help menu."""
         self.__main_help_menu.show()
 
     def hide_main_help_menu(self):
-        """Hide the main help menu."""
         self.__main_help_menu.hide()
 
-    def __create_need_magic_key_menu(self):
-        """Create the widget for when the player tries to pass through a
-        permanently locked door and do not hold any magic keys. It tells them
-        they need to find a magic key if they want to unlock the door."""
-        dismiss_message = (
-            f"Press {' or '.join(self.__dismiss_keys)} to return to the game"
-        )
-        return DismissiblePopUp(
-            self.__window,
-            None,
-            textwrap.dedent(MESSAGES["need_magic_key_menu"]),
-            dismiss_message,
-            DIMENSIONS["need_magic_key_menu"]["ipadx"],
-            DIMENSIONS["need_magic_key_menu"]["ipady"],
-            STYLES["dismiss_text"]["style"],
-            STYLES["dismiss_bottom_label"]["style"],
-        )
-
-    def show_need_magic_key_menu(self):
-        """Show the widget that tells the player they need a magic key to
-        unlock a permanently locked door."""
-        self.__need_magic_key_menu.show()
-
-    def hide_need_magic_key_menu(self):
-        """Hide the widget that tells the player they need a magic key to
-        unlock a permanently locked door."""
-        self.__need_magic_key_menu.hide()
-
     def __create_game_won_menu(self):
-        """Create the widget telling the player they won the game."""
         dismiss_message = (
             f"Press {' or '.join(self.__dismiss_keys)} to return to the main "
             "menu"
@@ -445,23 +373,17 @@ class TextTriviaMazeView(TriviaMazeView):
             self.__window,
             None,
             textwrap.dedent(MESSAGES["game_won_menu"]),
+            DIMENSIONS["game_won_menu"]["pady"],
             dismiss_message,
-            DIMENSIONS["game_won_menu"]["ipadx"],
-            DIMENSIONS["game_won_menu"]["ipady"],
-            STYLES["dismiss_text"]["style"],
-            STYLES["dismiss_bottom_label"]["style"],
         )
 
     def show_game_won_menu(self):
-        """Show the widget telling the player they won the game."""
         self.__game_won_menu.show()
 
     def hide_game_won_menu(self):
-        """Hide the widget telling the player they won the game."""
         self.__game_won_menu.hide()
 
     def __create_game_lost_menu(self):
-        """Create the widget telling the player they lost the game."""
         dismiss_message = (
             f"Press {' or '.join(self.__dismiss_keys)} to return to the main "
             "menu"
@@ -470,25 +392,17 @@ class TextTriviaMazeView(TriviaMazeView):
             self.__window,
             None,
             textwrap.dedent(MESSAGES["game_lost_menu"]),
+            DIMENSIONS["game_lost_menu"]["pady"],
             dismiss_message,
-            DIMENSIONS["game_lost_menu"]["ipadx"],
-            DIMENSIONS["game_lost_menu"]["ipady"],
-            STYLES["dismiss_text"]["style"],
-            STYLES["dismiss_bottom_label"]["style"],
         )
 
     def show_game_lost_menu(self):
-        """Show the widget telling the player they lost the game."""
         self.__game_lost_menu.show()
 
     def hide_game_lost_menu(self):
-        """Hide the widget telling the player they lost the game."""
         self.__game_lost_menu.hide()
 
     def __forward_keystroke_to_controller(self, event):
-        """Given a tkinter event, attempt to map it to a corresponding
-        keystroke and pass it to the controller for interpretation as a
-        command."""
         NEWLINE = 13
         ESCAPE = 27
         LINEFEED = 10
@@ -506,14 +420,12 @@ class TextTriviaMazeView(TriviaMazeView):
             self._maze_controller.process_keystroke(key)
 
     def update_hp_gauge(self):
-        # FIXME: Delete this method and just grab the HP from the model in the
-        # view's `update()` method.
+        # FIXME: Retrieve current adventurer HP from Model
         current_hp = 72
 
         self.__hp_gauge.set(current_hp)
 
     def __create_map(self):
-        """Create the map widget that is displayed in the primary interface."""
         dims = DIMENSIONS["map"]
         return Map(
             self.__window,
@@ -525,17 +437,28 @@ class TextTriviaMazeView(TriviaMazeView):
             "",
         )
 
-    def __update_map(self):
-        """Update the contents of the map by looping over all rooms in the maze
-        and redrawing them."""
-        for room_row in self._maze_model.get_rooms():
-            for room in room_row:
-                self.__maze_map.update_room(room)
-        self.__map.contents = str(self.__maze_map)
+    def update_map(self):
+        # FIXME: Grab the Rooms objects from the model here
+        MAP_EXAMPLE = """
+        *  *  **  *  **  *  **  *  **  *  **  *  **  *  *
+        *  P  ||     ||     ||     ||  I  **@ i  **     *
+        *  -  **  *  **  *  **  *  **  -  **  -  **  -  *
+        *  -  **  *  **  *  **  *  **  -  **  -  **  -  *
+        *  X  ||  V  ||  X  **  V  ||     **     ||     *
+        *  *  **  *  **  -  **  -  **  -  **  *  **  -  *
+        *  *  **  *  **  -  **  -  **  -  **  *  **  -  *
+        *  H  ||  M  **  H  **  O  **     ||  H  **     *
+        *  -  **  *  **  -  **  -  **  *  **  *  **  -  *
+        *  -  **  *  **  -  **  -  **  *  **  *  **  -  *
+        *  A  ||     **     **     **     ||  H  **     *
+        *  -  **  -  **  -  **  -  **  -  **  -  **  -  *
+        *  -  **  -  **  -  **  -  **  -  **  -  **  -  *
+        *     **     ||  H  **     ||     **  H  ||  H  *
+        *  *  **  *  **  *  **  *  **  *  **  *  **  *  *
+        """
+        self.__map.contents = textwrap.dedent(MAP_EXAMPLE)
 
     def __create_side_bar(self):
-        """Create the sidebar frame that holds the hp gauge, inventory, and
-        pillar inventory."""
         dims_side_bar = DIMENSIONS["side_bar"]
 
         side_bar = SubWindow(
@@ -598,18 +521,10 @@ class TextTriviaMazeView(TriviaMazeView):
         self,
         num_cols=2,
     ):
-        """Create the widget that can be accessed from the in-game menu to
-        display the legend of symbols used in the map."""
-        symbols = []
-        descriptions = []
-        for _, entry in ROOM_CONTENT_SYMBOLS.items():
-            symbols.append(entry[ROOM_CONTENT_SYMBOL_KEY])
-            descriptions.append(entry[ROOM_CONTENT_DESC_KEY])
-
         symbol_overrides = {" ": "<space>"}
         legend_rows = self.__generate_rows_for_multicolumn_display(
-            symbols=symbols,
-            descriptions=descriptions,
+            symbols=ROOM_CONTENT_SYMBOLS.values(),
+            descriptions=ROOM_CONTENT_SYMBOLS.keys(),
             num_cols=num_cols,
             symbol_overrides=symbol_overrides,
         )
@@ -622,111 +537,65 @@ class TextTriviaMazeView(TriviaMazeView):
             self.__window,
             None,
             ("\n").join(legend_rows),
+            DIMENSIONS["map_legend_menu"]["pady"],
             dismiss_message,
-            DIMENSIONS["map_legend_menu"]["ipadx"],
-            DIMENSIONS["map_legend_menu"]["ipady"],
-            STYLES["dismiss_text"]["style"],
-            STYLES["dismiss_bottom_label"]["style"],
         )
 
     @staticmethod
     def __generate_rows_for_multicolumn_display(
         symbols, descriptions, num_cols, symbol_overrides
     ):
-        """Given a set of symbols and descriptions for a legend, pack them into
-        a specified number of formatted columns so that they can be displayed
-        as a giant string. Symbols can be overridden using a dictionary
-        parameter."""
-        # Separation to place between columns
-        COL_SEP = "  "
+        # Determine longest description and symbol strings
+        symbol_max_len = len(max(symbols, key=len))
+        if symbol_overrides:
+            symbol_max_len = max(
+                symbol_max_len,
+                len(max(symbol_overrides.values(), key=len)),
+            )
+        description_max_len = len(max(descriptions, key=len))
 
-        # Initialize 2D array that will contain some number of display rows
-        # (depending on the length of symbols and descriptions), each of which
-        # will contain 2*num_cols entries corresponding to the symbol and
-        # description of each column.
-        rows = []
-        row = -1
-        col = 0
+        entries = deque()
+
         for symbol, description in zip(symbols, descriptions):
+            # Special handling to account for space character (empty room)
             if symbol in symbol_overrides:
                 symbol = symbol_overrides[symbol]
 
-            if col == 0:
-                # Begin list for this row
-                rows.append([])
-                row += 1
-
-            rows[row].append([symbol, description])
-
-            col += 1
-
-            if col == num_cols:
-                # Reset column counter
-                col = 0
-
-        # Find the longest symbol string in each symbol subcolumn
-        symbol_max_len_by_col = []
-        description_max_len_by_col = []
-        total_width = 0  # Maximum possible width of a given row of chars
-        for col in range(num_cols):
-            # For this column, assemble all symbols for it by looping over all
-            # of the rows
-            symbols_in_col = []
-            descriptions_in_col = []
-            for row in rows:
-                # If this row doesn't have an entry for all columns, append
-                # empty string entries.
-                if col >= len(row):
-                    symbols_in_col.append("")
-                    descriptions_in_col.append("")
-                else:
-                    symbols_in_col.append(row[col][0])
-                    descriptions_in_col.append(row[col][1])
-
-            symbol_max_len_in_this_col = len(max(symbols_in_col, key=len))
-            description_max_len_in_this_col = len(
-                max(descriptions_in_col, key=len)
-            )
-            description_max_len_by_col.append(description_max_len_in_this_col)
-            symbol_max_len_by_col.append(symbol_max_len_in_this_col)
-
-            total_width += (
-                symbol_max_len_in_this_col + description_max_len_in_this_col
+            entries.append(
+                f"{symbol:>{symbol_max_len}}: {description:<{description_max_len}}"
             )
 
-        row_entries = []
-        for row in rows:
-            row_str = ""
-            for col, (symbol, description) in enumerate(row):
-                row_str += (
-                    f"{symbol:>{symbol_max_len_by_col[col]}}: "
-                    f"{description:<{description_max_len_by_col[col]}}"
-                )
-                if col < len(row) - 1:
-                    row_str += COL_SEP
+        max_width_of_one_row = num_cols * len(entries[0])
 
-            row_entries.append(row_str)
+        rows = []
+        row = 0
+        while entries:
+            # Pop off next element and put in next column
+            for col in range(num_cols):
+                if col == 0:
+                    # Begin string for this row
+                    rows.append("")
 
-        # Pad the bottom row to the right with spaces
-        row_entries[-1] = row_entries[-1].ljust(total_width)
+                rows[row] += entries.popleft()
 
-        return row_entries
+                if col == num_cols - 1:
+                    # Begin new row
+                    row += 1
+
+                # Pad the bottom row to the right with spaces
+                if not entries:
+                    rows[row] = rows[row].ljust(max_width_of_one_row)
+                    break
+
+        return rows
 
     def show_map_legend_menu(self):
-        """Show the widget that can be accessed from the in-game menu to
-        display the legend of symbols used in the map."""
         self.__map_legend_menu.show()
 
     def hide_map_legend_menu(self):
-        """Hide the widget that can be accessed from the in-game menu to
-        display the legend of symbols used in the map."""
         self.__map_legend_menu.hide()
 
     def __create_command_legend_menu(self):
-        """Create the widget that can be accessed from the in-game menu to
-        display the commands accessible in the primary interface. Note that the
-        contents are initially empty, and are set via arguments passed to the
-        `show_commands_legend_menu()` method."""
         dismiss_message = (
             f"Press {' or '.join(self.__dismiss_keys)} to return to the "
             "in-game menu"
@@ -735,16 +604,13 @@ class TextTriviaMazeView(TriviaMazeView):
             self.__window,
             None,
             None,
+            DIMENSIONS["command_legend_menu"]["pady"],
             dismiss_message,
-            DIMENSIONS["command_legend_menu"]["ipadx"],
-            DIMENSIONS["command_legend_menu"]["ipady"],
-            STYLES["dismiss_text"]["style"],
-            STYLES["dismiss_bottom_label"]["style"],
         )
 
     def show_command_legend_menu(self, symbols, descriptions, num_cols):
         """
-        Fills the commands help widget based on a dict containing command
+        Fills the commands help pop-up based on a dict containing command
         keystrokes and their description, then displays it on top of the
         primary interface.
 
@@ -766,14 +632,9 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__command_legend_menu.show()
 
     def hide_command_legend_menu(self):
-        """Hide the widget that can be accessed from the in-game menu to
-        display the commands accessible in the primary interface."""
         self.__command_legend_menu.hide()
 
     def __create_event_log(self):
-        """Create the event log widget, which is used to record log messages
-        for display to the user in the primary interface when a notable event
-        occurs."""
         dims = DIMENSIONS["event_log"]
         return EventLog(
             self.__window,
@@ -788,22 +649,83 @@ class TextTriviaMazeView(TriviaMazeView):
         )
 
     def write_to_event_log(self, message):
-        """Write a message on a new line in the event log widget."""
         self.__event_log.write(message)
 
     def update(self):
-        # Update map
-        self.__update_map()
+        # Update the current room display
+        current_room = self._maze_model.current_room
+        self._room_label.config(text=f"Current Room: {current_room}")
 
-        # FIXME: Update HP gauge
-        # FIXME: Update inventory
-        # FIXME: Update pillar inventory
-        # FIXME: Write
+        # Update the item display
+        items = self._maze_model.player_items
+        item_list = "\n".join([f"- {item}" for item in items])
+        self._item_label.config(text=f"Items: \n{item_list}")
+
+        # Check if a question needs to be posed
+        if self._maze_model.question_to_pose:
+            question, answer_options = self._maze_model.question_to_pose
+            self._question_label.config(text=question)
+
+            # Create buttons for each answer option
+            for i, option in enumerate(answer_options):
+                button = self._answer_buttons[i]
+                button.config(text=option)
+                button.pack()
+
+            # Show the input field for the player's answer
+            self._answer_input.pack()
+        else:
+            # Hide the question and answer options
+            self._question_label.config(text="")
+            for button in self._answer_buttons:
+                button.pack_forget()
+
+            # Hide the input field for the player's answer
+            self._answer_input.delete(0, END)
+            self._answer_input.pack_forget()
+
+        # Update any relevant messages or prompts
+        message = self._maze_model.current_message
+        self._message_label.config(text=message)
+
+        prompt = self._maze_model.current_prompt
+        self._prompt_label.config(text=prompt)
 
     def pose_question_and_get_answer(self):
-        # FIXME: Implement this
-        pass
+        """Displays a question, answer options, and input field for the player to answer.
+
+        Returns:
+            str: The answer the player inputs in the input field.
+        """
+        # Get the current question and answer options from the model
+        question, options = self._maze_model.get_current_question_and_options()
+
+        # Display the question and answer options
+        self._question_label.config(text=question)
+        for i, option in enumerate(options):
+            self._option_buttons[i].config(text=option)
+            self._option_buttons[i].grid(row=i+2, column=0)
+
+        # Display the input field and submit button
+        self._answer_entry.grid(row=len(options)+2, column=0)
+        self._submit_button.grid(row=len(options)+3, column=0)
+
+        # Wait for the player to submit an answer
+        self.wait_variable(self._submitted_answer)
+
+        # Get the submitted answer and clear the input field
+        answer = self._submitted_answer.get()
+        self._answer_entry.delete(0, 'end')
+
+        # Hide the answer options, input field, and submit button
+        self._question_label.config(text='')
+        for i in range(len(options)):
+            self._option_buttons[i].grid_forget()
+        self._answer_entry.grid_forget()
+        self._submit_button.grid_forget()
+
+        return answer
+
 
     def quit_entire_game(self):
-        """Tear down the entire application and quit."""
         self.__window.destroy()
