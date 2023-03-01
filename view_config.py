@@ -25,7 +25,8 @@ DIMENSIONS = {
     "need_magic_key_menu": {"ipadx": 10, "ipady": 10},
     "magic_key_menu": {"ipadx": 10, "ipady": 10},
     "game_won_menu": {"ipadx": 10, "ipady": 10},
-    "game_lost_menu": {"ipadx": 10, "ipady": 10},
+    "game_lost_died_menu": {"ipadx": 10, "ipady": 10},
+    "game_lost_trapped_menu": {"ipadx": 10, "ipady": 10},
     "question_and_answer_menu": {"ipadx": 10, "ipady": 10},
 }
 
@@ -97,7 +98,8 @@ MESSAGES = {
     "main_menu": __WELCOME_MESSAGE,
     "main_help_menu": __MAIN_HELP_MESSAGE,
     "game_won_menu": __YOU_WIN_MESSAGE,
-    "game_lost_menu": __YOU_DIED_MESSAGE,
+    "game_lost_died_menu": __YOU_DIED_MESSAGE,
+    "game_lost_trapped_menu": __YOU_ARE_TRAPPED_MESSAGE
     "need_magic_key_menu": "This door is permanently locked. To open it, find a magic key!",
     "use_magic_key_menu": "This door is permanently locked. To open it, use a magic key."
 }
