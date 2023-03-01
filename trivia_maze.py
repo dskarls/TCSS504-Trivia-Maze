@@ -321,8 +321,9 @@ class TriviaMaze(TriviaMazeModel):
         Returns
         -------
         str
-            'win' if the win conditions have been met and 'lose' if loss conditions are met.
-            Empty string if neither conditions are met.
+            'win' if the win conditions have been met. If the adventurer has no possible path to
+            win due to permanently locking doors 'trapped' is returned. If the adventurer has no 
+            hitpoints 'dead' is returned. Returns None if neither win nor loss conditions are met.
         """
         adv_room = self.__get_adventurer_room()
         # reached exit with all pillars. Win!
@@ -332,11 +333,10 @@ class TriviaMaze(TriviaMazeModel):
         ):
             return "win"
         # no path possible to win or no more hit points
-        if (
-            not self.__adventurer_can_navigate_maze_to_win()
-            or self.__adventurer.hit_points == 0
-        ):
-            return "lose"
+        if not self.__adventurer_can_navigate_maze_to_win():
+            return "trapped"
+        elif self.__adventurer.hit_points == 0:
+            return "dead"
         return None
 
     def __adventurer_can_navigate_maze_to_win(self):
