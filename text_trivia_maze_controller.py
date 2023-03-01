@@ -262,13 +262,12 @@ class InGameMenuCommandContext(MenuCommandContext):
 
         elif selected_option == "display commands":
             # Generate legend symbols/descriptions to display
-            # FIXME: Don't hard-code 'key' or 'description' here
             symbols = tuple(
-                entry["key"]
+                entry[_COMMAND_KEY_KEY]
                 for entry in PrimaryInterfaceCommandContext.COMMANDS.values()
             )
             descriptions = tuple(
-                entry["description"]
+                entry[_COMMAND_DESC_KEY]
                 for entry in PrimaryInterfaceCommandContext.COMMANDS.values()
             )
 
