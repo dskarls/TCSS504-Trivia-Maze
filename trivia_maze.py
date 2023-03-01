@@ -337,7 +337,6 @@ class TriviaMaze(TriviaMazeModel):
             return "trapped"
         elif self.__adventurer.hit_points == 0:
             return "died"
-        return None
 
     def __adventurer_can_navigate_maze_to_win(self):
         """
