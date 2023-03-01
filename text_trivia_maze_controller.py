@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from enum import Enum, auto
 
 from text_trivia_maze_view import TextTriviaMazeView
+from tkinter import Button, Entry, Label, Tk, W
 
 _COMMAND_DESC_KEY = "description"
 _COMMAND_KEY_KEY = "key"
@@ -326,13 +327,6 @@ class GameLostCommandContext(DismissibleCommandContext):
             self._maze_controller.set_active_context("main_menu")
 
 
-class NeedMagicKeyCommandContext(DismissibleCommandContext):
-    def process_keystroke(self, key):
-        if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
-            self._maze_view.hide_need_magic_key_menu()
-            self._maze_controller.set_active_context("primary_interface")
-
-
 class PrimaryInterfaceCommandContext(CommandContext):
     class Command(Enum):
         """Enumeration used to fix commands to a small finite support set."""
@@ -395,19 +389,19 @@ class PrimaryInterfaceCommandContext(CommandContext):
     def process_keystroke(self, key):
         # Non-movement commands
         if (
-            key
-            == self.COMMANDS[self.Command.SHOW_IN_GAME_MENU][_COMMAND_KEY_KEY]
+                key
+                == self.COMMANDS[self.Command.SHOW_IN_GAME_MENU][_COMMAND_KEY_KEY]
         ):
             self._maze_view.show_in_game_menu()
             self._maze_controller.set_active_context("in_game_menu")
         elif (
-            key
-            == self.COMMANDS[self.Command.USE_HEALING_POTION][_COMMAND_KEY_KEY]
+                key
+                == self.COMMANDS[self.Command.USE_HEALING_POTION][_COMMAND_KEY_KEY]
         ):
             self._maze_model.use_item("healing potion")
         elif (
-            key
-            == self.COMMANDS[self.Command.USE_VISION_POTION][_COMMAND_KEY_KEY]
+                key
+                == self.COMMANDS[self.Command.USE_VISION_POTION][_COMMAND_KEY_KEY]
         ):
             self._maze_model.use_item("vision potion")
         else:
@@ -415,22 +409,32 @@ class PrimaryInterfaceCommandContext(CommandContext):
             if key == self.COMMANDS[self.Command.MOVE_WEST][_COMMAND_KEY_KEY]:
                 self._maze_model.move_adventurer("west")
             elif (
-                key == self.COMMANDS[self.Command.MOVE_EAST][_COMMAND_KEY_KEY]
+                    key == self.COMMANDS[self.Command.MOVE_EAST][_COMMAND_KEY_KEY]
             ):
                 self._maze_model.move_adventurer("east")
             elif (
-                key == self.COMMANDS[self.Command.MOVE_NORTH][_COMMAND_KEY_KEY]
+                    key == self.COMMANDS[self.Command.MOVE_NORTH][_COMMAND_KEY_KEY]
             ):
                 self._maze_model.move_adventurer("north")
             elif (
-                key == self.COMMANDS[self.Command.MOVE_SOUTH][_COMMAND_KEY_KEY]
+                    key == self.COMMANDS[self.Command.MOVE_SOUTH][_COMMAND_KEY_KEY]
             ):
                 self._maze_model.move_adventurer("south")
 
 
 class QuestionAndAnswerCommandContext(CommandContext):
-    # FIXME: Figure out what other keys need to be enabled for a player to
-    # answer questions
+    """
+    A command context for handling player input during a question and answer event.
+
+    Attributes:
+        COMMANDS (dict): A dictionary of available commands and their respective keys and types.
+        _answer_options (list): A list of the answer option buttons.
+        _answer_input (Entry): The input field for the player's answer.
+        _correct_answer (str): The correct answer to the current question.
+        _selected_answer (str): The player's currently selected answer.
+
+    """
+
     class Command(Enum):
         """Enumeration used to fix commands to a small finite support set."""
 
@@ -455,14 +459,60 @@ class QuestionAndAnswerCommandContext(CommandContext):
         },
     }
 
+    def __init__(self, maze_controller, maze_view, maze_model, question, answer_options, correct_answer):
+        """
+        Initializes a new instance of the QuestionAndAnswerCommandContext class.
+
+        Args:
+            maze_controller (MazeController): The maze controller.
+            maze_view (MazeView): The maze view.
+            maze_model (MazeModel): The maze model.
+            question (str): The question being asked.
+            answer_options (list): The possible answer options.
+            correct_answer (str): The correct answer to the question.
+        """
+        super().__init__(maze_controller, maze_view, maze_model)
+        self._answer_options = answer_options
+        self._correct_answer = correct_answer
+        self._selected_answer = None
+
+        # Add the question and answer options to the Q&A widget
+        self._maze_view.show_question_and_answers(question, answer_options)
+
+        # Add the answer input field to the Q&A widget
+        self._answer_input = self._maze_view.add_answer_input_field()
+        self._answer_input.bind("<Return>", self.process_keystroke)
+
+        # Set focus to the answer input field
+        self._answer_input.focus_set()
+
     def process_keystroke(self, key):
-        # FIXME: Display somewhere in the QA pop-up how many suggestion
+        """
+        Processes a keystroke for the current context.
+
+        Args:
+            key (str): The keystroke to process.
+
+        """
+        # TODO: When hints implemented, display somewhere in the QA pop-up how many suggestion
         # potions they have left and what button to press to use one
-        if key == self.COMMANDS[self.Command.SUBMIT_ANSWER]:
-            # FIXME: Get current answer and check if it is correct
-            pass
-        elif key == self.COMMANDS[self.Command.USE_SUGGESTION_POTION]:
-            # TODO: Check if user has a suggestion potion. If so, use it and
+
+        if key.keysym == "Down":
+            self._maze_view.select_next_answer_option()
+        elif key.keysym == "Up":
+            self._maze_view.select_previous_answer_option()
+        elif key.keysym == "space":
+            self._selected_answer = self._maze_view.get_selected_answer_option()
+        elif key.keysym == self.COMMANDS[self.Command.SUBMIT_ANSWER][_COMMAND_KEY_KEY]:
+            # Check if the player's answer is correct
+            if self._selected_answer == self._correct_answer or self._answer_input.get().strip().lower() == self._correct_answer.lower():
+                self._maze_view.show_answer_feedback(True)
+            else:
+                self._maze_view.show_answer_feedback(False)
+
+        elif key == self.COMMANDS[self.Command.USE_SUGGESTION_POTION][_COMMAND_KEY_KEY]:
+
+            # TODO: When hint is implemented, check if user has a suggestion potion. If so, use it and
             # update the Q&A widget to display its hint
             pass
 
