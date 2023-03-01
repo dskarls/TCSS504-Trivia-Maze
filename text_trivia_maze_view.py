@@ -28,6 +28,12 @@ from view_components import (
 
 
 class TriviaMazeModelObserver(ABC):
+    """
+    An object that responds to changes to a TriviaMazeModel in a blind manner
+    -- all it is told is that the model changed in some way, not what
+    specifically about it changed.
+    """
+
     def __init__(self, maze_model):
         self._maze_model = maze_model
 
@@ -640,8 +646,16 @@ class TextTriviaMazeView(TriviaMazeView):
         return hp_gauge, inventory, pillars_inventory, menu_access_label
 
     def populate_menu_access_label(self, text):
-        """Fills in the content of the help message at the bottom of the side
-        bar."""
+        """
+        Fills in the content of the help message label at the bottom of the
+        side bar.
+
+        Parameters
+        ----------
+        text : str
+            An instruction to the user as to how they can pull up the in-game
+            menu.
+        """
         self.__menu_access_label.configure(text=text)
 
     def __create_map_legend_menu(
@@ -649,7 +663,14 @@ class TextTriviaMazeView(TriviaMazeView):
         num_cols=2,
     ):
         """Create the widget that can be accessed from the in-game menu to
-        display the legend of symbols used in the map."""
+        display the legend of symbols used in the map.
+
+        Parameters
+        ----------
+        num_cols : int
+            How many columns of symbol-description pairs should be constructed
+            in the map legend.
+        """
         symbols = []
         descriptions = []
         for _, entry in ROOM_CONTENT_SYMBOLS.items():
@@ -686,7 +707,29 @@ class TextTriviaMazeView(TriviaMazeView):
         """Given a set of symbols and descriptions for a legend, pack them into
         a specified number of formatted columns so that they can be displayed
         as a giant string. Symbols can be overridden using a dictionary
-        parameter."""
+        parameter.
+
+        Parameters
+        ----------
+        symbols : list
+            Abbreviated symbols that need descriptions.
+        descriptions : list
+            Description that explain the abbreviated symbols.
+        num_cols : int
+            How many columns of symbol-description pairs should be constructed
+            in the display.
+        symbol_overrides : dict
+            Maps strings in ``symbols`` to strings that should be written into
+            the display instead, e.g. an space doesn't display well so we
+            replace it with "<space>".
+
+        Returns
+        -------
+        list
+            The individual rows of text that make up the display content. These
+            will typically be joined by newlines by the caller to come up with
+            the final display string.
+        """
         # Separation to place between columns
         COL_SEP = "  "
         SYMBOL_DESC_SEP = ": "
@@ -800,16 +843,18 @@ class TextTriviaMazeView(TriviaMazeView):
 
     def show_command_legend_menu(self, symbols, descriptions, num_cols):
         """
-        Fills the commands help widget based on a dict containing command
-        keystrokes and their description, then displays it on top of the
-        primary interface.
+        Fills the commands legend widget based on a set of symbols, their
+        descriptions, and a number of columns to arrange them in.
 
         Parameters
         ----------
-        commands_info : tuple of dict
-            Each entry is a dict containing the keys 'key' (which indicates the
-            command keystroke) and 'description' (which indicates the
-            description to display for that keystroke.)
+        symbols : list
+            Abbreviated symbols used in the map.
+        descriptions : list
+            Description of each symbol used in the map.
+        num_cols : int
+            How many columns of symbol-description pairs should be constructed
+            in the command legend.
         """
         legend_rows = self.__generate_rows_for_multicolumn_display(
             symbols=symbols,
@@ -844,7 +889,13 @@ class TextTriviaMazeView(TriviaMazeView):
         )
 
     def write_to_event_log(self, message):
-        """Write a message on a new line in the event log widget."""
+        """Write a message on a new line in the event log widget.
+
+        Parameters
+        ----------
+        message : str
+            Text to write into the chat log.
+        """
         self.__event_log.write(message)
 
     def update(self):
