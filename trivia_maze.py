@@ -322,7 +322,7 @@ class TriviaMaze(TriviaMazeModel):
             'win' if the win conditions have been met and 'lose' if loss conditions are met.
             Empty string if neither conditions are met.
         """
-        adv_room = self.get_adventurer_room()
+        adv_room = self.__get_adventurer_room()
         # reached exit with all pillars. Win!
         if adv_room.is_exit() and len(self.__adventurer.get_pillars_found()) == 4:
             return "win"
