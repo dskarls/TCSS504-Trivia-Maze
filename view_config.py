@@ -99,7 +99,7 @@ MESSAGES = {
     "main_help_menu": __MAIN_HELP_MESSAGE,
     "game_won_menu": __YOU_WIN_MESSAGE,
     "game_lost_died_menu": __YOU_DIED_MESSAGE,
-    "game_lost_trapped_menu": __YOU_ARE_TRAPPED_MESSAGE
+    "game_lost_trapped_menu": __YOU_ARE_TRAPPED_MESSAGE,
     "need_magic_key_menu": "This door is permanently locked. To open it, find a magic key!",
     "use_magic_key_menu": "This door is permanently locked. To open it, use a magic key."
 }
