@@ -497,8 +497,9 @@ class TextTriviaMazeView(TriviaMazeView):
         """Hide the widget telling the player they won the game."""
         self.__game_won_menu.hide()
 
-    def __create_game_lost_menu(self):
-        """Create the widget telling the player they lost the game."""
+    def __create_game_lost_died_menu(self):
+        """Create the widget telling the player they lost the game 
+        from the adventurer reaching 0 hitpoints."""
         dismiss_message = (
             f"Press {' or '.join(self.__dismiss_keys)} to return to the main "
             "menu"
@@ -506,21 +507,21 @@ class TextTriviaMazeView(TriviaMazeView):
         return DismissiblePopUp(
             self.__window,
             None,
-            textwrap.dedent(MESSAGES["game_lost_menu"]),
+            textwrap.dedent(MESSAGES["game_lost_died_menu"]),
             dismiss_message,
-            DIMENSIONS["game_lost_menu"]["ipadx"],
-            DIMENSIONS["game_lost_menu"]["ipady"],
+            DIMENSIONS["game_lost_died_menu"]["ipadx"],
+            DIMENSIONS["game_lost_died_menu"]["ipady"],
             STYLES["dismiss_text"]["style"],
             STYLES["dismiss_bottom_label"]["style"],
         )
 
-    def show_game_lost_menu(self):
+    def show_game_lost_died_menu(self):
         """Show the widget telling the player they lost the game."""
-        self.__game_lost_menu.show()
+        self.__game_lost_died_menu.show()
 
-    def hide_game_lost_menu(self):
+    def hide_game_lost_died_menu(self):
         """Hide the widget telling the player they lost the game."""
-        self.__game_lost_menu.hide()
+        self.__game_lost_died_menu.hide()
 
     def __forward_keystroke_to_controller(self, event):
         """Given a tkinter event, attempt to map it to a corresponding
