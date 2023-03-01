@@ -88,9 +88,13 @@ class TextTriviaMazeController(TriviaMazeController):
         self.__game_won_menu_context = GameWonCommandContext(
             self, self._maze_model, self.__maze_view
         )
-        self.__game_lost_menu_context = GameLostCommandContext(
+        self.__game_lost_died_menu_context = GameLostDiedCommandContext(
             self, self._maze_model, self.__maze_view
         )
+        self.__game_lost_trapped_menu_context = GameLostTrappedCommandContext(
+            self, self._maze_model, self.__maze_view
+        )
+
         self.__question_and_answer_context = QuestionAndAnswerCommandContext(
             self, self._maze_model, self.__maze_view
         )
@@ -123,7 +127,8 @@ class TextTriviaMazeController(TriviaMazeController):
             "map_legend_menu": self.__map_legend_menu_context,
             "command_legend_menu": self.__command_legend_menu_context,
             "game_won_menu": self.__game_won_menu_context,
-            "game_lost_menu": self.__game_lost_menu_context,
+            "game_lost_died_menu": self.__game_lost_died_menu_context,
+            "game_lost_trapped_menu": self.__game_lost_trapped_menu_context,
             "question_and_answer": self.__question_and_answer_context,
             "magic_key": self.__magic_key_context,
             "need_magic_key": self.__need_magic_key_context,
@@ -340,10 +345,17 @@ class GameWonCommandContext(DismissibleCommandContext):
             self._maze_controller.set_active_context("main_menu")
 
 
-class GameLostCommandContext(DismissibleCommandContext):
+class GameLostDiedCommandContext(DismissibleCommandContext):
     def process_keystroke(self, key):
         if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
-            self._maze_view.hide_game_lost_menu()
+            self._maze_view.hide_game_lost_died_menu()
+            self._maze_controller.set_active_context("main_menu")
+
+
+class GameLostTrappedCommandContext(DismissibleCommandContext):
+    def process_keystroke(self, key):
+        if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
+            self._maze_view.hide_game_lost_trapped_menu()
             self._maze_controller.set_active_context("main_menu")
 
 
