@@ -83,10 +83,13 @@ class TriviaMaze(TriviaMazeModel):
             self.__adventurer_current_col,
         ) = self.__maze.entrance
 
-        # Set entrance room as visited
+        # Set entrance room as visited and occupied by adventurer
         self.__maze.rooms[self.__maze.entrance[0]][
             self.__maze.entrance[1]
         ].visited = True
+        self.__maze.rooms[self.__maze.entrance[0]][
+            self.__maze.entrance[1]
+        ].occupied_by_adventurer = True
 
         self.__direction_attempt = None
 
