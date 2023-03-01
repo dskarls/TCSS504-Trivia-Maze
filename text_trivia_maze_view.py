@@ -211,7 +211,7 @@ class TextTriviaMazeView(TriviaMazeView):
 
         self.__game_lost_died_menu = self.__create_game_lost_died_menu()
         self.hide_game_lost_died_menu()
-        
+
         self.__game_lost_trapped_menu = self.__create_game_lost_trapped_menu()
         self.hide_game_lost_trapped_menu()
 
@@ -517,7 +517,7 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__game_won_menu.hide()
 
     def __create_game_lost_died_menu(self):
-        """Create the widget telling the player they lost the game 
+        """Create the widget telling the player they lost the game
         from the adventurer reaching 0 hitpoints."""
         dismiss_message = (
             f"Press {' or '.join(self.__dismiss_keys)} to return to the main "
@@ -541,9 +541,9 @@ class TextTriviaMazeView(TriviaMazeView):
     def hide_game_lost_died_menu(self):
         """Hide the widget telling the player they lost the game."""
         self.__game_lost_died_menu.hide()
-        
+
     def __create_game_lost_trapped_menu(self):
-        """Create the widget telling the player they lost the game by 
+        """Create the widget telling the player they lost the game by
         getting trapped in the maze."""
         dismiss_message = (
             f"Press {' or '.join(self.__dismiss_keys)} to return to the main "
