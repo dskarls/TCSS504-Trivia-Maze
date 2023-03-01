@@ -81,7 +81,8 @@ class TriviaMazeView(TriviaMazeModelObserver):
     @abstractmethod
     def pose_question_and_get_answer(self, question_and_answer):
         """Show the user a question-and-answer pop-up and retrieve the answer,
-        then hide the pop-up."""
+        then hide the pop-up.
+        """
 
     @abstractmethod
     def write_to_event_log(self):
@@ -98,29 +99,29 @@ class TriviaMazeView(TriviaMazeModelObserver):
     @abstractmethod
     def show_game_lost_died_menu(self):
         """
-        Display a pop-up to the user telling them they lost the game 
-        from reaching 0 hitpoints.
+        Display a pop-up to the user telling them they lost the game from
+        reaching 0 hitpoints.
         """
 
     @abstractmethod
     def hide_game_lost_died_menu(self):
         """
-        Hide the pop-up to the user telling them they lost the game 
-        from reaching 0 hitpoints.
+        Hide the pop-up to the user telling them they lost the game from
+        reaching 0 hitpoints.
         """
-    
+
     @abstractmethod
     def show_game_lost_trapped_menu(self):
         """
-        Display a pop-up to the user telling them they lost the game
-        from getting trapped in the maze.
+        Display a pop-up to the user telling them they lost the game from
+        getting trapped in the maze.
         """
 
     @abstractmethod
     def hide_game_lost_trapped_menu(self):
         """
-        Hide the pop-up to the user telling them they lost the game
-        from getting trapped in the maze.
+        Hide the pop-up to the user telling them they lost the game from
+        getting trapped in the maze.
         """
 
     @abstractmethod
