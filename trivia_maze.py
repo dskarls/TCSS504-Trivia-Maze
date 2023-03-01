@@ -78,7 +78,7 @@ class TriviaMaze(TriviaMazeModel):
 
         self.__db = SQLiteTriviaDatabase(db_file_path)
 
-        self.__maze, self.__adventurer = self.reset()
+        self.__maze, self.__adventurer = self.__reset_maze_and_adventurer()
 
         # Place adventurer in entrance room
         (
@@ -1034,7 +1034,7 @@ class TriviaMaze(TriviaMazeModel):
         """If the user returns to the main menu after starting a game and then
         starts a new game, the model should regenerate a new maze and a new
         adventurer, etc."""
-        return self.__reset_maze_and_adventurer()
+        self.__maze, self.__adventurer = self.__reset_maze_and_adventurer()
     
     def __reset_maze_and_adventurer(self):
         return Maze(self.num_rows, self.num_cols, self.__db), Adventurer()
