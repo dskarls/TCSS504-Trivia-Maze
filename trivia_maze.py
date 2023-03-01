@@ -77,6 +77,9 @@ class TriviaMaze(TriviaMazeModel):
 
         self.__maze, self.__adventurer = self.__reset_maze_and_adventurer()
 
+        self.__place_adventurer_in_maze()
+
+    def __place_adventurer_in_maze(self):
         # Place adventurer in entrance room
         (
             self.__adventurer_current_row,
@@ -325,7 +328,7 @@ class TriviaMaze(TriviaMazeModel):
         -------
         str
             'win' if the win conditions have been met. If the adventurer has no possible path to
-            win due to permanently locking doors 'trapped' is returned. If the adventurer has no 
+            win due to permanently locking doors 'trapped' is returned. If the adventurer has no
             hitpoints 'dead' is returned. Returns None if neither win nor loss conditions are met.
         """
         adv_room = self.__get_adventurer_room()
