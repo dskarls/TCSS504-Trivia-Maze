@@ -84,11 +84,6 @@ class TriviaMazeView(TriviaMazeModelObserver):
         then hide the pop-up."""
 
     @abstractmethod
-    def update_hp_gauge(self):
-        """Update the HP gauge to reflect the adventurer's current health
-        points."""
-
-    @abstractmethod
     def write_to_event_log(self):
         """Write a message to the event log."""
 
@@ -542,13 +537,6 @@ class TextTriviaMazeView(TriviaMazeView):
             # ignore it since it's not a supported key command.
             self._maze_controller.process_keystroke(key)
 
-    def update_hp_gauge(self):
-        # FIXME: Delete this method and just grab the HP from the model in the
-        # view's `update()` method.
-        current_hp = 72
-
-        self.__hp_gauge.set(current_hp)
-
     def __create_map(self):
         """Create the map widget that is displayed in the primary interface."""
         dims = DIMENSIONS["map"]
@@ -902,7 +890,9 @@ class TextTriviaMazeView(TriviaMazeView):
         # Update map
         self.__update_map()
 
-        # FIXME: Update HP gauge
+        # Update adventurer HP
+        self.__hp_gauge.set(self._maze_model.get_adventurer_hp())
+
         # FIXME: Update inventory
         # FIXME: Update pillar inventory
         # FIXME: Write
