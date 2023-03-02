@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from enum import Enum, auto
 from question_and_answer import HintableQuestionAndAnswer
-
+from trivia_maze_model_observer import TriviaMazeModelObserver
 from text_trivia_maze_view import TextTriviaMazeView
 
 _COMMAND_DESC_KEY = "description"
@@ -10,15 +10,6 @@ _COMMAND_TYPE = "type"
 _COMMAND_TYPE_OTHER = "other"
 _COMMAND_TYPE_ITEM = "item"
 _COMMAND_TYPE_MOVEMENT = "movement"
-
-
-class TriviaMazeModelObserver(ABC):
-    def __init__(self, maze_model):
-        self._maze_model = maze_model
-
-    @abstractmethod
-    def update(self):
-        pass
 
 
 class TriviaMazeController(TriviaMazeModelObserver):
@@ -63,8 +54,6 @@ class TextTriviaMazeController(TriviaMazeController):
         self.__maze_view.populate_menu_access_label(
             f"Press <{in_game_menu_key}> to access the in-game menu"
         )
-
-        self._maze_model.register_observer(self.__maze_view)
 
         # Initialize command interpretation contexts
         self.__main_menu_context = MainMenuCommandContext(

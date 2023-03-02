@@ -3,11 +3,11 @@ from trivia_maze import TriviaMaze
 
 
 class TriviaMazeModelObserver(ABC):
-
     def __init__(self, trivia_maze: TriviaMaze):
-        self._maze = trivia_maze
-        self._maze.register_observer(self)
+        self._maze_model = trivia_maze
+        self._maze_model.register_observer(self)
 
     @abstractmethod
     def update(self, event):
-        pass
+        """Perform any necessary updates to self whenever the maze model emits
+        a notification."""

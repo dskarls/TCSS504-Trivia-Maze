@@ -4,7 +4,7 @@ import textwrap
 from tkinter import *
 from tkinter.ttk import *
 from maze_map import MazeMap
-
+from trivia_maze_model_observer import TriviaMazeModelObserver
 from view_config import (
     DIMENSIONS,
     MESSAGES,
@@ -25,22 +25,6 @@ from view_components import (
     EventLog,
     SubWindow,
 )
-
-
-class TriviaMazeModelObserver(ABC):
-    """
-    An object that responds to changes to a TriviaMazeModel in a blind manner
-    -- all it is told is that the model changed in some way, not what
-    specifically about it changed.
-    """
-
-    def __init__(self, maze_model):
-        self._maze_model = maze_model
-
-    @abstractmethod
-    def update(self):
-        """Perform any necessary updates to self whenever the maze model emits
-        a notification."""
 
 
 class TriviaMazeView(TriviaMazeModelObserver):
