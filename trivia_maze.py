@@ -356,16 +356,17 @@ class TriviaMaze(TriviaMazeModel):
 
         elif item == self.__ITEMS[self.__Items.VISION_POTION]:
             # Use vision potion
-            vision_potion = self.__adventurer.consume_vision_potion()
+            if len(self.__adventurer.get_vision_potions()) > 0:
+                vision_potion = self.__adventurer.consume_vision_potion()
 
-            # Get set of adjacent rooms inside maze and set the rooms as
-            # visited
-            for room in self.__get_adjacent_rooms_in_maze(
-                self.__get_adventurer_room()
-            ):
-                room.visited = True
+                # Get set of adjacent rooms inside maze and set the rooms as
+                # visited
+                for room in self.__get_adjacent_rooms_in_maze(
+                    self.__get_adventurer_room()
+                ):
+                    room.visited = True
 
-            self.__event_log_buffer.append(f"You used a {str(vision_potion)}!")
+                self.__event_log_buffer.append(f"You used a {str(vision_potion)}!")
 
         elif item == self.__ITEMS[self.__Items.MAGIC_KEY]:
             magic_key = self.__adventurer.consume_magic_key()
