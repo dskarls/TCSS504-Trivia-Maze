@@ -280,3 +280,13 @@ class Adventurer:
             A list containing MagicKey objects.
         """
         return self.__magic_keys
+
+    def get_items(self):
+        """
+        Return a tuple of references to all items held in inventory."""
+        return tuple(
+            self.__healing_potions
+            + self.__vision_potions
+            + self.__pillars_found
+            + self.__magic_keys
+        )
