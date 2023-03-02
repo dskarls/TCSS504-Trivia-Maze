@@ -526,6 +526,7 @@ class TriviaMaze(TriviaMazeModel):
         self.__notify_observers()
 
     def __reset_maze_and_adventurer(self):
+        """Regenerate maze and adventurer from scratch."""
         return Maze(self.num_rows, self.num_cols, self.__db), Adventurer()
 
     def get_adventurer_items(self):
