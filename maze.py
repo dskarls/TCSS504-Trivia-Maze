@@ -169,7 +169,7 @@ class Maze:
     __PIT_PROBABILITY = 0.15
     __HEALING_POTION_PROBABILITY = 0.15
     __VISION_POTION_PROBABILITY = 0.15
-    __MAGIC_KEY_PROBABILITY = 0.05
+    __MAGIC_KEY_PROBABILITY = 0.15
     __LOCKED_DOOR_PROBABILITY = 0.5
 
     # Min and max amount that a healing potion can restore to hit points
