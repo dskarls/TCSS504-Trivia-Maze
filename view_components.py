@@ -340,7 +340,7 @@ class EnumeratedInventory:
 
     def clear(self):
         """Set all item quantities to zero."""
-        for item_quantity_label in self.__item_quantity_labels:
+        for item_quantity_label in self.__item_quantity_labels.values():
             item_quantity_label.configure(text="0")
 
 
@@ -424,7 +424,7 @@ class CheckboxInventory:
 
     def clear(self):
         """Set all items as not being held, unchecking their boxes."""
-        for item_control_var in self.__item_check_button_control_vars:
+        for item_control_var in self.__item_check_button_control_vars.values():
             item_control_var.set(0)
 
 
