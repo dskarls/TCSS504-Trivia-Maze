@@ -1,7 +1,6 @@
 import pathlib
 
-# from trivia_maze import TriviaMaze
-from mock import TriviaMaze
+from trivia_maze import TriviaMaze
 from text_trivia_maze_controller import TextTriviaMazeController
 
 if __name__ == "__main__":
