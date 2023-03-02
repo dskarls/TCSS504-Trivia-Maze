@@ -73,14 +73,14 @@ __YOU_DIED_MESSAGE = """
                  \_/\___/ \__,_|  \__,_|_|\___|\__,_|
 """
 __YOU_ARE_TRAPPED_MESSAGE = """
-__   __             ___             _____                              _   _ 
+__   __             ___             _____                              _   _
 \ \ / /            / _ \           |_   _|                            | | | |
  \ V /___  _   _  / /_\ \_ __ ___    | |_ __ __ _ _ __  _ __   ___  __| | | |
   \ // _ \| | | | |  _  | '__/ _ \   | | '__/ _` | '_ \| '_ \ / _ \/ _` | | |
   | | (_) | |_| | | | | | | |  __/   | | | | (_| | |_) | |_) |  __/ (_| | |_|
   \_/\___/ \__,_| \_| |_/_|  \___|   \_/_|  \__,_| .__/| .__/ \___|\__,_| (_)
-                                                 | |   | |                   
-                                                 |_|   |_|                   
+                                                 | |   | |
+                                                 |_|   |_|
 """
 __MAIN_HELP_MESSAGE = """
 Your goal is to collect all four pillars of OOP and safely reach the exit of
@@ -101,7 +101,7 @@ MESSAGES = {
     "game_lost_died_menu": __YOU_DIED_MESSAGE,
     "game_lost_trapped_menu": __YOU_ARE_TRAPPED_MESSAGE,
     "need_magic_key_menu": "This door is permanently locked. To open it, find a magic key!",
-    "use_magic_key_menu": "This door is permanently locked. To open it, use a magic key."
+    "use_magic_key_menu": "This door is permanently locked. To open it, use a magic key.",
 }
 
 
@@ -229,7 +229,7 @@ ROOM_SIDE_SYMBOLS = {
         ROOM_SIDE_DESC_KEY: "Locked Door",
     },
     RoomSides.DOOR_PERMANENTLY_LOCKED: {
-        ROOM_SIDE_SYMBOL_KEY: "P",
+        ROOM_SIDE_SYMBOL_KEY: "%",
         ROOM_SIDE_DESC_KEY: "Permanently Door",
     },
 }
