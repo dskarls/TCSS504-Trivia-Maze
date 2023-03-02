@@ -80,6 +80,9 @@ class TextTriviaMazeController(TriviaMazeController):
         self.__command_legend_menu_context = CommandLegendCommandContext(
             self, self._maze_model, self.__maze_view
         )
+        self.__save_confirmation_menu_context = SaveConfirmationCommandContext(
+            self, self._maze_model, self.__maze_view
+        )
         self.__game_won_menu_context = GameWonCommandContext(
             self, self._maze_model, self.__maze_view
         )
@@ -122,6 +125,7 @@ class TextTriviaMazeController(TriviaMazeController):
             "in_game_menu": self.__in_game_menu_context,
             "map_legend_menu": self.__map_legend_menu_context,
             "command_legend_menu": self.__command_legend_menu_context,
+            "save_confirmation_menu": self.__save_confirmation_menu_context,
             "game_won_menu": self.__game_won_menu_context,
             "game_lost_died_menu": self.__game_lost_died_menu_context,
             "game_lost_trapped_menu": self.__game_lost_trapped_menu_context,
@@ -297,6 +301,8 @@ class InGameMenuCommandContext(MenuCommandContext):
 
         elif selected_option == "save game":
             self._maze_model.save_game()
+            self._maze_view.show_save_confirmation_menu()
+            self._maze_controller.set_active_context("save_confirmation_menu")
 
         elif selected_option == "return to main menu":
             # Have the model create a completely new map and reset all item
@@ -356,6 +362,13 @@ class CommandLegendCommandContext(DismissibleCommandContext):
     def process_keystroke(self, key):
         if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
             self._maze_view.hide_command_legend_menu()
+            self._maze_controller.set_active_context("in_game_menu")
+
+
+class SaveConfirmationCommandContext(DismissibleCommandContext):
+    def process_keystroke(self, key):
+        if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
+            self._maze_view.hide_save_confirmation_menu()
             self._maze_controller.set_active_context("in_game_menu")
 
 

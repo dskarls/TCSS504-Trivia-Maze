@@ -244,8 +244,13 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__in_game_menu = self.__create_in_game_menu()
         self.hide_in_game_menu()
 
+        # Map legend menu
         self.__map_legend_menu = self.__create_map_legend_menu()
         self.hide_map_legend_menu()
+
+        # Create pop-up to confirm user save game
+        self.__save_confirmation_menu = self.__create_save_confirmation_menu()
+        self.hide_save_confirmation_menu()
 
         # Create empty commands help menu
         self.__command_legend_menu = self.__create_command_legend_menu()
@@ -463,6 +468,34 @@ class TextTriviaMazeView(TriviaMazeView):
         """Hide the pop-up telling the user that they can't load a game because
         no save file was found."""
         self.__no_save_file_found_menu.hide()
+
+    def __create_save_confirmation_menu(self):
+        """Create pop-up that tells the user that their save game was
+        successful."""
+        dismiss_message = (
+            f"Press {' or '.join(self.__dismiss_keys)} to return to the "
+            "in-game menu"
+        )
+        return DismissiblePopUp(
+            self.__window,
+            None,
+            textwrap.dedent(MESSAGES["save_confirmation_menu"]),
+            dismiss_message,
+            DIMENSIONS["save_confirmation_menu"]["ipadx"],
+            DIMENSIONS["save_confirmation_menu"]["ipady"],
+            STYLES["dismiss_text"]["style"],
+            STYLES["dismiss_bottom_label"]["style"],
+        )
+
+    def show_save_confirmation_menu(self):
+        """Show the pop-up that tells the user their save game was
+        successful."""
+        self.__save_confirmation_menu.show()
+
+    def hide_save_confirmation_menu(self):
+        """Hide the pop-up that tells the user their save game was
+        successful."""
+        self.__save_confirmation_menu.hide()
 
     def __create_main_help_menu(self):
         """Create the main help menu. This is the help menu that is accessed
