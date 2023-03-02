@@ -152,8 +152,7 @@ class TriviaMaze(TriviaMazeModel):
             items_in_room = adventurer_room.remove_items()
             for item in items_in_room:
                 self.__adventurer.pick_up_item(item)
-                ITEM_ADDED = f"You picked up {item}."
-                self.__event_log_buffer.append(ITEM_ADDED)
+                self.__event_log_buffer.append(f"You picked up a {item}.")
 
             # pit damage
             if adventurer_room.get_pit() is not None:
