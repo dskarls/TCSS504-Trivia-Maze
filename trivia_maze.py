@@ -247,12 +247,12 @@ class TriviaMaze(TriviaMazeModel):
             # Use healing potion
             hit_points_recovered = self.__adventurer.consume_healing_potion()
             if hit_points_recovered:
-                HEALTH_USE_STR = (
+                health_potion_use_str = (
                     "You consume a healing potion and gain "
                     f"{hit_points_recovered} hit points! "
                     f"{self.__adventurer.hit_points} health remaining."
                 )
-                self.__event_log_buffer.append(HEALTH_USE_STR)
+                self.__event_log_buffer.append(health_potion_use_str)
 
         elif item == self.__ITEMS[self.__Items.VISION_POTION]:
             # Use vision potion
