@@ -946,9 +946,12 @@ class TextTriviaMazeView(TriviaMazeView):
         # Update adventurer HP
         self.__hp_gauge.set(self._maze_model.get_adventurer_hp())
 
+        # Grab event log entries and write them out
+        for log_message in self._maze_model.flush_event_log_buffer():
+            self.write_to_event_log(log_message)
+
         # FIXME: Update inventory
         # FIXME: Update pillar inventory
-        # FIXME: Write
 
     def pose_question_and_get_answer(self):
         # FIXME: Implement this
