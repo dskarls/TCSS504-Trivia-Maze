@@ -365,10 +365,10 @@ class TriviaMaze(TriviaMazeModel):
         DIRECTIONS = [Room.NORTH, Room.EAST, Room.SOUTH, Room.WEST]
         TOTAL_ROOMS = self.__maze.num_rows * self.__maze.num_cols
 
-        visited_rooms = []
         invalid_rooms = []
         inaccessible_rooms = self.__get_inaccessible_rooms()
         current_room = self.__get_adventurer_room()
+        visited_rooms = [current_room]
         pillars_found = list(self.__adventurer.get_pillars_found())
         exit_found = False
 
@@ -417,9 +417,7 @@ class TriviaMaze(TriviaMazeModel):
             if len(visited_rooms) > 0:
                 invalid_rooms.append(current_room)
                 current_room = visited_rooms.pop()
-            else:
-                # no other possible paths forward
-                return False
+
         # check if the exit and all pillars have been found
         if exit_found and len(pillars_found) == 4:
             return True
