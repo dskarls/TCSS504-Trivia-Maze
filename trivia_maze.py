@@ -79,6 +79,10 @@ class TriviaMaze(TriviaMazeModel):
 
         self.__place_adventurer_in_maze()
 
+        # For keeping track of direction attempted during a move operation by
+        # the adventurer
+        self.__direction_attempt = None
+
     def __place_adventurer_in_maze(self):
         # Place adventurer in entrance room
         (
