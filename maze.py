@@ -146,7 +146,7 @@ class Maze:
         Places items (healing potions, vision potions, OOP pillars, and pits)
         into the maze via random selection according to the corresponding
         probabilities.
-    __roll_to_place_item_or_pit
+    __roll_to_place_item_or_pit_door
         Decide whether to place an item or not by doing a random sampling using
         its placement probability.
     __room_is_in_maze
