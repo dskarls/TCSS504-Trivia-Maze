@@ -222,6 +222,7 @@ class MainMenuCommandContext(MenuCommandContext):
 
             # Hide main menu so user can begin playing and switch contexts
             self._maze_model.reset()
+            self._maze_view.reset_inventories()
             self._maze_view.hide_main_menu()
 
             self._maze_controller.set_active_context("primary_interface")
