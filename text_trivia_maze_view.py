@@ -971,7 +971,8 @@ class TextTriviaMazeView(TriviaMazeView):
     def reset_inventories(self):
         """Set all inventory quantities to zero and uncheck all pillar
         boxes."""
-        # FIXME: Implement this...needs a 'uncheck item' for CheckboxInventory
+        self.__inventory.clear()
+        self.__pillars_inventory.clear()
 
     def pose_question_and_get_answer(self):
         # FIXME: Implement this
