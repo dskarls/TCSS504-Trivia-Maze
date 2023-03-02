@@ -1,8 +1,8 @@
 from abc import abstractmethod
 import textwrap
-
 from tkinter import *
 from tkinter.ttk import *
+
 from maze_map import MazeMap
 from trivia_maze_model_observer import TriviaMazeModelObserver
 from view_config import (
@@ -24,6 +24,16 @@ from view_components import (
     ShortAnswerQuestionAndAnswer,
     EventLog,
     SubWindow,
+)
+from maze_items import (
+    HealingPotion,
+    VisionPotion,
+    SuggestionPotion,
+    MagicKey,
+    AbstractionPillar,
+    EncapsulationPillar,
+    PolymorphismPillar,
+    InheritancePillar,
 )
 
 
@@ -123,6 +133,19 @@ class TextTriviaMazeView(TriviaMazeView):
     the main menu window over the top of the primary interface. Showing the
     primary interface then simply amounts to hiding the main menu (or pop-ups).
     """
+
+    __PILLAR_TYPE_LABELS = {
+        AbstractionPillar: "Abstraction",
+        EncapsulationPillar: "Encapsulation",
+        InheritancePillar: "Inheritance",
+        PolymorphismPillar: "Polymorphism",
+    }
+    __INVENTORY_TYPE_LABELS = {
+        HealingPotion: "Health Potion",
+        SuggestionPotion: "Suggestion Potion",
+        VisionPotion: "Vision Potion",
+        MagicKey: "Magic Key",
+    }
 
     def __init__(
         self,
@@ -620,13 +643,6 @@ class TextTriviaMazeView(TriviaMazeView):
             bar_pady=dims_hp_gauge_bar["pady"],
         )
 
-        inventory_item_labels = (
-            "Health Potion",
-            "Suggestion Potion",
-            "Vision Potion",
-            "Magic Key",
-        )
-
         dims_inventory = DIMENSIONS["inventory"]
         inventory = EnumeratedInventory(
             window=side_bar.frame,
@@ -634,14 +650,7 @@ class TextTriviaMazeView(TriviaMazeView):
             title_ipady=DIMENSIONS["inventory_title"]["ipady"],
             padx=dims_inventory["padx"],
             pady=dims_inventory["pady"],
-            item_labels=inventory_item_labels,
-        )
-
-        pillars_item_labels = (
-            "Abstraction",
-            "Encapsulation",
-            "Inheritance",
-            "Polymorphism",
+            item_labels=self.__INVENTORY_TYPE_LABELS.values(),
         )
 
         dims_pillars = DIMENSIONS["pillars"]
@@ -651,7 +660,7 @@ class TextTriviaMazeView(TriviaMazeView):
             title_ipady=DIMENSIONS["pillars_title"]["ipady"],
             padx=dims_pillars["padx"],
             pady=dims_pillars["pady"],
-            item_labels=pillars_item_labels,
+            item_labels=self.__PILLAR_TYPE_LABELS.values(),
         )
 
         menu_access_label = Label(
@@ -934,8 +943,35 @@ class TextTriviaMazeView(TriviaMazeView):
         for log_message in self._maze_model.flush_event_log_buffer():
             self.write_to_event_log(log_message)
 
-        # FIXME: Update inventory
-        # FIXME: Update pillar inventory
+        # Update inventories
+        self.__update_inventories()
+
+    def __update_inventories(self):
+        """Update the count of all items in regular inventory and pillar
+        inventory"""
+        current_items = self._maze_model.get_adventurer_items()
+        self.__update_inventory(current_items)
+        self.__update_pillar_inventory(current_items)
+
+    def __update_inventory(self, current_items):
+        """Update the counts of all items in the enumerated inventory."""
+        for item_type, item_label in self.__INVENTORY_TYPE_LABELS.items():
+            item_count = sum(
+                isinstance(item, item_type) for item in current_items
+            )
+            self.__inventory.update_item_quantity(item_label, item_count)
+
+    def __update_pillar_inventory(self, current_items):
+        """Check any boxes in the pillar inventory if the adventurer holds the
+        relevant pillar."""
+        for pillar_type, pillar_label in self.__PILLAR_TYPE_LABELS.items():
+            if any((isinstance(item, pillar_type) for item in current_items)):
+                self.__pillars_inventory.check_item(pillar_label)
+
+    def reset_inventories(self):
+        """Set all inventory quantities to zero and uncheck all pillar
+        boxes."""
+        # FIXME: Implement this...needs a 'uncheck item' for CheckboxInventory
 
     def pose_question_and_get_answer(self):
         # FIXME: Implement this
