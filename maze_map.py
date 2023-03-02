@@ -56,8 +56,13 @@ class MazeMap:
         self.__num_rows = num_rows
         self.__num_char_subrows = num_char_subrows
         self.__padding_col = padding_col
-        no_room = f" {padding_col} {padding_col} \n" * 3
-        self.__room_strings = [[no_room] * num_cols for _ in range(num_rows)]
+
+        # String used to represent a hidden room
+        self.hidden_room = f" {padding_col} {padding_col} \n" * 3
+
+        self.__room_strings = [
+            [self.hidden_room] * num_cols for _ in range(num_rows)
+        ]
 
     def __str__(self):
         """Join string representations for each room to give a global visual
@@ -117,9 +122,11 @@ class MazeMap:
             coordinates in maze, as well as a str representation.
         """
         # Go to element in room strings corresponding to this room
+        room_row, room_col = room.coords
         if room.visited:
-            room_row, room_col = room.coords
             self.__room_strings[room_row][room_col] = self.__get_room_str(room)
+        else:
+            self.__room_strings[room_row][room_col] = self.hidden_room
 
     def __get_room_symbol(self, room):
         """
