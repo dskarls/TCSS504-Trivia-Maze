@@ -385,8 +385,10 @@ class TriviaMaze(TriviaMazeModel):
                 return True
             # check if room has a pillar
             if current_room.contains_pillar():
-                # add pillar to found list
-                pillars_found.append(current_room.get_pillar())
+                # add pillar to found list if it's not already there
+                pillar = current_room.get_pillar()
+                if pillar not in pillars_found:
+                    pillars_found.append(pillar)
 
             # check if adv has locked themselves in a room
             if self.__get_adventurer_room() in inaccessible_rooms:
