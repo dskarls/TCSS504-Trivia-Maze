@@ -48,6 +48,7 @@ class TextTriviaMazeController(TriviaMazeController):
         super().__init__(maze_model)
 
         # Create a view object
+        self.__active_context = None
         dismiss_keys = (
             DismissibleCommandContext.COMMANDS[
                 DismissibleCommandContext.Command.DISMISS
@@ -170,7 +171,7 @@ class CommandContext(ABC):
         and view based on the current context."""
 
 
-class MenuCommandContext(CommandContext):
+class MenuCommandContext(CommandContext, ABC):
     class Command(Enum):
         """Enumeration used to fix commands to a small finite support set."""
 
@@ -276,7 +277,7 @@ class InGameMenuCommandContext(MenuCommandContext):
             self._maze_view.quit_entire_game()
 
 
-class DismissibleCommandContext(CommandContext):
+class DismissibleCommandContext(CommandContext, ABC):
     class Command(Enum):
         """Enumeration used to fix commands to a small finite support set."""
 
@@ -516,6 +517,18 @@ class QuestionAndAnswerCommandContext(CommandContext):
             # update the Q&A widget to display its hint
             pass
 
+    def question_answer(self, answer):
+        """
+        Called by the view when the player submits an answer to a question.
+        """
+        # Process the player's answer using the model
+        result = self._maze_model.process_answer(answer)
+
+        # Update the view based on the result
+        if result:
+            self._maze_view.show_message("Correct!")
+        else:
+            self._maze_view.show_message("Incorrect.")
 
 class MagicKeyCommandContext(CommandContext):
     class Command(Enum):
