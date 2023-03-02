@@ -338,6 +338,11 @@ class EnumeratedInventory:
         """Set the quantity associated with an item based on its name."""
         self.__item_quantity_labels[item_name].configure(text=str(quantity))
 
+    def clear(self):
+        """Set all item quantities to zero."""
+        for item_quantity_label in self.__item_quantity_labels:
+            item_quantity_label.configure(text="0")
+
 
 class CheckboxInventory:
     """An inventory of items that can either be held or not held, with
@@ -416,6 +421,11 @@ class CheckboxInventory:
     def check_item(self, item_name):
         """Set an item as being held, checking its box."""
         self.__item_check_button_control_vars[item_name].set(1)
+
+    def clear(self):
+        """Set all items as not being held, unchecking their boxes."""
+        for item_control_var in self.__item_check_button_control_vars:
+            item_control_var.set(0)
 
 
 class HPGauge:
