@@ -14,11 +14,6 @@ class TriviaMazeModel(ABC):
         pass
 
     @abstractmethod
-    def save_file_exists(self):
-        """Indicates whether a file containing a serialized model exists (True)
-        or not (False)."""
-
-    @abstractmethod
     def get_rooms(self):
         pass
 

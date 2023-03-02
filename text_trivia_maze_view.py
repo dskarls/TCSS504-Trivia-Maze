@@ -119,6 +119,16 @@ class TriviaMazeView(TriviaMazeModelObserver):
         """
 
     @abstractmethod
+    def show_no_save_file_found_menu(self):
+        """Show the pop-up telling the user that they can't load a game because
+        no save file was found."""
+
+    @abstractmethod
+    def hide_no_save_file_found_menu(self):
+        """Hide the pop-up telling the user that they can't load a game because
+        no save file was found."""
+
+    @abstractmethod
     def quit_entire_game(self):
         """Destroy the entire game and close the window"""
 
@@ -249,6 +259,13 @@ class TextTriviaMazeView(TriviaMazeView):
 
         # Create main menu and the help menu accessible from it
         self.__main_menu = self.__create_main_menu()
+
+        # Create pop-up to tell user that load game failed because no save file
+        # could be found
+        self.__no_save_file_found_menu = (
+            self.__create_no_save_file_found_menu()
+        )
+        self.hide_no_save_file_found_menu()
 
         # Help menu accessible from main menu
         self.__main_help_menu = self.__create_main_help_menu()
@@ -418,6 +435,34 @@ class TextTriviaMazeView(TriviaMazeView):
     def hide_question_and_answer_menu(self):
         """Hide the question and answer widget."""
         self.__question_and_answer_menu.hide()
+
+    def __create_no_save_file_found_menu(self):
+        """Create pop-up that tells the user that they couldn't load a game
+        because no save file could be found."""
+        dismiss_message = (
+            f"Press {' or '.join(self.__dismiss_keys)} to return to the main "
+            "menu"
+        )
+        return DismissiblePopUp(
+            self.__window,
+            None,
+            textwrap.dedent(MESSAGES["no_save_file_found_menu"]),
+            dismiss_message,
+            DIMENSIONS["no_save_file_found_menu"]["ipadx"],
+            DIMENSIONS["no_save_file_found_menu"]["ipady"],
+            STYLES["dismiss_text"]["style"],
+            STYLES["dismiss_bottom_label"]["style"],
+        )
+
+    def show_no_save_file_found_menu(self):
+        """Show the pop-up telling the user that they can't load a game because
+        no save file was found."""
+        self.__no_save_file_found_menu.show()
+
+    def hide_no_save_file_found_menu(self):
+        """Hide the pop-up telling the user that they can't load a game because
+        no save file was found."""
+        self.__no_save_file_found_menu.hide()
 
     def __create_main_help_menu(self):
         """Create the main help menu. This is the help menu that is accessed

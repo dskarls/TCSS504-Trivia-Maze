@@ -3,6 +3,7 @@ from enum import Enum, auto
 from question_and_answer import HintableQuestionAndAnswer
 from trivia_maze_model_observer import TriviaMazeModelObserver
 from text_trivia_maze_view import TextTriviaMazeView
+from trivia_maze import SaveGameFileNotFound
 
 _COMMAND_DESC_KEY = "description"
 _COMMAND_KEY_KEY = "key"
@@ -59,6 +60,11 @@ class TextTriviaMazeController(TriviaMazeController):
         self.__main_menu_context = MainMenuCommandContext(
             self, self._maze_model, self.__maze_view
         )
+        self.__no_save_file_found_menu_context = (
+            NoSaveFileFoundMenuCommandContext(
+                self, self._maze_model, self.__maze_view
+            )
+        )
         self.__main_help_menu_context = MainHelpMenuCommandContext(
             self, self._maze_model, self.__maze_view
         )
@@ -110,6 +116,7 @@ class TextTriviaMazeController(TriviaMazeController):
     def set_active_context(self, context_specifier):
         contexts = {
             "main_menu": self.__main_menu_context,
+            "no_save_file_found_menu": self.__no_save_file_found_menu_context,
             "main_help_menu": self.__main_help_menu_context,
             "primary_interface": self.__primary_interface_context,
             "in_game_menu": self.__in_game_menu_context,
@@ -230,12 +237,15 @@ class MainMenuCommandContext(MenuCommandContext):
             self._maze_controller.set_active_context("primary_interface")
 
         elif selected_option == "load game":
-            if self._maze_model.save_file_exists():
+            try:
                 self._maze_model.load_game()
                 self._maze_view.hide_main_menu()
                 self._maze_controller.set_active_context("primary_interface")
-
-            # FIXME: Gray out option if save file not present
+            except SaveGameFileNotFound:
+                self._maze_view.show_no_save_file_found_menu()
+                self._maze_controller.set_active_context(
+                    "no_save_file_found_menu"
+                )
 
         elif selected_option == "help":
             self._maze_view.show_main_help_menu()
@@ -319,6 +329,13 @@ class DismissibleCommandContext(CommandContext):
             _COMMAND_KEY_KEY: "Return",
         }
     }
+
+
+class NoSaveFileFoundMenuCommandContext(DismissibleCommandContext):
+    def process_keystroke(self, key):
+        if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
+            self._maze_view.hide_no_save_file_found_menu()
+            self._maze_controller.set_active_context("main_menu")
 
 
 class MainHelpMenuCommandContext(DismissibleCommandContext):

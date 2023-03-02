@@ -19,6 +19,7 @@ DIMENSIONS = {
     "pillars_title": {"ipady": 10},
     "menu_access_label": {"ipadx": 25, "ipady": 10},
     # Dismissible popups
+    "no_save_file_found_menu": {"ipadx": 10, "ipady": 8},
     "main_help_menu": {"ipadx": 10, "ipady": 8},
     "map_legend_menu": {"ipadx": 30, "ipady": 10},
     "command_legend_menu": {"ipadx": 30, "ipady": 10},
@@ -93,9 +94,13 @@ damage. However, healing potions can also be found throughout the maze.
 
 Good luck!
 """
+__NO_SAVE_FILE_FOUND_MESSAGE = """
+Load game failed! No save file could be found.
+"""
 
 MESSAGES = {
     "main_menu": __WELCOME_MESSAGE,
+    "no_save_file_found_menu": __NO_SAVE_FILE_FOUND_MESSAGE,
     "main_help_menu": __MAIN_HELP_MESSAGE,
     "game_won_menu": __YOU_WIN_MESSAGE,
     "game_lost_died_menu": __YOU_DIED_MESSAGE,

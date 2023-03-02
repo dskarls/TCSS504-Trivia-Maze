@@ -164,12 +164,6 @@ class TriviaMaze(TriviaMazeModel):
         with open(save_file_path, "wb") as save_flobj:
             pickle.dump(obj_to_serialize, save_flobj)
 
-    def save_file_exists(self):
-        """Return True if a save file that can be loaded exists. Otherwise,
-        return False."""
-        load_file_path = pathlib.Path(self.__SAVE_FILE_PATH)
-        return load_file_path.exists()
-
     def load_game(self):
         """
         Load the relevant parts of a saved model from a save file.
@@ -179,12 +173,12 @@ class TriviaMaze(TriviaMazeModel):
         SaveGameFileNotFound
             If no save game file can be found.
         """
-        if not self.save_file_exists():
+
+        load_file_path = pathlib.Path(self.__SAVE_FILE_PATH)
+        if not load_file_path.exists():
             raise SaveGameFileNotFound(
                 "Failed to load game. No save file exists."
             )
-
-        load_file_path = pathlib.Path(self.__SAVE_FILE_PATH)
 
         with open(load_file_path, "rb") as load_flobj:
             serialized_model_data = pickle.load(load_flobj)
