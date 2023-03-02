@@ -96,6 +96,18 @@ class TriviaMaze(TriviaMazeModel):
 
         self.__direction_attempt = None
 
+    def reset(self):
+        """If the user returns to the main menu after starting a game and then
+        starts a new game, the model should regenerate a new maze and a new
+        adventurer, etc."""
+        self.__maze, self.__adventurer = self.__reset_maze_and_adventurer()
+        self.__place_adventurer_in_maze()
+        self.__notify_observers()
+
+    def __reset_maze_and_adventurer(self):
+        """Regenerate maze and adventurer from scratch."""
+        return Maze(self.num_rows, self.num_cols, self.__db), Adventurer()
+
     def move_adventurer(self, direction):
         """
         Given a directional command will attempt to move the adventurer that
@@ -516,18 +528,6 @@ class TriviaMaze(TriviaMazeModel):
         """If a question is in the Q&A buffer, remove and return it."""
         if self.__question_and_answer_buffer:
             return self.__question_and_answer_buffer.pop()
-
-    def reset(self):
-        """If the user returns to the main menu after starting a game and then
-        starts a new game, the model should regenerate a new maze and a new
-        adventurer, etc."""
-        self.__maze, self.__adventurer = self.__reset_maze_and_adventurer()
-        self.__place_adventurer_in_maze()
-        self.__notify_observers()
-
-    def __reset_maze_and_adventurer(self):
-        """Regenerate maze and adventurer from scratch."""
-        return Maze(self.num_rows, self.num_cols, self.__db), Adventurer()
 
     def get_adventurer_items(self):
         return self.__adventurer.get_items()
