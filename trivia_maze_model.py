@@ -5,7 +5,6 @@ class TriviaMazeModel(ABC):
     def __init__(self):
         self._maze_observers = []
 
-    """
     @abstractmethod
     def save_game(self):
         pass
@@ -13,7 +12,11 @@ class TriviaMazeModel(ABC):
     @abstractmethod
     def load_game(self):
         pass
-    """
+
+    @abstractmethod
+    def save_file_exists(self):
+        """Indicates whether a file containing a serialized model exists (True)
+        or not (False)."""
 
     @abstractmethod
     def get_rooms(self):

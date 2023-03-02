@@ -210,11 +210,13 @@ class MainMenuCommandContext(MenuCommandContext):
             return
 
         # Trigger the currently selected item in the main menu
-        selected_option = self._maze_view.get_main_menu_current_selection()
+        selected_option = (
+            self._maze_view.get_main_menu_current_selection().lower()
+        )
 
         # NOTE: One might choose to have the controller tell the view what options
         # to add to the menu when it creates it in order to avoid duplication
-        if selected_option == "Start game":
+        if selected_option == "start game":
             # FIXME: Implement a difficulty selection and/or adventurer naming
             # menu and have the user go through that here. This may mean we
             # need to break up the stuff in the model's initialization so that
@@ -227,11 +229,19 @@ class MainMenuCommandContext(MenuCommandContext):
 
             self._maze_controller.set_active_context("primary_interface")
 
-        elif selected_option == "Help":
+        elif selected_option == "load game":
+            if self._maze_model.save_file_exists():
+                self._maze_model.load_game()
+                self._maze_view.hide_main_menu()
+                self._maze_controller.set_active_context("primary_interface")
+
+            # FIXME: Gray out option if save file not present
+
+        elif selected_option == "help":
             self._maze_view.show_main_help_menu()
             self._maze_controller.set_active_context("main_help_menu")
 
-        elif selected_option == "Quit game":
+        elif selected_option == "quit game":
             # Exit out of everything and close the window
             self._maze_view.quit_entire_game()
 
@@ -274,6 +284,9 @@ class InGameMenuCommandContext(MenuCommandContext):
                 symbols, descriptions, num_cols=2
             )
             self._maze_controller.set_active_context("command_legend_menu")
+
+        elif selected_option == "save game":
+            self._maze_model.save_game()
 
         elif selected_option == "return to main menu":
             # Have the model create a completely new map and reset all item

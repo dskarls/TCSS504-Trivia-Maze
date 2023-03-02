@@ -1,10 +1,17 @@
 from enum import Enum, auto
+import pathlib
+import pickle
 
 from adventurer import Adventurer
 from maze import Maze
 from room import Room
 from trivia_maze_model import TriviaMazeModel
 from trivia_database import SQLiteTriviaDatabase
+
+
+# Custom exceptions
+class SaveGameFileNotFound(FileNotFoundError):
+    """If a load game attempt is made when no save game file can be found."""
 
 
 class TriviaMaze(TriviaMazeModel):
@@ -65,6 +72,13 @@ class TriviaMaze(TriviaMazeModel):
         __Items.MAGIC_KEY: "magic key",
     }
 
+    # Where the save file is stored and how to access its component objects
+    __SAVE_FILE_PATH = pathlib.Path("save_game") / "trivia_maze.pkl"
+    __SAVE_FILE_KEY_ADVENTURER = "adventurer"
+    __SAVE_FILE_KEY_ADVENTURER_CURRENT_ROW = "adventurer_current_row"
+    __SAVE_FILE_KEY_ADVENTURER_CURRENT_COL = "adventurer_current_col"
+    __SAVE_FILE_KEY_MAZE = "maze"
+
     def __init__(self, num_rows, num_cols, db_file_path):
         super().__init__()
         self.__event_log_buffer = []
@@ -77,6 +91,8 @@ class TriviaMaze(TriviaMazeModel):
 
         self.__maze, self.__adventurer = self.__reset_maze_and_adventurer()
 
+        self.__adventurer_current_row = None
+        self.__adventurer_current_col = None
         self.__place_adventurer_in_maze()
 
         # For keeping track of direction attempted during a move operation by
@@ -111,6 +127,80 @@ class TriviaMaze(TriviaMazeModel):
     def __reset_maze_and_adventurer(self):
         """Regenerate maze and adventurer from scratch."""
         return Maze(self.num_rows, self.num_cols, self.__db), Adventurer()
+
+    def __serialize(self):
+        """
+        Create an object that contains the parts of the model needed to
+        reconstitute it. This amounts to the Maze and Adventurer objects
+        currently held by the model, which are packed into a dict.
+
+        Returns
+        -------
+        dict
+            Contains the keys "maze" and "adventurer", the values of which
+            correspond to the currently held Adventurer and Maze objects.
+        """
+        return {
+            self.__SAVE_FILE_KEY_MAZE: self.__maze,
+            self.__SAVE_FILE_KEY_ADVENTURER: self.__adventurer,
+            self.__SAVE_FILE_KEY_ADVENTURER_CURRENT_ROW: self.__adventurer_current_row,
+            self.__SAVE_FILE_KEY_ADVENTURER_CURRENT_COL: self.__adventurer_current_col,
+        }
+
+    def save_game(self):
+        """
+        Save the relevant parts of the model to a save file that can be loaded
+        at a later time to continue the game.
+        """
+        save_file_path = pathlib.Path(self.__SAVE_FILE_PATH)
+
+        # Create save directory if needed
+        save_file_dir = save_file_path.parent
+        if not save_file_dir.exists():
+            save_file_dir.mkdir()
+
+        # Create object to serialize and write to pickle file
+        obj_to_serialize = self.__serialize()
+        with open(save_file_path, "wb") as save_flobj:
+            pickle.dump(obj_to_serialize, save_flobj)
+
+    def save_file_exists(self):
+        """Return True if a save file that can be loaded exists. Otherwise,
+        return False."""
+        load_file_path = pathlib.Path(self.__SAVE_FILE_PATH)
+        return load_file_path.exists()
+
+    def load_game(self):
+        """
+        Load the relevant parts of a saved model from a save file.
+
+        Raises
+        ------
+        SaveGameFileNotFound
+            If no save game file can be found.
+        """
+        if not self.save_file_exists():
+            raise SaveGameFileNotFound(
+                "Failed to load game. No save file exists."
+            )
+
+        load_file_path = pathlib.Path(self.__SAVE_FILE_PATH)
+
+        with open(load_file_path, "rb") as load_flobj:
+            serialized_model_data = pickle.load(load_flobj)
+
+        # Overwrite current maze and adventurer with loaded objects
+        self.__maze = serialized_model_data[self.__SAVE_FILE_KEY_MAZE]
+        self.__adventurer = serialized_model_data[
+            self.__SAVE_FILE_KEY_ADVENTURER
+        ]
+        self.__adventurer_current_row = serialized_model_data[
+            self.__SAVE_FILE_KEY_ADVENTURER_CURRENT_ROW
+        ]
+        self.__adventurer_current_col = serialized_model_data[
+            self.__SAVE_FILE_KEY_ADVENTURER_CURRENT_COL
+        ]
+        self.__notify_observers()
 
     def move_adventurer(self, direction):
         """

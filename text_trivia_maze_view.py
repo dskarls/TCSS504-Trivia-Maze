@@ -342,7 +342,7 @@ class TextTriviaMazeView(TriviaMazeView):
     def __create_main_menu(self):
         """Create a main menu widget, insert it into the application master
         frame, and return it."""
-        options = ("Start game", "Help", "Quit game")
+        options = ("Start game", "Load Game", "Help", "Quit game")
         return MainMenu(self.__window, MESSAGES["main_menu"], options)
 
     def get_main_menu_current_selection(self):
@@ -368,6 +368,7 @@ class TextTriviaMazeView(TriviaMazeView):
             "Back to Game",
             "Display Map Legend",
             "Display Commands",
+            "Save Game",
             "Return to Main Menu",
             "Quit Game",
         )
