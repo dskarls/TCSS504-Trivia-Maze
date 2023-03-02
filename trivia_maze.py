@@ -527,3 +527,6 @@ class TriviaMaze(TriviaMazeModel):
 
     def __reset_maze_and_adventurer(self):
         return Maze(self.num_rows, self.num_cols, self.__db), Adventurer()
+
+    def get_adventurer_items(self):
+        return self.__adventurer.get_items()
