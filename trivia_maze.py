@@ -507,7 +507,7 @@ class TriviaMaze(TriviaMazeModel):
         for observer in self._maze_observers:
             observer.update()
 
-    def get_event_log_buffer_contents(self):
+    def flush_event_log_buffer(self):
         """If there are any entries in the event log buffer, remove and return
         them."""
         log_contents = self.__event_log_buffer.copy()
