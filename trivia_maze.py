@@ -128,6 +128,11 @@ class TriviaMaze(TriviaMazeModel):
         else:
             # Passable door -- either wasn't locked to begin with or was
             # unlocked with a correct response to a question and answer
+
+            # Set old room as no longer occupied
+            self.__get_adventurer_room().occupied_by_adventurer = False
+
+            # Adjust adventurer coords
             if direction == Room.NORTH:
                 self.__adventurer_current_row -= 1
             elif direction == Room.SOUTH:
