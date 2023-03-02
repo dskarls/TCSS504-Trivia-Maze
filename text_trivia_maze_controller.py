@@ -342,6 +342,7 @@ class GameWonCommandContext(DismissibleCommandContext):
     def process_keystroke(self, key):
         if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
             self._maze_view.hide_game_won_menu()
+            self._maze_view.show_main_menu()
             self._maze_controller.set_active_context("main_menu")
 
 
@@ -349,6 +350,7 @@ class GameLostDiedCommandContext(DismissibleCommandContext):
     def process_keystroke(self, key):
         if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
             self._maze_view.hide_game_lost_died_menu()
+            self._maze_view.show_main_menu()
             self._maze_controller.set_active_context("main_menu")
 
 
@@ -356,6 +358,7 @@ class GameLostTrappedCommandContext(DismissibleCommandContext):
     def process_keystroke(self, key):
         if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
             self._maze_view.hide_game_lost_trapped_menu()
+            self._maze_view.show_main_menu()
             self._maze_controller.set_active_context("main_menu")
 
 
