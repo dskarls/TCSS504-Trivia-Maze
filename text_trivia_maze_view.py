@@ -24,6 +24,7 @@ from view_components import (
     EventLog,
     SubWindow,
 )
+from question_and_answer import *
 
 
 class TriviaMazeModelObserver(ABC):
@@ -697,18 +698,61 @@ class TextTriviaMazeView(TriviaMazeView):
         Returns:
             str: The answer the player inputs in the input field.
         """
-        # Get the current question and answer options from the model
-        question, options = self._maze_model.get_current_question_and_options()
+
+        # Get the current question
+        question = self.controller.get_current_question()
+
+        # Display the question text
+        self.question_label.config(text=question.text)
+
+        # Determine question type and display answer options accordingly
+        if isinstance(question, ShortAnswerQA):
+            # Display input field for short answer questions
+            self.answer_input.pack()
+            self.true_false_button_frame.pack_forget()
+            self.multiple_choice_button_frame.pack_forget()
+
+        elif isinstance(question, TrueOrFalseQA):
+            # Display True/False buttons for true/false questions
+            self.answer_input.pack_forget()
+            self.multiple_choice_button_frame.pack_forget()
+            self.true_false_button_frame.pack(side="bottom")
+
+            # Bind the buttons to their corresponding functions
+            self.true_button.config(command=lambda: self.controller.answer_question("True"))
+            self.false_button.config(command=lambda: self.controller.answer_question("False"))
+
+        elif isinstance(question, MultipleChoiceQA):
+            # Display multiple choice buttons for multiple choice questions
+            self.answer_input.pack_forget()
+            self.true_false_button_frame.pack_forget()
+            self.multiple_choice_button_frame.pack(side="bottom")
+
+            # Set the labels for the buttons
+            options = question.options
+            self.option_a_button.config(text=options[0])
+            self.option_b_button.config(text=options[1])
+            self.option_c_button.config(text=options[2])
+            self.option_d_button.config(text=options[3])
+
+            # Bind the buttons to their corresponding functions
+            self.option_a_button.config(command=lambda: self.controller.answer_question(options[0]))
+            self.option_b_button.config(command=lambda: self.controller.answer_question(options[1]))
+            self.option_c_button.config(command=lambda: self.controller.answer_question(options[2]))
+            self.option_d_button.config(command=lambda: self.controller.answer_question(options[3]))
 
         # Display the question and answer options
-        self._question_label.config(text=question)
+        self.question_label.config(text=question.text)
         for i, option in enumerate(options):
             self._option_buttons[i].config(text=option)
-            self._option_buttons[i].grid(row=i+2, column=0)
+            self._option_buttons[i].grid(row=i + 2, column=0)
 
-        # Display the input field and submit button
-        self._answer_entry.grid(row=len(options)+2, column=0)
-        self._submit_button.grid(row=len(options)+3, column=0)
+        # Display the input field
+        self.answer_input.pack(side="bottom")
+        self._answer_entry.focus_set()
+
+        # Bind the input field to the "Return" event to submit the answer
+        self._answer_entry.bind("<Return>", lambda event: self.controller.answer_question(self._answer_entry.get()))
 
         # Wait for the player to submit an answer
         self.wait_variable(self._submitted_answer)
@@ -717,15 +761,16 @@ class TextTriviaMazeView(TriviaMazeView):
         answer = self._submitted_answer.get()
         self._answer_entry.delete(0, 'end')
 
-        # Hide the answer options, input field, and submit button
-        self._question_label.config(text='')
+        # Hide the answer options and input field
+        self.question_label.config(text='')
         for i in range(len(options)):
             self._option_buttons[i].grid_forget()
-        self._answer_entry.grid_forget()
-        self._submit_button.grid_forget()
+        self.answer_input.pack_forget()
+
+        # Unbind the input field from the "Return" event
+        self._answer_entry.unbind("<Return>")
 
         return answer
-
 
     def quit_entire_game(self):
         self.__window.destroy()
