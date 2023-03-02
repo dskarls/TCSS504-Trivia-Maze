@@ -141,10 +141,10 @@ class TextTriviaMazeController(TriviaMazeController):
         if game_status:
             if game_status == "died":
                 self.__maze_view.show_game_lost_died_menu()
-                self.set_active_context("game_lost_menu")
+                self.set_active_context("game_lost_died_menu")
             elif game_status == "trapped":
                 self.__maze_view.show_game_lost_trapped_menu()
-                self.set_active_context("game_lost_menu")
+                self.set_active_context("game_lost_trapped_menu")
             elif game_status == "win":
                 self.__maze_view.show_game_won_menu()
                 self.set_active_context("game_won_menu")
