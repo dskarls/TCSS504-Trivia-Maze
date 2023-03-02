@@ -137,9 +137,11 @@ class TriviaMaze(TriviaMazeModel):
             elif direction == Room.WEST:
                 self.__adventurer_current_col -= 1
 
-            # Mark the new room the adventurer has moved into as visited
+            # Mark the new room the adventurer has moved into as visited and
+            # occupied
             adventurer_room = self.__get_adventurer_room()
             adventurer_room.visited = True
+            adventurer_room.occupied_by_adventurer = True
 
             # pick up and remove all items from room
             items_in_room = adventurer_room.remove_items()
