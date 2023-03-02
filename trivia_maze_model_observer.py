@@ -8,6 +8,6 @@ class TriviaMazeModelObserver(ABC):
         self._maze_model.register_observer(self)
 
     @abstractmethod
-    def update(self, event):
+    def update(self):
         """Perform any necessary updates to self whenever the maze model emits
         a notification."""
