@@ -291,6 +291,7 @@ class Adventurer:
             A list containing VisionPotion objects.
         """
         return self.__vision_potions
+
     def get_items(self):
         """
         Return a tuple of references to all items held in inventory."""
