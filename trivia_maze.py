@@ -445,9 +445,10 @@ class TriviaMaze(TriviaMazeModel):
         ):
             return "win"
         # no path possible to win or no more hit points
-        if not self.__adventurer_can_navigate_maze_to_win():
-            return "trapped"
-        elif self.__adventurer.hit_points == 0:
+        if len(self.__adventurer.get_magic_keys()) < 1:
+            if not self.__adventurer_can_navigate_maze_to_win():
+                return "trapped"
+        if self.__adventurer.hit_points == 0:
             return "died"
 
     def __adventurer_can_navigate_maze_to_win(self):
@@ -463,19 +464,14 @@ class TriviaMaze(TriviaMazeModel):
             win.
         """
         DIRECTIONS = [Room.NORTH, Room.EAST, Room.SOUTH, Room.WEST]
-        TOTAL_ROOMS = self.__maze.num_rows * self.__maze.num_cols
 
         invalid_rooms = []
-        inaccessible_rooms = self.__get_inaccessible_rooms()
         current_room = self.__get_adventurer_room()
         visited_rooms = [current_room]
         pillars_found = list(self.__adventurer.get_pillars_found())
         exit_found = False
 
-        while (
-            len(visited_rooms) + len(invalid_rooms) + len(inaccessible_rooms)
-            < TOTAL_ROOMS
-        ):
+        while True:
             moved_to_new_room = False
             # check if we have moved into the exit room
             if current_room.is_exit():
@@ -489,10 +485,6 @@ class TriviaMaze(TriviaMazeModel):
                 pillar = current_room.get_pillar()
                 if pillar not in pillars_found:
                     pillars_found.append(pillar)
-
-            # check if adv has locked themselves in a room
-            if self.__get_adventurer_room() in inaccessible_rooms:
-                return False
             # loop through to find a valid direction to move into another room
             for direction in DIRECTIONS:
                 # check direction won't put us into a visited room
@@ -517,47 +509,13 @@ class TriviaMaze(TriviaMazeModel):
             if len(visited_rooms) > 0:
                 invalid_rooms.append(current_room)
                 current_room = visited_rooms.pop()
-
+            else:
+                break
         # check if the exit and all pillars have been found
         if exit_found and len(pillars_found) == 4:
             return True
         # if all rooms have been considered no possible path to victory
         return False
-
-    def __get_inaccessible_rooms(self):
-        """
-        Helper method that scans through the whole maze and checks if the room is
-        blocked from being accessed through normal means. Locked trivia doors are
-        not considered as blocking obstacles as the player may answer correctly.
-        Does not consider magic key's ability to open perm locked doors as this is
-        handled in the check_loss method.
-        Returns
-        -------
-        inaccesible_rooms : list
-            rooms that the adventurer will not have the ability to reach with out
-            the use of a magic key
-        """
-        inaccessible_rooms = []
-        DIRECTIONS = [Room.NORTH, Room.EAST, Room.SOUTH, Room.WEST]
-        for row in range(self.__maze.num_rows):
-            for col in range(self.__maze.num_cols):
-                wall_count = 0
-                perm_door_count = 0
-                for direction in DIRECTIONS:
-                    if (
-                        self.__maze.rooms[row][col].get_side(direction)
-                        == Room.WALL
-                    ):
-                        wall_count += 1
-                    elif (
-                        self.__maze.rooms[row][col]
-                        .get_side(direction)
-                        .perm_locked
-                    ):
-                        perm_door_count += 1
-                if wall_count + perm_door_count == 4:
-                    inaccessible_rooms.append(self.__maze.rooms[row][col])
-        return inaccessible_rooms
 
     def __move_to_new_room(self, room, direction):
         """
