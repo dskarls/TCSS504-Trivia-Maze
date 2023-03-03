@@ -548,14 +548,9 @@ class InGameMenu(PopUpWindow):
 
     def show(self):
         """Show the in-game menu's window."""
-        self._place_pop_up_at_center_of_window(self._frm, self._width)
-        self.__text_menu.focus()
+        super().show()
         self.__text_menu.reset_selection()
-        self._frm.update_idletasks()
-
-    def hide(self):
-        """Hide the in-game menu's window."""
-        self._frm.place_forget()
+        self.__text_menu.focus()
 
     @property
     def selected_option(self):
@@ -609,15 +604,6 @@ class DismissiblePopUp(PopUpWindow):
         )
         lbl.pack(fill=BOTH, ipadx=ipadx, ipady=ipady)
 
-    def show(self):
-        """Show the pop-up at the center of the parent frame."""
-        self._place_pop_up_at_center_of_window(self._frm, self._width)
-        self._frm.update_idletasks()
-
-    def hide(self):
-        """Hide the pop-up."""
-        self._frm.place_forget()
-
     def set_text(self, text):
         """Set the underlying text content of the pop-up to the specified
         value."""
@@ -653,9 +639,6 @@ class QuestionAndAnswerMenu(PopUpWindow):
             master=self._frm, text="", justify=CENTER, anchor=CENTER
         )
         self._question_lbl.pack(fill=BOTH, pady=pady)
-
-        # TODO: Also display how many suggestion potions the user has
-        # somewhere?
 
     def set_question(self, question_text):
         """
@@ -698,6 +681,9 @@ class HintableQuestionAndAnswerMenu(QuestionAndAnswerMenu):
             master=self._frm, text="", justify=CENTER, anchor=CENTER
         )
         hint_lbl.pack(fill=BOTH, pady=self._pady)
+
+        # TODO: Also display how many suggestion potions the user has
+        # somewhere?
 
         return hint_lbl
 
