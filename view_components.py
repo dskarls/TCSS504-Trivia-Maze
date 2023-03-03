@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 import functools
 
 from tkinter import *
@@ -6,6 +6,10 @@ from tkinter.ttk import *
 
 
 from view_config import STYLES
+
+
+class QAOptionNotFound(ValueError):
+    """When an option to select in an option-based widget cannot be found."""
 
 
 class TextMenu:
@@ -755,17 +759,19 @@ class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
         self._button_control_var = IntVar()
 
         buttons = []
-        for option in options:
+        for ind, option in enumerate(options):
             qa_option = Radiobutton(
                 master=self._frm,
                 text=option,
                 variable=self._button_control_var,
+                value=ind,
             )
             buttons.append(qa_option)
 
             # Pack to left unless this is the last column
-            qa_option.pack(side=LEFT)
+            qa_option.pack(side=LEFT, fill=BOTH, anchor=CENTER)
 
+        self._button_control_var.set(None)
         self._buttons = tuple(buttons)
 
     def set_options(self, options):
@@ -782,24 +788,29 @@ class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
 
         # Rejustify/pad?
 
-    def select_user_option(self, option_index):
+    def select_user_option(self, option_text):
         """
-        Mark one of the options in the widget as selected using its zero-based
-        index.
+        Mark one of the options in the widget as selected using its text label
+        content.
 
         Parameters
         ----------
-        option_index : int
-            Zero-based index indicating which option should be selected.
+        option_text : str
+            Text associated with the desired option.
         """
-        self._button_control_var.set(option_index + 1)
+        for ind, button in enumerate(self._buttons):
+            if button.cget("text") == option_text:
+                self._button_control_var.set(ind)
+                break
+
+        raise QAOptionNotFound("Option to select not found!")
 
     def clear_selection(self):
         """Deselect all buttons."""
         self._button_control_var.set(None)
 
     def get_user_answer(self):
-        return self._buttons[self._button_control_var - 1].cget("text")
+        return self._buttons[int(self._button_control_var.get())].cget("text")
 
 
 class TrueFalseQuestionAndAnswerMenu(QuestionAndAnswerWithOptionsMenu):
