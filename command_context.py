@@ -389,11 +389,11 @@ class ShortQuestionAndAnswerCommandContext(CommandContext):
         # FIXME: Display somewhere in the QA pop-up how many suggestion
         # potions they have left and what button to press to use one
 
-        # Take question and answer object from controller
-        question_and_answer = self._maze_controller.question_and_answer
-        self._maze_controller.question_and_answer = None
-
         if key == self.COMMANDS[self.Command.SUBMIT_ANSWER][_COMMAND_KEY_KEY]:
+            # Take question and answer object from controller
+            question_and_answer = self._maze_controller.question_and_answer
+            self._maze_controller.question_and_answer = None
+
             user_answer = self._maze_view.get_short_QA_user_answer()
             user_answer_correct = question_and_answer.answer_is_correct(
                 user_answer
@@ -475,11 +475,11 @@ class TrueOrFalseQuestionAndAnswerCommandContext(CommandContext):
         # FIXME: Display somewhere in the QA pop-up how many suggestion
         # potions they have left and what button to press to use one
 
-        # Take question and answer object from controller
-        question_and_answer = self._maze_controller.question_and_answer
-        self._maze_controller.question_and_answer = None
-
         if key == self.COMMANDS[self.Command.SUBMIT_ANSWER][_COMMAND_KEY_KEY]:
+            # Take question and answer object from controller
+            question_and_answer = self._maze_controller.question_and_answer
+            self._maze_controller.question_and_answer = None
+
             user_answer = self._maze_view.get_true_or_false_QA_user_answer()
             user_answer_correct = question_and_answer.answer_is_correct(
                 user_answer
