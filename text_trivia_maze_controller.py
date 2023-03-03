@@ -238,12 +238,19 @@ class MainMenuCommandContext(MenuCommandContext):
             self._maze_view.reset_inventories()
             self._maze_view.hide_main_menu()
 
+            # Clear view event log
+            self._maze_view.clear_event_log()
+
             self._maze_controller.set_active_context("primary_interface")
 
         elif selected_option == "load game":
             try:
                 self._maze_model.load_game()
                 self._maze_view.hide_main_menu()
+
+                # Clear view event log
+                self._maze_view.clear_event_log()
+
                 self._maze_controller.set_active_context("primary_interface")
             except SaveGameFileNotFound:
                 self._maze_view.show_no_save_file_found_menu()

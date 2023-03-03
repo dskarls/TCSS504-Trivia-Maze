@@ -1053,6 +1053,10 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__inventory.clear()
         self.__pillars_inventory.clear()
 
+    def clear_event_log(self):
+        """Remove all contents from the event log."""
+        self.__event_log.clear()
+
     def pose_question_and_get_answer(self):
         # FIXME: Implement this
         pass

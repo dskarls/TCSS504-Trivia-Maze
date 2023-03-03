@@ -276,6 +276,12 @@ class EventLog(SubWindow):
 
         return scrltxt
 
+    def clear(self):
+        """Clear contents of the event log."""
+        self.__textbox.config(state=NORMAL)
+        self.__textbox.delete("1.0", END)
+        self.__textbox.config(state=DISABLED)
+
 
 class EnumeratedInventory:
     """An inventory of items that have an positive integer count value
