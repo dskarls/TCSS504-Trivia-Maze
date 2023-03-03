@@ -681,7 +681,7 @@ class HintableQuestionAndAnswerMenu(QuestionAndAnswerMenu):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._hint_lbl = self._create_and_pack_hint_at_bottom()
+        self._hint_lbl = None
 
     def _create_and_pack_hint_at_bottom(self):
         """Create a hint Label and pack it at the bottom of the window under
