@@ -67,6 +67,7 @@ class TriviaMaze(TriviaMazeModel):
         VISION_POTION = auto()
         SUGGESTION_POTION = auto()
         MAGIC_KEY = auto()
+        SUGGESTION_POTION = auto()
 
     __ITEMS = {
         __Items.HEALING_POTION: "healing potion",
