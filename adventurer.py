@@ -281,6 +281,17 @@ class Adventurer:
         """
         return self.__magic_keys
 
+    def get_vision_potions(self):
+        """
+        Return a list of vision potions the adventurer has in their inventory.
+
+        Returns
+        -------
+        list
+            A list containing VisionPotion objects.
+        """
+        return self.__vision_potions
+
     def get_items(self):
         """
         Return a tuple of references to all items held in inventory."""

@@ -576,7 +576,7 @@ class MagicKeyCommandContext(CommandContext):
 
     def process_keystroke(self, key):
         if key == self.COMMANDS[self.Command.USE_MAGIC_KEY][_COMMAND_KEY_KEY]:
-            self._maze_model.use_item("magic_key")
+            self._maze_model.use_item("magic key")
             # TODO: Before any controller code switches to this command
             # context, it should first check whether the user actually had a
             # magic key. If not, then it should actually instead display a
