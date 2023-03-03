@@ -399,7 +399,18 @@ class TriviaMaze(TriviaMazeModel):
             self.move_adventurer(self.__direction_attempt)
             self.__event_log_buffer.append(f"You used a {str(magic_key)}!")
 
+        elif item == self.__ITEMS[self.__Items.SUGGESTION_POTION]:
+            if len(self.__adventurer.get_suggestion_potions()) > 0:
+                suggestion_potions = self.__adventurer.consume_suggestion_potions()
+                self.__event_log_buffer.append(f"You used a {str(suggestion_potion)}!")
+                return self.__get_hint_from_hintable_question()
+
         self.__notify_observers()
+    
+    def __get_hint_from_hintable_question(self):
+        """If a question has a hint will return that hint."""
+        qa_door = self.__get_adventurer_room.get_side(self.__direction_attempt)
+        return qa_door.question_and_answer.get_hint()
 
     def __unlock_perm_locked_door(self):
         """Unlocks a permanently locked trivia door in the room the adventurer
