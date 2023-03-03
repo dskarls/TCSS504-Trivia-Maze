@@ -132,4 +132,9 @@ dmypy.json
 # MacOS dir metadata files
 .DS_Store
 
+# Pycharm project dirs
 .idea/
+
+# Save game files
+save_game/
+
