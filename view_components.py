@@ -741,5 +741,7 @@ class ShortAnswerQuestionAndAnswer(HintableQuestionAndAnswerMenu):
         """Fetch and return the player's answer."""
         return self.__user_input.get()
 
-    def set_hint(self, text):
-        self.__hint_lbl.configure(text=text)
+    def clear_user_answer(self):
+        """Clear out any contents in the short answer text entry box."""
+        self.__user_input.delete("1.0", END)
+
