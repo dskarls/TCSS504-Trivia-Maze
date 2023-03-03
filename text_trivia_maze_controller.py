@@ -575,6 +575,7 @@ class QuestionAndAnswerCommandContext(CommandContext):
 
             # Hide Q&A widget
             self._maze_view.hide_short_QA_menu()
+            self._maze_view.clear_short_QA_user_answer()
 
             # Reset Q&A of controller to None so we don't keep asking the same
             # question

@@ -73,6 +73,11 @@ class TriviaMazeView(TriviaMazeModelObserver):
         """Hide the in-game menu pop-up"""
 
     @abstractmethod
+    def clear_short_QA_user_answer(self):
+        """Clear the contents of the text entry box in the short answer Q&A
+        widget."""
+
+    @abstractmethod
     def show_short_QA_menu(self):
         """Show the short answer Q&A widget."""
 
@@ -447,6 +452,11 @@ class TextTriviaMazeView(TriviaMazeView):
     def get_short_QA_user_answer(self):
         """Return the user's current answer to the relevant Q&A prompt."""
         return self.__short_QA_menu.get_user_answer()
+
+    def clear_short_QA_user_answer(self):
+        """Clear the contents of the text entry box in the short answer Q&A
+        widget."""
+        return self.__short_QA_menu.clear_user_answer()
 
     def __create_no_save_file_found_menu(self):
         """Create pop-up that tells the user that they couldn't load a game

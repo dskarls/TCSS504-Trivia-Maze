@@ -743,5 +743,5 @@ class ShortAnswerQuestionAndAnswer(HintableQuestionAndAnswerMenu):
 
     def clear_user_answer(self):
         """Clear out any contents in the short answer text entry box."""
-        self.__user_input.delete("1.0", END)
+        self.__user_input.delete(0, END)
 
