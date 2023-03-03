@@ -656,9 +656,16 @@ class QuestionAndAnswerMenu(PopUpWindow):
         # TODO: Also display how many suggestion potions the user has
         # somewhere?
 
-    def set_question(self, text):
-        """Sets the content of the question text to the specified value."""
-        self._question_lbl.configure(text=text)
+    def set_question(self, question_text):
+        """
+        Populates the question label with the specified text.
+
+        Parameters
+        ----------
+        question_text : str
+            String to fill in as question in the widget.
+        """
+        self._question_lbl.configure(text=question_text)
 
     @abstractmethod
     def set_hint(self, text):
