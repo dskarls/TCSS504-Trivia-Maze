@@ -76,6 +76,12 @@ class TriviaMazeView(TriviaMazeModelObserver):
     def pose_question_and_get_answer(self, question_and_answer):
         """Show the user a question-and-answer pop-up and retrieve the answer,
         then hide the pop-up.
+
+        Parameters
+        ----------
+        question_and_answer : QuestionAndAnswer
+            A question and answer to be posed to the user. Must have an
+            `answer_is_correct()` method, and optionally a `get_hint()` method.
         """
 
     @abstractmethod
