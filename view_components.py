@@ -681,7 +681,25 @@ class HintableQuestionAndAnswerMenu(QuestionAndAnswerMenu):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._hint_lbl = None
+        self._hint_lbl = self._create_and_pack_hint_at_bottom()
+
+    def _create_and_pack_hint_at_bottom(self):
+        """Create a hint Label and pack it at the bottom of the window under
+        the options (and free-form text box, if applicable).
+
+        Returns
+        -------
+        hint_lbl : tk.Label
+            A label widget located at the bottom of the frame that can contain
+            a hint.
+        """
+        # Add an empty text section to hold a hint
+        hint_lbl = Label(
+            master=self._frm, text="", justify=CENTER, anchor=CENTER
+        )
+        hint_lbl.pack(fill=BOTH, pady=self._pady)
+
+        return hint_lbl
 
     @abstractmethod
     def set_hint(self, hint_text):
@@ -694,15 +712,6 @@ class HintableQuestionAndAnswerMenu(QuestionAndAnswerMenu):
         """
         pass
 
-    def _create_and_pack_hint_at_bottom(self):
-        """Create a hint Label and pack it at the bottom of the window under
-        the options (and free-form text box, if applicable)."""
-        # Add an empty text section to hold a hint
-        self._hint_lbl = Label(
-            master=self._frm, text="", justify=CENTER, anchor=CENTER
-        )
-        self._hint_lbl.pack(fill=BOTH, pady=self._pady)
-
 
 class ShortAnswerQuestionAndAnswer(HintableQuestionAndAnswerMenu):
     """A question and answer widget that the user can respond to with a
@@ -711,6 +720,7 @@ class ShortAnswerQuestionAndAnswer(HintableQuestionAndAnswerMenu):
     def __init__(self, window, width, title, pady):
         super().__init__(window, width, title, pady)
 
+        # Create and pack free-form text entry box.
         self.__user_input = Entry(master=self._frm, justify=CENTER)
         self.__user_input.pack(fill=BOTH, pady=pady)
 
