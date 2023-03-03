@@ -22,6 +22,7 @@ from view_components import (
     DismissiblePopUp,
     Map,
     ShortAnswerQuestionAndAnswer,
+    TrueFalseQuestionAndAnswerMenu,
     EventLog,
     SubWindow,
 )
@@ -84,6 +85,14 @@ class TriviaMazeView(TriviaMazeModelObserver):
     @abstractmethod
     def hide_short_QA_menu(self):
         """Hide the short answer Q&A widget."""
+
+    @abstractmethod
+    def show_true_or_false_QA_menu(self):
+        """Show the true or false answer Q&A widget."""
+
+    @abstractmethod
+    def hide_true_or_false_QA_menu(self):
+        """Hide the true or false answer Q&A widget."""
 
     @abstractmethod
     def write_to_event_log(self):
@@ -263,9 +272,13 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__command_legend_menu = self.__create_command_legend_menu()
         self.hide_command_legend_menu()
 
-        # Creat empty question & answer menu
-        self.__short_QA_menu = self.__create_question_and_answer_menu()
+        # Creat empty short answer question & answer menu
+        self.__short_QA_menu = self.__create_short_QA_menu()
         self.hide_short_QA_menu()
+
+        # Creat empty true or false question & answer menu
+        self.__true_or_false_QA_menu = self.__create_true_or_false_QA_menu()
+        self.hide_true_or_false_QA_menu()
 
         # Create main menu and the help menu accessible from it
         self.__main_menu = self.__create_main_menu()
@@ -420,10 +433,10 @@ class TextTriviaMazeView(TriviaMazeView):
         """Hide the in-game menu."""
         self.__in_game_menu.hide()
 
-    def __create_question_and_answer_menu(self):
+    def __create_short_QA_menu(self):
         """Create a generic question and answer widget that doesn't hold any
         content yet. Its content can be populated by the controller using the
-        `set_question` method."""
+        `set_short_QA_question` and `set_short_WA_hint` methods."""
         return ShortAnswerQuestionAndAnswer(
             self.__window,
             None,
@@ -452,6 +465,46 @@ class TextTriviaMazeView(TriviaMazeView):
     def get_short_QA_user_answer(self):
         """Return the user's current answer to the relevant Q&A prompt."""
         return self.__short_QA_menu.get_user_answer()
+
+    def __create_true_or_false_QA_menu(self):
+        """Create a generic T/F question and answer widget that doesn't hold
+        any content yet. Its content can be populated by the controller using
+        `set_true_or_false_QA_question` and `set_true_or_false_WA_hint`
+        methods.
+        """
+        return TrueFalseQuestionAndAnswerMenu(
+            self.__window,
+            None,
+            "Q & A",
+            DIMENSIONS["question_and_answer_menu"]["ipady"],
+        )
+
+    def set_true_or_false_QA_question(self, question_text):
+        """Populate the true or false question and answer widget with the
+        question contents."""
+        self.__true_or_false_QA_menu.set_question(question_text)
+
+    def clear_true_or_false_QA_user_answer(self):
+        """Clear the contents of the text entry box in the short answer Q&A
+        widget."""
+        return self.__true_or_false_QA_menu.clear_selection()
+
+    def select_QA_user_answer(self, option):
+        """For multiple choice and true/false question and answer types, select
+        the option with the text value given by `option`"""
+        self.__true_or_false_QA_menu.select_user_option(option)
+
+    def show_true_or_false_QA_menu(self):
+        """Show the question and answer widget."""
+        self.__true_or_false_QA_menu.show()
+
+    def hide_true_or_false_QA_menu(self):
+        """Hide the question and answer widget."""
+        self.__true_or_false_QA_menu.hide()
+
+    def get_true_or_false_QA_user_answer(self):
+        """Return the user's current answer to the relevant Q&A prompt."""
+        return self.__true_or_false_QA_menu.get_user_answer()
 
     def clear_short_QA_user_answer(self):
         """Clear the contents of the text entry box in the short answer Q&A

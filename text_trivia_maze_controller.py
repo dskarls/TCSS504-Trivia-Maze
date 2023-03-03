@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum, auto
-from question_and_answer import HintableQuestionAndAnswer
+from question_and_answer import ShortAnswerQA, TrueOrFalseQA
 from trivia_maze_model_observer import TriviaMazeModelObserver
 from text_trivia_maze_view import TextTriviaMazeView
 from trivia_maze import SaveGameFileNotFound
@@ -92,9 +92,13 @@ class TextTriviaMazeController(TriviaMazeController):
         self.__game_lost_trapped_menu_context = GameLostTrappedCommandContext(
             self, self._maze_model, self.__maze_view
         )
-
-        self.__short_QA_context = QuestionAndAnswerCommandContext(
+        self.__short_QA_context = ShortQuestionAndAnswerCommandContext(
             self, self._maze_model, self.__maze_view
+        )
+        self.__true_or_false_QA_context = (
+            TrueOrFalseQuestionAndAnswerCommandContext(
+                self, self._maze_model, self.__maze_view
+            )
         )
         self.__magic_key_context = MagicKeyCommandContext(
             self, self._maze_model, self.__maze_view
@@ -134,6 +138,7 @@ class TextTriviaMazeController(TriviaMazeController):
             "game_lost_died_menu": self.__game_lost_died_menu_context,
             "game_lost_trapped_menu": self.__game_lost_trapped_menu_context,
             "short_QA_menu": self.__short_QA_context,
+            "true_or_false_QA_menu": self.__true_or_false_QA_context,
             "magic_key": self.__magic_key_context,
             "need_magic_key": self.__need_magic_key_context,
         }
@@ -170,11 +175,18 @@ class TextTriviaMazeController(TriviaMazeController):
             self._maze_model.flush_question_and_answer_buffer()
         )
         if self.question_and_answer:
-            self.__maze_view.set_short_QA_question(
-                self.question_and_answer.question,
-            )
-            self.__maze_view.show_short_QA_menu()
-            self.set_active_context("short_QA_menu")
+            if isinstance(self.question_and_answer, ShortAnswerQA):
+                self.__maze_view.set_short_QA_question(
+                    self.question_and_answer.question,
+                )
+                self.__maze_view.show_short_QA_menu()
+                self.set_active_context("short_QA_menu")
+            elif isinstance(self.question_and_answer, TrueOrFalseQA):
+                self.__maze_view.set_true_or_false_QA_question(
+                    self.question_and_answer.question,
+                )
+                self.__maze_view.show_true_or_false_QA_menu()
+                self.set_active_context("true_or_false_QA_menu")
 
 
 class CommandContext(ABC):
@@ -526,7 +538,7 @@ class PrimaryInterfaceCommandContext(CommandContext):
                     self._maze_view.show_need_magic_key_menu()
 
 
-class QuestionAndAnswerCommandContext(CommandContext):
+class ShortQuestionAndAnswerCommandContext(CommandContext):
     class Command(Enum):
         """Enumeration used to fix commands to a small finite support set."""
 
@@ -601,6 +613,81 @@ class QuestionAndAnswerCommandContext(CommandContext):
 
             # Return command interpretation to primary interface
             self._maze_controller.set_active_context("primary_interface")
+
+
+class TrueOrFalseQuestionAndAnswerCommandContext(CommandContext):
+    class Command(Enum):
+        """Enumeration used to fix commands to a small finite support set."""
+
+        # Answer selection commands
+        SELECT_TRUE = auto()
+        SELECT_FALSE = auto()
+
+        # Other commands
+        SUBMIT_ANSWER = auto()
+
+    COMMANDS = {
+        # Item commands
+        Command.SELECT_TRUE: {
+            _COMMAND_TYPE: _COMMAND_TYPE_OTHER,
+            _COMMAND_DESC_KEY: "Select True",
+            _COMMAND_KEY_KEY: "t",
+        },
+        Command.SELECT_FALSE: {
+            _COMMAND_TYPE: _COMMAND_TYPE_OTHER,
+            _COMMAND_DESC_KEY: "Select False",
+            _COMMAND_KEY_KEY: "f",
+        },
+        # Other commands
+        Command.SUBMIT_ANSWER: {
+            _COMMAND_TYPE: _COMMAND_TYPE_OTHER,
+            _COMMAND_DESC_KEY: "Submit answer",
+            _COMMAND_KEY_KEY: "Return",
+        },
+    }
+
+    def process_keystroke(self, key):
+        # FIXME: Display somewhere in the QA pop-up how many suggestion
+        # potions they have left and what button to press to use one
+        if key == self.COMMANDS[self.Command.SUBMIT_ANSWER][_COMMAND_KEY_KEY]:
+            user_answer = self._maze_view.get_true_or_false_QA_user_answer()
+            user_answer_correct = (
+                self._maze_controller.question_and_answer.answer_is_correct(
+                    user_answer
+                )
+            )
+            # Inform the model
+            self._maze_model.inform_player_answer_correct_or_incorrect(
+                user_answer_correct
+            )
+
+            if user_answer_correct:
+                # Tell user they were right and door was unlocked
+                # FIXME: Implement this
+                pass
+                print("Correct")
+            else:
+                # Tell user they were wrong and door was permanently locked
+                # FIXME: Implement this
+                print("Incorrect")
+                pass
+
+            # Hide Q&A widget
+            self._maze_view.hide_true_or_false_QA_menu()
+            self._maze_view.clear_true_or_false_QA_user_answer()
+
+            # Reset Q&A of controller to None so we don't keep asking the same
+            # question
+            self._maze_controller.question_and_answer = None
+
+            # Return command interpretation to primary interface
+            self._maze_controller.set_active_context("primary_interface")
+
+        elif key == self.COMMANDS[self.Command.SELECT_TRUE][_COMMAND_KEY_KEY]:
+            self._maze_view.select_QA_user_answer("True")
+
+        elif key == self.COMMANDS[self.Command.SELECT_FALSE][_COMMAND_KEY_KEY]:
+            self._maze_view.select_QA_user_answer("False")
 
 
 class MagicKeyCommandContext(CommandContext):
