@@ -383,6 +383,7 @@ class TriviaMaze(TriviaMazeModel):
         the player used a magic key.
         """
         current_room = self.__get_adventurer_room()
+        current_room.get_side(self.__direction_attempt).locked = False
         current_room.get_side(self.__direction_attempt).perm_locked = False
 
     def __unlock_trivia_door(self):
