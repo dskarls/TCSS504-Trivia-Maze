@@ -691,11 +691,6 @@ class ShortAnswerQuestionAndAnswer(QuestionAndAnswerMenu):
     def __init__(self, window, width, title, pady):
         super().__init__(window, width, title, pady)
 
-        self.__options_lbl = Label(
-            master=self._frm, text="", justify=CENTER, anchor=CENTER
-        )
-        self.__options_lbl.pack(fill=BOTH, pady=pady)
-
         self.__user_input = Entry(master=self._frm, justify=CENTER)
         self.__user_input.pack(fill=BOTH, pady=pady)
 
