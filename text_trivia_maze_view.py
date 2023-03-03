@@ -73,18 +73,6 @@ class TriviaMazeView(TriviaMazeModelObserver):
         """Hide the in-game menu pop-up"""
 
     @abstractmethod
-    def pose_question_and_get_answer(self, question_and_answer):
-        """Show the user a question-and-answer pop-up and retrieve the answer,
-        then hide the pop-up.
-
-        Parameters
-        ----------
-        question_and_answer : QuestionAndAnswer
-            A question and answer to be posed to the user. Must have an
-            `answer_is_correct()` method, and optionally a `get_hint()` method.
-        """
-
-    @abstractmethod
     def show_short_QA_menu(self):
         """Show the short answer Q&A widget."""
 
@@ -1071,18 +1059,6 @@ class TextTriviaMazeView(TriviaMazeView):
     def clear_event_log(self):
         """Remove all contents from the event log."""
         self.__event_log.clear()
-
-    def pose_question_and_get_answer(self, question_and_answer):
-        """Show the user a question-and-answer pop-up and retrieve the answer,
-        then hide the pop-up.
-
-        Parameters
-        ----------
-        question_and_answer : QuestionAndAnswer
-            A question and answer to be posed to the user. Must have an
-            `answer_is_correct()` method, and optionally a `get_hint()` method.
-        """
-        # FIXME: Implement this
 
     def quit_entire_game(self):
         """Tear down the entire application and quit."""
