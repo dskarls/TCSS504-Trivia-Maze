@@ -93,7 +93,7 @@ class TextTriviaMazeController(TriviaMazeController):
             self, self._maze_model, self.__maze_view
         )
 
-        self.__question_and_answer_context = QuestionAndAnswerCommandContext(
+        self.__short_QA_context = QuestionAndAnswerCommandContext(
             self, self._maze_model, self.__maze_view
         )
         self.__magic_key_context = MagicKeyCommandContext(
@@ -102,6 +102,10 @@ class TextTriviaMazeController(TriviaMazeController):
         self.__need_magic_key_context = NeedMagicKeyCommandContext(
             self, self._maze_model, self.__maze_view
         )
+
+        # Initialize question and answer (used between different command
+        # contexts) attr
+        self.question_and_answer = None
 
         # Player starts out at the main menu, so make that the active context.
         # NOTE: This sets the `__active_context` instance attr
@@ -129,7 +133,7 @@ class TextTriviaMazeController(TriviaMazeController):
             "game_won_menu": self.__game_won_menu_context,
             "game_lost_died_menu": self.__game_lost_died_menu_context,
             "game_lost_trapped_menu": self.__game_lost_trapped_menu_context,
-            "question_and_answer": self.__question_and_answer_context,
+            "short_QA_menu": self.__short_QA_context,
             "magic_key": self.__magic_key_context,
             "need_magic_key": self.__need_magic_key_context,
         }
@@ -158,22 +162,19 @@ class TextTriviaMazeController(TriviaMazeController):
         self.__process_question_and_answer_buffer()
 
     def __process_question_and_answer_buffer(self):
-        question_and_answer = (
+        """If the model put a QuestionAndAnswer object in its corresponding
+        buffer, tell the view to pose it to the user and switch to the
+        appropriate command context to get their answer (and, if applicable,
+        allow them to use a suggestion potion)."""
+        self.question_and_answer = (
             self._maze_model.flush_question_and_answer_buffer()
         )
-        if question_and_answer:
-            hint = None
-            if isinstance(question_and_answer, HintableQuestionAndAnswer):
-                hint = question_and_answer.get_hint()
-
-            if question_and_answer:
-                self.__maze_view.set_question(
-                    question_and_answer.question,
-                    question_and_answer.options,
-                    hint,
-                )
-                self.__maze_view.show_question_and_answer_menu()
-                self.set_active_context("question_and_answer")
+        if self.question_and_answer:
+            self.__maze_view.set_short_QA_question(
+                self.question_and_answer.question,
+            )
+            self.__maze_view.show_short_QA_menu()
+            self.set_active_context("short_QA_menu")
 
 
 class CommandContext(ABC):
@@ -526,8 +527,6 @@ class PrimaryInterfaceCommandContext(CommandContext):
 
 
 class QuestionAndAnswerCommandContext(CommandContext):
-    # FIXME: Figure out what other keys need to be enabled for a player to
-    # answer questions
     class Command(Enum):
         """Enumeration used to fix commands to a small finite support set."""
 
@@ -555,13 +554,50 @@ class QuestionAndAnswerCommandContext(CommandContext):
     def process_keystroke(self, key):
         # FIXME: Display somewhere in the QA pop-up how many suggestion
         # potions they have left and what button to press to use one
-        if key == self.COMMANDS[self.Command.SUBMIT_ANSWER]:
-            # FIXME: Get current answer and check if it is correct
-            pass
-        elif key == self.COMMANDS[self.Command.USE_SUGGESTION_POTION]:
+        if key == self.COMMANDS[self.Command.SUBMIT_ANSWER][_COMMAND_KEY_KEY]:
+            user_answer = self._maze_view.get_short_QA_user_answer()
+            user_answer_correct = (
+                self._maze_controller.question_and_answer.answer_is_correct(
+                    user_answer
+                )
+            )
+            # Inform the model
+            self._maze_model.inform_player_answer_correct_or_incorrect(True)
+
+            if user_answer_correct:
+                # Tell user they were right and door was unlocked
+                # FIXME: Implement this
+                pass
+            else:
+                # Tell user they were wrong and door was permanently locked
+                # FIXME: Implement this
+                pass
+
+            # Hide Q&A widget
+            self._maze_view.hide_short_QA_menu()
+
+            # Reset Q&A of controller to None so we don't keep asking the same
+            # question
+            self._maze_controller.question_and_answer = None
+
+            # Return command interpretation to primary interface
+            self._maze_controller.set_active_context("primary_interface")
+
+        elif (
+            key
+            == self.COMMANDS[self.Command.USE_SUGGESTION_POTION][
+                _COMMAND_KEY_KEY
+            ]
+        ):
             # TODO: Check if user has a suggestion potion. If so, use it and
             # update the Q&A widget to display its hint
-            pass
+
+            # Reset Q&A of controller to None so we don't keep asking the same
+            # question
+            self._maze_controller.question_and_answer = None
+
+            # Return command interpretation to primary interface
+            self._maze_controller.set_active_context("primary_interface")
 
 
 class MagicKeyCommandContext(CommandContext):
