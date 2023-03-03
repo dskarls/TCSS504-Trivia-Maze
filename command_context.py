@@ -416,10 +416,6 @@ class ShortQuestionAndAnswerCommandContext(CommandContext):
             self._maze_view.hide_short_QA_menu()
             self._maze_view.clear_short_QA_user_answer()
 
-            # Reset Q&A of controller to None so we don't keep asking the same
-            # question
-            self._maze_controller.question_and_answer = None
-
             # Return command interpretation to primary interface
             self._maze_controller.set_active_context("primary_interface")
 
@@ -499,10 +495,6 @@ class TrueOrFalseQuestionAndAnswerCommandContext(CommandContext):
             # Hide Q&A widget
             self._maze_view.hide_true_or_false_QA_menu()
             self._maze_view.clear_true_or_false_QA_user_answer()
-
-            # Reset Q&A of controller to None so we don't keep asking the same
-            # question
-            self._maze_controller.question_and_answer = None
 
             # Return command interpretation to primary interface
             self._maze_controller.set_active_context("primary_interface")
