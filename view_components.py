@@ -475,7 +475,7 @@ class HPGauge:
         self.__bar_hp_gauge["value"] = value
 
 
-class PopUpWindow(ABC):
+class PopUpWindow:
     """A pop-up window that does not belong to a frame's grid, but is rather
     displayed over the top of it."""
 
@@ -497,15 +497,15 @@ class PopUpWindow(ABC):
             width=width,
         )
 
-    @abstractmethod
     def show(self):
-        """Show the pop-up window."""
-        pass
+        """Show the pop-up window in the middle of the center of the parent
+        frame."""
+        self._place_pop_up_at_center_of_window(self._frm, self._width)
+        self._frm.update_idletasks()
 
-    @abstractmethod
     def hide(self):
         """Hide the pop-up window."""
-        pass
+        self._frm.place_forget()
 
 
 class InGameMenu(PopUpWindow):
