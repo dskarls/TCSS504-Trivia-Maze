@@ -701,7 +701,6 @@ class HintableQuestionAndAnswerMenu(QuestionAndAnswerMenu):
 
         return hint_lbl
 
-    @abstractmethod
     def set_hint(self, hint_text):
         """Sets the content of the hint text to the specified value.
 
@@ -710,7 +709,7 @@ class HintableQuestionAndAnswerMenu(QuestionAndAnswerMenu):
         hint_text : str
             The text to display as a hint in the widget.
         """
-        pass
+        self._hint_lbl.configure(text=hint_text)
 
 
 class ShortAnswerQuestionAndAnswer(HintableQuestionAndAnswerMenu):
