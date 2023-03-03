@@ -731,3 +731,81 @@ class ShortAnswerQuestionAndAnswer(HintableQuestionAndAnswerMenu):
         """Clear out any contents in the short answer text entry box."""
         self.__user_input.delete(0, END)
 
+
+class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
+    """A question and answer widget that has options, represent by radio
+    buttons, for the user to select from."""
+
+    def __init__(self, window, width, title, pady, options):
+        """Create radio buttons and labels for each of the options in
+        ``options`` and pack them into a frame (left-to-right, top-to-bottom)
+        in a two-column configuration.
+
+        Returns
+        -------
+        option_buttons : tk.Label
+            A label widget located at the bottom of the frame that can contain
+            a hint.
+        """
+        super().__init__(window, width, title, pady)
+
+        # Create options. Note that since they all belong to the same frame,
+        # they'll automatically coordinate so that only one can be selected at
+        # any given time.
+        self._button_control_var = IntVar()
+
+        buttons = []
+        for option in options:
+            qa_option = Radiobutton(
+                master=self._frm,
+                text=option,
+                variable=self._button_control_var,
+            )
+            buttons.append(qa_option)
+
+            # Pack to left unless this is the last column
+            qa_option.pack(side=LEFT)
+
+        self._buttons = tuple(buttons)
+
+    def set_options(self, options):
+        """Sets the content of the options text, if any, that the user can
+        choose from to the specified value.
+
+        Parameters
+        ----------
+        options : list
+            Set of possible options to display to the user.
+        """
+        for ind, option_text in enumerate(options):
+            self._buttons[ind].configure(text=option_text)
+
+        # Rejustify/pad?
+
+    def select_user_option(self, option_index):
+        """
+        Mark one of the options in the widget as selected using its zero-based
+        index.
+
+        Parameters
+        ----------
+        option_index : int
+            Zero-based index indicating which option should be selected.
+        """
+        self._button_control_var.set(option_index + 1)
+
+    def clear_selection(self):
+        """Deselect all buttons."""
+        self._button_control_var.set(None)
+
+    def get_user_answer(self):
+        return self._buttons[self._button_control_var - 1].cget("text")
+
+
+class TrueFalseQuestionAndAnswerMenu(QuestionAndAnswerWithOptionsMenu):
+    """A Q&A pop-up widget with only True or False options. No hints are
+    allowed."""
+
+    def __init__(self, window, width, title, pady):
+        options = ("True", "False")
+        super().__init__(window, width, title, pady, options)
