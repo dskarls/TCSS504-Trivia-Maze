@@ -635,6 +635,7 @@ class QuestionAndAnswerMenu(PopUpWindow):
     def __init__(self, window, width, title, pady):
         # Create the frame for the whole in-game menu
         super().__init__(window, width)
+        self._pady = pady
 
         # Create header with title in it
         frm_title = Frame(master=self._frm, width=width)
@@ -668,6 +669,21 @@ class QuestionAndAnswerMenu(PopUpWindow):
         self._question_lbl.configure(text=question_text)
 
     @abstractmethod
+    def get_user_answer(self):
+        """Fetch and return the player's answer."""
+        pass
+
+
+class HintableQuestionAndAnswerMenu(QuestionAndAnswerMenu):
+    """
+    A question and answer widget that allows hints to be displayed.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._hint_lbl = None
+
+    @abstractmethod
     def set_hint(self, hint_text):
         """Sets the content of the hint text to the specified value.
 
@@ -678,13 +694,17 @@ class QuestionAndAnswerMenu(PopUpWindow):
         """
         pass
 
-    @abstractmethod
-    def get_user_answer(self):
-        """Fetch and return the player's answer."""
-        pass
+    def _create_and_pack_hint_at_bottom(self):
+        """Create a hint Label and pack it at the bottom of the window under
+        the options (and free-form text box, if applicable)."""
+        # Add an empty text section to hold a hint
+        self._hint_lbl = Label(
+            master=self._frm, text="", justify=CENTER, anchor=CENTER
+        )
+        self._hint_lbl.pack(fill=BOTH, pady=self._pady)
 
 
-class ShortAnswerQuestionAndAnswer(QuestionAndAnswerMenu):
+class ShortAnswerQuestionAndAnswer(HintableQuestionAndAnswerMenu):
     """A question and answer widget that the user can respond to with a
     free-form text answer."""
 
@@ -693,12 +713,6 @@ class ShortAnswerQuestionAndAnswer(QuestionAndAnswerMenu):
 
         self.__user_input = Entry(master=self._frm, justify=CENTER)
         self.__user_input.pack(fill=BOTH, pady=pady)
-
-        # Add an empty text section to hold a hint
-        self.__hint_lbl = Label(
-            master=self._frm, text="", justify=CENTER, anchor=CENTER
-        )
-        self.__hint_lbl.pack(fill=BOTH, pady=pady)
 
     def show(self):
         """Show the widget in the middle of the center of the parent frame and
