@@ -73,6 +73,7 @@ class TriviaMaze(TriviaMazeModel):
         __Items.VISION_POTION: "vision potion",
         __Items.SUGGESTION_POTION: "suggestion potion",
         __Items.MAGIC_KEY: "magic key",
+        __Items.SUGGESTION_POTION: "suggestion potion",
     }
 
     # Where the save file is stored and how to access its component objects
