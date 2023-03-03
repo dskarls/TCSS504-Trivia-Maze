@@ -719,9 +719,12 @@ class ShortAnswerQuestionAndAnswer(HintableQuestionAndAnswerMenu):
     def __init__(self, window, width, title, pady):
         super().__init__(window, width, title, pady)
 
-        # Create and pack free-form text entry box.
+        # Create and pack free-form text entry box
         self.__user_input = Entry(master=self._frm, justify=CENTER)
         self.__user_input.pack(fill=BOTH, pady=pady)
+
+        # Create and pack hint label
+        self._hint_lbl = self._create_and_pack_hint_at_bottom()
 
     def show(self):
         """Show the widget in the middle of the center of the parent frame and
