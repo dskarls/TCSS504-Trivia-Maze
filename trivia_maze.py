@@ -400,9 +400,8 @@ class TriviaMaze(TriviaMazeModel):
             self.__event_log_buffer.append(f"You used a {str(magic_key)}!")
 
         elif item == self.__ITEMS[self.__Items.SUGGESTION_POTION]:
-            if len(self.__adventurer.get_suggestion_potions()) > 0:
-                suggestion_potions = self.__adventurer.consume_suggestion_potions()
-                self.__event_log_buffer.append(f"You used a {str(suggestion_potion)}!")
+            suggestion_potion = self.__adventurer.consume_suggestion_potions()
+            self.__event_log_buffer.append(f"You used a {str(suggestion_potion)}!")
 
         self.__notify_observers()
 
