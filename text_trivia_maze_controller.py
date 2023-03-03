@@ -562,7 +562,9 @@ class QuestionAndAnswerCommandContext(CommandContext):
                 )
             )
             # Inform the model
-            self._maze_model.inform_player_answer_correct_or_incorrect(True)
+            self._maze_model.inform_player_answer_correct_or_incorrect(
+                user_answer_correct
+            )
 
             if user_answer_correct:
                 # Tell user they were right and door was unlocked
