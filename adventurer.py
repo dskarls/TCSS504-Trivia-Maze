@@ -322,9 +322,34 @@ class Adventurer:
         """
         return self.__vision_potions
 
+    def get_suggestion_potions(self):
+        """
+        Return a list of suggestion potions the adventurer has in their inventory.
+
+        Returns
+        -------
+        list
+            A list containing SuggestionPotion objects.
+        """
+        return self.__suggestion_potions
+
+    def consume_suggestion_potion(self):
+        """
+        Consume a suggestion potion. If adventurer has none left, no action is
+        taken.
+
+        Returns
+        -------
+        SuggestionPotion
+            A suggestion potion object.
+        """
+        if self.__suggestion_potions:
+            return self.__suggestion_potions.pop()
+
     def get_items(self):
         """
-        Return a tuple of references to all items held in inventory."""
+        Return a tuple of references to all items held in inventory.
+        """
         return tuple(
             self.__healing_potions
             + self.__vision_potions
