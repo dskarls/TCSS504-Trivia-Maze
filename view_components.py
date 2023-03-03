@@ -668,8 +668,14 @@ class QuestionAndAnswerMenu(PopUpWindow):
         self._question_lbl.configure(text=question_text)
 
     @abstractmethod
-    def set_hint(self, text):
-        """Sets the content of the hint text to the specified value."""
+    def set_hint(self, hint_text):
+        """Sets the content of the hint text to the specified value.
+
+        Parameters
+        ----------
+        hint_text : str
+            The text to display as a hint in the widget.
+        """
         pass
 
     @abstractmethod
