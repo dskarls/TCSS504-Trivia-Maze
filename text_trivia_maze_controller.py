@@ -136,18 +136,25 @@ class TextTriviaMazeController(TriviaMazeController):
         self.__active_context = contexts[context_specifier]
 
     def update(self):
-        # Model update calls
+        """Observer response method to model changes."""
+        # Check if game is over
         game_status = self._maze_model.game_status()
         if game_status:
             if game_status == "died":
                 self.__maze_view.show_game_lost_died_menu()
                 self.set_active_context("game_lost_died_menu")
+                return
             elif game_status == "trapped":
                 self.__maze_view.show_game_lost_trapped_menu()
                 self.set_active_context("game_lost_trapped_menu")
+                return
             elif game_status == "win":
                 self.__maze_view.show_game_won_menu()
                 self.set_active_context("game_won_menu")
+                return
+
+        # If game still ongoing, check if there is a new Q&A to pose to the
+        # user
         self.__process_question_and_answer_buffer()
 
     def __process_question_and_answer_buffer(self):
