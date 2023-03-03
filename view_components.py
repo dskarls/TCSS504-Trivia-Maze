@@ -714,8 +714,5 @@ class ShortAnswerQuestionAndAnswer(QuestionAndAnswerMenu):
     def get_user_answer(self):
         return self.__user_input.get()
 
-    def set_options(self, text):
-        return self.__options_lbl.configure(text=text)
-
     def set_hint(self, text):
         self.__hint_lbl.configure(text=text)
