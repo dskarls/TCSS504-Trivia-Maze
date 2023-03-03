@@ -85,6 +85,14 @@ class TriviaMazeView(TriviaMazeModelObserver):
         """
 
     @abstractmethod
+    def show_short_QA_menu(self):
+        """Show the short answer Q&A widget."""
+
+    @abstractmethod
+    def hide_short_QA_menu(self):
+        """Hide the short answer Q&A widget."""
+
+    @abstractmethod
     def write_to_event_log(self):
         """Write a message to the event log."""
 
@@ -264,7 +272,7 @@ class TextTriviaMazeView(TriviaMazeView):
 
         # Creat empty question & answer menu
         self.__short_QA_menu = self.__create_question_and_answer_menu()
-        self.hide_question_and_answer_menu()
+        self.hide_short_QA_menu()
 
         # Create main menu and the help menu accessible from it
         self.__main_menu = self.__create_main_menu()
@@ -440,11 +448,11 @@ class TextTriviaMazeView(TriviaMazeView):
         with the hint contents."""
         self.__short_QA_menu.set_hint(hint_text)
 
-    def show_question_and_answer_menu(self):
+    def show_short_QA_menu(self):
         """Show the question and answer widget."""
         self.__short_QA_menu.show()
 
-    def hide_question_and_answer_menu(self):
+    def hide_short_QA_menu(self):
         """Hide the question and answer widget."""
         self.__short_QA_menu.hide()
 
