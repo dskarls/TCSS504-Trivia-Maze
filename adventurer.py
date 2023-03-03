@@ -7,6 +7,7 @@ from maze_items import (
     SuggestionPotion,
     VisionPotion,
     MagicKey,
+    SuggestionPotion
 )
 from util import generate_random_int
 
@@ -87,6 +88,7 @@ class Adventurer:
         self.__suggestion_potions = []
         self.__pillars_found = []
         self.__magic_keys = []
+        self.__suggestion_potions = []
 
         # Verify hit point args
         self.__verify_hit_point_args(
@@ -204,13 +206,15 @@ class Adventurer:
         Parameters
         ----------
         maze_item : Potion or PillarOfOOP
-            A healing potion, vision potion, pillar, or magic key.
+            A healing potion, vision potion, pillar, magic key, or a 
+            suggestion potion.
 
         Raises
         ------
         AttemptedToPlaceInvalidItemInInventory
-            If an object other than a HealingPotion, VisionPotion, or
-            PillarOfOOP subclass object is received as an argument.
+            If an object other than a HealingPotion, VisionPotion, MagicKey,
+            SuggestionPotion, or PillarOfOOP subclass object is received 
+            as an argument.
         """
         if isinstance(maze_item, HealingPotion):
             self.__healing_potions.append(maze_item)
@@ -229,6 +233,9 @@ class Adventurer:
 
         elif isinstance(maze_item, MagicKey):
             self.__magic_keys.append(maze_item)
+        
+        elif isinstance(maze_item, SuggestionPotion):
+            self.__suggestion_potions.append(maze_item)
 
         else:
             raise AttemptedToPlaceInvalidItemInInventory(
