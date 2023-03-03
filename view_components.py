@@ -678,9 +678,15 @@ class QuestionAndAnswerMenu(PopUpWindow):
         pass
 
     @abstractmethod
-    def set_options(self, text):
+    def set_options(self, options):
         """Sets the content of the options text, if any, that the user can
-        choose from to the specified value."""
+        choose from to the specified value.
+
+        Parameters
+        ----------
+        options : list
+            Set of possible options to display to the user.
+        """
         # TODO: This could be expanded to allow for options that exist in the
         # form of clickable buttons. This could be done by taking a list of
         # strings as an argument and then creating a desired graphical
