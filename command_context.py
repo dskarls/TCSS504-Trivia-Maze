@@ -478,10 +478,6 @@ class TrueOrFalseQuestionAndAnswerCommandContext(CommandContext):
                     user_answer
                 )
             )
-            # Inform the model
-            self._maze_model.inform_player_answer_correct_or_incorrect(
-                user_answer_correct
-            )
 
             if user_answer_correct:
                 # Tell user they were right and door was unlocked
@@ -504,6 +500,12 @@ class TrueOrFalseQuestionAndAnswerCommandContext(CommandContext):
 
             # Return command interpretation to primary interface
             self._maze_controller.set_active_context("primary_interface")
+
+            # Inform the model
+            # NOTE: This will cause the model to update its observers
+            self._maze_model.inform_player_answer_correct_or_incorrect(
+                user_answer_correct
+            )
 
         elif key == self.COMMANDS[self.Command.SELECT_TRUE][_COMMAND_KEY_KEY]:
             self._maze_view.select_QA_user_answer("True")
