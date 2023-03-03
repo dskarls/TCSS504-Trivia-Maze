@@ -738,6 +738,7 @@ class ShortAnswerQuestionAndAnswer(HintableQuestionAndAnswerMenu):
         self._frm.place_forget()
 
     def get_user_answer(self):
+        """Fetch and return the player's answer."""
         return self.__user_input.get()
 
     def set_hint(self, text):

@@ -263,9 +263,7 @@ class TextTriviaMazeView(TriviaMazeView):
         self.hide_command_legend_menu()
 
         # Creat empty question & answer menu
-        self.__question_and_answer_menu = (
-            self.__create_question_and_answer_menu()
-        )
+        self.__short_QA_menu = self.__create_question_and_answer_menu()
         self.hide_question_and_answer_menu()
 
         # Create main menu and the help menu accessible from it
@@ -432,20 +430,23 @@ class TextTriviaMazeView(TriviaMazeView):
             DIMENSIONS["question_and_answer_menu"]["ipady"],
         )
 
-    def set_question(self, question, options, hint):
-        """Populate the question and answer widget with the question
-        contents."""
-        self.__question_and_answer_menu.set_question(question)
-        self.__question_and_answer_menu.set_options(options)
-        self.__question_and_answer_menu.set_hint(hint)
+    def set_short_QA_question(self, question_text):
+        """Populate the short answer question and answer widget with the
+        question contents."""
+        self.__short_QA_menu.set_question(question_text)
+
+    def set_short_QA_hint(self, hint_text):
+        """Fill in the hint portion of the short question and answer widget
+        with the hint contents."""
+        self.__short_QA_menu.set_hint(hint_text)
 
     def show_question_and_answer_menu(self):
         """Show the question and answer widget."""
-        self.__question_and_answer_menu.show()
+        self.__short_QA_menu.show()
 
     def hide_question_and_answer_menu(self):
         """Hide the question and answer widget."""
-        self.__question_and_answer_menu.hide()
+        self.__short_QA_menu.hide()
 
     def __create_no_save_file_found_menu(self):
         """Create pop-up that tells the user that they couldn't load a game
