@@ -801,7 +801,7 @@ class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
         for ind, button in enumerate(self._buttons):
             if button.cget("text") == option_text:
                 self._button_control_var.set(ind)
-                break
+                return
 
         raise QAOptionNotFound("Option to select not found!")
 
