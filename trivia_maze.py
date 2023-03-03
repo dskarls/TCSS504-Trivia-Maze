@@ -366,7 +366,9 @@ class TriviaMaze(TriviaMazeModel):
                 ):
                     room.visited = True
 
-                self.__event_log_buffer.append(f"You used a {str(vision_potion)}!")
+                self.__event_log_buffer.append(
+                    f"You used a {str(vision_potion)}!"
+                )
 
         elif item == self.__ITEMS[self.__Items.MAGIC_KEY]:
             magic_key = self.__adventurer.consume_magic_key()
