@@ -440,6 +440,7 @@ class TextTriviaMazeView(TriviaMazeView):
         return ShortAnswerQuestionAndAnswer(
             self.__window,
             None,
+            DIMENSIONS["question_and_answer_menu"]["wraplength"],
             "Q & A",
             DIMENSIONS["question_and_answer_menu"]["ipady"],
         )
@@ -475,6 +476,7 @@ class TextTriviaMazeView(TriviaMazeView):
         return TrueFalseQuestionAndAnswerMenu(
             self.__window,
             None,
+            DIMENSIONS["question_and_answer_menu"]["wraplength"],
             "Q & A",
             DIMENSIONS["question_and_answer_menu"]["ipady"],
         )

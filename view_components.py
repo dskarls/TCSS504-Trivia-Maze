@@ -622,7 +622,7 @@ class QuestionAndAnswerMenu(PopUpWindow):
     capable of displaying a hint.
     """
 
-    def __init__(self, window, width, title, pady):
+    def __init__(self, window, width, wraplength, title, pady):
         # Create the frame for the whole in-game menu
         super().__init__(window, width)
         self._pady = pady
@@ -640,7 +640,11 @@ class QuestionAndAnswerMenu(PopUpWindow):
 
         # Add an empty text section to hold the question itself
         self._question_lbl = Label(
-            master=self._frm, text="", justify=CENTER, anchor=CENTER
+            master=self._frm,
+            text="",
+            justify=CENTER,
+            anchor=CENTER,
+            wraplength=wraplength,
         )
         self._question_lbl.pack(fill=BOTH, pady=pady)
 
@@ -706,8 +710,8 @@ class ShortAnswerQuestionAndAnswer(HintableQuestionAndAnswerMenu):
     """A question and answer widget that the user can respond to with a
     free-form text answer."""
 
-    def __init__(self, window, width, title, pady):
-        super().__init__(window, width, title, pady)
+    def __init__(self, window, width, wraplength, title, pady):
+        super().__init__(window, width, wraplength, title, pady)
 
         # Create and pack free-form text entry box
         self.__user_input = Entry(master=self._frm, justify=CENTER)
@@ -740,7 +744,7 @@ class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
     """A question and answer widget that has options, represent by radio
     buttons, for the user to select from."""
 
-    def __init__(self, window, width, title, pady, options):
+    def __init__(self, window, width, wraplength, title, pady, options):
         """Create radio buttons and labels for each of the options in
         ``options`` and pack them into a frame (left-to-right, top-to-bottom)
         in a two-column configuration.
@@ -751,7 +755,7 @@ class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
             A label widget located at the bottom of the frame that can contain
             a hint.
         """
-        super().__init__(window, width, title, pady)
+        super().__init__(window, width, wraplength, title, pady)
 
         # Create options. Note that since they all belong to the same frame,
         # they'll automatically coordinate so that only one can be selected at
@@ -817,6 +821,6 @@ class TrueFalseQuestionAndAnswerMenu(QuestionAndAnswerWithOptionsMenu):
     """A Q&A pop-up widget with only True or False options. No hints are
     allowed."""
 
-    def __init__(self, window, width, title, pady):
+    def __init__(self, window, width, wraplength, title, pady):
         options = ("True", "False")
-        super().__init__(window, width, title, pady, options)
+        super().__init__(window, width, wraplength, title, pady, options)

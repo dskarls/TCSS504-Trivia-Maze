@@ -29,7 +29,7 @@ DIMENSIONS = {
     "game_won_menu": {"ipadx": 10, "ipady": 10},
     "game_lost_died_menu": {"ipadx": 10, "ipady": 10},
     "game_lost_trapped_menu": {"ipadx": 10, "ipady": 10},
-    "question_and_answer_menu": {"ipadx": 10, "ipady": 10},
+    "question_and_answer_menu": {"wraplength": 400, "ipadx": 10, "ipady": 10},
 }
 
 ##############################################################################
