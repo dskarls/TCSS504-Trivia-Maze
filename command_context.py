@@ -398,17 +398,18 @@ class ShortQuestionAndAnswerCommandContext(CommandContext):
             user_answer_correct = question_and_answer.answer_is_correct(
                 user_answer
             )
-            # Inform the model
-            self._maze_model.inform_player_answer_correct_or_incorrect(
-                user_answer_correct
-            )
-
             # Hide Q&A widget
             self._maze_view.hide_short_QA_menu()
             self._maze_view.clear_short_QA_user_answer()
 
             # Return command interpretation to primary interface
             self._maze_controller.set_active_context("primary_interface")
+
+            # Inform the model
+            # NOTE: This will cause the model to update its observers
+            self._maze_model.inform_player_answer_correct_or_incorrect(
+                user_answer_correct
+            )
 
         elif (
             key
