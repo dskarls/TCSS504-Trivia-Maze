@@ -333,7 +333,7 @@ class Adventurer:
         """
         return self.__suggestion_potions
 
-    def consume_suggestion_potion(self):
+    def consume_suggestion_potions(self):
         """
         Consume a suggestion potion. If adventurer has none left, no action is
         taken.
