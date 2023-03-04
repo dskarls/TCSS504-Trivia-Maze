@@ -171,7 +171,8 @@ class TextTriviaMazeController(TriviaMazeController):
 
         # If game still ongoing, check if there is a new Q&A to pose to the
         # user
-        self.__process_question_and_answer_buffer()
+        if self.__active_context == self.__primary_interface_context:
+            self.__process_question_and_answer_buffer()
 
     def __process_question_and_answer_buffer(self):
         """If the model put a QuestionAndAnswer object in its corresponding
