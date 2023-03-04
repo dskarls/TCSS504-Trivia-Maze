@@ -56,7 +56,7 @@ Object-Oriented Programming,Short Answer,Hard,An _____ is a class that cannot be
 Object-Oriented Programming,Short Answer,Hard,An _____ is a class that defines a contract for its subclasses. ,Null,Null,Null,Null,interface
 "Algorithms and Big ""O""",Short Answer,Easy,A _____ algorithm has a time complexity of O(log n). ,Null,Null,Null,Null,logarithmic
 "Algorithms and Big ""O""",Short Answer,Easy,A _____ algorithm has a time complexity of O(n^2). ,Null,Null,Null,Null,quadratic
-"Algorithms and Big ""O""",Short Answer,Medium,A _____ algorithm has a time complexity of O(n log n). ,Null,Null,Null,Null,merge sort
+"Algorithms and Big ""O""",Short Answer,Medium,A _____ algorithm has a time complexity of O(n log n). ,Null,Null,Null,Null,linearithmic
 "Algorithms and Big ""O""",Short Answer,Medium,A _____ data structure is a linear collection of elements in which a new element is added at one end and an existing element is removed from the other end. ,Null,Null,Null,Null,queue
 "Algorithms and Big ""O""",Short Answer,Hard,A _____ is a technique used to improve the time complexity of a recursive algorithm by storing the results of expensive function calls and returning the cached result when the same inputs occur again. ,Null,Null,Null,Null,memoization
 "Algorithms and Big ""O""",Short Answer,Hard,A _____ is a technique used to improve the time complexity of a problem by breaking it down into smaller subproblems and storing the solutions to these subproblems to avoid redundant calculations,Null,Null,Null,Null,dynamic programming
