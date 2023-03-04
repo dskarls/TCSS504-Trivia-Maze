@@ -5,7 +5,7 @@ General Computer Science,Multiple Choice,Medium,Which of the following is not a 
 General Computer Science,Multiple Choice,Hard,Which of the following is not a type of computer architecture? ,Von Neumann,Harvard ,Neural ,Quantum ,Neural
 General Computer Science,Multiple Choice,Hard,Which of the following is not a type of computer security? ,Network security ,Application security ,Hardware security ,Time security ,Time security
 Python3 Syntax,Multiple Choice,Easy,What is the correct syntax for creating a list in Python? ,"list = {1, 2, 3} ","list = [1, 2, 3] ","list {1, 2, 3} ","list [1, 2, 3] ","list = [1, 2, 3] "
-Python3 Syntax,Multiple Choice,Easy,What is the correct way to create a tuple in Python? ,"tuple = {1, 2, 3} ","tuple = [1, 2, 3]","tuple {1, 2, 3} ","tuple (1, 2, 3) ","tuple (1, 2, 3) "
+Python3 Syntax,Multiple Choice,Easy,What is the correct way to create a tuple in Python? ,"tuple = {1, 2, 3} ","tuple = [1, 2, 3]","tuple {1, 2, 3} ","tuple = (1, 2, 3) ","tuple = (1, 2, 3) "
 Python3 Syntax,Multiple Choice,Medium,What is the correct way to create a set in Python? ,"set = (1, 2, 3) ","set = [1, 2, 3] ","set {1, 2, 3} ","set = {1, 2, 3} ","set = {1, 2, 3} "
 Python3 Syntax,Multiple Choice,Hard,What is the correct syntax for creating a lambda function in Python? ,lambda x: x+1 ,function x: x+1 ,def x: return x+1 ,x => x+1 ,lambda x: x+1
 Python3 Syntax,Multiple Choice,Hard,What is the correct way to create a class in Python? ,class MyClass: ,class MyClass(): ,def MyClass: ,def MyClass(): ,class MyClass():
