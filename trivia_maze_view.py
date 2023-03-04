@@ -104,11 +104,6 @@ class TriviaMazeView(TriviaMazeModelObserver):
         permanently locked door without a magic key."""
 
     @abstractmethod
-    def clear_short_QA_user_answer(self):
-        """Clear the contents of the text entry box in the short answer Q&A
-        widget."""
-
-    @abstractmethod
     def set_true_or_false_QA_question(self, question_text):
         """Populate the true or false question and answer widget with the
         question contents.
@@ -159,6 +154,21 @@ class TriviaMazeView(TriviaMazeModelObserver):
         hint_text : str
             Text to set the hint content to.
         """
+
+    @abstractmethod
+    def get_short_QA_user_answer(self):
+        """Return the user's current answer to the relevant Q&A prompt.
+
+        Returns
+        -------
+        str
+            The user's answer in the free form entry box.
+        """
+
+    @abstractmethod
+    def clear_short_QA_user_answer(self):
+        """Clear the contents of the text entry box in the short answer Q&A
+        widget."""
 
     @abstractmethod
     def show_true_or_false_QA_menu(self):
