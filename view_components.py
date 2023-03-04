@@ -1,14 +1,11 @@
 from abc import abstractmethod
 import functools
+import textwrap
 
 from tkinter import *
 from tkinter.ttk import *
 
 from view_config import STYLES
-
-
-class QAOptionNotFound(ValueError):
-    """When an option to select in an option-based widget cannot be found."""
 
 
 class TextMenu:
@@ -780,6 +777,42 @@ class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
     """A question and answer widget that has options, represent by radio
     buttons, for the user to select from."""
 
+    class WrappedRadiobutton(Radiobutton):
+        # Padding characters placed at beginning of every row of characters
+        __ROW_PREFIX = " " * 1
+
+        def __init__(self, master, text, variable, value, width):
+            self.__width = width
+            self.original_text = text
+
+            super().__init__(
+                master=master,
+                variable=variable,
+                value=value,
+            )
+
+            self.set_text(text)
+
+        def set_text(self, text):
+            """
+            Take an original text string, wrap it, and assign it to this
+            button.
+
+            Parameters
+            ----------
+            text : str
+                Arbitrary text.
+            """
+            # Update original text of button
+            self.original_text = text
+
+            # Wrap text
+            wrapped_text = self.__ROW_PREFIX + (f"\n{self.__ROW_PREFIX}").join(
+                textwrap.wrap(text, width=self.__width)
+            )
+
+            self.configure(text=wrapped_text)
+
     def __init__(
         self, window, width, wraplength, title, padx, ipady, num_cols, options
     ):
@@ -804,11 +837,12 @@ class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
         row = 1
         col = 0
         for ind, option in enumerate(options):
-            qa_option = Radiobutton(
+            qa_option = self.WrappedRadiobutton(
                 master=self._frm,
                 text=option,
                 variable=self._button_control_var,
                 value=ind,
+                width=25,
             )
             buttons.append(qa_option)
 
@@ -817,7 +851,9 @@ class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
                 row += 1
 
             # Pack to left unless this is the last column
-            qa_option.grid(row=row, column=col, pady=8)
+            qa_option.grid(
+                row=row, column=col, sticky=W, padx=15, pady=(0, 10)
+            )
 
             # End row at num_cols
             col += 1
@@ -837,33 +873,27 @@ class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
             Set of possible options to display to the user.
         """
         for ind, option_text in enumerate(options):
-            self._buttons[ind].configure(text=option_text)
+            self._buttons[ind].set_text(option_text)
 
-        # Rejustify/pad?
-
-    def select_user_option(self, option_text):
+    def select_user_option(self, option_index):
         """
-        Mark one of the options in the widget as selected using its text label
-        content.
+        Mark one of the options in the widget as selected using its zero-based
+        index.
 
         Parameters
         ----------
-        option_text : str
-            Text associated with the desired option.
+        option_index : int
+            Index associated with desired option. Indices are zero-based and go
+            left-to-right, top-to-bottom.
         """
-        for ind, button in enumerate(self._buttons):
-            if button.cget("text") == option_text:
-                self._button_control_var.set(ind)
-                return
-
-        raise QAOptionNotFound("Option to select not found!")
+        self._button_control_var.set(option_index)
 
     def clear_selection(self):
         """Deselect all buttons."""
         self._button_control_var.set(None)
 
     def get_user_answer(self):
-        return self._buttons[int(self._button_control_var.get())].cget("text")
+        return self._buttons[int(self._button_control_var.get())].original_text
 
 
 class TrueFalseQuestionAndAnswerMenu(QuestionAndAnswerWithOptionsMenu):

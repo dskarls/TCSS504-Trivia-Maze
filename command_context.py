@@ -485,10 +485,10 @@ class TrueOrFalseQuestionAndAnswerCommandContext(CommandContext):
             )
 
         elif key == self.COMMANDS[self.Command.SELECT_TRUE][_COMMAND_KEY_KEY]:
-            self._maze_view.select_true_or_false_QA_user_answer("True")
+            self._maze_view.select_true_or_false_QA_user_answer(0)
 
         elif key == self.COMMANDS[self.Command.SELECT_FALSE][_COMMAND_KEY_KEY]:
-            self._maze_view.select_true_or_false_QA_user_answer("False")
+            self._maze_view.select_true_or_false_QA_user_answer(1)
 
 
 class MultipleChoiceQuestionAndAnswerCommandContext(CommandContext):
@@ -569,24 +569,16 @@ class MultipleChoiceQuestionAndAnswerCommandContext(CommandContext):
             )
 
         elif key == self.COMMANDS[self.Command.SELECT_A][_COMMAND_KEY_KEY]:
-            self._maze_view.select_multiple_choice_QA_user_answer(
-                question_and_answer.options[0]
-            )
+            self._maze_view.select_multiple_choice_QA_user_answer(0)
 
         elif key == self.COMMANDS[self.Command.SELECT_B][_COMMAND_KEY_KEY]:
-            self._maze_view.select_multiple_choice_QA_user_answer(
-                question_and_answer.options[1]
-            )
+            self._maze_view.select_multiple_choice_QA_user_answer(1)
 
         elif key == self.COMMANDS[self.Command.SELECT_C][_COMMAND_KEY_KEY]:
-            self._maze_view.select_multiple_choice_QA_user_answer(
-                question_and_answer.options[2]
-            )
+            self._maze_view.select_multiple_choice_QA_user_answer(2)
 
         elif key == self.COMMANDS[self.Command.SELECT_D][_COMMAND_KEY_KEY]:
-            self._maze_view.select_multiple_choice_QA_user_answer(
-                question_and_answer.options[3]
-            )
+            self._maze_view.select_multiple_choice_QA_user_answer(3)
 
         elif (
             key

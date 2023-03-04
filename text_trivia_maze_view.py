@@ -96,14 +96,15 @@ class TriviaMazeView(TriviaMazeModelObserver):
         """Hide the true or false answer Q&A widget."""
 
     @abstractmethod
-    def select_true_or_false_QA_user_answer(self, option):
+    def select_true_or_false_QA_user_answer(self, option_index):
         """Select the option in the true of false QA widget with the text value
         given by `option` (should be "True" or "False").
 
         Parameters
         ----------
-        option: str
-            Text of option that should be selected.
+        option_index : int
+            Index associated with desired option. Indices are zero-based and go
+            left-to-right, top-to-bottom.
         """
 
     @abstractmethod
@@ -115,14 +116,15 @@ class TriviaMazeView(TriviaMazeModelObserver):
         """Hide the multiple choice answer Q&A widget."""
 
     @abstractmethod
-    def select_multiple_choice_QA_user_answer(self, option):
+    def select_multiple_choice_QA_user_answer(self, option_index):
         """Select the option in the multiple choice QA widget with the text
         value given by `option`.
 
         Parameters
         ----------
-        option: str
-            Text of option that should be selected.
+        option_index : int
+            Index associated with desired option. Indices are zero-based and go
+            left-to-right, top-to-bottom.
         """
 
     @abstractmethod
@@ -561,16 +563,17 @@ class TextTriviaMazeView(TriviaMazeView):
         widget."""
         return self.__multiple_choice_QA_menu.clear_selection()
 
-    def select_multiple_choice_QA_user_answer(self, option):
+    def select_multiple_choice_QA_user_answer(self, option_index):
         """Select the option in the multiple choice QA widget with the text
         value given by `option`.
 
         Parameters
         ----------
-        option: str
-            Text of option that should be selected.
+        option_index : int
+            Index associated with desired option. Indices are zero-based and go
+            left-to-right, top-to-bottom.
         """
-        self.__multiple_choice_QA_menu.select_user_option(option)
+        self.__multiple_choice_QA_menu.select_user_option(option_index)
 
     def __create_true_or_false_QA_menu(self):
         """Create a generic T/F question and answer widget that doesn't hold
@@ -597,16 +600,17 @@ class TextTriviaMazeView(TriviaMazeView):
         widget."""
         return self.__true_or_false_QA_menu.clear_selection()
 
-    def select_true_or_false_QA_user_answer(self, option):
+    def select_true_or_false_QA_user_answer(self, option_index):
         """Select the option in the true of false QA widget with the text value
         given by `option` (should be "True" or "False").
 
         Parameters
         ----------
-        option: str
-            Text of option that should be selected.
+        option_index : int
+            Index associated with desired option. Indices are zero-based and go
+            left-to-right, top-to-bottom.
         """
-        self.__true_or_false_QA_menu.select_user_option(option)
+        self.__true_or_false_QA_menu.select_user_option(option_index)
 
     def show_true_or_false_QA_menu(self):
         """Show the question and answer widget."""
