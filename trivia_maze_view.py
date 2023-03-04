@@ -49,6 +49,61 @@ class TriviaMazeView(TriviaMazeModelObserver):
         """Hide the in-game menu pop-up"""
 
     @abstractmethod
+    def show_map_legend_menu(self):
+        """Show the map legend pop-up"""
+
+    @abstractmethod
+    def hide_map_legend_menu(self):
+        """Hide the map legend pop-up"""
+
+    @abstractmethod
+    def show_command_legend_menu(self):
+        """Show the command legend pop-up"""
+
+    @abstractmethod
+    def hide_command_legend_menu(self):
+        """Hide the command legend pop-up"""
+
+    @abstractmethod
+    def show_save_confirmation_menu(self):
+        """Show the save confirmation pop-up"""
+
+    @abstractmethod
+    def hide_save_confirmation_menu(self):
+        """Hide the save confirmation pop-up"""
+
+    @abstractmethod
+    def get_in_game_menu_current_selection(self):
+        """Return the currently selected option in the in-game menu as a
+        string.
+
+        Returns
+        -------
+        str
+            The text of the currently selected option in the in-game menu.
+        """
+
+    @abstractmethod
+    def show_magic_key_menu(self):
+        """Show the magic key pop-up asking the user if they want to use a
+        magic key to unlock a permanently locked door."""
+
+    @abstractmethod
+    def hide_magic_key_menu(self):
+        """Hide the magic key pop-up asking the user if they want to use a
+        magic key to unlock a permanently locked door."""
+
+    @abstractmethod
+    def show_need_magic_key_menu(self):
+        """Show the pop-up telling the user they can't pass through a
+        permanently locked door without a magic key."""
+
+    @abstractmethod
+    def hide_need_magic_key_menu(self):
+        """Hide the pop-up telling the user they can't pass through a
+        permanently locked door without a magic key."""
+
+    @abstractmethod
     def clear_short_QA_user_answer(self):
         """Clear the contents of the text entry box in the short answer Q&A
         widget."""
