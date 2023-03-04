@@ -354,7 +354,13 @@ class TextTriviaMazeView(TriviaMazeView):
 
     def set_short_QA_hint(self, hint_text):
         """Fill in the hint portion of the short question and answer widget
-        with the hint contents."""
+        with the hint contents.
+
+        Parameters
+        ----------
+        hint_text : str
+            Text to set the hint content to.
+        """
         self.__short_QA_menu.set_hint(hint_text)
 
     def show_short_QA_menu(self):
