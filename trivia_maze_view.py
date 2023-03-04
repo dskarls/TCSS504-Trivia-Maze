@@ -247,6 +247,21 @@ class TriviaMazeView(TriviaMazeModelObserver):
         """
 
     @abstractmethod
+    def get_multiple_choice_QA_user_answer(self):
+        """Return the user's current answer to the relevant Q&A prompt.
+
+        Returns
+        -------
+        str
+            The current answer selected by the user, expressed as a string.
+        """
+
+    @abstractmethod
+    def clear_multiple_choice_QA_user_answer(self):
+        """Clear the contents of the text entry box in the short answer Q&A
+        widget."""
+
+    @abstractmethod
     def select_multiple_choice_QA_user_answer(self, option_index):
         """Select the option in the multiple choice QA widget with the text
         value given by `option`.
