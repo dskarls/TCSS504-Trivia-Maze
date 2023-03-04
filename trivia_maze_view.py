@@ -156,6 +156,10 @@ class TriviaMazeView(TriviaMazeModelObserver):
         """
 
     @abstractmethod
+    def clear_event_log(self):
+        """Clear the contents of the event log."""
+
+    @abstractmethod
     def show_game_won_menu(self):
         """Display a pop-up to the user telling them they won the game."""
 
