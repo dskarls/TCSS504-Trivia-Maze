@@ -372,7 +372,13 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__short_QA_menu.hide()
 
     def get_short_QA_user_answer(self):
-        """Return the user's current answer to the relevant Q&A prompt."""
+        """Return the user's current answer to the relevant Q&A prompt.
+
+        Returns
+        -------
+        str
+            The user's answer in the free form entry box.
+        """
         return self.__short_QA_menu.get_user_answer()
 
     def clear_short_QA_user_answer(self):
@@ -518,7 +524,14 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__true_or_false_QA_menu.hide()
 
     def get_true_or_false_QA_user_answer(self):
-        """Return the user's current answer to the relevant Q&A prompt."""
+        """Return the user's current answer to the relevant Q&A prompt.
+
+        Returns
+        -------
+        str
+            The current answer selected by the user (true or false), expressed
+            as a string.
+        """
         return self.__true_or_false_QA_menu.get_user_answer()
 
     def __create_no_save_file_found_menu(self):
