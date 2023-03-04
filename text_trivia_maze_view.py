@@ -21,6 +21,7 @@ from view_components import (
     InGameMenu,
     DismissiblePopUp,
     Map,
+    MultipleChoiceQuestionAndAnswerMenu,
     ShortAnswerQuestionAndAnswer,
     TrueFalseQuestionAndAnswerMenu,
     EventLog,
@@ -93,6 +94,36 @@ class TriviaMazeView(TriviaMazeModelObserver):
     @abstractmethod
     def hide_true_or_false_QA_menu(self):
         """Hide the true or false answer Q&A widget."""
+
+    @abstractmethod
+    def select_true_or_false_QA_user_answer(self, option):
+        """Select the option in the true of false QA widget with the text value
+        given by `option` (should be "True" or "False").
+
+        Parameters
+        ----------
+        option: str
+            Text of option that should be selected.
+        """
+
+    @abstractmethod
+    def show_multiple_choice_QA_menu(self):
+        """Show the multiple choice answer Q&A widget."""
+
+    @abstractmethod
+    def hide_multiple_choice_QA_menu(self):
+        """Hide the multiple choice answer Q&A widget."""
+
+    @abstractmethod
+    def select_multiple_choice_QA_user_answer(self, option):
+        """Select the option in the multiple choice QA widget with the text
+        value given by `option`.
+
+        Parameters
+        ----------
+        option: str
+            Text of option that should be selected.
+        """
 
     @abstractmethod
     def write_to_event_log(self):
@@ -279,6 +310,12 @@ class TextTriviaMazeView(TriviaMazeView):
         # Creat empty true or false question & answer menu
         self.__true_or_false_QA_menu = self.__create_true_or_false_QA_menu()
         self.hide_true_or_false_QA_menu()
+
+        # Creat empty short answer question & answer menu
+        self.__multiple_choice_QA_menu = (
+            self.__create_multiple_choice_QA_menu()
+        )
+        self.hide_multiple_choice_QA_menu()
 
         # Create main menu and the help menu accessible from it
         self.__main_menu = self.__create_main_menu()
@@ -468,6 +505,73 @@ class TextTriviaMazeView(TriviaMazeView):
         """Return the user's current answer to the relevant Q&A prompt."""
         return self.__short_QA_menu.get_user_answer()
 
+    def clear_short_QA_user_answer(self):
+        """Clear the contents of the text entry box in the short answer Q&A
+        widget."""
+        return self.__short_QA_menu.clear_user_answer()
+
+    def __create_multiple_choice_QA_menu(self):
+        """Create a generic question and answer widget that doesn't hold any
+        content yet. Its content can be populated by the controller using the
+        `set_multiple_choice_QA_question` and `set_multiple_choice_WA_hint` methods.
+        """
+        return MultipleChoiceQuestionAndAnswerMenu(
+            self.__window,
+            None,
+            DIMENSIONS["question_and_answer_menu"]["wraplength"],
+            "Short Question & Answer",
+            DIMENSIONS["question_and_answer_menu"]["padx"],
+            DIMENSIONS["question_and_answer_menu"]["ipady"],
+        )
+
+    def set_multiple_choice_QA_question(self, question_text):
+        """Populate the multiple_choice answer question and answer widget with the
+        question contents."""
+        self.__multiple_choice_QA_menu.set_question(question_text)
+
+    def set_multiple_choice_QA_hint(self, hint_text):
+        """Fill in the hint portion of the multiple_choice question and answer widget
+        with the hint contents."""
+        self.__multiple_choice_QA_menu.set_hint(hint_text)
+
+    def set_multiple_choice_QA_options(self, options):
+        """Sets the options for selection to those in ``options``.
+
+        Parameters
+        ----------
+        options : List
+            List of strings comprising selection options.
+        """
+        return self.__multiple_choice_QA_menu.set_options(options)
+
+    def show_multiple_choice_QA_menu(self):
+        """Show the question and answer widget."""
+        self.__multiple_choice_QA_menu.show()
+
+    def hide_multiple_choice_QA_menu(self):
+        """Hide the question and answer widget."""
+        self.__multiple_choice_QA_menu.hide()
+
+    def get_multiple_choice_QA_user_answer(self):
+        """Return the user's current answer to the relevant Q&A prompt."""
+        return self.__multiple_choice_QA_menu.get_user_answer()
+
+    def clear_multiple_choice_QA_user_answer(self):
+        """Clear the contents of the text entry box in the short answer Q&A
+        widget."""
+        return self.__multiple_choice_QA_menu.clear_selection()
+
+    def select_multiple_choice_QA_user_answer(self, option):
+        """Select the option in the multiple choice QA widget with the text
+        value given by `option`.
+
+        Parameters
+        ----------
+        option: str
+            Text of option that should be selected.
+        """
+        self.__multiple_choice_QA_menu.select_user_option(option)
+
     def __create_true_or_false_QA_menu(self):
         """Create a generic T/F question and answer widget that doesn't hold
         any content yet. Its content can be populated by the controller using
@@ -493,9 +597,15 @@ class TextTriviaMazeView(TriviaMazeView):
         widget."""
         return self.__true_or_false_QA_menu.clear_selection()
 
-    def select_QA_user_answer(self, option):
-        """For multiple choice and true/false question and answer types, select
-        the option with the text value given by `option`"""
+    def select_true_or_false_QA_user_answer(self, option):
+        """Select the option in the true of false QA widget with the text value
+        given by `option` (should be "True" or "False").
+
+        Parameters
+        ----------
+        option: str
+            Text of option that should be selected.
+        """
         self.__true_or_false_QA_menu.select_user_option(option)
 
     def show_true_or_false_QA_menu(self):
@@ -509,11 +619,6 @@ class TextTriviaMazeView(TriviaMazeView):
     def get_true_or_false_QA_user_answer(self):
         """Return the user's current answer to the relevant Q&A prompt."""
         return self.__true_or_false_QA_menu.get_user_answer()
-
-    def clear_short_QA_user_answer(self):
-        """Clear the contents of the text entry box in the short answer Q&A
-        widget."""
-        return self.__short_QA_menu.clear_user_answer()
 
     def __create_no_save_file_found_menu(self):
         """Create pop-up that tells the user that they couldn't load a game

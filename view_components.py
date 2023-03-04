@@ -674,8 +674,16 @@ class HintableQuestionAndAnswerMenu(QuestionAndAnswerMenu):
     A question and answer widget that allows hints to be displayed.
     """
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(
+        self,
+        window,
+        width,
+        wraplength,
+        title,
+        padx,
+        ipady,
+    ):
+        super().__init__(window, width, wraplength, title, padx, ipady)
 
         self._hint_lbl = Label(
             master=self._frm,
@@ -684,10 +692,18 @@ class HintableQuestionAndAnswerMenu(QuestionAndAnswerMenu):
             anchor=CENTER,
         )
 
+        # To be set by subclasses -- number of rows in grid of entire widget
+        # before hint row added
+        self._num_rows_without_hint = None
+
     def _show_hint_label(self):
         """Have hint label show up in frame"""
         self._hint_lbl.grid(
-            row=3, columnspan=2, padx=self._padx, pady=5, ipady=5
+            row=self._num_rows_without_hint,
+            columnspan=2,
+            padx=self._padx,
+            pady=5,
+            ipady=5,
         )
 
     def _hide_hint_label(self):
@@ -715,7 +731,15 @@ class ShortAnswerQuestionAndAnswer(HintableQuestionAndAnswerMenu):
     free-form text answer."""
 
     def __init__(self, window, width, wraplength, title, padx, ipady):
-        super().__init__(window, width, wraplength, title, padx, ipady)
+        super().__init__(
+            window,
+            width,
+            wraplength,
+            title,
+            padx,
+            ipady,
+        )
+        self._num_rows_without_hint = 3
 
         # Create and pack free-form text entry box
         self.__user_input = Entry(
@@ -756,7 +780,9 @@ class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
     """A question and answer widget that has options, represent by radio
     buttons, for the user to select from."""
 
-    def __init__(self, window, width, wraplength, title, padx, ipady, options):
+    def __init__(
+        self, window, width, wraplength, title, padx, ipady, num_cols, options
+    ):
         """Create radio buttons and labels for each of the options in
         ``options`` and pack them into a frame (left-to-right, top-to-bottom)
         in a two-column configuration.
@@ -775,6 +801,8 @@ class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
         self._button_control_var = IntVar()
 
         buttons = []
+        row = 1
+        col = 0
         for ind, option in enumerate(options):
             qa_option = Radiobutton(
                 master=self._frm,
@@ -784,8 +812,17 @@ class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
             )
             buttons.append(qa_option)
 
+            if col == 0:
+                # Begin list for this row
+                row += 1
+
             # Pack to left unless this is the last column
-            qa_option.grid(row=2, column=ind, pady=8)
+            qa_option.grid(row=row, column=col, pady=8)
+
+            # End row at num_cols
+            col += 1
+            if col == num_cols:
+                col = 0
 
         self._button_control_var.set(None)
         self._buttons = tuple(buttons)
@@ -836,5 +873,33 @@ class TrueFalseQuestionAndAnswerMenu(QuestionAndAnswerWithOptionsMenu):
     def __init__(self, window, width, wraplength, title, padx, ipady):
         options = ("True", "False")
         super().__init__(
-            window, width, wraplength, title, padx, ipady, options
+            window,
+            width,
+            wraplength,
+            title,
+            padx,
+            ipady,
+            num_cols=2,
+            options=options,
         )
+
+
+class MultipleChoiceQuestionAndAnswerMenu(
+    QuestionAndAnswerWithOptionsMenu, HintableQuestionAndAnswerMenu
+):
+    """A Q&A pop-up widget with only True or False options. No hints are
+    allowed."""
+
+    def __init__(self, window, width, wraplength, title, padx, ipady):
+        options = [""] * 4
+        super().__init__(
+            window,
+            width,
+            wraplength,
+            title,
+            padx,
+            ipady,
+            num_cols=2,
+            options=options,
+        )
+        self._num_rows_without_hint = 4

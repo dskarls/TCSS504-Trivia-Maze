@@ -461,9 +461,6 @@ class TrueOrFalseQuestionAndAnswerCommandContext(CommandContext):
     }
 
     def process_keystroke(self, key):
-        # FIXME: Display somewhere in the QA pop-up how many suggestion
-        # potions they have left and what button to press to use one
-
         if key == self.COMMANDS[self.Command.SUBMIT_ANSWER][_COMMAND_KEY_KEY]:
             # Take question and answer object from controller
             question_and_answer = self._maze_controller.question_and_answer
@@ -473,17 +470,6 @@ class TrueOrFalseQuestionAndAnswerCommandContext(CommandContext):
             user_answer_correct = question_and_answer.answer_is_correct(
                 user_answer
             )
-
-            if user_answer_correct:
-                # Tell user they were right and door was unlocked
-                # FIXME: Implement this
-                pass
-                print("Correct")
-            else:
-                # Tell user they were wrong and door was permanently locked
-                # FIXME: Implement this
-                print("Incorrect")
-                pass
 
             # Hide Q&A widget
             self._maze_view.hide_true_or_false_QA_menu()
@@ -499,10 +485,125 @@ class TrueOrFalseQuestionAndAnswerCommandContext(CommandContext):
             )
 
         elif key == self.COMMANDS[self.Command.SELECT_TRUE][_COMMAND_KEY_KEY]:
-            self._maze_view.select_QA_user_answer("True")
+            self._maze_view.select_true_or_false_QA_user_answer("True")
 
         elif key == self.COMMANDS[self.Command.SELECT_FALSE][_COMMAND_KEY_KEY]:
-            self._maze_view.select_QA_user_answer("False")
+            self._maze_view.select_true_or_false_QA_user_answer("False")
+
+
+class MultipleChoiceQuestionAndAnswerCommandContext(CommandContext):
+    class Command(Enum):
+        """Enumeration used to fix commands to a small finite support set."""
+
+        # Item commands
+        USE_SUGGESTION_POTION = auto()
+
+        # Answer selection commands
+        SELECT_A = auto()
+        SELECT_B = auto()
+        SELECT_C = auto()
+        SELECT_D = auto()
+
+        # Other commands
+        SUBMIT_ANSWER = auto()
+
+    COMMANDS = {
+        # Item commands
+        Command.USE_SUGGESTION_POTION: {
+            _COMMAND_TYPE: _COMMAND_TYPE_ITEM,
+            _COMMAND_DESC_KEY: "Use suggestion potion",
+            _COMMAND_KEY_KEY: "F1",
+        },
+        # Other commands
+        Command.SELECT_A: {
+            _COMMAND_TYPE: _COMMAND_TYPE_OTHER,
+            _COMMAND_DESC_KEY: "Select option A",
+            _COMMAND_KEY_KEY: "a",
+        },
+        Command.SELECT_B: {
+            _COMMAND_TYPE: _COMMAND_TYPE_OTHER,
+            _COMMAND_DESC_KEY: "Select option B",
+            _COMMAND_KEY_KEY: "b",
+        },
+        Command.SELECT_C: {
+            _COMMAND_TYPE: _COMMAND_TYPE_OTHER,
+            _COMMAND_DESC_KEY: "Select option C",
+            _COMMAND_KEY_KEY: "c",
+        },
+        Command.SELECT_D: {
+            _COMMAND_TYPE: _COMMAND_TYPE_OTHER,
+            _COMMAND_DESC_KEY: "Select option D",
+            _COMMAND_KEY_KEY: "d",
+        },
+        Command.SUBMIT_ANSWER: {
+            _COMMAND_TYPE: _COMMAND_TYPE_OTHER,
+            _COMMAND_DESC_KEY: "Submit answer",
+            _COMMAND_KEY_KEY: "Return",
+        },
+    }
+
+    def process_keystroke(self, key):
+        # Retrieve Q&A object held by controller
+        question_and_answer = self._maze_controller.question_and_answer
+
+        if key == self.COMMANDS[self.Command.SUBMIT_ANSWER][_COMMAND_KEY_KEY]:
+            # Take question and answer object from controller
+            self._maze_controller.question_and_answer = None
+
+            user_answer = self._maze_view.get_multiple_choice_QA_user_answer()
+            user_answer_correct = question_and_answer.answer_is_correct(
+                user_answer
+            )
+
+            # Hide Q&A widget
+            self._maze_view.hide_multiple_choice_QA_menu()
+            self._maze_view.clear_multiple_choice_QA_user_answer()
+
+            # Return command interpretation to primary interface
+            self._maze_controller.set_active_context("primary_interface")
+
+            # Inform the model
+            # NOTE: This will cause the model to update its observers
+            self._maze_model.inform_player_answer_correct_or_incorrect(
+                user_answer_correct
+            )
+
+        elif key == self.COMMANDS[self.Command.SELECT_A][_COMMAND_KEY_KEY]:
+            self._maze_view.select_multiple_choice_QA_user_answer(
+                question_and_answer.options[0]
+            )
+
+        elif key == self.COMMANDS[self.Command.SELECT_B][_COMMAND_KEY_KEY]:
+            self._maze_view.select_multiple_choice_QA_user_answer(
+                question_and_answer.options[1]
+            )
+
+        elif key == self.COMMANDS[self.Command.SELECT_C][_COMMAND_KEY_KEY]:
+            self._maze_view.select_multiple_choice_QA_user_answer(
+                question_and_answer.options[2]
+            )
+
+        elif key == self.COMMANDS[self.Command.SELECT_D][_COMMAND_KEY_KEY]:
+            self._maze_view.select_multiple_choice_QA_user_answer(
+                question_and_answer.options[3]
+            )
+
+        elif (
+            key
+            == self.COMMANDS[self.Command.USE_SUGGESTION_POTION][
+                _COMMAND_KEY_KEY
+            ]
+        ):
+            # If user has at least one suggestion potion, use it
+            adventurer_items = self._maze_model.get_adventurer_items()
+            num_suggestion_potions = sum(
+                isinstance(x, SuggestionPotion) for x in adventurer_items
+            )
+            if num_suggestion_potions > 0:
+                self._maze_model.use_item("suggestion potion")
+                self._maze_view.set_multiple_choice_QA_hint(
+                    question_and_answer.get_hint()
+                )
 
 
 class MagicKeyCommandContext(CommandContext):
@@ -532,11 +633,6 @@ class MagicKeyCommandContext(CommandContext):
     def process_keystroke(self, key):
         if key == self.COMMANDS[self.Command.USE_MAGIC_KEY][_COMMAND_KEY_KEY]:
             self._maze_model.use_item("magic key")
-            # TODO: Before any controller code switches to this command
-            # context, it should first check whether the user actually had a
-            # magic key. If not, then it should actually instead display a
-            # different widget (a dismissible context) telling the user that
-            # they need to find a magic key to unlock the door.
 
             self._maze_controller.set_active_context("primary_interface")
             self._maze_view.hide_magic_key_menu()

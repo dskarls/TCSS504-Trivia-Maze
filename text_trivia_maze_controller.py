@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from maze_items import SuggestionPotion
-from question_and_answer import ShortAnswerQA, TrueOrFalseQA
+from question_and_answer import MultipleChoiceQA, ShortAnswerQA, TrueOrFalseQA
 from trivia_maze_model_observer import TriviaMazeModelObserver
 from text_trivia_maze_view import TextTriviaMazeView
 
@@ -22,6 +22,7 @@ from command_context import (
     GameLostDiedCommandContext,
     GameLostTrappedCommandContext,
     TrueOrFalseQuestionAndAnswerCommandContext,
+    MultipleChoiceQuestionAndAnswerCommandContext,
     ShortQuestionAndAnswerCommandContext,
     MagicKeyCommandContext,
     NeedMagicKeyCommandContext,
@@ -107,6 +108,11 @@ class TextTriviaMazeController(TriviaMazeController):
                 self, self._maze_model, self.__maze_view
             )
         )
+        self.__multiple_choice_QA_context = (
+            MultipleChoiceQuestionAndAnswerCommandContext(
+                self, self._maze_model, self.__maze_view
+            )
+        )
         self.__magic_key_context = MagicKeyCommandContext(
             self, self._maze_model, self.__maze_view
         )
@@ -146,6 +152,7 @@ class TextTriviaMazeController(TriviaMazeController):
             "game_lost_trapped_menu": self.__game_lost_trapped_menu_context,
             "short_QA_menu": self.__short_QA_context,
             "true_or_false_QA_menu": self.__true_or_false_QA_context,
+            "multiple_choice_QA_menu": self.__multiple_choice_QA_context,
             "magic_key": self.__magic_key_context,
             "need_magic_key": self.__need_magic_key_context,
         }
@@ -183,7 +190,16 @@ class TextTriviaMazeController(TriviaMazeController):
         )
         if self.question_and_answer:
             if isinstance(self.question_and_answer, ShortAnswerQA):
-                self.__process_short_answer_QA(self.question_and_answer)
+                self.__maze_view.set_short_QA_question(
+                    self.question_and_answer.question,
+                )
+
+                self.__maze_view.set_short_QA_hint(
+                    self.__get_initial_hint_content()
+                )
+
+                self.__maze_view.show_short_QA_menu()
+                self.set_active_context("short_QA_menu")
 
             elif isinstance(self.question_and_answer, TrueOrFalseQA):
                 self.__maze_view.set_true_or_false_QA_question(
@@ -192,26 +208,51 @@ class TextTriviaMazeController(TriviaMazeController):
                 self.__maze_view.show_true_or_false_QA_menu()
                 self.set_active_context("true_or_false_QA_menu")
 
-    def __process_short_answer_QA(self, question_and_answer):
-        """Determine whether to show hint label in short answer Q&A and, if so,
-        what its contents should be. Then, show it and switch to the short QA
-        command context."""
-        self.__maze_view.set_short_QA_question(
-            question_and_answer.question,
-        )
-        adventurer_items = self._maze_model.get_adventurer_items()
+            elif isinstance(self.question_and_answer, MultipleChoiceQA):
+                self.__maze_view.set_multiple_choice_QA_question(
+                    self.question_and_answer.question,
+                )
 
-        # If user has at least one suggestion potion, show hint box
-        num_suggestion_potions = sum(
-            isinstance(x, SuggestionPotion) for x in adventurer_items
-        )
+                self.__maze_view.set_multiple_choice_QA_options(
+                    self.question_and_answer.options
+                )
+
+                self.__maze_view.set_multiple_choice_QA_hint(
+                    self.__get_initial_hint_content()
+                )
+
+                self.__maze_view.show_multiple_choice_QA_menu()
+                self.set_active_context("multiple_choice_QA_menu")
+
+    def __get_initial_hint_content(self):
+        """Determine whether to show the hint label for a hintable Q&A
+        component and, if so, what its contents should be.
+
+        Returns
+        -------
+        str
+            The content to place in the hint label of a hintable Q&A widget.
+        """
+
+        num_suggestion_potions = self.__get_num_suggestion_potions()
         if num_suggestion_potions > 0:
-            self.__maze_view.set_short_QA_hint(
+            return (
                 f"To see a hint, press <{USE_SUGGESTION_POTION_KEY}> to use one of your "
                 f"{num_suggestion_potions} suggestion potions."
             )
-        else:
-            self.__maze_view.set_short_QA_hint(None)
 
-        self.__maze_view.show_short_QA_menu()
-        self.set_active_context("short_QA_menu")
+    def __get_num_suggestion_potions(self):
+        """Get number of suggestion potions held by adventurer from
+        model.
+
+        Returns
+        -------
+        int
+            The number of suggestion potions the adventurer has.
+        """
+        adventurer_items = self._maze_model.get_adventurer_items()
+
+        # If user has at least one suggestion potion, show hint box
+        return sum(
+            isinstance(item, SuggestionPotion) for item in adventurer_items
+        )
