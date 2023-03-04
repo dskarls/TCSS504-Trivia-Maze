@@ -202,6 +202,11 @@ class TriviaMazeView(TriviaMazeModelObserver):
         """
 
     @abstractmethod
+    def clear_true_or_false_QA_user_answer(self):
+        """Clear the contents of the text entry box in the short answer Q&A
+        widget."""
+
+    @abstractmethod
     def show_multiple_choice_QA_menu(self):
         """Show the multiple choice answer Q&A widget."""
 

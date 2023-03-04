@@ -441,7 +441,13 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__multiple_choice_QA_menu.hide()
 
     def get_multiple_choice_QA_user_answer(self):
-        """Return the user's current answer to the relevant Q&A prompt."""
+        """Return the user's current answer to the relevant Q&A prompt.
+
+        Returns
+        -------
+        str
+            The current answer selected by the user, expressed as a string.
+        """
         return self.__multiple_choice_QA_menu.get_user_answer()
 
     def clear_multiple_choice_QA_user_answer(self):
