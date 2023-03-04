@@ -739,7 +739,8 @@ class ShortAnswerQuestionAndAnswer(HintableQuestionAndAnswerMenu):
         self._frm.update_idletasks()
 
     def hide(self):
-        """Hide the widget."""
+        """Unfocus the free form text entry and hide the widget."""
+        self._frm.focus()
         self._frm.place_forget()
 
     def get_user_answer(self):
