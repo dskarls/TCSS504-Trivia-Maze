@@ -4,7 +4,6 @@ Contains the Adventurer class and Adventurer-specific exceptions
 from maze_items import (
     HealingPotion,
     PillarOfOOP,
-    SuggestionPotion,
     VisionPotion,
     MagicKey,
     SuggestionPotion
