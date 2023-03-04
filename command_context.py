@@ -488,6 +488,8 @@ class TrueOrFalseQuestionAndAnswerCommandContext(CommandContext):
             if not user_answer:
                 return
 
+            user_answer = _strip_key_prefix(user_answer)
+
             # Take question and answer object from controller
             question_and_answer = self._maze_controller.question_and_answer
             self._maze_controller.question_and_answer = None
