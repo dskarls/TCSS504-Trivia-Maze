@@ -205,6 +205,10 @@ class TextTriviaMazeController(TriviaMazeController):
                 self.__maze_view.set_true_or_false_QA_question(
                     self.question_and_answer.question,
                 )
+                self.__maze_view.set_true_or_false_QA_options(
+                    self.__create_options_for_true_false()
+                )
+
                 self.__maze_view.show_true_or_false_QA_menu()
                 self.set_active_context("true_or_false_QA_menu")
 
@@ -214,7 +218,9 @@ class TextTriviaMazeController(TriviaMazeController):
                 )
 
                 self.__maze_view.set_multiple_choice_QA_options(
-                    self.question_and_answer.options
+                    self.__create_options_for_multiple_choice(
+                        self.question_and_answer.options
+                    )
                 )
 
                 self.__maze_view.set_multiple_choice_QA_hint(
@@ -256,3 +262,33 @@ class TextTriviaMazeController(TriviaMazeController):
         return sum(
             isinstance(item, SuggestionPotion) for item in adventurer_items
         )
+
+    @staticmethod
+    def __create_options_for_true_false():
+        """
+        Generate the options for a T/F question.
+
+        Returns
+        -------
+        list
+            List of strings
+        """
+        return ["[T] True", "[F] False"]
+
+    @staticmethod
+    def __create_options_for_multiple_choice(options):
+        """
+        Generate the options for a multiple choice question.
+
+        Returns
+        -------
+        list
+            List of strings
+        """
+        options_with_prefixes = []
+        ind_to_letter = {0: "A", 1: "B", 2: "C", 3: "D"}
+
+        for ind, option in enumerate(options):
+            options_with_prefixes.append(f"<{ind_to_letter[ind]}> {option}")
+
+        return options_with_prefixes

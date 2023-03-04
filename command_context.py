@@ -12,6 +12,23 @@ _COMMAND_TYPE_ITEM = "item"
 _COMMAND_TYPE_MOVEMENT = "movement"
 
 
+def _strip_key_prefix(user_answer):
+    """
+    Removes the key prefix on a T/F or multiple choice user input
+
+    Parameters
+    ----------
+    user_answer : str
+        Raw user answer.
+
+    Returns
+    -------
+    str
+        Original user answer but with key prefix removed.
+    """
+    return user_answer[4:]
+
+
 class CommandContext(ABC):
     """
     Interprets keystrokes within a specific context. For example, one context
@@ -559,6 +576,8 @@ class MultipleChoiceQuestionAndAnswerCommandContext(CommandContext):
             user_answer = self._maze_view.get_multiple_choice_QA_user_answer()
             if not user_answer:
                 return
+
+            user_answer = _strip_key_prefix(user_answer)
 
             # Take question and answer object from controller
             self._maze_controller.question_and_answer = None

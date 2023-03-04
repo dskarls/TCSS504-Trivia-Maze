@@ -80,6 +80,28 @@ class TriviaMazeView(TriviaMazeModelObserver):
         widget."""
 
     @abstractmethod
+    def set_true_or_false_QA_question(self, question_text):
+        """Populate the true or false question and answer widget with the
+        question contents.
+
+        Parameters
+        ----------
+        question_text : str
+            Question contents.
+        """
+
+    @abstractmethod
+    def set_true_or_false_QA_options(self, options):
+        """Populate the true or false question and answer widget with the
+        specified options.
+
+        Parameters
+        ----------
+        options : List
+            List of strings to fill in as options.
+        """
+
+    @abstractmethod
     def show_short_QA_menu(self):
         """Show the short answer Q&A widget."""
 
@@ -114,6 +136,38 @@ class TriviaMazeView(TriviaMazeModelObserver):
     @abstractmethod
     def hide_multiple_choice_QA_menu(self):
         """Hide the multiple choice answer Q&A widget."""
+
+    @abstractmethod
+    def set_multiple_choice_QA_question(self, question_text):
+        """Populate the multiple_choice answer question and answer widget with the
+        question contents.
+
+        Parameters
+        ----------
+        question_text : str
+            Question contents.
+        """
+
+    @abstractmethod
+    def set_multiple_choice_QA_hint(self, hint_text):
+        """Fill in the hint portion of the multiple_choice question and answer widget
+        with the hint contents.
+
+        Parameters
+        ----------
+        hint_text : str
+            Hint contents.
+        """
+
+    @abstractmethod
+    def set_multiple_choice_QA_options(self, options):
+        """Sets the options for selection to those in ``options``.
+
+        Parameters
+        ----------
+        options : List
+            List of strings comprising selection options.
+        """
 
     @abstractmethod
     def select_multiple_choice_QA_user_answer(self, option_index):
@@ -528,12 +582,24 @@ class TextTriviaMazeView(TriviaMazeView):
 
     def set_multiple_choice_QA_question(self, question_text):
         """Populate the multiple_choice answer question and answer widget with the
-        question contents."""
+        question contents.
+
+        Parameters
+        ----------
+        question_text : str
+            Question contents.
+        """
         self.__multiple_choice_QA_menu.set_question(question_text)
 
     def set_multiple_choice_QA_hint(self, hint_text):
         """Fill in the hint portion of the multiple_choice question and answer widget
-        with the hint contents."""
+        with the hint contents.
+
+        Parameters
+        ----------
+        hint_text : str
+            Hint contents.
+        """
         self.__multiple_choice_QA_menu.set_hint(hint_text)
 
     def set_multiple_choice_QA_options(self, options):
@@ -592,8 +658,25 @@ class TextTriviaMazeView(TriviaMazeView):
 
     def set_true_or_false_QA_question(self, question_text):
         """Populate the true or false question and answer widget with the
-        question contents."""
+        question contents.
+
+        Parameters
+        ----------
+        question_text : str
+            Question contents.
+        """
         self.__true_or_false_QA_menu.set_question(question_text)
+
+    def set_true_or_false_QA_options(self, options):
+        """Populate the true or false question and answer widget with the
+        specified options.
+
+        Parameters
+        ----------
+        options : List
+            List of strings to fill in as options.
+        """
+        self.__true_or_false_QA_menu.set_options(options)
 
     def clear_true_or_false_QA_user_answer(self):
         """Clear the contents of the text entry box in the short answer Q&A
