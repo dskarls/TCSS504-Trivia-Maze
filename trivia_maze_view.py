@@ -42,35 +42,35 @@ class TriviaMazeView(TriviaMazeModelObserver):
 
     @abstractmethod
     def show_in_game_menu(self):
-        """Show the in-game menu pop-up"""
+        """Show the in-game menu pop-up."""
 
     @abstractmethod
     def hide_in_game_menu(self):
-        """Hide the in-game menu pop-up"""
+        """Hide the in-game menu pop-up."""
 
     @abstractmethod
     def show_map_legend_menu(self):
-        """Show the map legend pop-up"""
+        """Show the map legend pop-up."""
 
     @abstractmethod
     def hide_map_legend_menu(self):
-        """Hide the map legend pop-up"""
+        """Hide the map legend pop-up."""
 
     @abstractmethod
     def show_command_legend_menu(self):
-        """Show the command legend pop-up"""
+        """Show the command legend pop-up."""
 
     @abstractmethod
     def hide_command_legend_menu(self):
-        """Hide the command legend pop-up"""
+        """Hide the command legend pop-up."""
 
     @abstractmethod
     def show_save_confirmation_menu(self):
-        """Show the save confirmation pop-up"""
+        """Show the save confirmation pop-up."""
 
     @abstractmethod
     def hide_save_confirmation_menu(self):
-        """Hide the save confirmation pop-up"""
+        """Hide the save confirmation pop-up."""
 
     @abstractmethod
     def get_in_game_menu_current_selection(self):
@@ -102,28 +102,6 @@ class TriviaMazeView(TriviaMazeModelObserver):
     def hide_need_magic_key_menu(self):
         """Hide the pop-up telling the user they can't pass through a
         permanently locked door without a magic key."""
-
-    @abstractmethod
-    def set_true_or_false_QA_question(self, question_text):
-        """Populate the true or false question and answer widget with the
-        question contents.
-
-        Parameters
-        ----------
-        question_text : str
-            Question contents.
-        """
-
-    @abstractmethod
-    def set_true_or_false_QA_options(self, options):
-        """Populate the true or false question and answer widget with the
-        specified options.
-
-        Parameters
-        ----------
-        options : List
-            List of strings to fill in as options.
-        """
 
     @abstractmethod
     def show_short_QA_menu(self):
@@ -177,6 +155,39 @@ class TriviaMazeView(TriviaMazeModelObserver):
     @abstractmethod
     def hide_true_or_false_QA_menu(self):
         """Hide the true or false answer Q&A widget."""
+
+    @abstractmethod
+    def set_true_or_false_QA_question(self, question_text):
+        """Populate the true or false question and answer widget with the
+        question contents.
+
+        Parameters
+        ----------
+        question_text : str
+            Question contents.
+        """
+
+    @abstractmethod
+    def set_true_or_false_QA_options(self, options):
+        """Populate the true or false question and answer widget with the
+        specified options.
+
+        Parameters
+        ----------
+        options : List
+            List of strings to fill in as options.
+        """
+
+    @abstractmethod
+    def get_true_or_false_QA_user_answer(self):
+        """Return the user's current answer to the relevant Q&A prompt.
+
+        Returns
+        -------
+        str
+            The current answer selected by the user (true or false), expressed
+            as a string.
+        """
 
     @abstractmethod
     def select_true_or_false_QA_user_answer(self, option_index):
