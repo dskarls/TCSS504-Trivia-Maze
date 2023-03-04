@@ -8,7 +8,7 @@ Python3 Syntax,Multiple Choice,Easy,What is the correct syntax for creating a li
 Python3 Syntax,Multiple Choice,Easy,What is the correct way to create a tuple in Python? ,"tuple = {1, 2, 3} ","tuple = [1, 2, 3]","tuple {1, 2, 3} ","tuple = (1, 2, 3) ","tuple = (1, 2, 3) "
 Python3 Syntax,Multiple Choice,Medium,What is the correct way to create a set in Python? ,"set = (1, 2, 3) ","set = [1, 2, 3] ","set {1, 2, 3} ","set = {1, 2, 3} ","set = {1, 2, 3} "
 Python3 Syntax,Multiple Choice,Hard,What is the correct syntax for creating a lambda function in Python? ,lambda x: x+1 ,function x: x+1 ,def x: return x+1 ,x => x+1 ,lambda x: x+1
-Python3 Syntax,Multiple Choice,Hard,What is the correct way to create a class in Python? ,class MyClass: ,class MyClass(): ,def MyClass: ,def MyClass(): ,class MyClass():
+Python3 Syntax,Multiple Choice,Hard,What is the correct way to create a class in Python? ,class MyClass: ,class MyClass(self): ,def MyClass: ,def MyClass(): ,class MyClass:
 Object-Oriented Programming,Multiple Choice,Easy,What is the correct syntax for creating a constructor in a class? ,constructor(){},__construct(){} ,__init__{}() ,__init__(){} ,__init__(){}
 Object-Oriented Programming,Multiple Choice,Easy,Which of the following is not an advantage of object-oriented programming? ,Code reuse,Data hiding ,Increased code size ,Modularity ,Increased code size
 Object-Oriented Programming,Multiple Choice,Medium,Which of the following is not a principle of object-oriented programming? ,Encapsulation,Abstraction ,Inheritance ,Performance,Performance
