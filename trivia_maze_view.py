@@ -146,8 +146,14 @@ class TriviaMazeView(TriviaMazeModelObserver):
         """
 
     @abstractmethod
-    def write_to_event_log(self):
-        """Write a message to the event log."""
+    def write_to_event_log(self, message):
+        """Write a message on a new line in the event log widget.
+
+        Parameters
+        ----------
+        message : str
+            Text to write into the chat log.
+        """
 
     @abstractmethod
     def show_game_won_menu(self):
