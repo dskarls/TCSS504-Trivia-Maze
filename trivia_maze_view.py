@@ -139,6 +139,28 @@ class TriviaMazeView(TriviaMazeModelObserver):
         """Hide the short answer Q&A widget."""
 
     @abstractmethod
+    def set_short_QA_question(self, question_text):
+        """Populate the short answer question and answer widget with the
+        specified question contents.
+
+        Parameters
+        ----------
+        question_text : str
+            Text to set question content to.
+        """
+
+    @abstractmethod
+    def set_short_QA_hint(self, hint_text):
+        """Fill in the hint portion of the short question and answer widget
+        with the hint contents.
+
+        Parameters
+        ----------
+        hint_text : str
+            Text to set the hint content to.
+        """
+
+    @abstractmethod
     def show_true_or_false_QA_menu(self):
         """Show the true or false answer Q&A widget."""
 
