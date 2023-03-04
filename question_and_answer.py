@@ -111,7 +111,7 @@ class MultipleChoiceQA(HintableQuestionAndAnswer):
             o for o in self.options if o != self.correct_answer
         ]
         hint += "- " + incorrect_options[0] + "\n"
-        hint += "- " + incorrect_options[1] + "\n"
+        hint += "- " + incorrect_options[1]
         return hint
 
 
