@@ -1,7 +1,6 @@
-from abc import abstractmethod
 from maze_items import SuggestionPotion
 from question_and_answer import MultipleChoiceQA, ShortAnswerQA, TrueOrFalseQA
-from trivia_maze_model_observer import TriviaMazeModelObserver
+from trivia_maze_controller import TriviaMazeController
 from text_trivia_maze_view import TextTriviaMazeView
 
 from command_context import (
@@ -27,21 +26,6 @@ from command_context import (
     MagicKeyCommandContext,
     NeedMagicKeyCommandContext,
 )
-
-
-class TriviaMazeController(TriviaMazeModelObserver):
-    @abstractmethod
-    def process_keystroke(self, key):
-        """
-        Takes a keyboard input and interprets it as a command to be issued to
-        the model or view which is then called as appropriate.
-        """
-
-    @abstractmethod
-    def start_main_event_loop(self):
-        """
-        Display main menu and start listening for input from user
-        """
 
 
 class TextTriviaMazeController(TriviaMazeController):
