@@ -647,10 +647,9 @@ class QuestionAndAnswerMenu(PopUpWindow):
             justify=CENTER,
             anchor=CENTER,
             wraplength=wraplength,
-            relief=RIDGE,
         )
         self._question_lbl.grid(
-            row=1, column=0, columnspan=2, ipadx=padx, ipady=ipady
+            row=1, column=0, columnspan=2, padx=padx, ipadx=padx, ipady=ipady
         )
 
     def set_question(self, question_text):
@@ -677,38 +676,38 @@ class HintableQuestionAndAnswerMenu(QuestionAndAnswerMenu):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._hint_lbl = None
 
-    def _create_and_pack_hint_at_bottom(self):
-        """Create a hint Label and pack it at the bottom of the window under
-        the options (and free-form text box, if applicable).
-
-        Returns
-        -------
-        hint_lbl : tk.Label
-            A label widget located at the bottom of the frame that can contain
-            a hint.
-        """
-        # Add an empty text section to hold a hint
-        hint_lbl = Label(
-            master=self._frm, text="", justify=CENTER, anchor=CENTER
+        self._hint_lbl = Label(
+            master=self._frm,
+            text="",
+            justify=CENTER,
+            anchor=CENTER,
         )
-        hint_lbl.pack(fill=BOTH, padx=self._padx, ipady=self._ipady)
 
-        # TODO: Also display how many suggestion potions the user has
-        # somewhere?
+    def _show_hint_label(self):
+        """Have hint label show up in frame"""
+        self._hint_lbl.grid(
+            row=3, columnspan=2, padx=self._padx, pady=5, ipady=5
+        )
 
-        return hint_lbl
+    def _hide_hint_label(self):
+        """Hide hint label in frame"""
+        self._hint_lbl.grid_forget()
 
     def set_hint(self, hint_text):
-        """Sets the content of the hint text to the specified value.
+        """Sets the content of the hint text to the specified value. If
+        `hint_text` is falsey, this will hide the hint label entirely.
 
         Parameters
         ----------
-        hint_text : str
+        hint_text : str or None
             The text to display as a hint in the widget.
         """
-        self._hint_lbl.configure(text=hint_text)
+        if hint_text:
+            self._hint_lbl.configure(text=hint_text)
+            self._show_hint_label()
+        else:
+            self._hide_hint_label()
 
 
 class ShortAnswerQuestionAndAnswer(HintableQuestionAndAnswerMenu):
@@ -719,11 +718,18 @@ class ShortAnswerQuestionAndAnswer(HintableQuestionAndAnswerMenu):
         super().__init__(window, width, wraplength, title, padx, ipady)
 
         # Create and pack free-form text entry box
-        self.__user_input = Entry(master=self._frm, justify=CENTER)
-        self.__user_input.pack(fill=BOTH, ipady=ipady)
-
-        # Create and pack hint label
-        self._hint_lbl = self._create_and_pack_hint_at_bottom()
+        self.__user_input = Entry(
+            master=self._frm,
+        )
+        self.__user_input.grid(
+            sticky=NSEW,
+            row=2,
+            column=0,
+            columnspan=2,
+            padx=50,
+            pady=ipady,
+            ipady=ipady,
+        )
 
     def show(self):
         """Show the widget in the middle of the center of the parent frame and
@@ -778,14 +784,7 @@ class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
             buttons.append(qa_option)
 
             # Pack to left unless this is the last column
-            qa_option.pack(
-                side=LEFT,
-                padx=self._padx,
-                ipadx=self._padx,
-                anchor=W,
-                pady=5,
-                ipady=5,
-            )
+            qa_option.grid(row=2, column=ind, pady=8)
 
         self._button_control_var.set(None)
         self._buttons = tuple(buttons)
