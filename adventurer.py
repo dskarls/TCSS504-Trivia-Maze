@@ -1,7 +1,13 @@
 """
 Contains the Adventurer class and Adventurer-specific exceptions
 """
-from maze_items import HealingPotion, PillarOfOOP, VisionPotion, MagicKey
+from maze_items import (
+    HealingPotion,
+    PillarOfOOP,
+    SuggestionPotion,
+    VisionPotion,
+    MagicKey,
+)
 from util import generate_random_int
 
 
@@ -78,6 +84,7 @@ class Adventurer:
         """
         self.__healing_potions = []
         self.__vision_potions = []
+        self.__suggestion_potions = []
         self.__pillars_found = []
         self.__magic_keys = []
 
@@ -214,6 +221,9 @@ class Adventurer:
         elif isinstance(maze_item, VisionPotion):
             self.__vision_potions.append(maze_item)
 
+        elif isinstance(maze_item, SuggestionPotion):
+            self.__suggestion_potions.append(maze_item)
+
         elif isinstance(maze_item, PillarOfOOP):
             self.__pillars_found.append(maze_item)
 
@@ -244,6 +254,19 @@ class Adventurer:
         """
         if self.__vision_potions:
             return self.__vision_potions.pop()
+
+    def consume_suggestion_potion(self):
+        """
+        Consume a suggestion potion. If adventurer has none left, no action is
+        taken.
+
+        Returns
+        -------
+        SuggestionPotion
+            A potion of suggestion.
+        """
+        if self.__suggestion_potions:
+            return self.__suggestion_potions.pop()
 
     def get_pillars_found(self):
         """
@@ -298,6 +321,7 @@ class Adventurer:
         return tuple(
             self.__healing_potions
             + self.__vision_potions
+            + self.__suggestion_potions
             + self.__pillars_found
             + self.__magic_keys
         )
