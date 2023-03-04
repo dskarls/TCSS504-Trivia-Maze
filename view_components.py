@@ -4,7 +4,6 @@ import functools
 from tkinter import *
 from tkinter.ttk import *
 
-
 from view_config import STYLES
 
 
@@ -484,9 +483,7 @@ class PopUpWindow:
     displayed over the top of it."""
 
     def __init__(self, window, width):
-        self._frm = Frame(
-            master=window,
-        )
+        self._frm = Frame(master=window, relief=RIDGE)
         self._place_pop_up_at_center_of_window(self._frm, width)
         self._width = width
 
@@ -622,10 +619,11 @@ class QuestionAndAnswerMenu(PopUpWindow):
     capable of displaying a hint.
     """
 
-    def __init__(self, window, width, wraplength, title, pady):
+    def __init__(self, window, width, wraplength, title, padx, ipady):
         # Create the frame for the whole in-game menu
         super().__init__(window, width)
-        self._pady = pady
+        self._padx = padx
+        self._ipady = ipady
 
         # Create header with title in it
         frm_title = Frame(master=self._frm, width=width)
@@ -635,8 +633,10 @@ class QuestionAndAnswerMenu(PopUpWindow):
             text=title,
             justify=CENTER,
             anchor=CENTER,
+            relief=RIDGE,
+            style=STYLES["question_and_answer_menu_title"]["style"],
         )
-        lbl.pack(fill=BOTH, pady=pady)
+        lbl.pack(fill=BOTH, ipady=ipady)
 
         # Add an empty text section to hold the question itself
         self._question_lbl = Label(
@@ -645,8 +645,9 @@ class QuestionAndAnswerMenu(PopUpWindow):
             justify=CENTER,
             anchor=CENTER,
             wraplength=wraplength,
+            relief=RIDGE,
         )
-        self._question_lbl.pack(fill=BOTH, pady=pady)
+        self._question_lbl.pack(fill=BOTH, ipadx=padx, ipady=ipady)
 
     def set_question(self, question_text):
         """
@@ -688,7 +689,7 @@ class HintableQuestionAndAnswerMenu(QuestionAndAnswerMenu):
         hint_lbl = Label(
             master=self._frm, text="", justify=CENTER, anchor=CENTER
         )
-        hint_lbl.pack(fill=BOTH, pady=self._pady)
+        hint_lbl.pack(fill=BOTH, padx=self._padx, ipady=self._ipady)
 
         # TODO: Also display how many suggestion potions the user has
         # somewhere?
@@ -710,12 +711,12 @@ class ShortAnswerQuestionAndAnswer(HintableQuestionAndAnswerMenu):
     """A question and answer widget that the user can respond to with a
     free-form text answer."""
 
-    def __init__(self, window, width, wraplength, title, pady):
-        super().__init__(window, width, wraplength, title, pady)
+    def __init__(self, window, width, wraplength, title, padx, ipady):
+        super().__init__(window, width, wraplength, title, padx, ipady)
 
         # Create and pack free-form text entry box
         self.__user_input = Entry(master=self._frm, justify=CENTER)
-        self.__user_input.pack(fill=BOTH, pady=pady)
+        self.__user_input.pack(fill=BOTH, ipady=ipady)
 
         # Create and pack hint label
         self._hint_lbl = self._create_and_pack_hint_at_bottom()
@@ -744,7 +745,7 @@ class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
     """A question and answer widget that has options, represent by radio
     buttons, for the user to select from."""
 
-    def __init__(self, window, width, wraplength, title, pady, options):
+    def __init__(self, window, width, wraplength, title, padx, ipady, options):
         """Create radio buttons and labels for each of the options in
         ``options`` and pack them into a frame (left-to-right, top-to-bottom)
         in a two-column configuration.
@@ -755,7 +756,7 @@ class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
             A label widget located at the bottom of the frame that can contain
             a hint.
         """
-        super().__init__(window, width, wraplength, title, pady)
+        super().__init__(window, width, wraplength, title, padx, ipady)
 
         # Create options. Note that since they all belong to the same frame,
         # they'll automatically coordinate so that only one can be selected at
@@ -773,7 +774,14 @@ class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
             buttons.append(qa_option)
 
             # Pack to left unless this is the last column
-            qa_option.pack(side=LEFT, fill=BOTH, anchor=CENTER)
+            qa_option.pack(
+                side=LEFT,
+                padx=self._padx,
+                ipadx=self._padx,
+                anchor=W,
+                pady=5,
+                ipady=5,
+            )
 
         self._button_control_var.set(None)
         self._buttons = tuple(buttons)
@@ -821,6 +829,8 @@ class TrueFalseQuestionAndAnswerMenu(QuestionAndAnswerWithOptionsMenu):
     """A Q&A pop-up widget with only True or False options. No hints are
     allowed."""
 
-    def __init__(self, window, width, wraplength, title, pady):
+    def __init__(self, window, width, wraplength, title, padx, ipady):
         options = ("True", "False")
-        super().__init__(window, width, wraplength, title, pady, options)
+        super().__init__(
+            window, width, wraplength, title, padx, ipady, options
+        )
