@@ -6,7 +6,7 @@ General Computer Science,Multiple Choice,Hard,Which of the following is not a ty
 General Computer Science,Multiple Choice,Hard,Which of the following is not a type of computer security? ,Network security ,Application security ,Hardware security ,Time security ,Time security
 Python3 Syntax,Multiple Choice,Easy,What is the correct syntax for creating a list in Python? ,"list = {1, 2, 3} ","list = [1, 2, 3] ","list {1, 2, 3} ","list [1, 2, 3] ","list = [1, 2, 3] "
 Python3 Syntax,Multiple Choice,Easy,What is the correct way to create a tuple in Python? ,"tuple = {1, 2, 3} ","tuple = [1, 2, 3]","tuple {1, 2, 3} ","tuple (1, 2, 3) ","tuple (1, 2, 3) "
-Python3 Syntax,Multiple Choice,Medium,What is the correct way to create a set in Python? ,"set = (1, 2, 3) ","set = [1, 2, 3] ","set {1, 2, 3} ","set {(1, 2, 3)} ","set {1, 2, 3} "
+Python3 Syntax,Multiple Choice,Medium,What is the correct way to create a set in Python? ,"set = (1, 2, 3) ","set = [1, 2, 3] ","set {1, 2, 3} ","set = {1, 2, 3} ","set = {1, 2, 3} "
 Python3 Syntax,Multiple Choice,Hard,What is the correct syntax for creating a lambda function in Python? ,lambda x: x+1 ,function x: x+1 ,def x: return x+1 ,x => x+1 ,lambda x: x+1
 Python3 Syntax,Multiple Choice,Hard,What is the correct way to create a class in Python? ,class MyClass: ,class MyClass(): ,def MyClass: ,def MyClass(): ,class MyClass():
 Object-Oriented Programming,Multiple Choice,Easy,What is the correct syntax for creating a constructor in a class? ,constructor(){},__construct(){} ,__init__{}() ,__init__(){} ,__init__(){}
@@ -15,8 +15,8 @@ Object-Oriented Programming,Multiple Choice,Medium,Which of the following is not
 Object-Oriented Programming,Multiple Choice,Medium,Which of the following is not a type of polymorphism in object-oriented programming? ,Ad-hoc polymorphism ,Parametric polymorphism ,Subtype polymorphism ,Performance polymorphism ,Performance polymorphism
 Object-Oriented Programming,Multiple Choice,Hard,Which of the following is not a way to achieve encapsulation in object-oriented programming? ,Using private variables ,Using protected variables ,Using public variables ,Using global variables ,Using global variables
 Object-Oriented Programming,Multiple Choice,Hard,Which of the following is not a way to achieve abstraction in object-oriented programming? ,Using interfaces ,Using abstract classes ,Using inheritance ,Using global variables,Using global variables
-"Algorithms and Big ""O""",Multiple Choice,Easy,Which of the following is not a common time complexity? ,O(1) ,O(n) ,O(n^2,O(n^3) ,O(n^3)
-"Algorithms and Big ""O""",Multiple Choice,Easy,Which of the following is not a common space complexity? ,O(1) ,O(n) ,O(n^2,O(n^3) ,O(n^3)
+"Algorithms and Big ""O""",Multiple Choice,Easy,Which of the following is not a common time complexity? ,O(1) ,O(n) ,O(n^2),O(n^3) ,O(n^3)
+"Algorithms and Big ""O""",Multiple Choice,Easy,Which of the following is not a common space complexity? ,O(1) ,O(n) ,O(n^2),O(n^3) ,O(n^3)
 "Algorithms and Big ""O""",Multiple Choice,Medium,Which of the following is not a common type of sorting algorithm? ,bubble sort ,quick sort ,insertion sort ,matrix sort ,matrix sort
 "Algorithms and Big ""O""",Multiple Choice,Medium,Which of the following is not a common type of data structure? a,array ,linked list ,stack ,matrix ,matrix
 "Algorithms and Big ""O""",Multiple Choice,Hard,Which of the following is not a way to improve the time complexity of an algorithm? ,memoization ,dynamic programming ,increasing hardware power ,decreasing the input size ,increasing hardware power
