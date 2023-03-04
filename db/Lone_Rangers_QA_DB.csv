@@ -18,7 +18,7 @@ Object-Oriented Programming,Multiple Choice,Hard,Which of the following is not a
 "Algorithms and Big ""O""",Multiple Choice,Easy,Which of the following is not a common time complexity? ,O(1) ,O(n) ,O(n^2),O(n^3) ,O(n^3)
 "Algorithms and Big ""O""",Multiple Choice,Easy,Which of the following is not a common space complexity? ,O(1) ,O(n) ,O(n^2),O(n^3) ,O(n^3)
 "Algorithms and Big ""O""",Multiple Choice,Medium,Which of the following is not a common type of sorting algorithm? ,bubble sort ,quick sort ,insertion sort ,matrix sort ,matrix sort
-"Algorithms and Big ""O""",Multiple Choice,Medium,Which of the following is not a common type of data structure? a,array ,linked list ,stack ,matrix ,matrix
+"Algorithms and Big ""O""",Multiple Choice,Medium,Which of the following is not a common type of data structure? ,array ,linked list ,stack ,thread ,thread
 "Algorithms and Big ""O""",Multiple Choice,Hard,Which of the following is not a way to improve the time complexity of an algorithm? ,memoization ,dynamic programming ,increasing hardware power ,decreasing the input size ,increasing hardware power
 "Algorithms and Big ""O""",Multiple Choice,Hard,Which of the following is not a property of Big O notation?,It describes the worst-case scenario ,It describes the average-case scenario ,It describes the best-case scenario ,It describes the time complexity in terms of the input size ,describes the average-case scenario
 Software Design Patterns,Multiple Choice,Easy,Which of the following is not a type of design pattern? ,creational ,behavioral,structural ,numerical ,numerical
