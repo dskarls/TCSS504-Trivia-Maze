@@ -13,6 +13,7 @@ from maze_items import (
     HealingPotion,
     Pit,
     PolymorphismPillar,
+    SuggestionPotion,
     VisionPotion,
     MagicKey,
 )
