@@ -160,6 +160,11 @@ class TriviaMazeView(TriviaMazeModelObserver):
         """Clear the contents of the event log."""
 
     @abstractmethod
+    def reset_inventories(self):
+        """Zero out and uncheck all adventurer inventory items in the
+        display."""
+
+    @abstractmethod
     def show_game_won_menu(self):
         """Display a pop-up to the user telling them they won the game."""
 
