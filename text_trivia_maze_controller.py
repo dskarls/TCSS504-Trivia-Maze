@@ -1,9 +1,14 @@
 from abc import abstractmethod
+from maze_items import SuggestionPotion
 from question_and_answer import ShortAnswerQA, TrueOrFalseQA
 from trivia_maze_model_observer import TriviaMazeModelObserver
 from text_trivia_maze_view import TextTriviaMazeView
 
-from command_context import IN_GAME_MENU_KEY, DISMISS_KEYS
+from command_context import (
+    IN_GAME_MENU_KEY,
+    DISMISS_KEYS,
+    USE_SUGGESTION_POTION_KEY,
+)
 from command_context import (
     MainMenuCommandContext,
     MainHelpMenuCommandContext,
@@ -178,14 +183,35 @@ class TextTriviaMazeController(TriviaMazeController):
         )
         if self.question_and_answer:
             if isinstance(self.question_and_answer, ShortAnswerQA):
-                self.__maze_view.set_short_QA_question(
-                    self.question_and_answer.question,
-                )
-                self.__maze_view.show_short_QA_menu()
-                self.set_active_context("short_QA_menu")
+                self.__process_short_answer_QA(self.question_and_answer)
+
             elif isinstance(self.question_and_answer, TrueOrFalseQA):
                 self.__maze_view.set_true_or_false_QA_question(
                     self.question_and_answer.question,
                 )
                 self.__maze_view.show_true_or_false_QA_menu()
                 self.set_active_context("true_or_false_QA_menu")
+
+    def __process_short_answer_QA(self, question_and_answer):
+        """Determine whether to show hint label in short answer Q&A and, if so,
+        what its contents should be. Then, show it and switch to the short QA
+        command context."""
+        self.__maze_view.set_short_QA_question(
+            question_and_answer.question,
+        )
+        adventurer_items = self._maze_model.get_adventurer_items()
+
+        # If user has at least one suggestion potion, show hint box
+        num_suggestion_potions = sum(
+            isinstance(x, SuggestionPotion) for x in adventurer_items
+        )
+        if num_suggestion_potions > 0:
+            self.__maze_view.set_short_QA_hint(
+                f"To see a hint, press <{USE_SUGGESTION_POTION_KEY}> to use one of your "
+                f"{num_suggestion_potions} suggestion potions."
+            )
+        else:
+            self.__maze_view.set_short_QA_hint(None)
+
+        self.__maze_view.show_short_QA_menu()
+        self.set_active_context("short_QA_menu")

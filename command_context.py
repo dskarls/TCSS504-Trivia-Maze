@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum, auto
+from maze_items import SuggestionPotion
 
 from trivia_maze import SaveGameFileNotFound
 
@@ -386,12 +387,11 @@ class ShortQuestionAndAnswerCommandContext(CommandContext):
     }
 
     def process_keystroke(self, key):
-        # FIXME: Display somewhere in the QA pop-up how many suggestion
-        # potions they have left and what button to press to use one
+        # Retrieve Q&A object held by controller
+        question_and_answer = self._maze_controller.question_and_answer
 
         if key == self.COMMANDS[self.Command.SUBMIT_ANSWER][_COMMAND_KEY_KEY]:
             # Take question and answer object from controller
-            question_and_answer = self._maze_controller.question_and_answer
             self._maze_controller.question_and_answer = None
 
             user_answer = self._maze_view.get_short_QA_user_answer()
@@ -402,15 +402,6 @@ class ShortQuestionAndAnswerCommandContext(CommandContext):
             self._maze_model.inform_player_answer_correct_or_incorrect(
                 user_answer_correct
             )
-
-            if user_answer_correct:
-                # Tell user they were right and door was unlocked
-                # FIXME: Implement this
-                pass
-            else:
-                # Tell user they were wrong and door was permanently locked
-                # FIXME: Implement this
-                pass
 
             # Hide Q&A widget
             self._maze_view.hide_short_QA_menu()
@@ -425,15 +416,16 @@ class ShortQuestionAndAnswerCommandContext(CommandContext):
                 _COMMAND_KEY_KEY
             ]
         ):
-            # TODO: Check if user has a suggestion potion. If so, use it and
-            # update the Q&A widget to display its hint
-
-            # Reset Q&A of controller to None so we don't keep asking the same
-            # question
-            self._maze_controller.question_and_answer = None
-
-            # Return command interpretation to primary interface
-            self._maze_controller.set_active_context("primary_interface")
+            # If user has at least one suggestion potion, use it
+            adventurer_items = self._maze_model.get_adventurer_items()
+            num_suggestion_potions = sum(
+                isinstance(x, SuggestionPotion) for x in adventurer_items
+            )
+            if num_suggestion_potions > 0:
+                self._maze_model.use_item("suggestion potion")
+                self._maze_view.set_short_QA_hint(
+                    question_and_answer.get_hint()
+                )
 
 
 class TrueOrFalseQuestionAndAnswerCommandContext(CommandContext):
@@ -562,3 +554,7 @@ DISMISS_KEYS = (
         DismissibleCommandContext.Command.DISMISS
     ][_COMMAND_KEY_KEY],
 )
+
+USE_SUGGESTION_POTION_KEY = ShortQuestionAndAnswerCommandContext.COMMANDS[
+    ShortQuestionAndAnswerCommandContext.Command.USE_SUGGESTION_POTION
+][_COMMAND_KEY_KEY]
