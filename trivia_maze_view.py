@@ -22,6 +22,16 @@ class TriviaMazeView(TriviaMazeModelObserver):
         """Hide the main menu"""
 
     @abstractmethod
+    def get_main_menu_current_selection(self):
+        """Return the currently selected option in the main menu as a string.
+
+        Returns
+        -------
+        str
+            The text of the currently selected option in the main menu.
+        """
+
+    @abstractmethod
     def show_main_help_menu(self):
         """Display the help menu accessible from the main menu. Explains rules
         of the game."""
