@@ -41,7 +41,7 @@ General Computer Science,Short Answer,Easy,A _____ is a set of rules and convent
 General Computer Science,Short Answer,Medium,"An _____ is a list set of instructions used to solve problems or perform tasks, based on the understanding of available alternatives.",Null,Null,Null,Null,algorithm
 General Computer Science,Short Answer,Medium,A _____ is a sequence of instructions that are executed in a specific order. ,Null,Null,Null,Null,program
 General Computer Science,Short Answer,Hard,A _____ is a program or device that can gain unauthorized access to a computer system. ,Null,Null,Null,Null,malware
-General Computer Science,Short Answer,Hard,A _____ is a process of ensuring that data is kept private and secure.,Null,Null,Null,Null,encryption
+General Computer Science,Short Answer,Hard,_____ is a process of ensuring that data is kept private and secure.,Null,Null,Null,Null,encryption
 Python3 Syntax,Short Answer,Easy,The __init__ method is used to initialize a _______. ,Null,Null,Null,Null,class
 Python3 Syntax,Short Answer,Easy,The _____ function is used to convert a variable to a string. ,Null,Null,Null,Null,str
 Python3 Syntax,Short Answer,Medium,The _____ function is used to catch exceptions in Python. ,Null,Null,Null,Null,try
