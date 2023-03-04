@@ -13,6 +13,7 @@ from maze_items import (
     HealingPotion,
     Pit,
     PolymorphismPillar,
+    SuggestionPotion,
     VisionPotion,
     MagicKey,
 )
@@ -169,6 +170,7 @@ class Maze:
     __PIT_PROBABILITY = 0.15
     __HEALING_POTION_PROBABILITY = 0.15
     __VISION_POTION_PROBABILITY = 0.15
+    __SUGGESTION_POTION_PROBABILITY = 0.15
     __MAGIC_KEY_PROBABILITY = 0.15
     __LOCKED_DOOR_PROBABILITY = 0.25
 
@@ -230,6 +232,7 @@ class Maze:
             Pit: 0,
             HealingPotion: 0,
             VisionPotion: 0,
+            SuggestionPotion: 0,
             PillarOfOOP: 0,
             MagicKey: 0,
         }
@@ -464,6 +467,14 @@ class Maze:
                 ):
                     this_room.place_item(VisionPotion())
                     self.__unfound_items_counter[VisionPotion] += 1
+                    placed_potion_pillar_or_key = True
+
+                # Roll to see if we should place a vision potion
+                if self.__roll_to_place_item_or_pit_or_door(
+                    self.__SUGGESTION_POTION_PROBABILITY
+                ):
+                    this_room.place_item(SuggestionPotion())
+                    self.__unfound_items_counter[SuggestionPotion] += 1
                     placed_potion_pillar_or_key = True
 
                 # Roll to see if we should place a magic key

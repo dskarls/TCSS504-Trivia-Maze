@@ -21,7 +21,9 @@ from view_components import (
     InGameMenu,
     DismissiblePopUp,
     Map,
+    MultipleChoiceQuestionAndAnswerMenu,
     ShortAnswerQuestionAndAnswer,
+    TrueFalseQuestionAndAnswerMenu,
     EventLog,
     SubWindow,
 )
@@ -73,9 +75,110 @@ class TriviaMazeView(TriviaMazeModelObserver):
         """Hide the in-game menu pop-up"""
 
     @abstractmethod
-    def pose_question_and_get_answer(self, question_and_answer):
-        """Show the user a question-and-answer pop-up and retrieve the answer,
-        then hide the pop-up.
+    def clear_short_QA_user_answer(self):
+        """Clear the contents of the text entry box in the short answer Q&A
+        widget."""
+
+    @abstractmethod
+    def set_true_or_false_QA_question(self, question_text):
+        """Populate the true or false question and answer widget with the
+        question contents.
+
+        Parameters
+        ----------
+        question_text : str
+            Question contents.
+        """
+
+    @abstractmethod
+    def set_true_or_false_QA_options(self, options):
+        """Populate the true or false question and answer widget with the
+        specified options.
+
+        Parameters
+        ----------
+        options : List
+            List of strings to fill in as options.
+        """
+
+    @abstractmethod
+    def show_short_QA_menu(self):
+        """Show the short answer Q&A widget."""
+
+    @abstractmethod
+    def hide_short_QA_menu(self):
+        """Hide the short answer Q&A widget."""
+
+    @abstractmethod
+    def show_true_or_false_QA_menu(self):
+        """Show the true or false answer Q&A widget."""
+
+    @abstractmethod
+    def hide_true_or_false_QA_menu(self):
+        """Hide the true or false answer Q&A widget."""
+
+    @abstractmethod
+    def select_true_or_false_QA_user_answer(self, option_index):
+        """Select the option in the true of false QA widget with the text value
+        given by `option` (should be "True" or "False").
+
+        Parameters
+        ----------
+        option_index : int
+            Index associated with desired option. Indices are zero-based and go
+            left-to-right, top-to-bottom.
+        """
+
+    @abstractmethod
+    def show_multiple_choice_QA_menu(self):
+        """Show the multiple choice answer Q&A widget."""
+
+    @abstractmethod
+    def hide_multiple_choice_QA_menu(self):
+        """Hide the multiple choice answer Q&A widget."""
+
+    @abstractmethod
+    def set_multiple_choice_QA_question(self, question_text):
+        """Populate the multiple_choice answer question and answer widget with the
+        question contents.
+
+        Parameters
+        ----------
+        question_text : str
+            Question contents.
+        """
+
+    @abstractmethod
+    def set_multiple_choice_QA_hint(self, hint_text):
+        """Fill in the hint portion of the multiple_choice question and answer widget
+        with the hint contents.
+
+        Parameters
+        ----------
+        hint_text : str
+            Hint contents.
+        """
+
+    @abstractmethod
+    def set_multiple_choice_QA_options(self, options):
+        """Sets the options for selection to those in ``options``.
+
+        Parameters
+        ----------
+        options : List
+            List of strings comprising selection options.
+        """
+
+    @abstractmethod
+    def select_multiple_choice_QA_user_answer(self, option_index):
+        """Select the option in the multiple choice QA widget with the text
+        value given by `option`.
+
+        Parameters
+        ----------
+        option_index : int
+            Index associated with desired option. Indices are zero-based and go
+            left-to-right, top-to-bottom.
         """
 
     @abstractmethod
@@ -256,11 +359,19 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__command_legend_menu = self.__create_command_legend_menu()
         self.hide_command_legend_menu()
 
-        # Creat empty question & answer menu
-        self.__question_and_answer_menu = (
-            self.__create_question_and_answer_menu()
+        # Creat empty short answer question & answer menu
+        self.__short_QA_menu = self.__create_short_QA_menu()
+        self.hide_short_QA_menu()
+
+        # Creat empty true or false question & answer menu
+        self.__true_or_false_QA_menu = self.__create_true_or_false_QA_menu()
+        self.hide_true_or_false_QA_menu()
+
+        # Creat empty short answer question & answer menu
+        self.__multiple_choice_QA_menu = (
+            self.__create_multiple_choice_QA_menu()
         )
-        self.hide_question_and_answer_menu()
+        self.hide_multiple_choice_QA_menu()
 
         # Create main menu and the help menu accessible from it
         self.__main_menu = self.__create_main_menu()
@@ -415,31 +526,186 @@ class TextTriviaMazeView(TriviaMazeView):
         """Hide the in-game menu."""
         self.__in_game_menu.hide()
 
-    def __create_question_and_answer_menu(self):
+    def __create_short_QA_menu(self):
         """Create a generic question and answer widget that doesn't hold any
         content yet. Its content can be populated by the controller using the
-        `set_question` method."""
+        `set_short_QA_question` and `set_short_WA_hint` methods."""
         return ShortAnswerQuestionAndAnswer(
             self.__window,
             None,
-            "Q & A",
+            DIMENSIONS["question_and_answer_menu"]["wraplength"],
+            "Short Question & Answer",
+            DIMENSIONS["question_and_answer_menu"]["padx"],
             DIMENSIONS["question_and_answer_menu"]["ipady"],
         )
 
-    def set_question(self, question, options, hint):
-        """Populate the question and answer widget with the question
-        contents."""
-        self.__question_and_answer_menu.set_question(question)
-        self.__question_and_answer_menu.set_options(options)
-        self.__question_and_answer_menu.set_hint(hint)
+    def set_short_QA_question(self, question_text):
+        """Populate the short answer question and answer widget with the
+        question contents."""
+        self.__short_QA_menu.set_question(question_text)
 
-    def show_question_and_answer_menu(self):
+    def set_short_QA_hint(self, hint_text):
+        """Fill in the hint portion of the short question and answer widget
+        with the hint contents."""
+        self.__short_QA_menu.set_hint(hint_text)
+
+    def show_short_QA_menu(self):
         """Show the question and answer widget."""
-        self.__question_and_answer_menu.show()
+        self.__short_QA_menu.show()
 
-    def hide_question_and_answer_menu(self):
+    def hide_short_QA_menu(self):
         """Hide the question and answer widget."""
-        self.__question_and_answer_menu.hide()
+        self.__short_QA_menu.hide()
+
+    def get_short_QA_user_answer(self):
+        """Return the user's current answer to the relevant Q&A prompt."""
+        return self.__short_QA_menu.get_user_answer()
+
+    def clear_short_QA_user_answer(self):
+        """Clear the contents of the text entry box in the short answer Q&A
+        widget."""
+        return self.__short_QA_menu.clear_user_answer()
+
+    def __create_multiple_choice_QA_menu(self):
+        """Create a generic question and answer widget that doesn't hold any
+        content yet. Its content can be populated by the controller using the
+        `set_multiple_choice_QA_question` and `set_multiple_choice_WA_hint` methods.
+        """
+        return MultipleChoiceQuestionAndAnswerMenu(
+            self.__window,
+            None,
+            DIMENSIONS["question_and_answer_menu"]["wraplength"],
+            "Short Question & Answer",
+            DIMENSIONS["question_and_answer_menu"]["padx"],
+            DIMENSIONS["question_and_answer_menu"]["ipady"],
+        )
+
+    def set_multiple_choice_QA_question(self, question_text):
+        """Populate the multiple_choice answer question and answer widget with the
+        question contents.
+
+        Parameters
+        ----------
+        question_text : str
+            Question contents.
+        """
+        self.__multiple_choice_QA_menu.set_question(question_text)
+
+    def set_multiple_choice_QA_hint(self, hint_text):
+        """Fill in the hint portion of the multiple_choice question and answer widget
+        with the hint contents.
+
+        Parameters
+        ----------
+        hint_text : str
+            Hint contents.
+        """
+        self.__multiple_choice_QA_menu.set_hint(hint_text)
+
+    def set_multiple_choice_QA_options(self, options):
+        """Sets the options for selection to those in ``options``.
+
+        Parameters
+        ----------
+        options : List
+            List of strings comprising selection options.
+        """
+        return self.__multiple_choice_QA_menu.set_options(options)
+
+    def show_multiple_choice_QA_menu(self):
+        """Show the question and answer widget."""
+        self.__multiple_choice_QA_menu.show()
+
+    def hide_multiple_choice_QA_menu(self):
+        """Hide the question and answer widget."""
+        self.__multiple_choice_QA_menu.hide()
+
+    def get_multiple_choice_QA_user_answer(self):
+        """Return the user's current answer to the relevant Q&A prompt."""
+        return self.__multiple_choice_QA_menu.get_user_answer()
+
+    def clear_multiple_choice_QA_user_answer(self):
+        """Clear the contents of the text entry box in the short answer Q&A
+        widget."""
+        return self.__multiple_choice_QA_menu.clear_selection()
+
+    def select_multiple_choice_QA_user_answer(self, option_index):
+        """Select the option in the multiple choice QA widget with the text
+        value given by `option`.
+
+        Parameters
+        ----------
+        option_index : int
+            Index associated with desired option. Indices are zero-based and go
+            left-to-right, top-to-bottom.
+        """
+        self.__multiple_choice_QA_menu.select_user_option(option_index)
+
+    def __create_true_or_false_QA_menu(self):
+        """Create a generic T/F question and answer widget that doesn't hold
+        any content yet. Its content can be populated by the controller using
+        `set_true_or_false_QA_question` and `set_true_or_false_WA_hint`
+        methods.
+        """
+        return TrueFalseQuestionAndAnswerMenu(
+            self.__window,
+            None,
+            DIMENSIONS["question_and_answer_menu"]["wraplength"],
+            "True/False Question & Answer",
+            DIMENSIONS["question_and_answer_menu"]["padx"],
+            DIMENSIONS["question_and_answer_menu"]["ipady"],
+        )
+
+    def set_true_or_false_QA_question(self, question_text):
+        """Populate the true or false question and answer widget with the
+        question contents.
+
+        Parameters
+        ----------
+        question_text : str
+            Question contents.
+        """
+        self.__true_or_false_QA_menu.set_question(question_text)
+
+    def set_true_or_false_QA_options(self, options):
+        """Populate the true or false question and answer widget with the
+        specified options.
+
+        Parameters
+        ----------
+        options : List
+            List of strings to fill in as options.
+        """
+        self.__true_or_false_QA_menu.set_options(options)
+
+    def clear_true_or_false_QA_user_answer(self):
+        """Clear the contents of the text entry box in the short answer Q&A
+        widget."""
+        return self.__true_or_false_QA_menu.clear_selection()
+
+    def select_true_or_false_QA_user_answer(self, option_index):
+        """Select the option in the true of false QA widget with the text value
+        given by `option` (should be "True" or "False").
+
+        Parameters
+        ----------
+        option_index : int
+            Index associated with desired option. Indices are zero-based and go
+            left-to-right, top-to-bottom.
+        """
+        self.__true_or_false_QA_menu.select_user_option(option_index)
+
+    def show_true_or_false_QA_menu(self):
+        """Show the question and answer widget."""
+        self.__true_or_false_QA_menu.show()
+
+    def hide_true_or_false_QA_menu(self):
+        """Hide the question and answer widget."""
+        self.__true_or_false_QA_menu.hide()
+
+    def get_true_or_false_QA_user_answer(self):
+        """Return the user's current answer to the relevant Q&A prompt."""
+        return self.__true_or_false_QA_menu.get_user_answer()
 
     def __create_no_save_file_found_menu(self):
         """Create pop-up that tells the user that they couldn't load a game
@@ -1053,9 +1319,9 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__inventory.clear()
         self.__pillars_inventory.clear()
 
-    def pose_question_and_get_answer(self):
-        # FIXME: Implement this
-        pass
+    def clear_event_log(self):
+        """Remove all contents from the event log."""
+        self.__event_log.clear()
 
     def quit_entire_game(self):
         """Tear down the entire application and quit."""

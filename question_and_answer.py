@@ -33,7 +33,6 @@ class QuestionAndAnswer(ABC):
         :param user_answer: (str) The user's answer.
         :return: (bool) True if the user's answer is correct, False otherwise.
         """
-        return user_answer.lower() == self.correct_answer.lower()
 
 
 class TrueOrFalseQA(QuestionAndAnswer):
@@ -112,7 +111,7 @@ class MultipleChoiceQA(HintableQuestionAndAnswer):
             o for o in self.options if o != self.correct_answer
         ]
         hint += "- " + incorrect_options[0] + "\n"
-        hint += "- " + incorrect_options[1] + "\n"
+        hint += "- " + incorrect_options[1]
         return hint
 
 

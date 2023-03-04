@@ -29,7 +29,12 @@ DIMENSIONS = {
     "game_won_menu": {"ipadx": 10, "ipady": 10},
     "game_lost_died_menu": {"ipadx": 10, "ipady": 10},
     "game_lost_trapped_menu": {"ipadx": 10, "ipady": 10},
-    "question_and_answer_menu": {"ipadx": 10, "ipady": 10},
+    "question_and_answer_menu": {
+        "wraplength": 400,
+        "padx": 15,
+        "ipadx": 10,
+        "ipady": 10,
+    },
 }
 
 ##############################################################################
@@ -250,6 +255,10 @@ ROOM_SIDE_SYMBOLS = {
 ##############################################################################
 STYLES = {
     "main_menu": {"style": "main_menu.TLabel", "font": ("Courier New", 16)},
+    "question_and_answer_menu_title": {
+        "style": "question_and_answer_menu_title.TLabel",
+        "font": ("Arial", 14, "bold"),
+    },
     "map": {"style": "map.TLabel", "font": ("Courier New", 26, "bold")},
     "hp_gauge_label": {
         "style": "hp_gauge_label.TLabel",

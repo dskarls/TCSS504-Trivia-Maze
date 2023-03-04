@@ -1,9 +1,9 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 import functools
+import textwrap
 
 from tkinter import *
 from tkinter.ttk import *
-
 
 from view_config import STYLES
 
@@ -276,6 +276,12 @@ class EventLog(SubWindow):
 
         return scrltxt
 
+    def clear(self):
+        """Clear contents of the event log."""
+        self.__textbox.config(state=NORMAL)
+        self.__textbox.delete("1.0", END)
+        self.__textbox.config(state=DISABLED)
+
 
 class EnumeratedInventory:
     """An inventory of items that have an positive integer count value
@@ -469,14 +475,12 @@ class HPGauge:
         self.__bar_hp_gauge["value"] = value
 
 
-class PopUpWindow(ABC):
+class PopUpWindow:
     """A pop-up window that does not belong to a frame's grid, but is rather
     displayed over the top of it."""
 
     def __init__(self, window, width):
-        self._frm = Frame(
-            master=window,
-        )
+        self._frm = Frame(master=window, relief=RIDGE)
         self._place_pop_up_at_center_of_window(self._frm, width)
         self._width = width
 
@@ -491,15 +495,15 @@ class PopUpWindow(ABC):
             width=width,
         )
 
-    @abstractmethod
     def show(self):
-        """Show the pop-up window."""
-        pass
+        """Show the pop-up window in the middle of the center of the parent
+        frame."""
+        self._place_pop_up_at_center_of_window(self._frm, self._width)
+        self._frm.update_idletasks()
 
-    @abstractmethod
     def hide(self):
         """Hide the pop-up window."""
-        pass
+        self._frm.place_forget()
 
 
 class InGameMenu(PopUpWindow):
@@ -542,14 +546,9 @@ class InGameMenu(PopUpWindow):
 
     def show(self):
         """Show the in-game menu's window."""
-        self._place_pop_up_at_center_of_window(self._frm, self._width)
-        self.__text_menu.focus()
+        super().show()
         self.__text_menu.reset_selection()
-        self._frm.update_idletasks()
-
-    def hide(self):
-        """Hide the in-game menu's window."""
-        self._frm.place_forget()
+        self.__text_menu.focus()
 
     @property
     def selected_option(self):
@@ -603,15 +602,6 @@ class DismissiblePopUp(PopUpWindow):
         )
         lbl.pack(fill=BOTH, ipadx=ipadx, ipady=ipady)
 
-    def show(self):
-        """Show the pop-up at the center of the parent frame."""
-        self._place_pop_up_at_center_of_window(self._frm, self._width)
-        self._frm.update_idletasks()
-
-    def hide(self):
-        """Hide the pop-up."""
-        self._frm.place_forget()
-
     def set_text(self, text):
         """Set the underlying text content of the pop-up to the specified
         value."""
@@ -626,75 +616,141 @@ class QuestionAndAnswerMenu(PopUpWindow):
     capable of displaying a hint.
     """
 
-    def __init__(self, window, width, title, pady):
+    def __init__(self, window, width, wraplength, title, padx, ipady):
         # Create the frame for the whole in-game menu
         super().__init__(window, width)
+        self._padx = padx
+        self._ipady = ipady
 
         # Create header with title in it
         frm_title = Frame(master=self._frm, width=width)
-        frm_title.pack(fill=BOTH, anchor=CENTER)
+        frm_title.grid(columnspan=2, pady=5)
         lbl = Label(
             master=frm_title,
             text=title,
+            style=STYLES["question_and_answer_menu_title"]["style"],
             justify=CENTER,
             anchor=CENTER,
         )
-        lbl.pack(fill=BOTH, pady=pady)
+        lbl.pack(
+            pady=5,
+            fill=BOTH,
+        )
 
         # Add an empty text section to hold the question itself
         self._question_lbl = Label(
-            master=self._frm, text="", justify=CENTER, anchor=CENTER
+            master=self._frm,
+            text="",
+            justify=CENTER,
+            anchor=CENTER,
+            wraplength=wraplength,
         )
-        self._question_lbl.pack(fill=BOTH, pady=pady)
+        self._question_lbl.grid(
+            row=1, column=0, columnspan=2, padx=padx, ipadx=padx, ipady=ipady
+        )
 
-        # TODO: Also display how many suggestion potions the user has
-        # somewhere?
+    def set_question(self, question_text):
+        """
+        Populates the question label with the specified text.
 
-    def set_question(self, text):
-        """Sets the content of the question text to the specified value."""
-        self._question_lbl.configure(text=text)
-
-    @abstractmethod
-    def set_hint(self, text):
-        """Sets the content of the hint text to the specified value."""
-        pass
+        Parameters
+        ----------
+        question_text : str
+            String to fill in as question in the widget.
+        """
+        self._question_lbl.configure(text=question_text)
 
     @abstractmethod
     def get_user_answer(self):
         """Fetch and return the player's answer."""
         pass
 
-    @abstractmethod
-    def set_options(self, text):
-        """Sets the content of the options text, if any, that the user can
-        choose from to the specified value."""
-        # TODO: This could be expanded to allow for options that exist in the
-        # form of clickable buttons. This could be done by taking a list of
-        # strings as an argument and then creating a desired graphical
-        # interface to them.
-        pass
+
+class HintableQuestionAndAnswerMenu(QuestionAndAnswerMenu):
+    """
+    A question and answer widget that allows hints to be displayed.
+    """
+
+    def __init__(
+        self,
+        window,
+        width,
+        wraplength,
+        title,
+        padx,
+        ipady,
+    ):
+        super().__init__(window, width, wraplength, title, padx, ipady)
+
+        self._hint_lbl = Label(
+            master=self._frm,
+            text="",
+            justify=CENTER,
+            anchor=CENTER,
+        )
+
+        # To be set by subclasses -- number of rows in grid of entire widget
+        # before hint row added
+        self._num_rows_without_hint = None
+
+    def _show_hint_label(self):
+        """Have hint label show up in frame"""
+        self._hint_lbl.grid(
+            row=self._num_rows_without_hint,
+            columnspan=2,
+            padx=self._padx,
+            pady=5,
+            ipady=5,
+        )
+
+    def _hide_hint_label(self):
+        """Hide hint label in frame"""
+        self._hint_lbl.grid_forget()
+
+    def set_hint(self, hint_text):
+        """Sets the content of the hint text to the specified value. If
+        `hint_text` is falsey, this will hide the hint label entirely.
+
+        Parameters
+        ----------
+        hint_text : str or None
+            The text to display as a hint in the widget.
+        """
+        if hint_text:
+            self._hint_lbl.configure(text=hint_text)
+            self._show_hint_label()
+        else:
+            self._hide_hint_label()
 
 
-class ShortAnswerQuestionAndAnswer(QuestionAndAnswerMenu):
+class ShortAnswerQuestionAndAnswer(HintableQuestionAndAnswerMenu):
     """A question and answer widget that the user can respond to with a
     free-form text answer."""
 
-    def __init__(self, window, width, title, pady):
-        super().__init__(window, width, title, pady)
-
-        self.__options_lbl = Label(
-            master=self._frm, text="", justify=CENTER, anchor=CENTER
+    def __init__(self, window, width, wraplength, title, padx, ipady):
+        super().__init__(
+            window,
+            width,
+            wraplength,
+            title,
+            padx,
+            ipady,
         )
-        self.__options_lbl.pack(fill=BOTH, pady=pady)
+        self._num_rows_without_hint = 3
 
-        self.__user_input = Entry(master=self._frm, justify=CENTER)
-        self.__user_input.pack(fill=BOTH, pady=pady)
-
-        # Add an empty text section to hold a hint
-        self.__hint_lbl = Label(
-            master=self._frm, text="", justify=CENTER, anchor=CENTER
+        # Create and pack free-form text entry box
+        self.__user_input = Entry(
+            master=self._frm,
         )
-        self.__hint_lbl.pack(fill=BOTH, pady=pady)
+        self.__user_input.grid(
+            sticky=NSEW,
+            row=2,
+            column=0,
+            columnspan=2,
+            padx=50,
+            pady=ipady,
+            ipady=ipady,
+        )
 
     def show(self):
         """Show the widget in the middle of the center of the parent frame and
@@ -704,14 +760,176 @@ class ShortAnswerQuestionAndAnswer(QuestionAndAnswerMenu):
         self._frm.update_idletasks()
 
     def hide(self):
-        """Hide the widget."""
+        """Unfocus the free form text entry and hide the widget."""
+        self._frm.focus()
         self._frm.place_forget()
 
     def get_user_answer(self):
+        """Fetch and return the player's answer."""
         return self.__user_input.get()
 
-    def set_options(self, text):
-        return self.__options_lbl.configure(text=text)
+    def clear_user_answer(self):
+        """Clear out any contents in the short answer text entry box."""
+        self.__user_input.delete(0, END)
 
-    def set_hint(self, text):
-        self.__hint_lbl.configure(text=text)
+
+class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
+    """A question and answer widget that has options, represent by radio
+    buttons, for the user to select from."""
+
+    class WrappedRadiobutton(Radiobutton):
+        # Padding characters placed at beginning of every row of characters
+        __ROW_PREFIX = " " * 1
+
+        def __init__(self, master, text, variable, value, width):
+            self.__width = width
+            self.original_text = text
+
+            super().__init__(
+                master=master,
+                variable=variable,
+                value=value,
+            )
+
+            self.set_text(text)
+
+        def set_text(self, text):
+            """
+            Take an original text string, wrap it, and assign it to this
+            button.
+
+            Parameters
+            ----------
+            text : str
+                Arbitrary text.
+            """
+            # Update original text of button
+            self.original_text = text
+
+            # Wrap text
+            wrapped_text = self.__ROW_PREFIX + (f"\n{self.__ROW_PREFIX}").join(
+                textwrap.wrap(text, width=self.__width)
+            )
+
+            self.configure(text=wrapped_text)
+
+    def __init__(
+        self, window, width, wraplength, title, padx, ipady, num_cols, options
+    ):
+        """Create radio buttons and labels for each of the options in
+        ``options`` and pack them into a frame (left-to-right, top-to-bottom)
+        in a two-column configuration.
+
+        Returns
+        -------
+        option_buttons : tk.Label
+            A label widget located at the bottom of the frame that can contain
+            a hint.
+        """
+        super().__init__(window, width, wraplength, title, padx, ipady)
+
+        # Create options. Note that since they all belong to the same frame,
+        # they'll automatically coordinate so that only one can be selected at
+        # any given time.
+        self._button_control_var = IntVar()
+
+        buttons = []
+        row = 1
+        col = 0
+        for ind, option in enumerate(options):
+            qa_option = self.WrappedRadiobutton(
+                master=self._frm,
+                text=option,
+                variable=self._button_control_var,
+                value=ind,
+                width=25,
+            )
+            buttons.append(qa_option)
+
+            if col == 0:
+                # Begin list for this row
+                row += 1
+
+            # Pack to left unless this is the last column
+            qa_option.grid(
+                row=row, column=col, sticky=W, padx=15, pady=(0, 10)
+            )
+
+            # End row at num_cols
+            col += 1
+            if col == num_cols:
+                col = 0
+
+        self._button_control_var.set(None)
+        self._buttons = tuple(buttons)
+
+    def set_options(self, options):
+        """Sets the content of the options text, if any, that the user can
+        choose from to the specified value.
+
+        Parameters
+        ----------
+        options : list
+            Set of possible options to display to the user.
+        """
+        for ind, option_text in enumerate(options):
+            self._buttons[ind].set_text(option_text)
+
+    def select_user_option(self, option_index):
+        """
+        Mark one of the options in the widget as selected using its zero-based
+        index.
+
+        Parameters
+        ----------
+        option_index : int
+            Index associated with desired option. Indices are zero-based and go
+            left-to-right, top-to-bottom.
+        """
+        self._button_control_var.set(option_index)
+
+    def clear_selection(self):
+        """Deselect all buttons."""
+        self._button_control_var.set(None)
+
+    def get_user_answer(self):
+        return self._buttons[int(self._button_control_var.get())].original_text
+
+
+class TrueFalseQuestionAndAnswerMenu(QuestionAndAnswerWithOptionsMenu):
+    """A Q&A pop-up widget with only True or False options. No hints are
+    allowed."""
+
+    def __init__(self, window, width, wraplength, title, padx, ipady):
+        options = ("True", "False")
+        super().__init__(
+            window,
+            width,
+            wraplength,
+            title,
+            padx,
+            ipady,
+            num_cols=2,
+            options=options,
+        )
+
+
+class MultipleChoiceQuestionAndAnswerMenu(
+    QuestionAndAnswerWithOptionsMenu, HintableQuestionAndAnswerMenu
+):
+    """A Q&A pop-up widget with only True or False options. No hints are
+    allowed."""
+
+    def __init__(self, window, width, wraplength, title, padx, ipady):
+        options = [""] * 4
+        super().__init__(
+            window,
+            width,
+            wraplength,
+            title,
+            padx,
+            ipady,
+            num_cols=2,
+            options=options,
+        )
+        self._num_rows_without_hint = 4
