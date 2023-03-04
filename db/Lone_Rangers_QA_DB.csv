@@ -82,7 +82,7 @@ Object-Oriented Programming,True or False,Medium,Polymorphism in object-oriented
 Object-Oriented Programming,True or False,Medium,Inheritance in object-oriented programming allows a subclass to inherit the attributes and methods of its superclass. ,TRUE,FALSE,Null,Null,TRUE
 Python3 Syntax,Multiple Choice,Easy,What is the correct syntax for creating a list in Python? ,"list = {1, 2, 3} ","list = [1, 2, 3] ","list {1, 2, 3} ","list [1, 2, 3] ","list = [1, 2, 3] "
 Python3 Syntax,Multiple Choice,Easy,What is the correct way to create a tuple in Python? ,"tuple = {1, 2, 3} ","tuple = [1, 2, 3]","tuple {1, 2, 3} ","tuple (1, 2, 3) ","tuple (1, 2, 3) "
-Python3 Syntax,Multiple Choice,Hard,What is the correct way to create a class in Python? ,class MyClass: ,class MyClass(): ,def MyClass: ,def MyClass(): ,class MyClass(): 
+Python3 Syntax,Multiple Choice,Hard,What is the correct way to create a class in Python? ,class MyClass: ,class MyClass(self): ,def MyClass: ,def MyClass(): ,class MyClass(self): 
 Python3 Syntax,Multiple Choice,Hard,What is the correct syntax for creating a lambda function in Python? ,lambda x: x+1 ,function x: x+1 ,def x: return x+1 ,x => x+1 ,lambda x: x+1 
 Python3 Syntax,Multiple Choice,Medium,What is the correct syntax for creating a dictionary in Python? ,dict = {'key': 'value'} ,"dict = [""key"": ""value""] ",{'key': 'value'} ,"{""key"": ""value""} "," {""key"": ""value""} "
 Python3 Syntax,Multiple Choice,Medium,What is the correct way to create a set in Python? ,"set = (1, 2, 3) ","set = [1, 2, 3] ","set {1, 2, 3} ","set {(1, 2, 3)} ","set {1, 2, 3} "
