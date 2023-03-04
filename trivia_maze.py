@@ -64,11 +64,13 @@ class TriviaMaze(TriviaMazeModel):
     class __Items(Enum):
         HEALING_POTION = auto()
         VISION_POTION = auto()
+        SUGGESTION_POTION = auto()
         MAGIC_KEY = auto()
 
     __ITEMS = {
         __Items.HEALING_POTION: "healing potion",
         __Items.VISION_POTION: "vision potion",
+        __Items.SUGGESTION_POTION: "suggestion potion",
         __Items.MAGIC_KEY: "magic key",
     }
 
@@ -368,6 +370,16 @@ class TriviaMaze(TriviaMazeModel):
 
                 self.__event_log_buffer.append(
                     f"You used a {str(vision_potion)}!"
+                )
+
+        elif item == self.__ITEMS[self.__Items.SUGGESTION_POTION]:
+            # Use vision potion
+            if len(self.__adventurer.get_suggestion_potions()) > 0:
+                suggestion_potion = (
+                    self.__adventurer.consume_suggestion_potion()
+                )
+                self.__event_log_buffer.append(
+                    f"You used a {str(suggestion_potion)}!"
                 )
 
         elif item == self.__ITEMS[self.__Items.MAGIC_KEY]:
