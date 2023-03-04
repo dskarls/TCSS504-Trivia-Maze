@@ -627,16 +627,18 @@ class QuestionAndAnswerMenu(PopUpWindow):
 
         # Create header with title in it
         frm_title = Frame(master=self._frm, width=width)
-        frm_title.pack(fill=BOTH, anchor=CENTER)
+        frm_title.grid(columnspan=2, pady=5)
         lbl = Label(
             master=frm_title,
             text=title,
+            style=STYLES["question_and_answer_menu_title"]["style"],
             justify=CENTER,
             anchor=CENTER,
-            relief=RIDGE,
-            style=STYLES["question_and_answer_menu_title"]["style"],
         )
-        lbl.pack(fill=BOTH, ipady=ipady)
+        lbl.pack(
+            pady=5,
+            fill=BOTH,
+        )
 
         # Add an empty text section to hold the question itself
         self._question_lbl = Label(
@@ -647,7 +649,9 @@ class QuestionAndAnswerMenu(PopUpWindow):
             wraplength=wraplength,
             relief=RIDGE,
         )
-        self._question_lbl.pack(fill=BOTH, ipadx=padx, ipady=ipady)
+        self._question_lbl.grid(
+            row=1, column=0, columnspan=2, ipadx=padx, ipady=ipady
+        )
 
     def set_question(self, question_text):
         """

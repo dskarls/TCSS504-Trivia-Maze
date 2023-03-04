@@ -1,4 +1,4 @@
-﻿General Computer Science,Multiple Choice,Easy,Which of the following is not a type of computer memory? ,RAM,ROM ,CPU ,HDD ,CPU
+General Computer Science,Multiple Choice,Easy,Which of the following is not a type of computer memory? ,RAM,ROM ,CPU ,HDD ,CPU
 General Computer Science,Multiple Choice,Easy,Which of the following is not a type of computer network? ,LAN ,WAN ,PAN ,SAN ,SAN
 General Computer Science,Multiple Choice,Medium,Which of the following is not a type of software,System software ,Application software ,Hardware software ,Firmware ,Hardware software
 General Computer Science,Multiple Choice,Medium,Which of the following is not a type of computer language? ,Assembly ,High-level ,Low-level ,Database ,Database
@@ -8,32 +8,32 @@ Python3 Syntax,Multiple Choice,Easy,What is the correct syntax for creating a li
 Python3 Syntax,Multiple Choice,Easy,What is the correct way to create a tuple in Python? ,"tuple = {1, 2, 3} ","tuple = [1, 2, 3]","tuple {1, 2, 3} ","tuple (1, 2, 3) ","tuple (1, 2, 3) "
 Python3 Syntax,Multiple Choice,Medium,What is the correct syntax for creating a dictionary in Python? ,dict = {'key': 'value'} ,"dict = [""key"": ""value""] ",{'key': 'value'} ,"{""key"": ""value""} "," {""key"": ""value""} "
 Python3 Syntax,Multiple Choice,Medium,What is the correct way to create a set in Python? ,"set = (1, 2, 3) ","set = [1, 2, 3] ","set {1, 2, 3} ","set {(1, 2, 3)} ","set {1, 2, 3} "
-Python3 Syntax,Multiple Choice,Hard,What is the correct syntax for creating a lambda function in Python? ,lambda x: x+1 ,function x: x+1 ,def x: return x+1 ,x => x+1 ,lambda x: x+1 
-Python3 Syntax,Multiple Choice,Hard,What is the correct way to create a class in Python? ,class MyClass: ,class MyClass(): ,def MyClass: ,def MyClass(): ,class MyClass(): 
-Object-Oriented Programming,Multiple Choice,Easy,What is the correct syntax for creating a constructor in a class? ,constructor(){},__construct(){} ,__init__{}() ,__init__(){} ,__init__(){} 
-Object-Oriented Programming,Multiple Choice,Easy,Which of the following is not an advantage of object-oriented programming? ,Code ,Data hiding ,Increased code size ,Modularity ,Increased code size 
+Python3 Syntax,Multiple Choice,Hard,What is the correct syntax for creating a lambda function in Python? ,lambda x: x+1 ,function x: x+1 ,def x: return x+1 ,x => x+1 ,lambda x: x+1
+Python3 Syntax,Multiple Choice,Hard,What is the correct way to create a class in Python? ,class MyClass: ,class MyClass(): ,def MyClass: ,def MyClass(): ,class MyClass():
+Object-Oriented Programming,Multiple Choice,Easy,What is the correct syntax for creating a constructor in a class? ,constructor(){},__construct(){} ,__init__{}() ,__init__(){} ,__init__(){}
+Object-Oriented Programming,Multiple Choice,Easy,Which of the following is not an advantage of object-oriented programming? ,Code ,Data hiding ,Increased code size ,Modularity ,Increased code size
 Object-Oriented Programming,Multiple Choice,Medium,Which of the following is not a principle of object-oriented programming? ,Encapsulation,Abstraction ,Inheritance ,Performance,Performance
-Object-Oriented Programming,Multiple Choice,Medium,Which of the following is not a type of polymorphism in object-oriented programming? ,Ad-hoc polymorphism ,Parametric polymorphism ,Subtype polymorphism ,Performance polymorphism ,Performance polymorphism 
-Object-Oriented Programming,Multiple Choice,Hard,Which of the following is not a way to achieve encapsulation in object-oriented programming? ,Using private variables ,Using protected variables ,Using public variables ,Using global variables ,Using global variables 
+Object-Oriented Programming,Multiple Choice,Medium,Which of the following is not a type of polymorphism in object-oriented programming? ,Ad-hoc polymorphism ,Parametric polymorphism ,Subtype polymorphism ,Performance polymorphism ,Performance polymorphism
+Object-Oriented Programming,Multiple Choice,Hard,Which of the following is not a way to achieve encapsulation in object-oriented programming? ,Using private variables ,Using protected variables ,Using public variables ,Using global variables ,Using global variables
 Object-Oriented Programming,Multiple Choice,Hard,Which of the following is not a way to achieve abstraction in object-oriented programming? ,Using interfaces ,Using abstract classes ,Using inheritance ,Using global variables,Using global variables
-"Algorithms and Big ""O""",Multiple Choice,Easy,Which of the following is not a common time complexity? ,O(1) ,O(n) ,O(n^2,O(n^3) ,O(n^3) 
-"Algorithms and Big ""O""",Multiple Choice,Easy,Which of the following is not a common space complexity? ,O(1) ,O(n) ,O(n^2,O(n^3) ,O(n^3) 
-"Algorithms and Big ""O""",Multiple Choice,Medium,Which of the following is not a common type of sorting algorithm? ,bubble sort ,quick sort ,insertion sort ,matrix sort ,matrix sort 
-"Algorithms and Big ""O""",Multiple Choice,Medium,Which of the following is not a common type of data structure? a,array ,linked list ,stack ,matrix ,matrix 
-"Algorithms and Big ""O""",Multiple Choice,Hard,Which of the following is not a way to improve the time complexity of an algorithm? ,memoization ,dynamic programming ,increasing hardware power ,decreasing the input size ,increasing hardware power 
-"Algorithms and Big ""O""",Multiple Choice,Hard,Which of the following is not a property of Big O notation?,It describes the worst-case scenario ,It describes the average-case scenario ,It describes the best-case scenario ,It describes the time complexity in terms of the input size ,describes the average-case scenario 
-Software Design Patterns,Multiple Choice,Easy,Which of the following is not a type of design pattern? ,creational ,behavioral,structural ,numerical ,numerical 
-Software Design Patterns,Multiple Choice,Easy,Which of the following is an example of a creational design pattern? ,singleton ,observer ,adapter ,bridge ,singleton 
-Software Design Patterns,Multiple Choice,Easy,What is the component of the Model-View-Controller design pattern that handles the data and business logic? ,model ,view ,controller ,database ,model 
-Software Design Patterns,Multiple Choice,Medium,Which of the following is not an example of a structural design pattern? ,decorator ,facade ,iterator ,transition ,transition 
-Software Design Patterns,Multiple Choice,Medium,Which of the following is an example of a behavioral design pattern? ,proxy ,adapter ,composite ,chain of responsibility ,chain of responsibility 
-Software Design Patterns,Multiple Choice,Medium,"In the Model-View-Controller design pattern, which component is responsible for updating the view when the model changes? ",model ,view ,controller ,database ,controller 
-Software Design Patterns,Multiple Choice,Hard,Which of the following is not a principle of design patterns,encapsulation ,abstraction,inheritance ,performance ,performance 
-Software Design Patterns,Multiple Choice,Hard,Which of the following is not a Gang of Four design pattern? ,command ,interpreter,mediator ,validator ,validator 
-Software Design Patterns,Multiple Choice,Hard,"In the Model-View-Controller design pattern, which component is responsible for updating the model when the view changes? ",model ,view ,controller ,database ,controller 
-"History of Tacoma, UW, and UWT",Multiple Choice,Easy,The Washington State Fair is located in which Pierce County city? ,tacoma ,orting ,puyallup ,sumner ,puyallup 
+"Algorithms and Big ""O""",Multiple Choice,Easy,Which of the following is not a common time complexity? ,O(1) ,O(n) ,O(n^2,O(n^3) ,O(n^3)
+"Algorithms and Big ""O""",Multiple Choice,Easy,Which of the following is not a common space complexity? ,O(1) ,O(n) ,O(n^2,O(n^3) ,O(n^3)
+"Algorithms and Big ""O""",Multiple Choice,Medium,Which of the following is not a common type of sorting algorithm? ,bubble sort ,quick sort ,insertion sort ,matrix sort ,matrix sort
+"Algorithms and Big ""O""",Multiple Choice,Medium,Which of the following is not a common type of data structure? a,array ,linked list ,stack ,matrix ,matrix
+"Algorithms and Big ""O""",Multiple Choice,Hard,Which of the following is not a way to improve the time complexity of an algorithm? ,memoization ,dynamic programming ,increasing hardware power ,decreasing the input size ,increasing hardware power
+"Algorithms and Big ""O""",Multiple Choice,Hard,Which of the following is not a property of Big O notation?,It describes the worst-case scenario ,It describes the average-case scenario ,It describes the best-case scenario ,It describes the time complexity in terms of the input size ,describes the average-case scenario
+Software Design Patterns,Multiple Choice,Easy,Which of the following is not a type of design pattern? ,creational ,behavioral,structural ,numerical ,numerical
+Software Design Patterns,Multiple Choice,Easy,Which of the following is an example of a creational design pattern? ,singleton ,observer ,adapter ,bridge ,singleton
+Software Design Patterns,Multiple Choice,Easy,What is the component of the Model-View-Controller design pattern that handles the data and business logic? ,model ,view ,controller ,database ,model
+Software Design Patterns,Multiple Choice,Medium,Which of the following is not an example of a structural design pattern? ,decorator ,facade ,iterator ,transition ,transition
+Software Design Patterns,Multiple Choice,Medium,Which of the following is an example of a behavioral design pattern? ,proxy ,adapter ,composite ,chain of responsibility ,chain of responsibility
+Software Design Patterns,Multiple Choice,Medium,"In the Model-View-Controller design pattern, which component is responsible for updating the view when the model changes? ",model ,view ,controller ,database ,controller
+Software Design Patterns,Multiple Choice,Hard,Which of the following is not a principle of design patterns,encapsulation ,abstraction,inheritance ,performance ,performance
+Software Design Patterns,Multiple Choice,Hard,Which of the following is not a Gang of Four design pattern? ,command ,interpreter,mediator ,validator ,validator
+Software Design Patterns,Multiple Choice,Hard,"In the Model-View-Controller design pattern, which component is responsible for updating the model when the view changes? ",model ,view ,controller ,database ,controller
+"History of Tacoma, UW, and UWT",Multiple Choice,Easy,The Washington State Fair is located in which Pierce County city? ,tacoma ,orting ,puyallup ,sumner ,puyallup
 "History of Tacoma, UW, and UWT",Multiple Choice,Medium,Which year did the University of Washington Tacoma open its doors to students? ,1990,2020,1910,1850,1990
-"History of Tacoma, UW, and UWT",Multiple Choice,Hard,What was the original industry of the City of Tacoma? ,fishing ,apples ,logging ,microchips ,logging 
+"History of Tacoma, UW, and UWT",Multiple Choice,Hard,What was the original industry of the City of Tacoma? ,fishing ,apples ,logging ,microchips ,logging
 "History of Tacoma, UW, and UWT",Multiple Choice,Hard,Which year was the City of Tacoma officially incorporated? ,1858,1863,1875,1889,1875
 "History of Tacoma, UW, and UWT",Multiple Choice,Hard,What is the nickname of the City of Tacoma? ,the city of trees,the city of destiny,the city of mountain,the city of the brave,the city of destiny
 General Computer Science,Short Answer,Easy,A _____ specific set of instructions that a computer can perform.,Null,Null,Null,Null,computer program
@@ -69,15 +69,15 @@ Software Design Patterns,Short Answer,Medium,The _____ is responsible for displa
 Software Design Patterns,Short Answer,Hard,The _____ pattern is a behavioral design pattern that allows objects to separate their responsibilities and interactions with one another. ,Null,Null,Null,Null,mediator
 Software Design Patterns,Short Answer,Hard,The _____ pattern is a behavioral design pattern that allows an object to change its behavior at runtime based on different states. ,Null,Null,Null,Null,state
 Software Design Patterns,Short Answer,Hard,The _____ is responsible for updating the model when the view changes and updating the view when the model changes. ,Null,Null,Null,Null,controller
-"History of Tacoma, UW, and UWT",Short Answer,Easy,The University of Washington Tacoma is located in the ___ of Tacoma. ,Null,Null,Null,Null,downtown
-"History of Tacoma, UW, and UWT",Short Answer,Easy,The University of Washington mascot’s name is a ___. ,Null,Null,Null,Null,husky
-"History of Tacoma, UW, and UWT",Short Answer,Easy,The City of Tacoma is located in which county ___.?,Null,Null,Null,Null,pierce
+"History of Tacoma, UW, and UWT",Short Answer,Easy,The University of Washington Tacoma is located in the ___ area of Tacoma.,Null,Null,Null,Null,downtown
+"History of Tacoma, UW, and UWT",Short Answer,Easy,The University of Washington mascot is a ___. ,Null,Null,Null,Null,husky
+"History of Tacoma, UW, and UWT",Short Answer,Easy,The City of Tacoma is located in which county ___?,Null,Null,Null,Null,pierce
 "History of Tacoma, UW, and UWT",Short Answer,Easy,The acronym for University of Washington Tacoma is ___. ,Null,Null,Null,Null,uwt
 "History of Tacoma, UW, and UWT",Short Answer,Medium,The City of Tacoma is located in the ___ region of Washington. ,Null,Null,Null,Null,south puget sound
-"History of Tacoma, UW, and UWT",Short Answer,Medium,The seat of Pierce County is the City of ___. ,Null,Null,Null,Null,tacoma
-"History of Tacoma, UW, and UWT",Short Answer,Medium,The University of Washington football team plays its home games at ,Null,Null,Null,Null,husky stadium
+"History of Tacoma, UW, and UWT",Short Answer,Medium,The seat of Pierce County is the city of ___. ,Null,Null,Null,Null,tacoma
+"History of Tacoma, UW, and UWT",Short Answer,Medium,The University of Washington football team plays its home games at _____ stadium.,Null,Null,Null,Null,husky
 "History of Tacoma, UW, and UWT",Short Answer,Hard,The City of Tacoma is the ___ largest city in Washington. ,Null,Null,Null,Null,third
-"History of Tacoma, UW, and UWT",Short Answer,Hard,The first branch campus of th eUniversity of Washington was in _____.,Null,Null,Null,Null,bothell
+"History of Tacoma, UW, and UWT",Short Answer,Hard,The first branch campus of the University of Washington was in _____.,Null,Null,Null,Null,bothell
 "History of Tacoma, UW, and UWT",Short Answer,Hard,"Tacoma derives from  _____, the native name of Mt. Rainier.",Null,Null,Null,Null,tahoma
 General Computer Science,True or False,Easy,Computer science is not the study of the theory and application of computers. ,TRUE,FALSE,Null,Null,FALSE
 General Computer Science,True or False,Easy,The first electronic computer was created in the 19th century,TRUE,FALSE,Null,Null,FALSE
