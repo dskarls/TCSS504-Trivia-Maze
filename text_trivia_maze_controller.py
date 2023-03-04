@@ -273,7 +273,7 @@ class TextTriviaMazeController(TriviaMazeController):
         list
             List of strings
         """
-        return ["[T] True", "[F] False"]
+        return ["<T> True", "<F> False"]
 
     @staticmethod
     def __create_options_for_multiple_choice(options):
