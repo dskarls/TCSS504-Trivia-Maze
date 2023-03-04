@@ -1,9 +1,9 @@
-﻿"Algorithms and Big ""O""",Multiple Choice,Easy,Which of the following is not a common time complexity? ,O(1) ,O(n) ,O(n^2),O(n^3) ,O(n^3) 
-"Algorithms and Big ""O""",Multiple Choice,Easy,Which of the following is not a common space complexity? ,O(1) ,O(n) ,O(n^2),O(n^3) ,O(n^3) 
+﻿"Algorithms and Big ""O""",Multiple Choice,Easy,Which of the following is not a common time complexity? ,O(1) ,O(n) ,O(n^2),O(n^3) ,O(n^3)
+"Algorithms and Big ""O""",Multiple Choice,Easy,Which of the following is not a common space complexity? ,O(1) ,O(n) ,O(n^2),O(n^3) ,O(n^3)
 "Algorithms and Big ""O""",Multiple Choice,Hard,Which of the following scenarios is described by Big O?,Worst-Case,Average-Case,Best-Case,Nth-Case,Worst-Case
-"Algorithms and Big ""O""",Multiple Choice,Hard,Which of the following is not a way to improve the time complexity of an algorithm? ,Memoization ,Dynamic Programming ,Increase Hardware Power ,Decrease Input Size ,Increase Hardware Power 
+"Algorithms and Big ""O""",Multiple Choice,Hard,Which of the following is not a way to improve the time complexity of an algorithm? ,Memoization ,Dynamic Programming ,Increase Hardware Power ,Decrease Input Size ,Increase Hardware Power
 "Algorithms and Big ""O""",Multiple Choice,Medium,Which of the following is not a common type of data structure?,Array ,Linked List,Stack,Thread,Thread
-"Algorithms and Big ""O""",Multiple Choice,Medium,Which of the following is not a common type of sorting algorithm? ,Bubble Sort ,Quick Sort ,Insertion Sort ,Matrix Sort ,Matrix Sort 
+"Algorithms and Big ""O""",Multiple Choice,Medium,Which of the following is not a common type of sorting algorithm? ,Bubble Sort ,Quick Sort ,Insertion Sort ,Matrix Sort ,Matrix Sort
 "Algorithms and Big ""O""",Short Answer,Easy,A _____ algorithm has a time complexity of O(log n). ,Null,Null,Null,Null,logarithmic
 "Algorithms and Big ""O""",Short Answer,Easy,A _____ algorithm has a time complexity of O(n^2). ,Null,Null,Null,Null,quadratic
 "Algorithms and Big ""O""",Short Answer,Hard,_____ improves time complexity by breaking problems into subproblems and storing solutions to avoid redundancy.,Null,Null,Null,Null,Dynamic Programming
@@ -32,9 +32,9 @@ General Computer Science,True or False,Hard,The P vs NP problem asks if problems
 General Computer Science,True or False,Hard,"The halting problem asks if it's possible to determine if a computer program will terminate or run indefinitely, given its description.",TRUE,FALSE,Null,Null,TRUE
 General Computer Science,True or False,Medium,The Turing machine is a theoretical model of a general-purpose computer that can perform any calculation that is algorithmically solvable. ,TRUE,FALSE,Null,Null,TRUE
 General Computer Science,True or False,Medium,The Von Neumann architecture is a design model for computers that separates the memory and processing units. ,TRUE,FALSE,Null,Null,TRUE
-"History of Tacoma, UW, and UWT",Multiple Choice,Easy,The Washington State Fair is located in which Pierce County city? ,Tacoma ,Orting ,Puyallup ,Sumner ,Puyallup 
+"History of Tacoma, UW, and UWT",Multiple Choice,Easy,The Washington State Fair is located in which Pierce County city? ,Tacoma ,Orting ,Puyallup ,Sumner ,Puyallup
 "History of Tacoma, UW, and UWT",Multiple Choice,Hard,Which year was the City of Tacoma officially incorporated? ,1858,1863,1875,1889,1875
-"History of Tacoma, UW, and UWT",Multiple Choice,Hard,What was the original industry of the City of Tacoma? ,Fishing ,Apples ,Logging ,Microchips ,Logging 
+"History of Tacoma, UW, and UWT",Multiple Choice,Hard,What was the original industry of the City of Tacoma? ,Fishing ,Apples ,Logging ,Microchips ,Logging
 "History of Tacoma, UW, and UWT",Multiple Choice,Hard,What is the nickname of the City of Tacoma? ,The City of Trees,The City of Destiny,The City of Mountain,The City of The Brave,The City of Destiny
 "History of Tacoma, UW, and UWT",Multiple Choice,Medium,Which year did the University of Washington Tacoma open its doors to students? ,1990,2020,1910,1850,1990
 "History of Tacoma, UW, and UWT",Short Answer,Easy,The University of Washington Tacoma is located in the ___ of Tacoma. ,Null,Null,Null,Null,Downtown
@@ -60,10 +60,10 @@ General Computer Science,True or False,Medium,The Von Neumann architecture is a 
 "History of Tacoma, UW, and UWT",True or False,Medium,The City of Tacoma was originally a logging town. ,TRUE,FALSE,Null,Null,TRUE
 "History of Tacoma, UW, and UWT",True or False,Medium,The City of Tacoma was named after the nearby Mount Rainier. ,TRUE,FALSE,Null,Null,TRUE
 "History of Tacoma, UW, and UWT",True or False,Medium,The City of Tacoma was named after the nearby Mount Tacoma. ,TRUE,FALSE,Null,Null,FALSE
-Object-Oriented Programming,Multiple Choice,Easy,Which of the following is not an advantage of OOP? ,Code Reuseability,Data Hiding ,Increased Code Size ,Modularity ,Increased Code Size 
+Object-Oriented Programming,Multiple Choice,Easy,Which of the following is not an advantage of OOP? ,Code Reuseability,Data Hiding ,Increased Code Size ,Modularity ,Increased Code Size
 Object-Oriented Programming,Multiple Choice,Easy,What is the correct syntax for creating a constructor in a class? ,constructor():,__construct():,__init__{}:,__init__():,__init__():
 Object-Oriented Programming,Multiple Choice,Hard,Using which of the following is not a way to achieve abstraction in OOP? ,Interfaces ,Abstract Classes ,Inheritance ,Global Variables,Global Variables
-Object-Oriented Programming,Multiple Choice,Hard,Using which of the following is not a way to achieve encapsulation in OOP? ,Private Variables ,Protected Variables ,Public Variables ,Global Variables ,Global Variables 
+Object-Oriented Programming,Multiple Choice,Hard,Using which of the following is not a way to achieve encapsulation in OOP? ,Private Variables ,Protected Variables ,Public Variables ,Global Variables ,Global Variables
 Object-Oriented Programming,Multiple Choice,Medium,Which of the following is not a type of polymorphism in OOP? ,Ad-hoc,Parametric,Subtype,Performance,Performance
 Object-Oriented Programming,Multiple Choice,Medium,Which of the following is not a principle of OOP? ,Encapsulation,Abstraction ,Inheritance ,Performance,Performance
 Object-Oriented Programming,Short Answer,Easy,An _____ is a variable that belongs to an object or a class. ,Null,Null,Null,Null,attribute
@@ -79,9 +79,9 @@ Object-Oriented Programming,True or False,Hard,"In OOP, abstraction is the abili
 Object-Oriented Programming,True or False,Medium,Polymorphism in object-oriented programming allows objects of different classes to be treated as objects of a common class. ,TRUE,FALSE,Null,Null,TRUE
 Object-Oriented Programming,True or False,Medium,Inheritance in object-oriented programming allows a subclass to inherit the attributes and methods of its superclass. ,TRUE,FALSE,Null,Null,TRUE
 Python3 Syntax,Multiple Choice,Easy,What is the correct syntax for creating a list in Python? ,"list = {1, 2, 3} ","list = [1, 2, 3] ","list {1, 2, 3} ","list [1, 2, 3] ","list = [1, 2, 3] "
-Python3 Syntax,Multiple Choice,Easy,What is the correct way to create a tuple in Python? ,"tuple = {1, 2, 3} ","tuple = [1, 2, 3]","tuple {1, 2, 3} ","tuple (1, 2, 3) ","tuple (1, 2, 3) "
-Python3 Syntax,Multiple Choice,Hard,What is the correct way to create a class in Python? ,class MyClass: ,def MyClass(self): ,def MyClass: ,def MyClass(): ,class MyClass: 
-Python3 Syntax,Multiple Choice,Hard,What is the correct syntax for creating a lambda function in Python? ,lambda x: x+1 ,function x: x+1 ,def x: return x+1 ,x => x+1 ,lambda x: x+1 
+Python3 Syntax,Multiple Choice,Easy,What is the correct way to create a tuple in Python? ,"tuple = {1, 2, 3} ","tuple = [1, 2, 3]","tuple {1, 2, 3} ","tuple = (1, 2, 3) ","tuple = (1, 2, 3) "
+Python3 Syntax,Multiple Choice,Hard,What is the correct way to create a class in Python? ,class MyClass: ,def MyClass(self): ,def MyClass: ,def MyClass(): ,class MyClass:
+Python3 Syntax,Multiple Choice,Hard,What is the correct syntax for creating a lambda function in Python? ,lambda x: x+1 ,function x: x+1 ,def x: return x+1 ,x => x+1 ,lambda x: x+1
 Python3 Syntax,Short Answer,Easy,The __init__ method is used to initialize a _______. ,Null,Null,Null,Null,class
 Python3 Syntax,Short Answer,Easy,The _____ function is used to convert a variable to a string. ,Null,Null,Null,Null,str
 Python3 Syntax,Short Answer,Hard,The _____ statement is used to raise an exception in Python. ,Null,Null,Null,Null,raise
@@ -93,15 +93,15 @@ Python3 Syntax,True or False,Hard,The pass statement in Python can be used as a 
 Python3 Syntax,True or False,Hard,The del keyword in Python cannot be used to delete a variable from memory. ,TRUE,FALSE,Null,Null,FALSE
 Python3 Syntax,True or False,Medium,"In Python, a variable declared with the ""global"" keyword can be accessed and modified inside a function. ",TRUE,FALSE,Null,Null,TRUE
 Python3 Syntax,True or False,Medium,The range() function in Python includes the end value. ,TRUE,FALSE,Null,Null,FALSE
-Software Design Patterns,Multiple Choice,Easy,Which of the following is not a type of design pattern? ,Creational ,Behavioral,Structural ,Numerical ,Numerical 
-Software Design Patterns,Multiple Choice,Easy,What is the component of the MVC pattern that handles the data and business logic? ,Model ,View ,Controller ,Database ,Model 
-Software Design Patterns,Multiple Choice,Easy,Which of the following is an example of a creational design pattern? ,Singleton ,Observer ,Adapter ,Bridge ,Singleton 
-Software Design Patterns,Multiple Choice,Hard,Which of the following is not a Gang of Four design pattern? ,Command ,Interpreter,Mediator ,Validator ,Validator 
-Software Design Patterns,Multiple Choice,Hard,Which of the following is not a principle of design patterns?,Encapsulation ,Abstraction,Inheritance ,Performance ,Performance 
-Software Design Patterns,Multiple Choice,Hard,"In the MVC pattern, which component is responsible for updating the model when the view changes? ",Model ,View ,Controller ,Database ,Controller 
-Software Design Patterns,Multiple Choice,Medium,Which of the following is not an example of a structural design pattern? ,Decorator ,Facade ,Iterator ,Transition ,Transition 
-Software Design Patterns,Multiple Choice,Medium,"In the MVC pattern, which component is responsible for updating the view when the model changes? ",Model ,View ,Controller ,Database ,Controller 
-Software Design Patterns,Multiple Choice,Medium,Which of the following is an example of a behavioral design pattern? ,Proxy ,Adapter ,Composite ,Chain of Responsibility ,Chain of Responsibility 
+Software Design Patterns,Multiple Choice,Easy,Which of the following is not a type of design pattern? ,Creational ,Behavioral,Structural ,Numerical ,Numerical
+Software Design Patterns,Multiple Choice,Easy,What is the component of the MVC pattern that handles the data and business logic? ,Model ,View ,Controller ,Database ,Model
+Software Design Patterns,Multiple Choice,Easy,Which of the following is an example of a creational design pattern? ,Singleton ,Observer ,Adapter ,Bridge ,Singleton
+Software Design Patterns,Multiple Choice,Hard,Which of the following is not a Gang of Four design pattern? ,Command ,Interpreter,Mediator ,Validator ,Validator
+Software Design Patterns,Multiple Choice,Hard,Which of the following is not a principle of design patterns?,Encapsulation ,Abstraction,Inheritance ,Performance ,Performance
+Software Design Patterns,Multiple Choice,Hard,"In the MVC pattern, which component is responsible for updating the model when the view changes? ",Model ,View ,Controller ,Database ,Controller
+Software Design Patterns,Multiple Choice,Medium,Which of the following is not an example of a structural design pattern? ,Decorator ,Facade ,Iterator ,Transition ,Transition
+Software Design Patterns,Multiple Choice,Medium,"In the MVC pattern, which component is responsible for updating the view when the model changes? ",Model ,View ,Controller ,Database ,Controller
+Software Design Patterns,Multiple Choice,Medium,Which of the following is an example of a behavioral design pattern? ,Proxy ,Adapter ,Composite ,Chain of Responsibility ,Chain of Responsibility
 Software Design Patterns,Short Answer,Easy,The _____ pattern is a creational pattern allowing only one instance of a class to be created. ,Null,Null,Null,Null,Singleton
 Software Design Patterns,Short Answer,Easy,The _____ pattern is a behavioral pattern allowing objects to notify other objects about changes in their state. ,Null,Null,Null,Null,Observer
 Software Design Patterns,Short Answer,Easy,"In the MVC pattern, the ___ handles user input and updates the model and view. ",Null,Null,Null,Null,Controller
