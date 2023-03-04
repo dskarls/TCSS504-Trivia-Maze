@@ -391,10 +391,14 @@ class ShortQuestionAndAnswerCommandContext(CommandContext):
         question_and_answer = self._maze_controller.question_and_answer
 
         if key == self.COMMANDS[self.Command.SUBMIT_ANSWER][_COMMAND_KEY_KEY]:
+            # Ensure user has made a selection
+            user_answer = self._maze_view.get_short_QA_user_answer()
+            if not user_answer:
+                return
+
             # Take question and answer object from controller
             self._maze_controller.question_and_answer = None
 
-            user_answer = self._maze_view.get_short_QA_user_answer()
             user_answer_correct = question_and_answer.answer_is_correct(
                 user_answer
             )
@@ -462,11 +466,15 @@ class TrueOrFalseQuestionAndAnswerCommandContext(CommandContext):
 
     def process_keystroke(self, key):
         if key == self.COMMANDS[self.Command.SUBMIT_ANSWER][_COMMAND_KEY_KEY]:
+            # Ensure user has made a selection
+            user_answer = self._maze_view.get_true_or_false_QA_user_answer()
+            if not user_answer:
+                return
+
             # Take question and answer object from controller
             question_and_answer = self._maze_controller.question_and_answer
             self._maze_controller.question_and_answer = None
 
-            user_answer = self._maze_view.get_true_or_false_QA_user_answer()
             user_answer_correct = question_and_answer.answer_is_correct(
                 user_answer
             )
@@ -547,10 +555,14 @@ class MultipleChoiceQuestionAndAnswerCommandContext(CommandContext):
         question_and_answer = self._maze_controller.question_and_answer
 
         if key == self.COMMANDS[self.Command.SUBMIT_ANSWER][_COMMAND_KEY_KEY]:
+            # Ensure user has made a selection
+            user_answer = self._maze_view.get_multiple_choice_QA_user_answer()
+            if not user_answer:
+                return
+
             # Take question and answer object from controller
             self._maze_controller.question_and_answer = None
 
-            user_answer = self._maze_view.get_multiple_choice_QA_user_answer()
             user_answer_correct = question_and_answer.answer_is_correct(
                 user_answer
             )
