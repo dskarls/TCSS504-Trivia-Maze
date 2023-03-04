@@ -84,7 +84,7 @@ General Computer Science,True or False,Medium,The Turing machine is a theoretica
 General Computer Science,True or False,Medium,The Von Neumann architecture is a design model for computers that separates the memory and processing units. ,TRUE,FALSE,Null,Null,TRUE
 General Computer Science,True or False,Hard,"The P vs NP problem is a computational problem that asks whether every problem whose solution can be verified in polynomial time, can also be solved in polynomial time. ",TRUE,FALSE,Null,Null,TRUE
 General Computer Science,True or False,Hard,"The Halting problem is a problem that asks whether, given a description of an arbitrary computer program, it is possible to decide whether the program finishes running or continues running forever. ",TRUE,FALSE,Null,Null,TRUE
-Python3 Syntax,True or False,Easy,"In Python, a variable must be declared before it can be used. ",TRUE,FALSE,Null,Null,FALSE
+Python3 Syntax,True or False,Easy,"In Python, a variable must be declared before it can be used. ",TRUE,FALSE,Null,Null,TRUE
 Python3 Syntax,True or False,Easy,The print function in Python requires parentheses. ,TRUE,FALSE,Null,Null,TRUE
 Python3 Syntax,True or False,Medium,"In Python, a variable declared with the ""global"" keyword can be accessed and modified inside a function. ",TRUE,FALSE,Null,Null,TRUE
 Python3 Syntax,True or False,Medium,The range() function in Python includes the end value. ,TRUE,FALSE,Null,Null,FALSE
