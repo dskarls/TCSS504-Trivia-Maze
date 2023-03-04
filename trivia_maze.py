@@ -4,6 +4,7 @@ import pickle
 
 from adventurer import Adventurer
 from maze import Maze
+from maze_items import SuggestionPotion
 from room import Room
 from trivia_maze_model import TriviaMazeModel
 from trivia_database import SQLiteTriviaDatabase
@@ -374,7 +375,14 @@ class TriviaMaze(TriviaMazeModel):
 
         elif item == self.__ITEMS[self.__Items.SUGGESTION_POTION]:
             # Use vision potion
-            if len(self.__adventurer.get_suggestion_potions()) > 0:
+            adventurer_items = self.get_adventurer_items()
+
+            # If user has at least one suggestion potion, show hint box
+            num_suggestion_potions = sum(
+                isinstance(x, SuggestionPotion) for x in adventurer_items
+            )
+
+            if num_suggestion_potions > 0:
                 suggestion_potion = (
                     self.__adventurer.consume_suggestion_potion()
                 )
@@ -592,4 +600,5 @@ class TriviaMaze(TriviaMazeModel):
             return self.__question_and_answer_buffer.pop()
 
     def get_adventurer_items(self):
+        """Get a list of all items held by the adventurer."""
         return self.__adventurer.get_items()
