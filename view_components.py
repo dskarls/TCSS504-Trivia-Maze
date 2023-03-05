@@ -893,7 +893,14 @@ class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
         self._button_control_var.set(None)
 
     def get_user_answer(self):
-        return self._buttons[int(self._button_control_var.get())].original_text
+        try:
+            return self._buttons[
+                int(self._button_control_var.get())
+            ].original_text
+        except TclError:
+            # No option was selected. Note there is no finer exception thrown
+            # by tkinter for us to catch here.
+            return None
 
 
 class TrueFalseQuestionAndAnswerMenu(QuestionAndAnswerWithOptionsMenu):
