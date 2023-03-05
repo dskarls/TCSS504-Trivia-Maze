@@ -337,13 +337,23 @@ class TriviaMaze(TriviaMazeModel):
         self.__notify_observers()
 
     def get_rooms(self):
-        """Returns a 2d list of the rooms in the maze."""
+        """Returns a 2d list of the rooms in the maze.
+
+        Returns
+        -------
+        List[List[Room]]
+            All of the rooms in the maze.
+        """
         return self.__maze.rooms
 
     def use_item(self, item):
         """
-        This method checks which item the adventurer used and will make the appropriate
-        method calls.
+        Attempts to consume one of the adventurer's items. If they don't have
+        the relevant item, no action is taken.
+
+        NOTE: Successfully using a magic key will actually result in moving the
+        adventurer to the relevant room.
+
         Parameters
         ----------
         item : str
@@ -444,11 +454,24 @@ class TriviaMaze(TriviaMazeModel):
         self.__notify_observers()
 
     def get_adventurer_hp(self):
-        """Returns the adventurer's current hit points"""
+        """Returns the adventurer's current hit points.
+
+        Returns
+        -------
+        int
+            The adventurer's current hp.
+        """
         return self.__adventurer.hit_points
 
     def get_adventurer_coords(self):
-        """Returns a tuple of the adventurer's current coordinates in the maze."""
+        """Returns a tuple of the adventurer's current coordinates in the maze.
+
+        Returns
+        -------
+        tuple[int]
+            A 2-tuple containing the adventurer's current row and column as
+            integers.
+        """
         return self.__adventurer_current_row, self.__adventurer_current_col
 
     def game_status(self):
@@ -601,7 +624,14 @@ class TriviaMaze(TriviaMazeModel):
 
     def register_observer(self, observer):
         """Add a TriviaMazeModelObserver object to the registered list of
-        observers tracked by the model."""
+        observers tracked by the model.
+
+        Parameters
+        ----------
+        TriviaMazeModelObserver
+            An observer object that should be notified whenever the model's
+            internal state is updated.
+        """
         self._maze_observers.append(observer)
 
     def __notify_observers(self):
@@ -621,5 +651,11 @@ class TriviaMaze(TriviaMazeModel):
             return self.__question_and_answer_buffer.pop()
 
     def get_adventurer_items(self):
-        """Get a list of all items held by the adventurer."""
+        """Get a list of all items held by the adventurer.
+
+        Returns
+        -------
+        List[MazeItem]
+            A list of all items currently held by the adventurer.
+        """
         return self.__adventurer.get_items()
