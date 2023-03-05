@@ -144,3 +144,16 @@ class TriviaMazeModel(ABC):
             returned. If the adventurer has no hitpoints 'dead' is returned.
             Returns None if neither win nor loss conditions are met.
         """
+
+    @abstractmethod
+    def reset(self):
+        """If the user returns to the main menu after starting a game and then
+        starts a new game, the model should regenerate a new maze and a new
+        adventurer, etc."""
+
+    @abstractmethod
+    def inform_player_answer_correct_or_incorrect(self, answer_was_correct):
+        """Informs the model whether the player's response to the latest
+        question pulled from the Q&A buffer was correct or not. If it was,
+        unlock the relevant door and move the adventurer into the room on the
+        other side of the door. If not, permanently lock that door."""
