@@ -57,6 +57,9 @@ class CommandContext(ABC):
 
 
 class MenuCommandContext(CommandContext):
+    """Context for interpreting keystrokes when a menu is being shown to the
+    user."""
+
     class Command(Enum):
         """Enumeration used to fix commands to a small finite support set."""
 
@@ -73,7 +76,21 @@ class MenuCommandContext(CommandContext):
 
 
 class MainMenuCommandContext(MenuCommandContext):
+    """Context for interpreting keystrokes when the user is at the main
+    menu."""
+
     def process_keystroke(self, key):
+        """
+        Interact with view and model based on the keystroke ``key`` received
+        from the view.
+
+        Parameters
+        ----------
+        key : str
+            A keystroke input. This may be a single character, e.g. 'a' if the
+            'a' key is pressed, or could be something like 'Return' or
+            'Escape'.
+        """
         # NOTE: We ignore arrow keys here since the GUI is responsible for
         # having arrow keys traverse the menu. In fact, we actually only care
         # about the user hitting Return inside of this menu.
@@ -128,7 +145,22 @@ class MainMenuCommandContext(MenuCommandContext):
 
 
 class InGameMenuCommandContext(MenuCommandContext):
+    """Context for interpreting keystrokes when the user pulls up the in-game
+    menu."""
+
     def process_keystroke(self, key):
+        """
+        Interact with view and model based on the keystroke ``key`` received
+        from the view.
+
+        Parameters
+        ----------
+        key : str
+            A keystroke input. This may be a single character, e.g. 'a' if the
+            'a' key is pressed, or could be something like 'Return' or
+            'Escape'.
+        """
+
         # NOTE: We ignore arrow keys here since the GUI is responsible for
         # having arrow keys traverse the menu. In fact, we actually only care
         # about the user hitting Return inside of this menu.
@@ -189,6 +221,9 @@ class InGameMenuCommandContext(MenuCommandContext):
 
 
 class DismissibleCommandContext(CommandContext):
+    """Context for interpreting keystrokes when the user is shown a widget
+    whose only corresponding action is to be dismissed."""
+
     class Command(Enum):
         """Enumeration used to fix commands to a small finite support set."""
 
@@ -205,42 +240,132 @@ class DismissibleCommandContext(CommandContext):
 
 
 class NoSaveFileFoundMenuCommandContext(DismissibleCommandContext):
+    """Context for dismissing the widget that informs the user that the game
+    could not be loaded because no save game file could be found."""
+
     def process_keystroke(self, key):
+        """
+        Interact with view and model based on the keystroke ``key`` received
+        from the view.
+
+        Parameters
+        ----------
+        key : str
+            A keystroke input. This may be a single character, e.g. 'a' if the
+            'a' key is pressed, or could be something like 'Return' or
+            'Escape'.
+        """
+
         if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
             self._maze_view.hide_no_save_file_found_menu()
             self._maze_controller.set_active_context("main_menu")
 
 
 class MainHelpMenuCommandContext(DismissibleCommandContext):
+    """Context for dismissing the widget that shows the user the help text
+    displayed from the corresponding main menu option."""
+
     def process_keystroke(self, key):
+        """
+        Interact with view and model based on the keystroke ``key`` received
+        from the view.
+
+        Parameters
+        ----------
+        key : str
+            A keystroke input. This may be a single character, e.g. 'a' if the
+            'a' key is pressed, or could be something like 'Return' or
+            'Escape'.
+        """
+
         if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
             self._maze_view.hide_main_help_menu()
             self._maze_controller.set_active_context("main_menu")
 
 
 class MapLegendCommandContext(DismissibleCommandContext):
+    """Context for dismissing the widget that shows the user the symbols used
+    inside the map."""
+
     def process_keystroke(self, key):
+        """
+        Interact with view and model based on the keystroke ``key`` received
+        from the view.
+
+        Parameters
+        ----------
+        key : str
+            A keystroke input. This may be a single character, e.g. 'a' if the
+            'a' key is pressed, or could be something like 'Return' or
+            'Escape'.
+        """
+
         if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
             self._maze_view.hide_map_legend_menu()
             self._maze_controller.set_active_context("in_game_menu")
 
 
 class CommandLegendCommandContext(DismissibleCommandContext):
+    """Context for dismissing the widget that shows the user the commands they
+    can use and their corresponding keystrokes."""
+
     def process_keystroke(self, key):
+        """
+        Interact with view and model based on the keystroke ``key`` received
+        from the view.
+
+        Parameters
+        ----------
+        key : str
+            A keystroke input. This may be a single character, e.g. 'a' if the
+            'a' key is pressed, or could be something like 'Return' or
+            'Escape'.
+        """
+
         if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
             self._maze_view.hide_command_legend_menu()
             self._maze_controller.set_active_context("in_game_menu")
 
 
 class SaveConfirmationCommandContext(DismissibleCommandContext):
+    """Context for dismissing the widget that informs the user that their save
+    game attempt was successful."""
+
     def process_keystroke(self, key):
+        """
+        Interact with view and model based on the keystroke ``key`` received
+        from the view.
+
+        Parameters
+        ----------
+        key : str
+            A keystroke input. This may be a single character, e.g. 'a' if the
+            'a' key is pressed, or could be something like 'Return' or
+            'Escape'.
+        """
+
         if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
             self._maze_view.hide_save_confirmation_menu()
             self._maze_controller.set_active_context("in_game_menu")
 
 
 class GameWonCommandContext(DismissibleCommandContext):
+    """Context for dismissing the widget that informs the user that they won
+    the game."""
+
     def process_keystroke(self, key):
+        """
+        Interact with view and model based on the keystroke ``key`` received
+        from the view.
+
+        Parameters
+        ----------
+        key : str
+            A keystroke input. This may be a single character, e.g. 'a' if the
+            'a' key is pressed, or could be something like 'Return' or
+            'Escape'.
+        """
+
         if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
             self._maze_view.hide_game_won_menu()
             self._maze_view.show_main_menu()
@@ -248,7 +373,22 @@ class GameWonCommandContext(DismissibleCommandContext):
 
 
 class GameLostDiedCommandContext(DismissibleCommandContext):
+    """Context for dismissing the widget that informs the user that they lost
+    the game because they died."""
+
     def process_keystroke(self, key):
+        """
+        Interact with view and model based on the keystroke ``key`` received
+        from the view.
+
+        Parameters
+        ----------
+        key : str
+            A keystroke input. This may be a single character, e.g. 'a' if the
+            'a' key is pressed, or could be something like 'Return' or
+            'Escape'.
+        """
+
         if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
             self._maze_view.hide_game_lost_died_menu()
             self._maze_view.show_main_menu()
@@ -256,7 +396,24 @@ class GameLostDiedCommandContext(DismissibleCommandContext):
 
 
 class GameLostTrappedCommandContext(DismissibleCommandContext):
+    """Context for dismissing the widget that informs the user that they lost
+    the game because they locked themselves into a section of the maze that
+    does not contain any magic keys, does not contain the necessary remaining
+    pillars not yet picked up, and does not contain the exit."""
+
     def process_keystroke(self, key):
+        """
+        Interact with view and model based on the keystroke ``key`` received
+        from the view.
+
+        Parameters
+        ----------
+        key : str
+            A keystroke input. This may be a single character, e.g. 'a' if the
+            'a' key is pressed, or could be something like 'Return' or
+            'Escape'.
+        """
+
         if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
             self._maze_view.hide_game_lost_trapped_menu()
             self._maze_view.show_main_menu()
@@ -264,13 +421,31 @@ class GameLostTrappedCommandContext(DismissibleCommandContext):
 
 
 class NeedMagicKeyCommandContext(DismissibleCommandContext):
+    """Context for dismissing the widget that informs the user that they need a
+    magic key to pass through a locked door."""
+
     def process_keystroke(self, key):
+        """
+        Interact with view and model based on the keystroke ``key`` received
+        from the view.
+
+        Parameters
+        ----------
+        key : str
+            A keystroke input. This may be a single character, e.g. 'a' if the
+            'a' key is pressed, or could be something like 'Return' or
+            'Escape'.
+        """
+
         if key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
             self._maze_view.hide_need_magic_key_menu()
             self._maze_controller.set_active_context("primary_interface")
 
 
 class PrimaryInterfaceCommandContext(CommandContext):
+    """The most important context! Interprets keystrokes while the player is
+    moving through the maze and using items."""
+
     class Command(Enum):
         """Enumeration used to fix commands to a small finite support set."""
 
@@ -330,6 +505,18 @@ class PrimaryInterfaceCommandContext(CommandContext):
     }
 
     def process_keystroke(self, key):
+        """
+        Interact with view and model based on the keystroke ``key`` received
+        from the view.
+
+        Parameters
+        ----------
+        key : str
+            A keystroke input. This may be a single character, e.g. 'a' if the
+            'a' key is pressed, or could be something like 'Return' or
+            'Escape'.
+        """
+
         # Non-movement commands
         if (
             key
@@ -379,6 +566,9 @@ class PrimaryInterfaceCommandContext(CommandContext):
 
 
 class ShortQuestionAndAnswerCommandContext(CommandContext):
+    """Command context for interpreting keystrokes while the user is answering
+    a short answer Q&A."""
+
     class Command(Enum):
         """Enumeration used to fix commands to a small finite support set."""
 
@@ -404,6 +594,18 @@ class ShortQuestionAndAnswerCommandContext(CommandContext):
     }
 
     def process_keystroke(self, key):
+        """
+        Interact with view and model based on the keystroke ``key`` received
+        from the view.
+
+        Parameters
+        ----------
+        key : str
+            A keystroke input. This may be a single character, e.g. 'a' if the
+            'a' key is pressed, or could be something like 'Return' or
+            'Escape'.
+        """
+
         # Retrieve Q&A object held by controller
         question_and_answer = self._maze_controller.question_and_answer
 
@@ -451,6 +653,9 @@ class ShortQuestionAndAnswerCommandContext(CommandContext):
 
 
 class TrueOrFalseQuestionAndAnswerCommandContext(CommandContext):
+    """Command context for interpreting keystrokes while the user is answering
+    a true-or-false Q&A."""
+
     class Command(Enum):
         """Enumeration used to fix commands to a small finite support set."""
 
@@ -482,6 +687,18 @@ class TrueOrFalseQuestionAndAnswerCommandContext(CommandContext):
     }
 
     def process_keystroke(self, key):
+        """
+        Interact with view and model based on the keystroke ``key`` received
+        from the view.
+
+        Parameters
+        ----------
+        key : str
+            A keystroke input. This may be a single character, e.g. 'a' if the
+            'a' key is pressed, or could be something like 'Return' or
+            'Escape'.
+        """
+
         if key == self.COMMANDS[self.Command.SUBMIT_ANSWER][_COMMAND_KEY_KEY]:
             # Ensure user has made a selection
             user_answer = self._maze_view.get_true_or_false_QA_user_answer()
@@ -519,6 +736,9 @@ class TrueOrFalseQuestionAndAnswerCommandContext(CommandContext):
 
 
 class MultipleChoiceQuestionAndAnswerCommandContext(CommandContext):
+    """Command context for interpreting keystrokes while the user is answering
+    a multiple choice Q&A."""
+
     class Command(Enum):
         """Enumeration used to fix commands to a small finite support set."""
 
@@ -570,6 +790,18 @@ class MultipleChoiceQuestionAndAnswerCommandContext(CommandContext):
     }
 
     def process_keystroke(self, key):
+        """
+        Interact with view and model based on the keystroke ``key`` received
+        from the view.
+
+        Parameters
+        ----------
+        key : str
+            A keystroke input. This may be a single character, e.g. 'a' if the
+            'a' key is pressed, or could be something like 'Return' or
+            'Escape'.
+        """
+
         # Retrieve Q&A object held by controller
         question_and_answer = self._maze_controller.question_and_answer
 
@@ -632,6 +864,9 @@ class MultipleChoiceQuestionAndAnswerCommandContext(CommandContext):
 
 
 class MagicKeyCommandContext(CommandContext):
+    """Command context for asking the user if they want to consume one of their
+    magic keys when trying to pass through a locked door."""
+
     class Command(Enum):
         """Enumeration used to fix commands to a small finite support set."""
 
@@ -656,6 +891,18 @@ class MagicKeyCommandContext(CommandContext):
     }
 
     def process_keystroke(self, key):
+        """
+        Interact with view and model based on the keystroke ``key`` received
+        from the view.
+
+        Parameters
+        ----------
+        key : str
+            A keystroke input. This may be a single character, e.g. 'a' if the
+            'a' key is pressed, or could be something like 'Return' or
+            'Escape'.
+        """
+
         if key == self.COMMANDS[self.Command.USE_MAGIC_KEY][_COMMAND_KEY_KEY]:
             self._maze_model.use_item("magic key")
 

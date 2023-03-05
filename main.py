@@ -1,3 +1,7 @@
+"""
+Entry point (driver) for game. Run this module directly from the command line
+to play the game.
+"""
 import pathlib
 
 from trivia_maze import TriviaMaze
