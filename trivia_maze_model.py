@@ -131,14 +131,16 @@ class TriviaMazeModel(ABC):
     @abstractmethod
     def game_status(self):
         """
-        Checks if the win or loss conditions have been met. If adventurer has to collected
-        all 4 pillars of OOP and be in the exit room they will win. They lose if the adventurer's
-        hit points reach 0 or have no possible way to reach exit with all four pillars of OOP.
+        Checks if the win or loss conditions have been met. If adventurer has
+        to collected all 4 pillars of OOP and be in the exit room they will
+        win. They lose if the adventurer's hit points reach 0 or have no
+        possible way to reach exit with all four pillars of OOP.
 
         Returns
         -------
         str
-            'win' if the win conditions have been met. If the adventurer has no possible path to
-            win due to permanently locking doors 'trapped' is returned. If the adventurer has no
-            hitpoints 'dead' is returned. Returns None if neither win nor loss conditions are met.
+            'win' if the win conditions have been met. If the adventurer has no
+            possible path to win due to permanently locking doors 'trapped' is
+            returned. If the adventurer has no hitpoints 'dead' is returned.
+            Returns None if neither win nor loss conditions are met.
         """
