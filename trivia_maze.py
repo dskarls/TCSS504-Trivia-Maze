@@ -103,6 +103,9 @@ class TriviaMaze(TriviaMazeModel):
         self.__direction_attempt = None
 
     def __place_adventurer_in_maze(self):
+        """Set the adventurer's current row and column to the entrance of the
+        maze and mark it as visited and occupied.
+        """
         # Place adventurer in entrance room
         (
             self.__adventurer_current_row,
@@ -571,6 +574,24 @@ class TriviaMaze(TriviaMazeModel):
             return self.__maze.rooms[room.coords[0]][room.coords[1] - 1]
 
     def __wall_or_perm(self, room, direction):
+        """
+        Return True if the specified direction in the given room is a wall or a
+        permanently locked door. Otherwise, return False.
+
+        Parameters
+        ----------
+        room : Room
+            Any room in the maze.
+        direction : str
+            Indicates one of the four cardinal directions ("east", "north",
+            "west", "south").
+
+        Returns
+        -------
+        bool
+            Whether the side of the room given by the direction is a wall or a
+            permanently locked door.
+        """
         side = room.get_side(direction)
         if side == Room.WALL:
             return True
