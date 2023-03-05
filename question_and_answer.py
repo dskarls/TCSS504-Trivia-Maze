@@ -184,4 +184,7 @@ def question_and_answer_factory(
     elif qa_type == "short answer":
         return ShortAnswerQA(question, correct_answer, category, options=None)
 
-    raise InvalidQuestionAndAnswerType("")
+    raise InvalidQuestionAndAnswerType(
+        f'Invalid question type {qa_type}. Must be one of {{"true or false", '
+        '"multiple choice", "short answer"}}.'
+    )
