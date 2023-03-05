@@ -138,3 +138,5 @@ dmypy.json
 # Save game files
 save_game/
 
+# Vscode
+.vscode/
