@@ -22,10 +22,8 @@ class TriviaMaze(TriviaMazeModel):
     used to display the entire maze at any iteration of the game.
     Class Attributes
     ------------------
-    __DEFAULT_NUM_ROWS : int
-        Number of rows to use if user skips through rows prompt.
-    __DEFAULT_NUM_COLS: int
         Number of columns to use if user skips through rows prompt.
+
     Instance Attributes
     ------------------
     __adventurer : Adventurer
@@ -39,6 +37,7 @@ class TriviaMaze(TriviaMazeModel):
         located in the array according to their two-dimensional coords, e.g. the
         Room at indices [1][2] corresponds to row 1, column 2 (both zero-based
         indexing).
+
     Methods
     -------
     __get_adjacent_rooms_in_maze
