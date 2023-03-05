@@ -640,13 +640,25 @@ class TriviaMaze(TriviaMazeModel):
 
     def flush_event_log_buffer(self):
         """If there are any entries in the event log buffer, remove and return
-        them."""
+        them.
+
+        Returns
+        -------
+        List[str]
+            Messages to be displayed in the event log.
+        """
         log_contents = self.__event_log_buffer.copy()
         self.__event_log_buffer.clear()
         return log_contents
 
     def flush_question_and_answer_buffer(self):
-        """If a question is in the Q&A buffer, remove and return it."""
+        """If a question is in the Q&A buffer, remove and return it.
+
+        Returns
+        -------
+        QuestionAndAnswer
+            An object that can be used to pose a question to a user, possibly
+            give them a hint, and get an answer."""
         if self.__question_and_answer_buffer:
             return self.__question_and_answer_buffer.pop()
 
