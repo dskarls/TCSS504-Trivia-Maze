@@ -25,6 +25,7 @@ from view_components import (
     TrueFalseQuestionAndAnswerMenu,
     EventLog,
     SubWindow,
+    DifficultyMenu
 )
 from maze_items import (
     HealingPotion,
