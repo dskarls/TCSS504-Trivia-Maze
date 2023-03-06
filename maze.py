@@ -20,6 +20,7 @@ from maze_items import (
 from question_and_answer import question_and_answer_factory
 from room import Room
 from util import generate_random_int, randomly_choose_between_two_outcomes
+from difficulty_config import DIFFICULTY_SETTINGS
 
 
 class MazeConstructionError(RuntimeError):
@@ -167,48 +168,6 @@ class Maze:
     __MIN_ALLOWED_ROWS_OR_COLS = 3
     __PILLAR_PROBABILITY = 0.1
     __MAX_ENTRANCE_EXIT_SAMPLE_ATTEMPTS = 15
-    
-    DIFFICULTY = {
-    "easy": {
-        PIT_PROBABILITY : 0.15, 
-        HEALING_POTION_PROBABILITY : 0.15,
-        VISION_POTION_PROBABILITY : 0.15,
-        SUGGESTION_POTION_PROBABILITY : 0.15,
-        MAGIC_KEY_PROBABILITY : 0.15,
-        LOCKED_DOOR_PROBABILITY : 0.25,
-        MIN_HEALING_POTION_VALUE : 5,
-        MAX_HEALING_POTION_VALUE : 15,
-        MIN_PIT_DAMAGE : 1,
-        MAX_PIT_DAMAGE : 20,
-        MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE : 2,
-    },
-    "medium": {
-        PIT_PROBABILITY : 0.15, 
-        HEALING_POTION_PROBABILITY : 0.15,
-        VISION_POTION_PROBABILITY : 0.15,
-        SUGGESTION_POTION_PROBABILITY : 0.15,
-        MAGIC_KEY_PROBABILITY : 0.15,
-        LOCKED_DOOR_PROBABILITY : 0.25,
-        MIN_HEALING_POTION_VALUE : 5,
-        MAX_HEALING_POTION_VALUE : 15,
-        MIN_PIT_DAMAGE : 1,
-        MAX_PIT_DAMAGE : 20,
-        MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE : 2,
-    },
-    "hard": {
-        PIT_PROBABILITY : 0.15, 
-        HEALING_POTION_PROBABILITY : 0.15,
-        VISION_POTION_PROBABILITY : 0.15,
-        SUGGESTION_POTION_PROBABILITY : 0.15,
-        MAGIC_KEY_PROBABILITY : 0.15,
-        LOCKED_DOOR_PROBABILITY : 0.25,
-        MIN_HEALING_POTION_VALUE : 5,
-        MAX_HEALING_POTION_VALUE : 15,
-        MIN_PIT_DAMAGE : 1,
-        MAX_PIT_DAMAGE : 20,
-        MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE : 2,
-    },
-}
 
     def __init__(self, row_count, col_count, trivia_db, difficulty):
         """
@@ -261,20 +220,20 @@ class Maze:
         # repetition
         self.__used_question_and_answer_hashes = set({})
         
-        __PIT_PROBABILITY = DIFFICULTY[difficulty][PIT_PROBABILITY]
-        __HEALING_POTION_PROBABILITY = DIFFICULTY[difficulty][HEALING_POTION_PROBABILITY]
-        __VISION_POTION_PROBABILITY = DIFFICULTY[difficulty][VISION_POTION_PROBABILITY]
-        __SUGGESTION_POTION_PROBABILITY = DIFFICULTY[difficulty][SUGGESTION_POTION_PROBABILITY]
-        __MAGIC_KEY_PROBABILITY = DIFFICULTY[difficulty][MAGIC_KEY_PROBABILITY]
-        __LOCKED_DOOR_PROBABILITY = DIFFICULTY[difficulty][LOCKED_DOOR_PROBABILITY]
+        __PIT_PROBABILITY = DIFFICULTY_SETTIGNS[difficulty][DifficultySettings.PIT_PROBABILITY]
+        __HEALING_POTION_PROBABILITY = DIFFICULTY_SETTIGNS[difficulty][DifficultySettings.HEALING_POTION_PROBABILITY]
+        __VISION_POTION_PROBABILITY = DIFFICULTY_SETTIGNS[difficulty][DifficultySettings.VISION_POTION_PROBABILITY]
+        __SUGGESTION_POTION_PROBABILITY = DIFFICULTY_SETTIGNS[difficulty][DifficultySettings.SUGGESTION_POTION_PROBABILITY]
+        __MAGIC_KEY_PROBABILITY = DIFFICULTY_SETTIGNS[difficulty][DifficultySettings.MAGIC_KEY_PROBABILITY]
+        __LOCKED_DOOR_PROBABILITY = DIFFICULTY_SETTIGNS[difficulty][DifficultySettings.LOCKED_DOOR_PROBABILITY]
 
         # Min and max amount that a healing potion can restore to hit points
-        __MIN_HEALING_POTION_VALUE = DIFFICULTY[difficulty][MIN_HEALING_POTION_VALUE]
-        __MAX_HEALING_POTION_VALUE = DIFFICULTY[difficulty][MAX_HEALING_POTION_VALUE]
+        __MIN_HEALING_POTION_VALUE = DIFFICULTY_SETTIGNS[difficulty][DifficultySettings.MIN_HEALING_POTION_VALUE]
+        __MAX_HEALING_POTION_VALUE = DIFFICULTY_SETTIGNS[difficulty][DifficultySettings.MAX_HEALING_POTION_VALUE]
 
         # Min and max amount of damage that a pit can do
-        __MIN_PIT_DAMAGE = DIFFICULTY[difficulty][MIN_PIT_DAMAGE]
-        __MAX_PIT_DAMAGE = DIFFICULTY[difficulty][MAX_PIT_DAMAGE]
+        __MIN_PIT_DAMAGE = DIFFICULTY_SETTIGNS[difficulty][DifficultySettings.MIN_PIT_DAMAGE]
+        __MAX_PIT_DAMAGE = DIFFICULTY_SETTIGNS[difficulty][DifficultySettings.MAX_PIT_DAMAGE]
     
         # Minimum Manhattan distance enforced between entrance and exit when
         # choosing where they should be. Cannot be larger than
