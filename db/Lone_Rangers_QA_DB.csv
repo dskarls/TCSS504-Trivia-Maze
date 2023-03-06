@@ -1,4 +1,4 @@
-﻿"Algorithms and Big ""O""",Multiple Choice,Easy,Which of the following is not a common time complexity? ,O(1) ,O(n) ,O(n^2),O(n^3) ,O(n^3)
+"Algorithms and Big ""O""",Multiple Choice,Easy,Which of the following is not a common time complexity? ,O(1) ,O(n) ,O(n^2),O(n^3) ,O(n^3)
 "Algorithms and Big ""O""",Multiple Choice,Easy,Which of the following is not a common space complexity? ,O(1) ,O(n) ,O(n^2),O(n^3) ,O(n^3)
 "Algorithms and Big ""O""",Multiple Choice,Hard,Which of the following scenarios is described by Big O?,Worst-Case,Average-Case,Best-Case,Nth-Case,Worst-Case
 "Algorithms and Big ""O""",Multiple Choice,Hard,Which of the following is not a way to improve the time complexity of an algorithm? ,Memoization ,Dynamic Programming ,Increase Hardware Power ,Decrease Input Size ,Increase Hardware Power
@@ -46,7 +46,7 @@ General Computer Science,True or False,Medium,The Von Neumann architecture is a 
 "History of Tacoma, UW, and UWT",Short Answer,Hard,"Tacoma derives from  _____, the native name of Mt. Rainier.",Null,Null,Null,Null,Tahoma
 "History of Tacoma, UW, and UWT",Short Answer,Medium,The City of Tacoma is located in the ___ region of Washington. ,Null,Null,Null,Null,South Puget Sound
 "History of Tacoma, UW, and UWT",Short Answer,Medium,The seat of Pierce County is the City of ___. ,Null,Null,Null,Null,Tacoma
-"History of Tacoma, UW, and UWT",Short Answer,Medium,The University of Washington football team plays its home games at              Staduim.,Null,Null,Null,Null,Husky
+"History of Tacoma, UW, and UWT",Short Answer,Medium,The University of Washington football team plays its home games at _____ Staduim.,Null,Null,Null,Null,Husky
 "History of Tacoma, UW, and UWT",True or False,Easy,The University of Washington Tacoma was founded in the 1990s. ,TRUE,FALSE,Null,Null,TRUE
 "History of Tacoma, UW, and UWT",True or False,Easy,"The City of Tacoma is located in King County, Washington. ",TRUE,FALSE,Null,Null,FALSE
 "History of Tacoma, UW, and UWT",True or False,Easy,The University of Washington Tacoma was founded in the 2000s. ,TRUE,FALSE,Null,Null,FALSE

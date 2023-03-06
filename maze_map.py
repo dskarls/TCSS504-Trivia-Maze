@@ -58,10 +58,10 @@ class MazeMap:
         self.__padding_col = padding_col
 
         # String used to represent a hidden room
-        self.hidden_room = f" {padding_col} {padding_col} \n" * 3
+        self.__hidden_room = f" {padding_col} {padding_col} \n" * 3
 
         self.__room_strings = [
-            [self.hidden_room] * num_cols for _ in range(num_rows)
+            [self.__hidden_room] * num_cols for _ in range(num_rows)
         ]
 
     def __str__(self):
@@ -126,7 +126,7 @@ class MazeMap:
         if room.visited:
             self.__room_strings[room_row][room_col] = self.__get_room_str(room)
         else:
-            self.__room_strings[room_row][room_col] = self.hidden_room
+            self.__room_strings[room_row][room_col] = self.__hidden_room
 
     def __get_room_symbol(self, room):
         """

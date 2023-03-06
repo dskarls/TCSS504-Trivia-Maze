@@ -4,6 +4,9 @@ from trivia_maze_model_observer import TriviaMazeModelObserver
 
 
 class TriviaMazeController(TriviaMazeModelObserver):
+    """An agent that observes a maze model and controls it based on user input
+    forwarded by the view."""
+
     @abstractmethod
     def process_keystroke(self, key):
         """

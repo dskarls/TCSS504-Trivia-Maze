@@ -22,10 +22,8 @@ class TriviaMaze(TriviaMazeModel):
     used to display the entire maze at any iteration of the game.
     Class Attributes
     ------------------
-    __DEFAULT_NUM_ROWS : int
-        Number of rows to use if user skips through rows prompt.
-    __DEFAULT_NUM_COLS: int
         Number of columns to use if user skips through rows prompt.
+
     Instance Attributes
     ------------------
     __adventurer : Adventurer
@@ -39,6 +37,7 @@ class TriviaMaze(TriviaMazeModel):
         located in the array according to their two-dimensional coords, e.g. the
         Room at indices [1][2] corresponds to row 1, column 2 (both zero-based
         indexing).
+
     Methods
     -------
     __get_adjacent_rooms_in_maze
@@ -103,6 +102,9 @@ class TriviaMaze(TriviaMazeModel):
         self.__direction_attempt = None
 
     def __place_adventurer_in_maze(self):
+        """Set the adventurer's current row and column to the entrance of the
+        maze and mark it as visited and occupied.
+        """
         # Place adventurer in entrance room
         (
             self.__adventurer_current_row,
@@ -334,13 +336,23 @@ class TriviaMaze(TriviaMazeModel):
         self.__notify_observers()
 
     def get_rooms(self):
-        """Returns a 2d list of the rooms in the maze."""
+        """Returns a 2d list of the rooms in the maze.
+
+        Returns
+        -------
+        List[List[Room]]
+            All of the rooms in the maze.
+        """
         return self.__maze.rooms
 
     def use_item(self, item):
         """
-        This method checks which item the adventurer used and will make the appropriate
-        method calls.
+        Attempts to consume one of the adventurer's items. If they don't have
+        the relevant item, no action is taken.
+
+        NOTE: Successfully using a magic key will actually result in moving the
+        adventurer to the relevant room.
+
         Parameters
         ----------
         item : str
@@ -441,25 +453,40 @@ class TriviaMaze(TriviaMazeModel):
         self.__notify_observers()
 
     def get_adventurer_hp(self):
-        """Returns the adventurer's current hit points"""
+        """Returns the adventurer's current hit points.
+
+        Returns
+        -------
+        int
+            The adventurer's current hp.
+        """
         return self.__adventurer.hit_points
 
     def get_adventurer_coords(self):
-        """Returns a tuple of the adventurer's current coordinates in the maze."""
+        """Returns a tuple of the adventurer's current coordinates in the maze.
+
+        Returns
+        -------
+        tuple[int]
+            A 2-tuple containing the adventurer's current row and column as
+            integers.
+        """
         return self.__adventurer_current_row, self.__adventurer_current_col
 
     def game_status(self):
         """
-        Checks if the win or loss conditions have been met. If adventurer has to collected
-        all 4 pillars of OOP and be in the exit room they will win. They lose if the adventurer's
-        hit points reach 0 or have no possible way to reach exit with all four pillars of OOP.
+        Checks if the win or loss conditions have been met. If adventurer has
+        to collected all 4 pillars of OOP and be in the exit room they will
+        win. They lose if the adventurer's hit points reach 0 or have no
+        possible way to reach exit with all four pillars of OOP.
 
         Returns
         -------
         str
-            'win' if the win conditions have been met. If the adventurer has no possible path to
-            win due to permanently locking doors 'trapped' is returned. If the adventurer has no
-            hitpoints 'dead' is returned. Returns None if neither win nor loss conditions are met.
+            'win' if the win conditions have been met. If the adventurer has no
+            possible path to win due to permanently locking doors 'trapped' is
+            returned. If the adventurer has no hitpoints 'dead' is returned.
+            Returns None if neither win nor loss conditions are met.
         """
         adv_room = self.__get_adventurer_room()
         # reached exit with all pillars. Win!
@@ -571,6 +598,24 @@ class TriviaMaze(TriviaMazeModel):
             return self.__maze.rooms[room.coords[0]][room.coords[1] - 1]
 
     def __wall_or_perm(self, room, direction):
+        """
+        Return True if the specified direction in the given room is a wall or a
+        permanently locked door. Otherwise, return False.
+
+        Parameters
+        ----------
+        room : Room
+            Any room in the maze.
+        direction : str
+            Indicates one of the four cardinal directions ("east", "north",
+            "west", "south").
+
+        Returns
+        -------
+        bool
+            Whether the side of the room given by the direction is a wall or a
+            permanently locked door.
+        """
         side = room.get_side(direction)
         if side == Room.WALL:
             return True
@@ -580,7 +625,14 @@ class TriviaMaze(TriviaMazeModel):
 
     def register_observer(self, observer):
         """Add a TriviaMazeModelObserver object to the registered list of
-        observers tracked by the model."""
+        observers tracked by the model.
+
+        Parameters
+        ----------
+        TriviaMazeModelObserver
+            An observer object that should be notified whenever the model's
+            internal state is updated.
+        """
         self._maze_observers.append(observer)
 
     def __notify_observers(self):
@@ -589,16 +641,34 @@ class TriviaMaze(TriviaMazeModel):
 
     def flush_event_log_buffer(self):
         """If there are any entries in the event log buffer, remove and return
-        them."""
+        them.
+
+        Returns
+        -------
+        List[str]
+            Messages to be displayed in the event log.
+        """
         log_contents = self.__event_log_buffer.copy()
         self.__event_log_buffer.clear()
         return log_contents
 
     def flush_question_and_answer_buffer(self):
-        """If a question is in the Q&A buffer, remove and return it."""
+        """If a question is in the Q&A buffer, remove and return it.
+
+        Returns
+        -------
+        QuestionAndAnswer
+            An object that can be used to pose a question to a user, possibly
+            give them a hint, and get an answer."""
         if self.__question_and_answer_buffer:
             return self.__question_and_answer_buffer.pop()
 
     def get_adventurer_items(self):
-        """Get a list of all items held by the adventurer."""
+        """Get a list of all items held by the adventurer.
+
+        Returns
+        -------
+        List[MazeItem]
+            A list of all items currently held by the adventurer.
+        """
         return self.__adventurer.get_items()
