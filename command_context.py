@@ -929,13 +929,13 @@ class DifficultyMenuCommandContext(MenuCommandContext):
         selected_option = (
             self._maze_view.get_difficulty_menu_selection().lower()
         )
-            self._maze_model.reset(selected_option)
-            self._maze_view.reset_inventories()
-            
-            # Clear view event log
-            self._maze_view.clear_event_log()
-            self._maze_view.hide_main_menu()
-            self._maze_controller.set_active_context("primary_interface")
+        self._maze_model.reset(selected_option)
+        self._maze_view.reset_inventories()
+
+        # Clear view event log
+        self._maze_view.clear_event_log()
+        self._maze_view.hide_main_menu()
+        self._maze_controller.set_active_context("primary_interface")
 
 IN_GAME_MENU_KEY = PrimaryInterfaceCommandContext.COMMANDS[
     PrimaryInterfaceCommandContext.Command.SHOW_IN_GAME_MENU
