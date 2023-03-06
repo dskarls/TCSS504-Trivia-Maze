@@ -105,20 +105,12 @@ class MainMenuCommandContext(MenuCommandContext):
         # NOTE: One might choose to have the controller tell the view what options
         # to add to the menu when it creates it in order to avoid duplication
         if selected_option == "start game":
-            # FIXME: Implement a difficulty selection and/or adventurer naming
-            # menu and have the user go through that here. This may mean we
-            # need to break up the stuff in the model's initialization so that
-            # its __init__ doesn't really do anything.
-
-            # Hide main menu so user can begin playing and switch contexts
-            self._maze_model.reset()
-            self._maze_view.reset_inventories()
+            # hide main menu
             self._maze_view.hide_main_menu()
-
-            # Clear view event log
-            self._maze_view.clear_event_log()
-
-            self._maze_controller.set_active_context("primary_interface")
+            # show difficulty menu
+            self._maze_view.show_difficulty_menu()
+            # set context to difficulty selection
+            self._maze_controller.set_active_context("difficulty_menu")
 
         elif selected_option == "load game":
             try:
