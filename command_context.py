@@ -914,6 +914,37 @@ class MagicKeyCommandContext(CommandContext):
             self._maze_view.hide_magic_key_menu()
 
 
+class DifficultyMenuCommandContext(MenuCommandContext):
+    """Context for interpreting keystrokes when the user pulls up the 
+    difficulty menu."""
+
+    def process_keystroke(self, key):
+        """
+        Interact with view and model based on the keystroke ``key`` received
+        from the view.
+
+        Parameters
+        ----------
+        key : str
+            A keystroke input. This may be a single character, e.g. 'a' if the
+            'a' key is pressed, or could be something like 'Return' or
+            'Escape'.
+        """
+
+        if key != self.COMMANDS[self.Command.SELECT][_COMMAND_KEY_KEY]:
+            return
+
+        selected_option = (
+            self._maze_view.get_difficulty_menu_selection().lower()
+        )
+            self._maze_model.reset(selected_option)
+            self._maze_view.reset_inventories()
+            
+            # Clear view event log
+            self._maze_view.clear_event_log()
+            self._maze_view.hide_main_menu()
+            self._maze_controller.set_active_context("primary_interface")
+
 IN_GAME_MENU_KEY = PrimaryInterfaceCommandContext.COMMANDS[
     PrimaryInterfaceCommandContext.Command.SHOW_IN_GAME_MENU
 ][_COMMAND_KEY_KEY]
