@@ -1159,3 +1159,30 @@ class TextTriviaMazeView(TriviaMazeView):
     def quit_entire_game(self):
         """Tear down the entire application and quit."""
         self.__window.destroy()
+    
+    def __create_difficulty_menu(self):
+        """Create the in-game menu widget, which is accessible to the user from
+        the primary interface while they're actually playing the game."""
+        options = (
+            "Easy",
+            "Medium",
+            "Hard",
+        )
+        return DifficultyMenu(
+            self.__window,
+            DIMENSIONS["in_game_menu"]["width"],
+            "In-Game Menu",
+            DIMENSIONS["in_game_menu_title"]["padx"],
+            DIMENSIONS["in_game_menu_title"]["pady"],
+            options,
+        )
+    
+    def get_difficulty_menu_selection(self):
+        """Return the currently selected option in the difficulty menu."""
+        return self.__difficulty_menu.selected_option
+    
+    def show_difficulty_menu(self):
+        return self.__difficulty_menu.show()
+    
+    def hide_difficulty_menu(self):
+        return self.__difficulty_menu.hide()
