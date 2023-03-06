@@ -57,8 +57,22 @@ class TriviaMazeView(TriviaMazeModelObserver):
         """Hide the map legend pop-up."""
 
     @abstractmethod
-    def show_command_legend_menu(self):
-        """Show the command legend pop-up."""
+    def show_command_legend_menu(self, symbols, descriptions, num_cols):
+        """
+        Fills the commands legend widget based on a set of symbols, their
+        descriptions, and a number of columns to arrange them in.
+
+        Parameters
+        ----------
+        symbols : list
+            Abbreviated symbols used in the map.
+        descriptions : list
+            Description of each symbol used in the map.
+        num_cols : int
+            How many columns of symbol-description pairs should be constructed
+            in the command legend.
+
+        """
 
     @abstractmethod
     def hide_command_legend_menu(self):

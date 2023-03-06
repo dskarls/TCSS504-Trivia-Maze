@@ -663,7 +663,6 @@ class QuestionAndAnswerMenu(PopUpWindow):
     @abstractmethod
     def get_user_answer(self):
         """Fetch and return the player's answer."""
-        pass
 
 
 class HintableQuestionAndAnswerMenu(QuestionAndAnswerMenu):

@@ -654,7 +654,7 @@ class TextTriviaMazeView(TriviaMazeView):
         """Create the widget for when the player tries to pass through a
         permanently locked door and holds a magic key. It asks them if they
         would like to use a magic key or not."""
-        dismiss_message = f"Press 'y' to use a magic key if not press 'n'"
+        dismiss_message = "Press 'y' to use a magic key if not press 'n'"
         return DismissiblePopUp(
             self.__window,
             None,
