@@ -91,7 +91,10 @@ class TriviaMaze(TriviaMazeModel):
 
         self.__db = SQLiteTriviaDatabase(db_file_path)
 
-        self.__maze, self.__adventurer = self.__reset_maze_and_adventurer()
+        # create maze and adventurer, default value medium will change after difficulty selection occurs
+        self.__maze, self.__adventurer = self.__reset_maze_and_adventurer(
+            difficulty="medium"
+        )
 
         self.__adventurer_current_row = None
         self.__adventurer_current_col = None
@@ -129,7 +132,7 @@ class TriviaMaze(TriviaMazeModel):
         self.__place_adventurer_in_maze()
         self.__notify_observers()
 
-    def __reset_maze_and_adventurer(self):
+    def __reset_maze_and_adventurer(self, difficulty):
         """Regenerate maze and adventurer from scratch."""
         return Maze(self.num_rows, self.num_cols, self.__db, difficulty), Adventurer()
 
@@ -181,18 +184,14 @@ class TriviaMaze(TriviaMazeModel):
 
         load_file_path = pathlib.Path(self.__SAVE_FILE_PATH)
         if not load_file_path.exists():
-            raise SaveGameFileNotFound(
-                "Failed to load game. No save file exists."
-            )
+            raise SaveGameFileNotFound("Failed to load game. No save file exists.")
 
         with open(load_file_path, "rb") as load_flobj:
             serialized_model_data = pickle.load(load_flobj)
 
         # Overwrite current maze and adventurer with loaded objects
         self.__maze = serialized_model_data[self.__SAVE_FILE_KEY_MAZE]
-        self.__adventurer = serialized_model_data[
-            self.__SAVE_FILE_KEY_ADVENTURER
-        ]
+        self.__adventurer = serialized_model_data[self.__SAVE_FILE_KEY_ADVENTURER]
         self.__adventurer_current_row = serialized_model_data[
             self.__SAVE_FILE_KEY_ADVENTURER_CURRENT_ROW
         ]
@@ -226,9 +225,7 @@ class TriviaMaze(TriviaMazeModel):
         elif door_or_wall.locked:
             # Door is not permanently locked, but is locked by a question and
             # answer. Put it in the question and buffer.
-            self.__question_and_answer_buffer.append(
-                door_or_wall.question_and_answer
-            )
+            self.__question_and_answer_buffer.append(door_or_wall.question_and_answer)
 
         else:
             # Passable door -- either wasn't locked to begin with or was
@@ -261,9 +258,7 @@ class TriviaMaze(TriviaMazeModel):
 
             # pit damage
             if adventurer_room.get_pit() is not None:
-                self.__apply_pit_damage_to_adventurer(
-                    adventurer_room.get_pit()
-                )
+                self.__apply_pit_damage_to_adventurer(adventurer_room.get_pit())
 
         self.__notify_observers()
 
@@ -381,9 +376,7 @@ class TriviaMaze(TriviaMazeModel):
                 ):
                     room.visited = True
 
-                self.__event_log_buffer.append(
-                    f"You used a {str(vision_potion)}!"
-                )
+                self.__event_log_buffer.append(f"You used a {str(vision_potion)}!")
 
         elif item == self.__ITEMS[self.__Items.SUGGESTION_POTION]:
             # Use vision potion
@@ -395,12 +388,8 @@ class TriviaMaze(TriviaMazeModel):
             )
 
             if num_suggestion_potions > 0:
-                suggestion_potion = (
-                    self.__adventurer.consume_suggestion_potion()
-                )
-                self.__event_log_buffer.append(
-                    f"You used a {str(suggestion_potion)}!"
-                )
+                suggestion_potion = self.__adventurer.consume_suggestion_potion()
+                self.__event_log_buffer.append(f"You used a {str(suggestion_potion)}!")
 
         elif item == self.__ITEMS[self.__Items.MAGIC_KEY]:
             magic_key = self.__adventurer.consume_magic_key()
@@ -490,10 +479,7 @@ class TriviaMaze(TriviaMazeModel):
         """
         adv_room = self.__get_adventurer_room()
         # reached exit with all pillars. Win!
-        if (
-            adv_room.is_exit()
-            and len(self.__adventurer.get_pillars_found()) == 4
-        ):
+        if adv_room.is_exit() and len(self.__adventurer.get_pillars_found()) == 4:
             return "win"
         # no path possible to win or no more hit points
         if len(self.__adventurer.get_magic_keys()) < 1:
