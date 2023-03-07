@@ -20,7 +20,7 @@ from maze_items import (
 from question_and_answer import question_and_answer_factory
 from room import Room
 from util import generate_random_int, randomly_choose_between_two_outcomes
-from difficulty_config import DIFFICULTY_SETTINGS
+from difficulty_config import DifficultySettings, DIFFICULTY_SETTINGS
 
 
 class MazeConstructionError(RuntimeError):
@@ -166,7 +166,21 @@ class Maze:
 
     # Smallest dimensions of maze
     __MIN_ALLOWED_ROWS_OR_COLS = 3
+
+    # Values default to get initial maze constructed
+    # These will change when difficulty is selected
     __PILLAR_PROBABILITY = 0.1
+    __PIT_PROBABILITY = 0.15
+    __HEALING_POTION_PROBABILITY = 0.15
+    __VISION_POTION_PROBABILITY = 0.15
+    __SUGGESTION_POTION_PROBABILITY = 0.15
+    __MAGIC_KEY_PROBABILITY = 0.15
+    __LOCKED_DOOR_PROBABILITY = 0.25
+    __MIN_HEALING_POTION_VALUE = 5
+    __MAX_HEALING_POTION_VALUE = 15
+    __MIN_PIT_DAMAGE = 1
+    __MAX_PIT_DAMAGE = 20
+    __MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE = 2
     __MAX_ENTRANCE_EXIT_SAMPLE_ATTEMPTS = 15
 
     def __init__(self, row_count, col_count, trivia_db, difficulty):
@@ -192,8 +206,8 @@ class Maze:
         self.rooms = []
 
         if (
-            row_count < self.__MIN_ALLOWED_ROWS_OR_COLS
-            or col_count < self.__MIN_ALLOWED_ROWS_OR_COLS
+                row_count < self.__MIN_ALLOWED_ROWS_OR_COLS
+                or col_count < self.__MIN_ALLOWED_ROWS_OR_COLS
         ):
             raise MazeTooSmall(
                 "The maze maze must be at least "
@@ -219,28 +233,51 @@ class Maze:
         # Keep track of which questions we've attached to doors to avoid
         # repetition
         self.__used_question_and_answer_hashes = set({})
-        
-        __PIT_PROBABILITY = DIFFICULTY_SETTIGNS[difficulty][DifficultySettings.PIT_PROBABILITY]
-        __HEALING_POTION_PROBABILITY = DIFFICULTY_SETTIGNS[difficulty][DifficultySettings.HEALING_POTION_PROBABILITY]
-        __VISION_POTION_PROBABILITY = DIFFICULTY_SETTIGNS[difficulty][DifficultySettings.VISION_POTION_PROBABILITY]
-        __SUGGESTION_POTION_PROBABILITY = DIFFICULTY_SETTIGNS[difficulty][DifficultySettings.SUGGESTION_POTION_PROBABILITY]
-        __MAGIC_KEY_PROBABILITY = DIFFICULTY_SETTIGNS[difficulty][DifficultySettings.MAGIC_KEY_PROBABILITY]
-        __LOCKED_DOOR_PROBABILITY = DIFFICULTY_SETTIGNS[difficulty][DifficultySettings.LOCKED_DOOR_PROBABILITY]
+
+        # probabilities of items being placed in the maze
+        __PIT_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+            DifficultySettings.PIT_PROBABILITY
+        ]
+        __HEALING_POTION_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+            DifficultySettings.HEALING_POTION_PROBABILITY
+        ]
+        __VISION_POTION_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+            DifficultySettings.VISION_POTION_PROBABILITY
+        ]
+        __SUGGESTION_POTION_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+            DifficultySettings.SUGGESTION_POTION_PROBABILITY
+        ]
+        __MAGIC_KEY_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+            DifficultySettings.MAGIC_KEY_PROBABILITY
+        ]
+        __LOCKED_DOOR_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+            DifficultySettings.LOCKED_DOOR_PROBABILITY
+        ]
 
         # Min and max amount that a healing potion can restore to hit points
-        __MIN_HEALING_POTION_VALUE = DIFFICULTY_SETTIGNS[difficulty][DifficultySettings.MIN_HEALING_POTION_VALUE]
-        __MAX_HEALING_POTION_VALUE = DIFFICULTY_SETTIGNS[difficulty][DifficultySettings.MAX_HEALING_POTION_VALUE]
+        __MIN_HEALING_POTION_VALUE = DIFFICULTY_SETTINGS[difficulty][
+            DifficultySettings.MIN_HEALING_POTION_VALUE
+        ]
+        __MAX_HEALING_POTION_VALUE = DIFFICULTY_SETTINGS[difficulty][
+            DifficultySettings.MAX_HEALING_POTION_VALUE
+        ]
 
         # Min and max amount of damage that a pit can do
-        __MIN_PIT_DAMAGE = DIFFICULTY_SETTIGNS[difficulty][DifficultySettings.MIN_PIT_DAMAGE]
-        __MAX_PIT_DAMAGE = DIFFICULTY_SETTIGNS[difficulty][DifficultySettings.MAX_PIT_DAMAGE]
-    
+        __MIN_PIT_DAMAGE = DIFFICULTY_SETTINGS[difficulty][
+            DifficultySettings.MIN_PIT_DAMAGE
+        ]
+        __MAX_PIT_DAMAGE = DIFFICULTY_SETTINGS[difficulty][
+            DifficultySettings.MAX_PIT_DAMAGE
+        ]
+
         # Minimum Manhattan distance enforced between entrance and exit when
         # choosing where they should be. Cannot be larger than
         #     (row_count - 1) + (col_count - 1)
         # where row_count and col_count are the number of rows and columns of the
         # entire maze.
-        __MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE = DIFFICULTY[difficulty][MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE]
+        __MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE = DIFFICULTY_SETTINGS[difficulty][
+            DifficultySettings.MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE
+        ]
 
         self.build_maze(trivia_db)
 
@@ -313,9 +350,9 @@ class Maze:
             maze exit.
         """
         # Check that min. distance is valid
-        if self.__MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE > (
-            self.num_rows - 1
-        ) + (self.num_cols - 1):
+        if self.__MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE > (self.num_rows - 1) + (
+                self.num_cols - 1
+        ):
             raise InvalidMinEntranceExitDistance(
                 "The minimum Manhattan distance enforced between the "
                 "(randomly generated) entrance and exit cannot exceed "
@@ -377,9 +414,7 @@ class Maze:
         literally be impossible to some games!
         """
         for row in range(0, self.num_rows):
-            self.rooms.append(
-                [Room(row, col) for col in range(0, self.num_cols)]
-            )
+            self.rooms.append([Room(row, col) for col in range(0, self.num_cols)])
 
         # Set entrance and exit
         self.entrance, self.exit = self.__set_entrance_and_exit()
@@ -443,7 +478,7 @@ class Maze:
                 # Roll to see if we should place a pillar here
                 if pillars_to_place:
                     if self.__roll_to_place_item_or_pit_or_door(
-                        self.__PILLAR_PROBABILITY
+                            self.__PILLAR_PROBABILITY
                     ):
                         self.__unfound_items_counter[PillarOfOOP] += 1
                         this_room.place_item(pillars_to_place.pop())
@@ -451,7 +486,7 @@ class Maze:
 
                 # Roll to see if we should place a healing potion
                 if self.__roll_to_place_item_or_pit_or_door(
-                    self.__HEALING_POTION_PROBABILITY
+                        self.__HEALING_POTION_PROBABILITY
                 ):
                     this_room.place_item(
                         HealingPotion(
@@ -464,7 +499,7 @@ class Maze:
 
                 # Roll to see if we should place a vision potion
                 if self.__roll_to_place_item_or_pit_or_door(
-                    self.__VISION_POTION_PROBABILITY
+                        self.__VISION_POTION_PROBABILITY
                 ):
                     this_room.place_item(VisionPotion())
                     self.__unfound_items_counter[VisionPotion] += 1
@@ -472,7 +507,7 @@ class Maze:
 
                 # Roll to see if we should place a vision potion
                 if self.__roll_to_place_item_or_pit_or_door(
-                    self.__SUGGESTION_POTION_PROBABILITY
+                        self.__SUGGESTION_POTION_PROBABILITY
                 ):
                     this_room.place_item(SuggestionPotion())
                     self.__unfound_items_counter[SuggestionPotion] += 1
@@ -480,7 +515,7 @@ class Maze:
 
                 # Roll to see if we should place a magic key
                 if self.__roll_to_place_item_or_pit_or_door(
-                    self.__MAGIC_KEY_PROBABILITY
+                        self.__MAGIC_KEY_PROBABILITY
                 ):
                     this_room.place_item(MagicKey())
                     self.__unfound_items_counter[MagicKey] += 1
@@ -489,9 +524,7 @@ class Maze:
                 # If we did not place a pillar or potion, roll to see if we
                 # should place a pit.
                 if not placed_potion_pillar_or_key:
-                    if self.__roll_to_place_item_or_pit_or_door(
-                        self.__PIT_PROBABILITY
-                    ):
+                    if self.__roll_to_place_item_or_pit_or_door(self.__PIT_PROBABILITY):
                         this_room.set_pit(
                             Pit(self.__MIN_PIT_DAMAGE, self.__MAX_PIT_DAMAGE)
                         )
@@ -521,16 +554,16 @@ class Maze:
                     # If this room is an entrance or exit, or already contains
                     # a pillar, don't place any items
                     if (
-                        this_room.is_entrance()
-                        or this_room.is_exit()
-                        or this_room.get_pit()
-                        or this_room.contains_pillar()
+                            this_room.is_entrance()
+                            or this_room.is_exit()
+                            or this_room.get_pit()
+                            or this_room.contains_pillar()
                     ):
                         continue
 
                     # Roll to see if we should place a pillar here
                     if self.__roll_to_place_item_or_pit_or_door(
-                        self.__PILLAR_PROBABILITY
+                            self.__PILLAR_PROBABILITY
                     ):
                         this_room.place_item(pillars_to_place.pop())
                         self.__unfound_items_counter[PillarOfOOP] += 1
@@ -575,9 +608,7 @@ class Maze:
         """
         return row in range(0, self.num_rows) and col in range(self.num_cols)
 
-    def __set_room_doors_on_traversal_step(
-        self, previous_room, this_room, trivia_db
-    ):
+    def __set_room_doors_on_traversal_step(self, previous_room, this_room, trivia_db):
         """
         When traversing from one room to adjacent room while building the maze,
         set the sides of each room passed through to be doors.
@@ -624,18 +655,12 @@ class Maze:
         # Assume we will create an unlocked door
         question_and_answer = None
 
-        if self.__roll_to_place_item_or_pit_or_door(
-            self.__LOCKED_DOOR_PROBABILITY
-        ):
+        if self.__roll_to_place_item_or_pit_or_door(self.__LOCKED_DOOR_PROBABILITY):
             # If we rolled to create a locked door, create a question and
             # answer. Creating a Door with it will make the door locked.
-            question_and_answer = self.__get_new_question_and_answer_from_db(
-                trivia_db
-            )
+            question_and_answer = self.__get_new_question_and_answer_from_db(trivia_db)
 
-        previous_room.set_side(
-            previous_room_side, Room.DOOR, question_and_answer
-        )
+        previous_room.set_side(previous_room_side, Room.DOOR, question_and_answer)
         this_room.set_side(this_room_side, Room.DOOR)
 
     def __get_new_question_and_answer_from_db(self, trivia_db):
@@ -656,7 +681,7 @@ class Maze:
         return qa_obj
 
     def __set_room_sides_to_doors_during_random_depth_first_traversal(
-        self, row, col, previous_room, cumulative_visited, trivia_db
+            self, row, col, previous_room, cumulative_visited, trivia_db
     ):
         """
         Perform a random depth-first traversal of the entire maze. This is done
@@ -680,10 +705,7 @@ class Maze:
         trivia_db : TriviaDatabase
             A database from which questions and answers can be obtained.
         """
-        if (
-            not self.__room_is_in_maze(row, col)
-            or (row, col) in cumulative_visited
-        ):
+        if not self.__room_is_in_maze(row, col) or (row, col) in cumulative_visited:
             # Done tracing out new rooms as far as we can in this
             # path...backtrack by letting this frame get popped off the call
             # stack
@@ -691,9 +713,7 @@ class Maze:
 
         # Set relevant side of current and previous rooms to doors
         this_room = self.rooms[row][col]
-        self.__set_room_doors_on_traversal_step(
-            previous_room, this_room, trivia_db
-        )
+        self.__set_room_doors_on_traversal_step(previous_room, this_room, trivia_db)
         previous_room = this_room
 
         potential_neighbor_coords = [
