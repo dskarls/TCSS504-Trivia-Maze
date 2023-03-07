@@ -10,6 +10,10 @@ class TriviaMazeView(TriviaMazeModelObserver):
     """
 
     def __init__(self, maze_model, maze_controller):
+        """
+        Initialize a TriviaMazeView object with a reference to a TriviaMazeModel
+        object and a TriviaMazeController object.
+        """
         super().__init__(maze_model)
         self._maze_controller = maze_controller
 
