@@ -82,6 +82,26 @@ class TriviaMaze(TriviaMazeModel):
     __SAVE_FILE_KEY_MAZE = "maze"
 
     def __init__(self, num_rows, num_cols, db_file_path):
+        """
+        Initializes a TriviaMaze object with the specified number of rows, number of columns, and path to the database file.
+
+        Args:
+        num_rows (int): The number of rows to create for the maze.
+        num_cols (int): The number of columns to create for the maze.
+        db_file_path (str or pathlib.Path): The path to the SQLite trivia database file.
+
+        Attributes:
+        num_rows (int): The number of rows in the maze.
+        num_cols (int): The number of columns in the maze.
+        __event_log_buffer (list): A list to store events that occur during the game.
+        __question_and_answer_buffer (list): A list to store questions and answers that have been encountered during the game.
+        __db (SQLiteTriviaDatabase): An instance of the SQLiteTriviaDatabase class containing the trivia questions and answers.
+        __maze (Maze): A two-dimensional array of Room objects that represent the maze.
+        __adventurer (Adventurer): An instance of the Adventurer class that is initialized to traverse the maze.
+        __adventurer_current_row (int): The current x coordinate (row) of the adventurer.
+        __adventurer_current_col (int): The current y coordinate (column) of the adventurer.
+        __direction_attempt (str or None): A string representing the direction attempted during a move operation by the adventurer, or None if no move operation is currently underway.
+        """
         super().__init__()
         self.__event_log_buffer = []
         self.__question_and_answer_buffer = []
