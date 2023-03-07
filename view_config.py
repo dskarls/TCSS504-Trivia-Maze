@@ -89,6 +89,23 @@ __   __             ___             _____                              _   _
                               | |   | |
                               |_|   |_|
 """
+__DIFFICULTY_MENU_MESSAGE = """
+   _____      _           _      ___      
+  /  ___|    | |         | |    / _ \     
+  \ `--.  ___| | ___  ___| |_  / /_\ \    
+   `--. \/ _ \ |/ _ \/ __| __| |  _  |    
+  /\__/ /  __/ |  __/ (__| |_  | | | |    
+  \____/ \___|_|\___|\___|\__| \_| |_/    
+                                          
+                                          
+______ _  __  __ _            _ _         
+|  _  (_)/ _|/ _(_)          | | |        
+| | | |_| |_| |_ _  ___ _   _| | |_ _   _ 
+| | | | |  _|  _| |/ __| | | | | __| | | |
+| |/ /| | | | | | | (__| |_| | | |_| |_| |
+|___/ |_|_| |_| |_|\___|\__,_|_|\__|\__, |
+                                     __/ |
+                                    |___/ """
 __MAIN_HELP_MESSAGE = """
 Your goal is to collect all four pillars of OOP and safely reach the exit of
 the maze. The doors of many rooms will be locked and attempting to go through
@@ -117,6 +134,7 @@ MESSAGES = {
     "game_lost_trapped_menu": __YOU_ARE_TRAPPED_MESSAGE,
     "need_magic_key_menu": "This door is permanently locked. To open it, find a magic key!",
     "use_magic_key_menu": "This door is permanently locked. To open it, use a magic key.",
+    "difficulty_choice_menu": __DIFFICULTY_MENU_MESSAGE,
 }
 
 
