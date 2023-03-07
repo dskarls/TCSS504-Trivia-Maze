@@ -25,6 +25,7 @@ from command_context import (
     ShortQuestionAndAnswerCommandContext,
     MagicKeyCommandContext,
     NeedMagicKeyCommandContext,
+    DifficultyMenuCommandContext,
 )
 
 
@@ -52,10 +53,8 @@ class TextTriviaMazeController(TriviaMazeController):
         self.__main_menu_context = MainMenuCommandContext(
             self, self._maze_model, self.__maze_view
         )
-        self.__no_save_file_found_menu_context = (
-            NoSaveFileFoundMenuCommandContext(
-                self, self._maze_model, self.__maze_view
-            )
+        self.__no_save_file_found_menu_context = NoSaveFileFoundMenuCommandContext(
+            self, self._maze_model, self.__maze_view
         )
         self.__main_help_menu_context = MainHelpMenuCommandContext(
             self, self._maze_model, self.__maze_view
@@ -87,10 +86,8 @@ class TextTriviaMazeController(TriviaMazeController):
         self.__short_QA_context = ShortQuestionAndAnswerCommandContext(
             self, self._maze_model, self.__maze_view
         )
-        self.__true_or_false_QA_context = (
-            TrueOrFalseQuestionAndAnswerCommandContext(
-                self, self._maze_model, self.__maze_view
-            )
+        self.__true_or_false_QA_context = TrueOrFalseQuestionAndAnswerCommandContext(
+            self, self._maze_model, self.__maze_view
         )
         self.__multiple_choice_QA_context = (
             MultipleChoiceQuestionAndAnswerCommandContext(
@@ -101,6 +98,9 @@ class TextTriviaMazeController(TriviaMazeController):
             self, self._maze_model, self.__maze_view
         )
         self.__need_magic_key_context = NeedMagicKeyCommandContext(
+            self, self._maze_model, self.__maze_view
+        )
+        self.__difficulty_menu_context = DifficultyMenuCommandContext(
             self, self._maze_model, self.__maze_view
         )
 
@@ -139,6 +139,7 @@ class TextTriviaMazeController(TriviaMazeController):
             "multiple_choice_QA_menu": self.__multiple_choice_QA_context,
             "magic_key": self.__magic_key_context,
             "need_magic_key": self.__need_magic_key_context,
+            "difficulty_menu": self.__difficulty_menu_context,
         }
         self.__active_context = contexts[context_specifier]
 
@@ -169,18 +170,14 @@ class TextTriviaMazeController(TriviaMazeController):
         buffer, tell the view to pose it to the user and switch to the
         appropriate command context to get their answer (and, if applicable,
         allow them to use a suggestion potion)."""
-        self.question_and_answer = (
-            self._maze_model.flush_question_and_answer_buffer()
-        )
+        self.question_and_answer = self._maze_model.flush_question_and_answer_buffer()
         if self.question_and_answer:
             if isinstance(self.question_and_answer, ShortAnswerQA):
                 self.__maze_view.set_short_QA_question(
                     self.question_and_answer.question,
                 )
 
-                self.__maze_view.set_short_QA_hint(
-                    self.__get_initial_hint_content()
-                )
+                self.__maze_view.set_short_QA_hint(self.__get_initial_hint_content())
 
                 self.__maze_view.show_short_QA_menu()
                 self.set_active_context("short_QA_menu")
@@ -243,9 +240,7 @@ class TextTriviaMazeController(TriviaMazeController):
         adventurer_items = self._maze_model.get_adventurer_items()
 
         # If user has at least one suggestion potion, show hint box
-        return sum(
-            isinstance(item, SuggestionPotion) for item in adventurer_items
-        )
+        return sum(isinstance(item, SuggestionPotion) for item in adventurer_items)
 
     @staticmethod
     def __create_options_for_true_false():
