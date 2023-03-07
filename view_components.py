@@ -316,9 +316,7 @@ class EnumeratedInventory:
         for item in self.__item_labels:
             # Create frame for this item
             frm_item = Frame(master=self.__window)
-            frm_item.pack(
-                side=TOP, fill=BOTH, padx=self.__padx, pady=self.__pady
-            )
+            frm_item.pack(side=TOP, fill=BOTH, padx=self.__padx, pady=self.__pady)
 
             # Create label for item
             lbl_item = Label(
@@ -373,9 +371,7 @@ class CheckboxInventory:
             fill=BOTH,
         )
 
-        self.__item_check_button_control_vars = (
-            self.__create_inventory_item_labels()
-        )
+        self.__item_check_button_control_vars = self.__create_inventory_item_labels()
 
     def __create_inventory_item_labels(self):
         """Create and pack the labels that hold the names of all of the items
@@ -387,9 +383,7 @@ class CheckboxInventory:
         for ind, item in enumerate(self.__item_labels):
             # Create frame for this item
             frm_item = Frame(master=self.__window, height=50)
-            frm_item.pack(
-                side=TOP, fill=BOTH, padx=self.__padx, pady=self.__pady
-            )
+            frm_item.pack(side=TOP, fill=BOTH, padx=self.__padx, pady=self.__pady)
 
             # Create label for item
             lbl_item = Label(
@@ -409,9 +403,7 @@ class CheckboxInventory:
                 onvalue=1,
                 offvalue=0,
                 command=functools.partial(
-                    lambda ind: control_vars[ind].set(
-                        1 - control_vars[ind].get()
-                    ),
+                    lambda ind: control_vars[ind].set(1 - control_vars[ind].get()),
                     ind=ind,
                 ),
             )
@@ -851,9 +843,7 @@ class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
                 row += 1
 
             # Pack to left unless this is the last column
-            qa_option.grid(
-                row=row, column=col, sticky=W, padx=15, pady=(0, 10)
-            )
+            qa_option.grid(row=row, column=col, sticky=W, padx=15, pady=(0, 10))
 
             # End row at num_cols
             col += 1
@@ -894,9 +884,7 @@ class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
 
     def get_user_answer(self):
         try:
-            return self._buttons[
-                int(self._button_control_var.get())
-            ].original_text
+            return self._buttons[int(self._button_control_var.get())].original_text
         except TclError:
             # No option was selected. Note there is no finer exception thrown
             # by tkinter for us to catch here.
@@ -942,33 +930,28 @@ class MultipleChoiceQuestionAndAnswerMenu(
         self._num_rows_without_hint = 4
 
 
-class DifficultyMenu(PopUpWindow):
-    """The difficulty menu widget that is displayed before the player begins the
-    game. Contains a banner message and an arrow-scrollable text menu."""
+class DifficultyMenu(SubWindow):
+    def __init__(self, window, banner_text, menu_options):
+        """Create a frame inside of the frame specified by `window` that fills
+        up its entire row and column span."""
+        super().__init__(window, None, None, 0, 0, *window.grid_size())
 
-    def __init__(self, window, width, title, padx, pady, menu_options):
-        # Create the frame for the whole in-game menu
-        super().__init__(window, width)
-
-        # Create header with title in it
-        frm_title = Frame(
-            master=self._frm,
-            width=width,
-            relief=RIDGE,
-        )
-        frm_title.pack(fill=BOTH, anchor=CENTER)
+        # Add banner message
         lbl = Label(
-            master=frm_title,
-            text=title,
+            master=self.frame,
+            text=banner_text,
             justify=CENTER,
             anchor=CENTER,
+            style=STYLES["main_menu"]["style"],
         )
-        lbl.pack(fill=BOTH, padx=padx, pady=pady)
 
+        lbl.pack(fill=BOTH)
+
+        # Add text menu with desired options
         self.__text_menu = TextMenu(
             options=menu_options,
-            master=self._frm,
-            width=width,
+            master=self.frame,
+            width=None,
             height=len(menu_options),
             unselected_foreground_color="grey",
             unselected_background_color="black",
@@ -978,11 +961,18 @@ class DifficultyMenu(PopUpWindow):
             justify=CENTER,
         )
 
+    def hide(self):
+        """Hide this widget."""
+        self.frame.grid_remove()
+
     def show(self):
-        """Show the in-game menu's window."""
-        super().show()
-        self.__text_menu.reset_selection()
+        """Show this widget."""
+        self.frame.grid()
+
+        # Attach focus to text menu of options
         self.__text_menu.focus()
+        self.__text_menu.reset_selection()
+        self.frame.update_idletasks()
 
     @property
     def selected_option(self):
