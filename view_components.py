@@ -942,31 +942,33 @@ class MultipleChoiceQuestionAndAnswerMenu(
         self._num_rows_without_hint = 4
 
 
-class DifficultyMenu(SubWindow):
+class DifficultyMenu(PopUpWindow):
     """The difficulty menu widget that is displayed before the player begins the
     game. Contains a banner message and an arrow-scrollable text menu."""
 
-    def __init__(self, window, banner_text, menu_options):
-        """Create a frame inside of the frame specified by `window` that fills
-        up its entire row and column span."""
-        super().__init__(window, None, None, 0, 0, *window.grid_size())
+    def __init__(self, window, width, title, padx, pady, menu_options):
+        # Create the frame for the whole in-game menu
+        super().__init__(window, width)
 
-        # Add banner message
+        # Create header with title in it
+        frm_title = Frame(
+            master=self._frm,
+            width=width,
+            relief=RIDGE,
+        )
+        frm_title.pack(fill=BOTH, anchor=CENTER)
         lbl = Label(
-            master=self.frame,
-            text=banner_text,
+            master=frm_title,
+            text=title,
             justify=CENTER,
             anchor=CENTER,
-            style=STYLES["main_menu"]["style"],
         )
+        lbl.pack(fill=BOTH, padx=padx, pady=pady)
 
-        lbl.pack(fill=BOTH)
-
-        # Add text menu with desired options
         self.__text_menu = TextMenu(
             options=menu_options,
-            master=self.frame,
-            width=None,
+            master=self._frm,
+            width=width,
             height=len(menu_options),
             unselected_foreground_color="grey",
             unselected_background_color="black",
@@ -976,18 +978,11 @@ class DifficultyMenu(SubWindow):
             justify=CENTER,
         )
 
-    def hide(self):
-        """Hide this widget."""
-        self.frame.grid_remove()
-
     def show(self):
-        """Show this widget."""
-        self.frame.grid()
-
-        # Attach focus to text menu of options
-        self.__text_menu.focus()
+        """Show the in-game menu's window."""
+        super().show()
         self.__text_menu.reset_selection()
-        self.frame.update_idletasks()
+        self.__text_menu.focus()
 
     @property
     def selected_option(self):
