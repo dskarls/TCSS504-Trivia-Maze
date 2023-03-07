@@ -7,6 +7,12 @@ class TriviaMazeModel(ABC):
     adventurer, and pits."""
 
     def __init__(self):
+        """
+        Initialize a TriviaMazeModel object with an empty list to store its observers.
+        Attributes:
+        _maze_observers (list): A list of objects that observe the TriviaMazeModel and will
+        be notified when changes occur.
+        """
         self._maze_observers = []
 
     @abstractmethod
