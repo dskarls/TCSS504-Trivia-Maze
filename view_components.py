@@ -11,7 +11,27 @@ from view_config import STYLES
 class TextMenu:
     """A menu of strings traversable with arrow keys. The selected element can
     be colored differently from the rest of the elements. Intended to be used
-    with keystroke detection to make a selection."""
+    with keystroke detection to make a selection.
+
+    Args:
+        options (list): List of strings to be displayed in the menu.
+        master (Tk): Parent widget for the menu.
+        width (int): Width of the menu in characters.
+        height (int): Height of the menu in characters.
+        unselected_foreground_color (str): Foreground color of unselected items.
+        unselected_background_color (str): Background color of unselected items.
+        selected_foreground_color (str): Foreground color of the selected item.
+        selected_background_color (str): Background color of the selected item.
+        font (tuple): Tuple of font family, size, and style for the menu items.
+        justify (str): Text justification within the menu (LEFT, CENTER, or RIGHT).
+
+    Attributes:
+        selected_option (str): The currently selected option in the menu.
+
+    Methods:
+        focus(): Give focus to the menu.
+        reset_selection(): Clear the current selection and set the first item as active.
+    """
 
     def __init__(
         self,
@@ -26,6 +46,9 @@ class TextMenu:
         font,
         justify,
     ):
+        """
+        Constructs a new TextMenu object with the given options and visual properties.
+        """
         self.__options = options
         self.__list_box = Listbox(
             master,
