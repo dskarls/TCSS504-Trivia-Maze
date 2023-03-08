@@ -91,11 +91,11 @@ class TriviaMaze(TriviaMazeModel):
 
         self.__db = SQLiteTriviaDatabase(db_file_path)
 
-        self.__maze, self.__adventurer = self.__reset_maze_and_adventurer()
+        self.__maze = None
+        self.__adventurer = None
 
         self.__adventurer_current_row = None
         self.__adventurer_current_col = None
-        self.__place_adventurer_in_maze()
 
         # For keeping track of direction attempted during a move operation by
         # the adventurer
