@@ -125,7 +125,7 @@ class TriviaMaze(TriviaMazeModel):
         """If the user returns to the main menu after starting a game and then
         starts a new game, the model should regenerate a new maze and a new
         adventurer, etc."""
-        self.__maze, self.__adventurer = self.__reset_maze_and_adventurer()
+        self.__maze, self.__adventurer = self.__reset_maze_and_adventurer(difficulty)
         self.__place_adventurer_in_maze()
         self.__notify_observers()
 
