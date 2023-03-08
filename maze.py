@@ -183,7 +183,7 @@ class Maze:
     __MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE = 2
     __MAX_ENTRANCE_EXIT_SAMPLE_ATTEMPTS = 15
 
-    def __init__(self, row_count, col_count, trivia_db, difficulty):
+    def __init__(self, row_count, col_count, trivia_db, difficulty=None):
         """
         Build a traversable maze of the specified dimensions and fill
         it with items and pits.
@@ -235,49 +235,50 @@ class Maze:
         self.__used_question_and_answer_hashes = set({})
 
         # probabilities of items being placed in the maze
-        __PIT_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
-            DifficultySettings.PIT_PROBABILITY
-        ]
-        __HEALING_POTION_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
-            DifficultySettings.HEALING_POTION_PROBABILITY
-        ]
-        __VISION_POTION_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
-            DifficultySettings.VISION_POTION_PROBABILITY
-        ]
-        __SUGGESTION_POTION_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
-            DifficultySettings.SUGGESTION_POTION_PROBABILITY
-        ]
-        __MAGIC_KEY_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
-            DifficultySettings.MAGIC_KEY_PROBABILITY
-        ]
-        __LOCKED_DOOR_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
-            DifficultySettings.LOCKED_DOOR_PROBABILITY
-        ]
+        if difficulty:
+            __PIT_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+                DifficultySettings.PIT_PROBABILITY
+            ]
+            __HEALING_POTION_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+                DifficultySettings.HEALING_POTION_PROBABILITY
+            ]
+            __VISION_POTION_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+                DifficultySettings.VISION_POTION_PROBABILITY
+            ]
+            __SUGGESTION_POTION_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+                DifficultySettings.SUGGESTION_POTION_PROBABILITY
+            ]
+            __MAGIC_KEY_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+                DifficultySettings.MAGIC_KEY_PROBABILITY
+            ]
+            __LOCKED_DOOR_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+                DifficultySettings.LOCKED_DOOR_PROBABILITY
+            ]
 
-        # Min and max amount that a healing potion can restore to hit points
-        __MIN_HEALING_POTION_VALUE = DIFFICULTY_SETTINGS[difficulty][
-            DifficultySettings.MIN_HEALING_POTION_VALUE
-        ]
-        __MAX_HEALING_POTION_VALUE = DIFFICULTY_SETTINGS[difficulty][
-            DifficultySettings.MAX_HEALING_POTION_VALUE
-        ]
+            # Min and max amount that a healing potion can restore to hit points
+            __MIN_HEALING_POTION_VALUE = DIFFICULTY_SETTINGS[difficulty][
+                DifficultySettings.MIN_HEALING_POTION_VALUE
+            ]
+            __MAX_HEALING_POTION_VALUE = DIFFICULTY_SETTINGS[difficulty][
+                DifficultySettings.MAX_HEALING_POTION_VALUE
+            ]
 
-        # Min and max amount of damage that a pit can do
-        __MIN_PIT_DAMAGE = DIFFICULTY_SETTINGS[difficulty][
-            DifficultySettings.MIN_PIT_DAMAGE
-        ]
-        __MAX_PIT_DAMAGE = DIFFICULTY_SETTINGS[difficulty][
-            DifficultySettings.MAX_PIT_DAMAGE
-        ]
+            # Min and max amount of damage that a pit can do
+            __MIN_PIT_DAMAGE = DIFFICULTY_SETTINGS[difficulty][
+                DifficultySettings.MIN_PIT_DAMAGE
+            ]
+            __MAX_PIT_DAMAGE = DIFFICULTY_SETTINGS[difficulty][
+                DifficultySettings.MAX_PIT_DAMAGE
+            ]
 
-        # Minimum Manhattan distance enforced between entrance and exit when
-        # choosing where they should be. Cannot be larger than
-        #     (row_count - 1) + (col_count - 1)
-        # where row_count and col_count are the number of rows and columns of the
-        # entire maze.
-        __MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE = DIFFICULTY_SETTINGS[difficulty][
-            DifficultySettings.MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE
-        ]
+            # Minimum Manhattan distance enforced between entrance and exit when
+            # choosing where they should be. Cannot be larger than
+            #     (row_count - 1) + (col_count - 1)
+            # where row_count and col_count are the number of rows and columns of the
+            # entire maze.
+            __MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE = DIFFICULTY_SETTINGS[difficulty][
+                DifficultySettings.MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE
+            ]
 
         self.build_maze(trivia_db)
 

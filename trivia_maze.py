@@ -91,10 +91,7 @@ class TriviaMaze(TriviaMazeModel):
 
         self.__db = SQLiteTriviaDatabase(db_file_path)
 
-        # create maze and adventurer, default value medium will change after difficulty selection occurs
-        self.__maze, self.__adventurer = self.__reset_maze_and_adventurer(
-            difficulty="medium"
-        )
+        self.__maze, self.__adventurer = self.__reset_maze_and_adventurer()
 
         self.__adventurer_current_row = None
         self.__adventurer_current_col = None
@@ -124,15 +121,15 @@ class TriviaMaze(TriviaMazeModel):
 
         self.__direction_attempt = None
 
-    def reset(self, difficulty):
+    def reset(self, difficulty=None):
         """If the user returns to the main menu after starting a game and then
         starts a new game, the model should regenerate a new maze and a new
         adventurer, etc."""
-        self.__maze, self.__adventurer = self.__reset_maze_and_adventurer(difficulty)
+        self.__maze, self.__adventurer = self.__reset_maze_and_adventurer()
         self.__place_adventurer_in_maze()
         self.__notify_observers()
 
-    def __reset_maze_and_adventurer(self, difficulty):
+    def __reset_maze_and_adventurer(self, difficulty=None):
         """Regenerate maze and adventurer from scratch."""
         return Maze(self.num_rows, self.num_cols, self.__db, difficulty), Adventurer()
 
