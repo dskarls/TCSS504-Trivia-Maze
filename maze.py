@@ -184,32 +184,33 @@ class Maze:
             If the row or column counts are smaller than the smallest allowable
             size.
         """
-        #
+
         # Smallest dimensions of maze
         self.__MIN_ALLOWED_ROWS_OR_COLS = 3
 
-        self.__PILLAR_PROBABILITY = 0.1
+        # values default to medium difficulty if no difficulty is chosen
+        self.__PILLAR_PROBABILITY = 0.25
         self.__PIT_PROBABILITY = 0.15
         self.__HEALING_POTION_PROBABILITY = 0.15
         self.__VISION_POTION_PROBABILITY = 0.15
         self.__SUGGESTION_POTION_PROBABILITY = 0.15
         self.__MAGIC_KEY_PROBABILITY = 0.15
-        self.__LOCKED_DOOR_PROBABILITY = 0.25
+        self.__LOCKED_DOOR_PROBABILITY = 0.35
 
         # Min and max amount that a healing potion can restore to hit points
-        self.__MIN_HEALING_POTION_VALUE = 5
+        self.__MIN_HEALING_POTION_VALUE = 1
         self.__MAX_HEALING_POTION_VALUE = 15
 
         # Min and max amount of damage that a pit can do
-        self.__MIN_PIT_DAMAGE = 1
-        self.__MAX_PIT_DAMAGE = 20
+        self.__MIN_PIT_DAMAGE = 5
+        self.__MAX_PIT_DAMAGE = 25
 
         # Minimum Manhattan distance enforced between entrance and exit when
         # choosing where they should be. Cannot be larger than
         #     (row_count - 1) + (col_count - 1)
         # where row_count and col_count are the number of rows and columns of the
         # entire maze.
-        self.__MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE = 2
+        self.__MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE = 6
         self.__MAX_ENTRANCE_EXIT_SAMPLE_ATTEMPTS = 15
         self.rooms = []
 
