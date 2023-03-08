@@ -223,6 +223,18 @@ class Map(SubWindow):
 class EventLog(SubWindow):
     """
     The text box that logs notable events for the player to see.
+    :param window: The window to embed the event log subwindow in
+    :param width: The width of the event log subwindow
+    :param num_lines: The maximum number of lines that can be shown in the
+        event log text box
+    :param row: The row of the grid where the event log subwindow should be
+        placed
+    :param column: The column of the grid where the event log subwindow should
+        be placed
+    :param rowspan: The number of rows the event log subwindow should span
+    :param columnspan: The number of columns the event log subwindow should span
+    :param padx: The padding on the left and right sides of the subwindow
+    :param pady: The padding on the top and bottom sides of the subwindow
     """
 
     # String prefixed to all log entries
@@ -240,15 +252,27 @@ class EventLog(SubWindow):
         padx,
         pady,
     ):
+        """
+        Initialize a new instance of the EventLog class.
+        :param window:
+        :param width:
+        :param num_lines:
+        :param row:
+        :param column:
+        :param rowspan:
+        :param columnspan:
+        :param padx:
+        :param pady:
+        """
         super().__init__(window, width, None, row, column, rowspan, columnspan)
 
         self.__textbox = self.__add_scrollable_readonly_textbox_to_subwindow(
             self.frame, num_lines, padx, pady
         )
-
-        # Initialize a var to track whether the log has already been written
+        # Initialize a variable to track whether the log has already been written
         # to. This is used to determine prefixes/postfixes wrapped around each
         # message.
+
         self.__contents_empty = True
 
     def write(self, message):
@@ -307,10 +331,19 @@ class EventLog(SubWindow):
 
 
 class EnumeratedInventory:
-    """An inventory of items that have an positive integer count value
+    """An inventory of items that have a positive integer count value
     associated with them."""
 
     def __init__(self, window, title, title_ipady, padx, pady, item_labels):
+        """
+        Initialize a new instance of the EnumeratedInventory class.
+        :param window:
+        :param title:
+        :param title_ipady:
+        :param padx:
+        :param pady:
+        :param item_labels:
+        """
         self.__window = window
         self.__padx = padx
         self.__pady = pady
@@ -378,6 +411,15 @@ class CheckboxInventory:
     checkboxes reflecting this state."""
 
     def __init__(self, window, title, title_ipady, padx, pady, item_labels):
+        """
+        Initialize a new instance of teh CheckboxInventory class.
+        :param window:
+        :param title:
+        :param title_ipady:
+        :param padx:
+        :param pady:
+        :param item_labels:
+        """
         self.__window = window
         self.__padx = padx
         self.__pady = pady
@@ -470,6 +512,15 @@ class HPGauge:
         bar_padx,
         bar_pady,
     ):
+        """
+        Initialize a widget to display the adventurer's hit points with a bar and label.
+        :param window:
+        :param height:
+        :param bar_width:
+        :param label_padx:
+        :param bar_padx:
+        :param bar_pady:
+        """
         # Create frame to hold hp gauge label and bar
         frm = Frame(master=window, height=height)
         frm.pack(
@@ -503,6 +554,11 @@ class PopUpWindow:
     displayed over the top of it."""
 
     def __init__(self, window, width):
+        """
+        Initialize a new instance of the PopUpWindow class.
+        :param window:
+        :param width:
+        """
         self._frm = Frame(master=window, relief=RIDGE)
         self._place_pop_up_at_center_of_window(self._frm, width)
         self._width = width
@@ -536,6 +592,15 @@ class InGameMenu(PopUpWindow):
     """
 
     def __init__(self, window, width, title, padx, pady, menu_options):
+        """
+        Define the constructor for the InGameMenue class.
+        :param window:
+        :param width:
+        :param title:
+        :param padx:
+        :param pady:
+        :param menu_options:
+        """
         # Create the frame for the whole in-game menu
         super().__init__(window, width)
 
@@ -931,6 +996,10 @@ class TrueFalseQuestionAndAnswerMenu(QuestionAndAnswerWithOptionsMenu):
 
     def __init__(self, window, width, wraplength, title, padx, ipady):
         options = ("True", "False")
+        """
+        Calls the __init__ method of the QuestionAndAnswerWithOptionsMenu
+        to initialize an object of the class.
+        """
         super().__init__(
             window,
             width,
@@ -951,6 +1020,10 @@ class MultipleChoiceQuestionAndAnswerMenu(
 
     def __init__(self, window, width, wraplength, title, padx, ipady):
         options = [""] * 4
+        """
+        Calls the __init__ method of the QuestionAndAnswerWithOptionsMenu
+        to initialize an object of the class.
+        """
         super().__init__(
             window,
             width,
