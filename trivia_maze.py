@@ -121,7 +121,7 @@ class TriviaMaze(TriviaMazeModel):
 
         self.__direction_attempt = None
 
-    def reset(self, difficulty=None):
+    def reset(self, difficulty="medium"):
         """If the user returns to the main menu after starting a game and then
         starts a new game, the model should regenerate a new maze and a new
         adventurer, etc.
@@ -135,7 +135,7 @@ class TriviaMaze(TriviaMazeModel):
         self.__place_adventurer_in_maze()
         self.__notify_observers()
 
-    def __reset_maze_and_adventurer(self, difficulty=None):
+    def __reset_maze_and_adventurer(self, difficulty):
         """Regenerate maze and adventurer from scratch.
         
         Parameters
