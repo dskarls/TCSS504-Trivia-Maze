@@ -25,6 +25,7 @@ from command_context import (
     ShortQuestionAndAnswerCommandContext,
     MagicKeyCommandContext,
     NeedMagicKeyCommandContext,
+    DifficultyMenuCommandContext,
 )
 
 
@@ -103,6 +104,9 @@ class TextTriviaMazeController(TriviaMazeController):
         self.__need_magic_key_context = NeedMagicKeyCommandContext(
             self, self._maze_model, self.__maze_view
         )
+        self.__difficulty_menu_context = DifficultyMenuCommandContext(
+            self, self._maze_model, self.__maze_view
+        )
 
         # Initialize question and answer (used between different command
         # contexts) attr
@@ -139,6 +143,7 @@ class TextTriviaMazeController(TriviaMazeController):
             "multiple_choice_QA_menu": self.__multiple_choice_QA_context,
             "magic_key": self.__magic_key_context,
             "need_magic_key": self.__need_magic_key_context,
+            "difficulty_menu": self.__difficulty_menu_context,
         }
         self.__active_context = contexts[context_specifier]
 

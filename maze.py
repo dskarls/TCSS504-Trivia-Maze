@@ -20,6 +20,7 @@ from maze_items import (
 from question_and_answer import question_and_answer_factory
 from room import Room
 from util import generate_random_int, randomly_choose_between_two_outcomes
+from difficulty_config import DifficultySettings, DIFFICULTY_SETTINGS
 
 
 class MazeConstructionError(RuntimeError):
@@ -163,38 +164,10 @@ class Maze:
         starting room).
     """
 
-    # Smallest dimensions of maze
-    __MIN_ALLOWED_ROWS_OR_COLS = 3
-
-    __PILLAR_PROBABILITY = 0.1
-    __PIT_PROBABILITY = 0.15
-    __HEALING_POTION_PROBABILITY = 0.15
-    __VISION_POTION_PROBABILITY = 0.15
-    __SUGGESTION_POTION_PROBABILITY = 0.15
-    __MAGIC_KEY_PROBABILITY = 0.15
-    __LOCKED_DOOR_PROBABILITY = 0.25
-
-    # Min and max amount that a healing potion can restore to hit points
-    __MIN_HEALING_POTION_VALUE = 5
-    __MAX_HEALING_POTION_VALUE = 15
-
-    # Min and max amount of damage that a pit can do
-    __MIN_PIT_DAMAGE = 1
-    __MAX_PIT_DAMAGE = 20
-
-    # Minimum Manhattan distance enforced between entrance and exit when
-    # choosing where they should be. Cannot be larger than
-    #     (row_count - 1) + (col_count - 1)
-    # where row_count and col_count are the number of rows and columns of the
-    # entire maze.
-    __MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE = 2
-    __MAX_ENTRANCE_EXIT_SAMPLE_ATTEMPTS = 15
-
-    def __init__(self, row_count, col_count, trivia_db):
+    def __init__(self, row_count, col_count, trivia_db, difficulty="medium"):
         """
         Build a traversable maze of the specified dimensions and fill
         it with items and pits.
-
         Parameters
         ----------
         row_count : int
@@ -203,7 +176,8 @@ class Maze:
             The number of columns of the maze.
         trivia_db : TriviaDatabase
             A database from which questions and answers can be obtained.
-
+        difficulty : str
+            Difficulty setting chosen by the player.
         Raises
         ------
         MazeTooSmall
@@ -212,6 +186,8 @@ class Maze:
         """
         self.rooms = []
 
+        # Smallest dimensions of maze
+        self.__MIN_ALLOWED_ROWS_OR_COLS = 3
         if (
             row_count < self.__MIN_ALLOWED_ROWS_OR_COLS
             or col_count < self.__MIN_ALLOWED_ROWS_OR_COLS
@@ -240,6 +216,53 @@ class Maze:
         # Keep track of which questions we've attached to doors to avoid
         # repetition
         self.__used_question_and_answer_hashes = set({})
+
+        self.__PILLAR_PROBABILITY = 0.25
+
+        # probabilities of items being placed in the maze
+        self.__PIT_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+            DifficultySettings.PIT_PROBABILITY
+        ]
+        self.__HEALING_POTION_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+            DifficultySettings.HEALING_POTION_PROBABILITY
+        ]
+        self.__VISION_POTION_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+            DifficultySettings.VISION_POTION_PROBABILITY
+        ]
+        self.__SUGGESTION_POTION_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+            DifficultySettings.SUGGESTION_POTION_PROBABILITY
+        ]
+        self.__MAGIC_KEY_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+            DifficultySettings.MAGIC_KEY_PROBABILITY
+        ]
+        self.__LOCKED_DOOR_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+            DifficultySettings.LOCKED_DOOR_PROBABILITY
+        ]
+        # Min and max amount that a healing potion can restore to hit points
+        self.__MIN_HEALING_POTION_VALUE = DIFFICULTY_SETTINGS[difficulty][
+            DifficultySettings.MIN_HEALING_POTION_VALUE
+        ]
+        self.__MAX_HEALING_POTION_VALUE = DIFFICULTY_SETTINGS[difficulty][
+            DifficultySettings.MAX_HEALING_POTION_VALUE
+        ]
+
+        # Min and max amount of damage that a pit can do
+        self.__MIN_PIT_DAMAGE = DIFFICULTY_SETTINGS[difficulty][
+            DifficultySettings.MIN_PIT_DAMAGE
+        ]
+        self.__MAX_PIT_DAMAGE = DIFFICULTY_SETTINGS[difficulty][
+            DifficultySettings.MAX_PIT_DAMAGE
+        ]
+
+        # Minimum Manhattan distance enforced between entrance and exit when
+        # choosing where they should be. Cannot be larger than
+        #     (row_count - 1) + (col_count - 1)
+        # where row_count and col_count are the number of rows and columns of the
+        # entire maze.
+        self.__MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE = DIFFICULTY_SETTINGS[
+            difficulty
+        ][DifficultySettings.MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE]
+        self.__MAX_ENTRANCE_EXIT_SAMPLE_ATTEMPTS = 15
 
         self.build_maze(trivia_db)
 

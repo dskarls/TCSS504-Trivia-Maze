@@ -939,3 +939,58 @@ class MultipleChoiceQuestionAndAnswerMenu(
             options=options,
         )
         self._num_rows_without_hint = 4
+
+
+class DifficultyMenu(SubWindow):
+    def __init__(self, window, banner_text, menu_options):
+        """Create a frame inside of the frame specified by `window` that fills
+        up its entire row and column span."""
+        super().__init__(window, None, None, 0, 0, *window.grid_size())
+
+        # Add banner message
+        lbl = Label(
+            master=self.frame,
+            text=banner_text,
+            justify=CENTER,
+            anchor=CENTER,
+            style=STYLES["main_menu"]["style"],
+        )
+
+        lbl.pack(fill=BOTH)
+
+        # Add text menu with desired options
+        self.__text_menu = TextMenu(
+            options=menu_options,
+            master=self.frame,
+            width=None,
+            height=len(menu_options),
+            unselected_foreground_color="grey",
+            unselected_background_color="black",
+            selected_foreground_color="black",
+            selected_background_color="white",
+            font=("Courier New", 18),
+            justify=CENTER,
+        )
+
+    def hide(self):
+        """Hide this widget."""
+        self.frame.grid_remove()
+
+    def show(self):
+        """Show this widget."""
+        self.frame.grid()
+
+        # Attach focus to text menu of options
+        self.__text_menu.focus()
+        self.__text_menu.reset_selection()
+        self.frame.update_idletasks()
+
+    @property
+    def selected_option(self):
+        """Used to expose which option in the menu the user has selected."""
+        return self.__text_menu.selected_option
+
+    @selected_option.setter
+    def selected_option(self, index):
+        """Used to set which option in the menu the user has selected."""
+        self.__text_menu.selected_option = index

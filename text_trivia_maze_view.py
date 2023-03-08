@@ -25,6 +25,7 @@ from view_components import (
     TrueFalseQuestionAndAnswerMenu,
     EventLog,
     SubWindow,
+    DifficultyMenu,
 )
 from maze_items import (
     HealingPotion,
@@ -137,6 +138,9 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__game_lost_trapped_menu = self.__create_game_lost_trapped_menu()
         self.hide_game_lost_trapped_menu()
 
+        self.__difficulty_menu = self.__create_difficulty_menu()
+        self.hide_difficulty_menu()
+
         # Create dialog for needing magic key
         self.__need_magic_key_menu = self.__create_need_magic_key_menu()
         self.hide_need_magic_key_menu()
@@ -161,15 +165,15 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__command_legend_menu = self.__create_command_legend_menu()
         self.hide_command_legend_menu()
 
-        # Creat empty short answer question & answer menu
+        # Create empty short answer question & answer menu
         self.__short_QA_menu = self.__create_short_QA_menu()
         self.hide_short_QA_menu()
 
-        # Creat empty true or false question & answer menu
+        # Create empty true or false question & answer menu
         self.__true_or_false_QA_menu = self.__create_true_or_false_QA_menu()
         self.hide_true_or_false_QA_menu()
 
-        # Creat empty short answer question & answer menu
+        # Create empty short answer question & answer menu
         self.__multiple_choice_QA_menu = (
             self.__create_multiple_choice_QA_menu()
         )
@@ -1159,3 +1163,27 @@ class TextTriviaMazeView(TriviaMazeView):
     def quit_entire_game(self):
         """Tear down the entire application and quit."""
         self.__window.destroy()
+
+    def __create_difficulty_menu(self):
+        """Create the difficulty menu widget that allows the user
+        to select what difficulty they would like to play."""
+        options = (
+            "Easy",
+            "Medium",
+            "Hard",
+        )
+        return DifficultyMenu(
+            self.__window, MESSAGES["difficulty_choice_menu"], options
+        )
+
+    def get_difficulty_menu_selection(self):
+        """Return the currently selected option in the difficulty menu."""
+        return self.__difficulty_menu.selected_option
+
+    def show_difficulty_menu(self):
+        """Shows the difficulty menu to select difficulty."""
+        return self.__difficulty_menu.show()
+
+    def hide_difficulty_menu(self):
+        """Hides the difficulty menu after a choice has been made."""
+        return self.__difficulty_menu.hide()

@@ -105,20 +105,12 @@ class MainMenuCommandContext(MenuCommandContext):
         # NOTE: One might choose to have the controller tell the view what options
         # to add to the menu when it creates it in order to avoid duplication
         if selected_option == "start game":
-            # FIXME: Implement a difficulty selection and/or adventurer naming
-            # menu and have the user go through that here. This may mean we
-            # need to break up the stuff in the model's initialization so that
-            # its __init__ doesn't really do anything.
-
-            # Hide main menu so user can begin playing and switch contexts
-            self._maze_model.reset()
-            self._maze_view.reset_inventories()
+            # hide main menu
             self._maze_view.hide_main_menu()
-
-            # Clear view event log
-            self._maze_view.clear_event_log()
-
-            self._maze_controller.set_active_context("primary_interface")
+            # show difficulty menu
+            self._maze_view.show_difficulty_menu()
+            # set context to difficulty selection
+            self._maze_controller.set_active_context("difficulty_menu")
 
         elif selected_option == "load game":
             try:
@@ -912,6 +904,39 @@ class MagicKeyCommandContext(CommandContext):
         elif key == self.COMMANDS[self.Command.DISMISS][_COMMAND_KEY_KEY]:
             self._maze_controller.set_active_context("primary_interface")
             self._maze_view.hide_magic_key_menu()
+
+
+class DifficultyMenuCommandContext(MenuCommandContext):
+    """Context for interpreting keystrokes when the user pulls up the
+    difficulty menu."""
+
+    def process_keystroke(self, key):
+        """
+        Interact with view and model based on the keystroke ``key`` received
+        from the view.
+
+        Parameters
+        ----------
+        key : str
+            A keystroke input. This may be a single character, e.g. 'a' if the
+            'a' key is pressed, or could be something like 'Return' or
+            'Escape'.
+        """
+
+        if key != self.COMMANDS[self.Command.SELECT][_COMMAND_KEY_KEY]:
+            return
+
+        selected_option = (
+            self._maze_view.get_difficulty_menu_selection().lower()
+        )
+        self._maze_view.hide_difficulty_menu()
+        self._maze_model.reset(selected_option)
+        self._maze_view.reset_inventories()
+
+        # Clear view event log
+        self._maze_view.clear_event_log()
+        self._maze_view.hide_main_menu()
+        self._maze_controller.set_active_context("primary_interface")
 
 
 IN_GAME_MENU_KEY = PrimaryInterfaceCommandContext.COMMANDS[
