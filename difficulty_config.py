@@ -1,3 +1,4 @@
+"""Used to set the values for different difficulty settings."""
 from enum import Enum, auto
 
 
