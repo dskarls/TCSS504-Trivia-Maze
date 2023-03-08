@@ -4,14 +4,15 @@ from abc import ABC, abstractmethod
 class TriviaMazeModel(ABC):
     """Represents a trivia maze, which features a maze with a single entrance
     and single exit filled with items (and Q&A-enabled doors), an
-    adventurer, and pits."""
+    adventurer, and pits.
+    Attributes:
+        _maze_observers (list): A list of objects that observe the TriviaMazeModel and will
+        be notified when changes occur.
+    """
 
     def __init__(self):
         """
         Initialize a TriviaMazeModel object with an empty list to store its observers.
-        Attributes:
-        _maze_observers (list): A list of objects that observe the TriviaMazeModel and will
-        be notified when changes occur.
         """
         self._maze_observers = []
 
