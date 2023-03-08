@@ -124,13 +124,25 @@ class TriviaMaze(TriviaMazeModel):
     def reset(self, difficulty=None):
         """If the user returns to the main menu after starting a game and then
         starts a new game, the model should regenerate a new maze and a new
-        adventurer, etc."""
+        adventurer, etc.
+        
+        Parameters
+        ----------
+        difficulty : str
+            Difficulty setting chosen by the player.
+        """
         self.__maze, self.__adventurer = self.__reset_maze_and_adventurer(difficulty)
         self.__place_adventurer_in_maze()
         self.__notify_observers()
 
     def __reset_maze_and_adventurer(self, difficulty=None):
-        """Regenerate maze and adventurer from scratch."""
+        """Regenerate maze and adventurer from scratch.
+        
+        Parameters
+        ----------
+        difficulty : str
+            Difficulty setting chosen by the player.
+        """
         return Maze(self.num_rows, self.num_cols, self.__db, difficulty), Adventurer()
 
     def __serialize(self):
