@@ -1145,8 +1145,8 @@ class TextTriviaMazeView(TriviaMazeView):
         self.__window.destroy()
 
     def __create_difficulty_menu(self):
-        """Create the in-game menu widget, which is accessible to the user from
-        the primary interface while they're actually playing the game."""
+        """Create the difficulty menu widget that allows the user
+        to select what difficulty they would like to play."""
         options = (
             "Easy",
             "Medium",
@@ -1161,7 +1161,9 @@ class TextTriviaMazeView(TriviaMazeView):
         return self.__difficulty_menu.selected_option
 
     def show_difficulty_menu(self):
+        """Shows the difficulty menu to select difficulty."""
         return self.__difficulty_menu.show()
 
     def hide_difficulty_menu(self):
+        """Hides the difficulty menu after a choice has been made."""
         return self.__difficulty_menu.hide()
