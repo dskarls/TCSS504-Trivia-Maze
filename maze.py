@@ -185,7 +185,9 @@ class Maze:
             size.
         """
         self.rooms = []
-
+        
+        # Smallest dimensions of maze
+        self.__MIN_ALLOWED_ROWS_OR_COLS = 3
         if (
                 row_count < self.__MIN_ALLOWED_ROWS_OR_COLS
                 or col_count < self.__MIN_ALLOWED_ROWS_OR_COLS
@@ -215,8 +217,6 @@ class Maze:
         # repetition
         self.__used_question_and_answer_hashes = set({})
         
-        # Smallest dimensions of maze
-        self.__MIN_ALLOWED_ROWS_OR_COLS = 3
         
         # probabilities of items being placed in the maze
         self.__PIT_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
