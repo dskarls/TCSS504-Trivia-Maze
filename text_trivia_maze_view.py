@@ -120,7 +120,6 @@ class TextTriviaMazeView(TriviaMazeView):
             3,
             padding_col="  ",
         )
-        self.__update_map()
 
         # Add separator lines to divide UI cleanly
         # NOTE: The separators need to be created after the primary interface
