@@ -177,6 +177,8 @@ class Maze:
             The number of columns of the maze.
         trivia_db : TriviaDatabase
             A database from which questions and answers can be obtained.
+        difficulty : str
+            Difficulty setting chosen by the player.
 
         Raises
         ------
