@@ -164,25 +164,6 @@ class Maze:
         starting room).
     """
 
-    # Smallest dimensions of maze
-    __MIN_ALLOWED_ROWS_OR_COLS = 3
-
-    # Values default to get initial maze constructed
-    # These will change when difficulty is selected
-    __PILLAR_PROBABILITY = 0.1
-    __PIT_PROBABILITY = 0.15
-    __HEALING_POTION_PROBABILITY = 0.15
-    __VISION_POTION_PROBABILITY = 0.15
-    __SUGGESTION_POTION_PROBABILITY = 0.15
-    __MAGIC_KEY_PROBABILITY = 0.15
-    __LOCKED_DOOR_PROBABILITY = 0.25
-    __MIN_HEALING_POTION_VALUE = 5
-    __MAX_HEALING_POTION_VALUE = 15
-    __MIN_PIT_DAMAGE = 1
-    __MAX_PIT_DAMAGE = 20
-    __MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE = 2
-    __MAX_ENTRANCE_EXIT_SAMPLE_ATTEMPTS = 15
-
     def __init__(self, row_count, col_count, trivia_db, difficulty=None):
         """
         Build a traversable maze of the specified dimensions and fill
@@ -203,6 +184,33 @@ class Maze:
             If the row or column counts are smaller than the smallest allowable
             size.
         """
+        #
+        # Smallest dimensions of maze
+        self.__MIN_ALLOWED_ROWS_OR_COLS = 3
+
+        self.__PILLAR_PROBABILITY = 0.1
+        self.__PIT_PROBABILITY = 0.15
+        self.__HEALING_POTION_PROBABILITY = 0.15
+        self.__VISION_POTION_PROBABILITY = 0.15
+        self.__SUGGESTION_POTION_PROBABILITY = 0.15
+        self.__MAGIC_KEY_PROBABILITY = 0.15
+        self.__LOCKED_DOOR_PROBABILITY = 0.25
+
+        # Min and max amount that a healing potion can restore to hit points
+        self.__MIN_HEALING_POTION_VALUE = 5
+        self.__MAX_HEALING_POTION_VALUE = 15
+
+        # Min and max amount of damage that a pit can do
+        self.__MIN_PIT_DAMAGE = 1
+        self.__MAX_PIT_DAMAGE = 20
+
+        # Minimum Manhattan distance enforced between entrance and exit when
+        # choosing where they should be. Cannot be larger than
+        #     (row_count - 1) + (col_count - 1)
+        # where row_count and col_count are the number of rows and columns of the
+        # entire maze.
+        self.__MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE = 2
+        self.__MAX_ENTRANCE_EXIT_SAMPLE_ATTEMPTS = 15
         self.rooms = []
 
         if (
@@ -236,49 +244,41 @@ class Maze:
 
         # probabilities of items being placed in the maze
         if difficulty:
-            __PIT_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+            self.__PIT_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
                 DifficultySettings.PIT_PROBABILITY
             ]
-            __HEALING_POTION_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+            self.__HEALING_POTION_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
                 DifficultySettings.HEALING_POTION_PROBABILITY
             ]
-            __VISION_POTION_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+            self.__VISION_POTION_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
                 DifficultySettings.VISION_POTION_PROBABILITY
             ]
-            __SUGGESTION_POTION_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+            self.__SUGGESTION_POTION_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
                 DifficultySettings.SUGGESTION_POTION_PROBABILITY
             ]
-            __MAGIC_KEY_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+            self.__MAGIC_KEY_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
                 DifficultySettings.MAGIC_KEY_PROBABILITY
             ]
-            __LOCKED_DOOR_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
+            self.__LOCKED_DOOR_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
                 DifficultySettings.LOCKED_DOOR_PROBABILITY
             ]
 
             # Min and max amount that a healing potion can restore to hit points
-            __MIN_HEALING_POTION_VALUE = DIFFICULTY_SETTINGS[difficulty][
+            self.__MIN_HEALING_POTION_VALUE = DIFFICULTY_SETTINGS[difficulty][
                 DifficultySettings.MIN_HEALING_POTION_VALUE
             ]
-            __MAX_HEALING_POTION_VALUE = DIFFICULTY_SETTINGS[difficulty][
+            self.__MAX_HEALING_POTION_VALUE = DIFFICULTY_SETTINGS[difficulty][
                 DifficultySettings.MAX_HEALING_POTION_VALUE
             ]
 
             # Min and max amount of damage that a pit can do
-            __MIN_PIT_DAMAGE = DIFFICULTY_SETTINGS[difficulty][
+            self.__MIN_PIT_DAMAGE = DIFFICULTY_SETTINGS[difficulty][
                 DifficultySettings.MIN_PIT_DAMAGE
             ]
-            __MAX_PIT_DAMAGE = DIFFICULTY_SETTINGS[difficulty][
+            self.__MAX_PIT_DAMAGE = DIFFICULTY_SETTINGS[difficulty][
                 DifficultySettings.MAX_PIT_DAMAGE
             ]
 
-            # Minimum Manhattan distance enforced between entrance and exit when
-            # choosing where they should be. Cannot be larger than
-            #     (row_count - 1) + (col_count - 1)
-            # where row_count and col_count are the number of rows and columns of the
-            # entire maze.
-            __MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE = DIFFICULTY_SETTINGS[difficulty][
-                DifficultySettings.MIN_ENTRANCE_EXIT_MANHATTAN_DISTANCE
-            ]
 
         self.build_maze(trivia_db)
 
