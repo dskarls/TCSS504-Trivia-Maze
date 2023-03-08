@@ -217,6 +217,7 @@ class Maze:
         # repetition
         self.__used_question_and_answer_hashes = set({})
         
+        self.__PILLAR_PROBABILITY = 0.25
         
         # probabilities of items being placed in the maze
         self.__PIT_PROBABILITY = DIFFICULTY_SETTINGS[difficulty][
