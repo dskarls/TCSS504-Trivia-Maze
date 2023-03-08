@@ -95,7 +95,9 @@ class TextTriviaMazeView(TriviaMazeView):
         # contained content
         self.__window.rowconfigure(0, minsize=DIMENSIONS["map"]["height"])
         self.__window.columnconfigure(0, minsize=DIMENSIONS["map"]["width"])
-        self.__window.columnconfigure(1, minsize=DIMENSIONS["side_bar"]["width"])
+        self.__window.columnconfigure(
+            1, minsize=DIMENSIONS["side_bar"]["width"]
+        )
 
         # Create primary interface windows
         # NOTE: These windows should be created first. Otherwise, the other
@@ -172,7 +174,9 @@ class TextTriviaMazeView(TriviaMazeView):
         self.hide_true_or_false_QA_menu()
 
         # Create empty short answer question & answer menu
-        self.__multiple_choice_QA_menu = self.__create_multiple_choice_QA_menu()
+        self.__multiple_choice_QA_menu = (
+            self.__create_multiple_choice_QA_menu()
+        )
         self.hide_multiple_choice_QA_menu()
 
         # Create main menu and the help menu accessible from it
@@ -180,7 +184,9 @@ class TextTriviaMazeView(TriviaMazeView):
 
         # Create pop-up to tell user that load game failed because no save file
         # could be found
-        self.__no_save_file_found_menu = self.__create_no_save_file_found_menu()
+        self.__no_save_file_found_menu = (
+            self.__create_no_save_file_found_menu()
+        )
         self.hide_no_save_file_found_menu()
 
         # Help menu accessible from main menu
@@ -262,7 +268,9 @@ class TextTriviaMazeView(TriviaMazeView):
     def __configure_keystroke_capture(self):
         """Capture keystrokes so they can be sent to the controller for
         interpretation"""
-        self.__window.bind("<KeyPress>", self.__forward_keystroke_to_controller)
+        self.__window.bind(
+            "<KeyPress>", self.__forward_keystroke_to_controller
+        )
         # Also capture arrow keys
         for arrow_key_event in {"<Left>", "<Right>", "<Up>", "<Down>"}:
             self.__window.bind(
@@ -540,7 +548,8 @@ class TextTriviaMazeView(TriviaMazeView):
         """Create pop-up that tells the user that they couldn't load a game
         because no save file could be found."""
         dismiss_message = (
-            f"Press {' or '.join(self.__dismiss_keys)} to return to the main " "menu"
+            f"Press {' or '.join(self.__dismiss_keys)} to return to the main "
+            "menu"
         )
         return DismissiblePopUp(
             self.__window,
@@ -567,7 +576,8 @@ class TextTriviaMazeView(TriviaMazeView):
         """Create pop-up that tells the user that their save game was
         successful."""
         dismiss_message = (
-            f"Press {' or '.join(self.__dismiss_keys)} to return to the " "in-game menu"
+            f"Press {' or '.join(self.__dismiss_keys)} to return to the "
+            "in-game menu"
         )
         return DismissiblePopUp(
             self.__window,
@@ -594,7 +604,8 @@ class TextTriviaMazeView(TriviaMazeView):
         """Create the main help menu. This is the help menu that is accessed
         from the main menu."""
         dismiss_message = (
-            f"Press {' or '.join(self.__dismiss_keys)} to return to the main " "menu"
+            f"Press {' or '.join(self.__dismiss_keys)} to return to the main "
+            "menu"
         )
         return DismissiblePopUp(
             self.__window,
@@ -672,7 +683,8 @@ class TextTriviaMazeView(TriviaMazeView):
     def __create_game_won_menu(self):
         """Create the widget telling the player they won the game."""
         dismiss_message = (
-            f"Press {' or '.join(self.__dismiss_keys)} to return to the main " "menu"
+            f"Press {' or '.join(self.__dismiss_keys)} to return to the main "
+            "menu"
         )
         return DismissiblePopUp(
             self.__window,
@@ -697,7 +709,8 @@ class TextTriviaMazeView(TriviaMazeView):
         """Create the widget telling the player they lost the game
         from the adventurer reaching 0 hitpoints."""
         dismiss_message = (
-            f"Press {' or '.join(self.__dismiss_keys)} to return to the main " "menu"
+            f"Press {' or '.join(self.__dismiss_keys)} to return to the main "
+            "menu"
         )
         return DismissiblePopUp(
             self.__window,
@@ -722,7 +735,8 @@ class TextTriviaMazeView(TriviaMazeView):
         """Create the widget telling the player they lost the game by
         getting trapped in the maze."""
         dismiss_message = (
-            f"Press {' or '.join(self.__dismiss_keys)} to return to the main " "menu"
+            f"Press {' or '.join(self.__dismiss_keys)} to return to the main "
+            "menu"
         )
         return DismissiblePopUp(
             self.__window,
@@ -888,7 +902,8 @@ class TextTriviaMazeView(TriviaMazeView):
         )
 
         dismiss_message = (
-            f"Press {' or '.join(self.__dismiss_keys)} to return to the " "in-game menu"
+            f"Press {' or '.join(self.__dismiss_keys)} to return to the "
+            "in-game menu"
         )
         return DismissiblePopUp(
             self.__window,
@@ -982,7 +997,9 @@ class TextTriviaMazeView(TriviaMazeView):
                     descriptions_in_col.append(row[col][1])
 
             symbol_max_len_in_this_col = len(max(symbols_in_col, key=len))
-            description_max_len_in_this_col = len(max(descriptions_in_col, key=len))
+            description_max_len_in_this_col = len(
+                max(descriptions_in_col, key=len)
+            )
             description_max_len_by_col.append(description_max_len_in_this_col)
             symbol_max_len_by_col.append(symbol_max_len_in_this_col)
 
@@ -1026,7 +1043,8 @@ class TextTriviaMazeView(TriviaMazeView):
         contents are initially empty, and are set via arguments passed to the
         `show_commands_legend_menu()` method."""
         dismiss_message = (
-            f"Press {' or '.join(self.__dismiss_keys)} to return to the " "in-game menu"
+            f"Press {' or '.join(self.__dismiss_keys)} to return to the "
+            "in-game menu"
         )
         return DismissiblePopUp(
             self.__window,
@@ -1120,7 +1138,9 @@ class TextTriviaMazeView(TriviaMazeView):
     def __update_inventory(self, current_items):
         """Update the counts of all items in the enumerated inventory."""
         for item_type, item_label in self.__INVENTORY_TYPE_LABELS.items():
-            item_count = sum(isinstance(item, item_type) for item in current_items)
+            item_count = sum(
+                isinstance(item, item_type) for item in current_items
+            )
             self.__inventory.update_item_quantity(item_label, item_count)
 
     def __update_pillar_inventory(self, current_items):

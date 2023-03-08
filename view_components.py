@@ -316,7 +316,9 @@ class EnumeratedInventory:
         for item in self.__item_labels:
             # Create frame for this item
             frm_item = Frame(master=self.__window)
-            frm_item.pack(side=TOP, fill=BOTH, padx=self.__padx, pady=self.__pady)
+            frm_item.pack(
+                side=TOP, fill=BOTH, padx=self.__padx, pady=self.__pady
+            )
 
             # Create label for item
             lbl_item = Label(
@@ -371,7 +373,9 @@ class CheckboxInventory:
             fill=BOTH,
         )
 
-        self.__item_check_button_control_vars = self.__create_inventory_item_labels()
+        self.__item_check_button_control_vars = (
+            self.__create_inventory_item_labels()
+        )
 
     def __create_inventory_item_labels(self):
         """Create and pack the labels that hold the names of all of the items
@@ -383,7 +387,9 @@ class CheckboxInventory:
         for ind, item in enumerate(self.__item_labels):
             # Create frame for this item
             frm_item = Frame(master=self.__window, height=50)
-            frm_item.pack(side=TOP, fill=BOTH, padx=self.__padx, pady=self.__pady)
+            frm_item.pack(
+                side=TOP, fill=BOTH, padx=self.__padx, pady=self.__pady
+            )
 
             # Create label for item
             lbl_item = Label(
@@ -403,7 +409,9 @@ class CheckboxInventory:
                 onvalue=1,
                 offvalue=0,
                 command=functools.partial(
-                    lambda ind: control_vars[ind].set(1 - control_vars[ind].get()),
+                    lambda ind: control_vars[ind].set(
+                        1 - control_vars[ind].get()
+                    ),
                     ind=ind,
                 ),
             )
@@ -843,7 +851,9 @@ class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
                 row += 1
 
             # Pack to left unless this is the last column
-            qa_option.grid(row=row, column=col, sticky=W, padx=15, pady=(0, 10))
+            qa_option.grid(
+                row=row, column=col, sticky=W, padx=15, pady=(0, 10)
+            )
 
             # End row at num_cols
             col += 1
@@ -884,7 +894,9 @@ class QuestionAndAnswerWithOptionsMenu(QuestionAndAnswerMenu):
 
     def get_user_answer(self):
         try:
-            return self._buttons[int(self._button_control_var.get())].original_text
+            return self._buttons[
+                int(self._button_control_var.get())
+            ].original_text
         except TclError:
             # No option was selected. Note there is no finer exception thrown
             # by tkinter for us to catch here.

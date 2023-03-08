@@ -46,7 +46,9 @@ class CommandContext(ABC):
         required_attrs = ("Command", "COMMANDS")
         for attr in required_attrs:
             if not hasattr(cls, attr):
-                raise TypeError(f"Subclasses of must define the {attr} class attr")
+                raise TypeError(
+                    f"Subclasses of must define the {attr} class attr"
+                )
 
     @abstractmethod
     def process_keystroke(self, key):
@@ -96,7 +98,9 @@ class MainMenuCommandContext(MenuCommandContext):
             return
 
         # Trigger the currently selected item in the main menu
-        selected_option = self._maze_view.get_main_menu_current_selection().lower()
+        selected_option = (
+            self._maze_view.get_main_menu_current_selection().lower()
+        )
 
         # NOTE: One might choose to have the controller tell the view what options
         # to add to the menu when it creates it in order to avoid duplication
@@ -119,7 +123,9 @@ class MainMenuCommandContext(MenuCommandContext):
                 self._maze_controller.set_active_context("primary_interface")
             except SaveGameFileNotFound:
                 self._maze_view.show_no_save_file_found_menu()
-                self._maze_controller.set_active_context("no_save_file_found_menu")
+                self._maze_controller.set_active_context(
+                    "no_save_file_found_menu"
+                )
 
         elif selected_option == "help":
             self._maze_view.show_main_help_menu()
@@ -154,7 +160,9 @@ class InGameMenuCommandContext(MenuCommandContext):
             return
 
         # Trigger the currently selected item in the main menu
-        selected_option = self._maze_view.get_in_game_menu_current_selection().lower()
+        selected_option = (
+            self._maze_view.get_in_game_menu_current_selection().lower()
+        )
 
         # NOTE: One might choose to have the controller tell the view what options
         # to add to the menu when it creates it in order to avoid duplication
@@ -177,7 +185,9 @@ class InGameMenuCommandContext(MenuCommandContext):
                 for entry in PrimaryInterfaceCommandContext.COMMANDS.values()
             )
 
-            self._maze_view.show_command_legend_menu(symbols, descriptions, num_cols=2)
+            self._maze_view.show_command_legend_menu(
+                symbols, descriptions, num_cols=2
+            )
             self._maze_controller.set_active_context("command_legend_menu")
 
         elif selected_option == "save game":
@@ -500,20 +510,37 @@ class PrimaryInterfaceCommandContext(CommandContext):
         """
 
         # Non-movement commands
-        if key == self.COMMANDS[self.Command.SHOW_IN_GAME_MENU][_COMMAND_KEY_KEY]:
+        if (
+            key
+            == self.COMMANDS[self.Command.SHOW_IN_GAME_MENU][_COMMAND_KEY_KEY]
+        ):
             self._maze_view.show_in_game_menu()
             self._maze_controller.set_active_context("in_game_menu")
-        elif key == self.COMMANDS[self.Command.USE_HEALING_POTION][_COMMAND_KEY_KEY]:
+        elif (
+            key
+            == self.COMMANDS[self.Command.USE_HEALING_POTION][_COMMAND_KEY_KEY]
+        ):
             self._maze_model.use_item("healing potion")
-        elif key == self.COMMANDS[self.Command.USE_VISION_POTION][_COMMAND_KEY_KEY]:
+        elif (
+            key
+            == self.COMMANDS[self.Command.USE_VISION_POTION][_COMMAND_KEY_KEY]
+        ):
             self._maze_model.use_item("vision potion")
         else:
             # Movement commands
             KEY_TO_DIRECTION = {
-                self.COMMANDS[self.Command.MOVE_WEST][_COMMAND_KEY_KEY]: "west",
-                self.COMMANDS[self.Command.MOVE_EAST][_COMMAND_KEY_KEY]: "east",
-                self.COMMANDS[self.Command.MOVE_NORTH][_COMMAND_KEY_KEY]: "north",
-                self.COMMANDS[self.Command.MOVE_SOUTH][_COMMAND_KEY_KEY]: "south",
+                self.COMMANDS[self.Command.MOVE_WEST][
+                    _COMMAND_KEY_KEY
+                ]: "west",
+                self.COMMANDS[self.Command.MOVE_EAST][
+                    _COMMAND_KEY_KEY
+                ]: "east",
+                self.COMMANDS[self.Command.MOVE_NORTH][
+                    _COMMAND_KEY_KEY
+                ]: "north",
+                self.COMMANDS[self.Command.MOVE_SOUTH][
+                    _COMMAND_KEY_KEY
+                ]: "south",
             }
             direction = KEY_TO_DIRECTION.get(key)
 
@@ -583,7 +610,9 @@ class ShortQuestionAndAnswerCommandContext(CommandContext):
             # Take question and answer object from controller
             self._maze_controller.question_and_answer = None
 
-            user_answer_correct = question_and_answer.answer_is_correct(user_answer)
+            user_answer_correct = question_and_answer.answer_is_correct(
+                user_answer
+            )
             # Hide Q&A widget
             self._maze_view.hide_short_QA_menu()
             self._maze_view.clear_short_QA_user_answer()
@@ -597,7 +626,12 @@ class ShortQuestionAndAnswerCommandContext(CommandContext):
                 user_answer_correct
             )
 
-        elif key == self.COMMANDS[self.Command.USE_SUGGESTION_POTION][_COMMAND_KEY_KEY]:
+        elif (
+            key
+            == self.COMMANDS[self.Command.USE_SUGGESTION_POTION][
+                _COMMAND_KEY_KEY
+            ]
+        ):
             # If user has at least one suggestion potion, use it
             adventurer_items = self._maze_model.get_adventurer_items()
             num_suggestion_potions = sum(
@@ -605,7 +639,9 @@ class ShortQuestionAndAnswerCommandContext(CommandContext):
             )
             if num_suggestion_potions > 0:
                 self._maze_model.use_item("suggestion potion")
-                self._maze_view.set_short_QA_hint(question_and_answer.get_hint())
+                self._maze_view.set_short_QA_hint(
+                    question_and_answer.get_hint()
+                )
 
 
 class TrueOrFalseQuestionAndAnswerCommandContext(CommandContext):
@@ -667,7 +703,9 @@ class TrueOrFalseQuestionAndAnswerCommandContext(CommandContext):
             question_and_answer = self._maze_controller.question_and_answer
             self._maze_controller.question_and_answer = None
 
-            user_answer_correct = question_and_answer.answer_is_correct(user_answer)
+            user_answer_correct = question_and_answer.answer_is_correct(
+                user_answer
+            )
 
             # Hide Q&A widget
             self._maze_view.hide_true_or_false_QA_menu()
@@ -770,7 +808,9 @@ class MultipleChoiceQuestionAndAnswerCommandContext(CommandContext):
             # Take question and answer object from controller
             self._maze_controller.question_and_answer = None
 
-            user_answer_correct = question_and_answer.answer_is_correct(user_answer)
+            user_answer_correct = question_and_answer.answer_is_correct(
+                user_answer
+            )
 
             # Hide Q&A widget
             self._maze_view.hide_multiple_choice_QA_menu()
@@ -797,7 +837,12 @@ class MultipleChoiceQuestionAndAnswerCommandContext(CommandContext):
         elif key == self.COMMANDS[self.Command.SELECT_D][_COMMAND_KEY_KEY]:
             self._maze_view.select_multiple_choice_QA_user_answer(3)
 
-        elif key == self.COMMANDS[self.Command.USE_SUGGESTION_POTION][_COMMAND_KEY_KEY]:
+        elif (
+            key
+            == self.COMMANDS[self.Command.USE_SUGGESTION_POTION][
+                _COMMAND_KEY_KEY
+            ]
+        ):
             # If user has at least one suggestion potion, use it
             adventurer_items = self._maze_model.get_adventurer_items()
             num_suggestion_potions = sum(
@@ -881,7 +926,9 @@ class DifficultyMenuCommandContext(MenuCommandContext):
         if key != self.COMMANDS[self.Command.SELECT][_COMMAND_KEY_KEY]:
             return
 
-        selected_option = self._maze_view.get_difficulty_menu_selection().lower()
+        selected_option = (
+            self._maze_view.get_difficulty_menu_selection().lower()
+        )
         self._maze_view.hide_difficulty_menu()
         self._maze_model.reset(selected_option)
         self._maze_view.reset_inventories()
@@ -897,9 +944,9 @@ IN_GAME_MENU_KEY = PrimaryInterfaceCommandContext.COMMANDS[
 ][_COMMAND_KEY_KEY]
 
 DISMISS_KEYS = (
-    DismissibleCommandContext.COMMANDS[DismissibleCommandContext.Command.DISMISS][
-        _COMMAND_KEY_KEY
-    ],
+    DismissibleCommandContext.COMMANDS[
+        DismissibleCommandContext.Command.DISMISS
+    ][_COMMAND_KEY_KEY],
 )
 
 USE_SUGGESTION_POTION_KEY = ShortQuestionAndAnswerCommandContext.COMMANDS[
