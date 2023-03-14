@@ -24,3 +24,7 @@ This repository contains an implementation of the Trivia Maze Dungeon Adventure 
 - test/
 
   Contains the pytest unit test files relevant to the Model of the MVC pattern implemented.
+
+- The remainder of the files are python source code (or configuration files for unit tests, IDE tools, or git). Of particular interest may be the abstract interfaces for the Model, View, and Controller, which may be found in `trivia_maze_model.py`, `trivia_maze_view.py`, and `trivia_maze_controller.py`, respectively. For grading purposes, the following may also be of interest:
+  - The `trivia_database.py` uses the `sqlite3` module to create a database in memory, as required
+  - The implementation of the Model in `trivia_maze.py` demonstrates that pickling was used for the save/load game mechanism
