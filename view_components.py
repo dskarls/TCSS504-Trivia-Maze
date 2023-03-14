@@ -11,7 +11,27 @@ from view_config import STYLES
 class TextMenu:
     """A menu of strings traversable with arrow keys. The selected element can
     be colored differently from the rest of the elements. Intended to be used
-    with keystroke detection to make a selection."""
+    with keystroke detection to make a selection.
+
+    Args:
+        options (list): List of strings to be displayed in the menu.
+        master (Tk): Parent widget for the menu.
+        width (int): Width of the menu in characters.
+        height (int): Height of the menu in characters.
+        unselected_foreground_color (str): Foreground color of unselected items.
+        unselected_background_color (str): Background color of unselected items.
+        selected_foreground_color (str): Foreground color of the selected item.
+        selected_background_color (str): Background color of the selected item.
+        font (tuple): Tuple of font family, size, and style for the menu items.
+        justify (str): Text justification within the menu (LEFT, CENTER, or RIGHT).
+
+    Attributes:
+        selected_option (str): The currently selected option in the menu.
+
+    Methods:
+        focus(): Give focus to the menu.
+        reset_selection(): Clear the current selection and set the first item as active.
+    """
 
     def __init__(
         self,
@@ -26,6 +46,9 @@ class TextMenu:
         font,
         justify,
     ):
+        """
+        Constructs a new TextMenu object with the given options and visual properties.
+        """
         self.__options = options
         self.__list_box = Listbox(
             master,
@@ -200,6 +223,18 @@ class Map(SubWindow):
 class EventLog(SubWindow):
     """
     The text box that logs notable events for the player to see.
+    :param window: The window to embed the event log subwindow in
+    :param width: The width of the event log subwindow
+    :param num_lines: The maximum number of lines that can be shown in the
+        event log text box
+    :param row: The row of the grid where the event log subwindow should be
+        placed
+    :param column: The column of the grid where the event log subwindow should
+        be placed
+    :param rowspan: The number of rows the event log subwindow should span
+    :param columnspan: The number of columns the event log subwindow should span
+    :param padx: The padding on the left and right sides of the subwindow
+    :param pady: The padding on the top and bottom sides of the subwindow
     """
 
     # String prefixed to all log entries
@@ -217,15 +252,27 @@ class EventLog(SubWindow):
         padx,
         pady,
     ):
+        """
+        Initialize a new instance of the EventLog class.
+        :param window: The window to embed the event log subwindow in.
+        :param width: The width of the event log subwindow.
+        :param num_lines: The maximum number of lines that can be shown in the event log text box.
+        :param row: The row of the grid where the event log subwindow should be placed.
+        :param column: The column of the grid where the event log subwindow should be placed.
+        :param rowspan: The number of rows the event log subwindow should span.
+        :param columnspan: The number of columns the event log subwindow should span.
+        :param padx: The padding on the left and right sides of the subwindow.
+        :param pady: The padding on the top and bottom sides of the subwindow.
+        """
         super().__init__(window, width, None, row, column, rowspan, columnspan)
 
         self.__textbox = self.__add_scrollable_readonly_textbox_to_subwindow(
             self.frame, num_lines, padx, pady
         )
-
-        # Initialize a var to track whether the log has already been written
+        # Initialize a variable to track whether the log has already been written
         # to. This is used to determine prefixes/postfixes wrapped around each
         # message.
+
         self.__contents_empty = True
 
     def write(self, message):
@@ -284,10 +331,19 @@ class EventLog(SubWindow):
 
 
 class EnumeratedInventory:
-    """An inventory of items that have an positive integer count value
+    """An inventory of items that have a positive integer count value
     associated with them."""
 
     def __init__(self, window, title, title_ipady, padx, pady, item_labels):
+        """
+        Initialize a new instance of the EnumeratedInventory class.
+        :param window: The window in which the inventory will be displayed.
+        :param title: The title of the inventory, which will be displayed as a label at the top of the inventory.
+        :param title_ipady: The amount of internal padding for the title label in the inventory.
+        :param padx: The amount of horizontal padding around the inventory items.
+        :param pady: The amount of vertical padding around the inventory items.
+        :param item_labels: A list of strings representing the labels for each item in the inventory.
+        """
         self.__window = window
         self.__padx = padx
         self.__pady = pady
@@ -355,6 +411,15 @@ class CheckboxInventory:
     checkboxes reflecting this state."""
 
     def __init__(self, window, title, title_ipady, padx, pady, item_labels):
+        """
+        Initialize a new instance of teh CheckboxInventory class.
+        :param window: The window in which the inventory will be displayed.
+        :param title: The title of the inventory, which will be displayed as a label at the top of the inventory.
+        :param title_ipady: The amount of internal padding for the title label in the inventory.
+        :param padx: The amount of horizontal padding around the inventory items.
+        :param pady: The amount of vertical padding around the inventory items.
+        :param item_labels: A list of strings representing the labels for each item in the inventory.
+        """
         self.__window = window
         self.__padx = padx
         self.__pady = pady
@@ -447,6 +512,15 @@ class HPGauge:
         bar_padx,
         bar_pady,
     ):
+        """
+        Initialize a widget to display the adventurer's hit points with a bar and label.
+        :param window: The parent window to place the HP gauge in.
+        :param height: The height of the HP gauge frame.
+        :param bar_width: The width of the HP gauge bar.
+        :param label_padx: The horizontal padding for the HP label.
+        :param bar_padx: The horizontal padding for the HP gauge bar.
+        :param bar_pady: The vertical padding for the HP gauge bar.
+        """
         # Create frame to hold hp gauge label and bar
         frm = Frame(master=window, height=height)
         frm.pack(
@@ -480,6 +554,11 @@ class PopUpWindow:
     displayed over the top of it."""
 
     def __init__(self, window, width):
+        """
+        Initialize a new instance of the PopUpWindow class.
+        :param window: The Tkinter window object to attach the pop-up window to.
+        :param width: The width of the pop-up window, in pixels.
+        """
         self._frm = Frame(master=window, relief=RIDGE)
         self._place_pop_up_at_center_of_window(self._frm, width)
         self._width = width
@@ -513,6 +592,15 @@ class InGameMenu(PopUpWindow):
     """
 
     def __init__(self, window, width, title, padx, pady, menu_options):
+        """
+        Initialize a new instance of the InGameMenu class.
+        :param window: The parent window in which the pop-up will appear.
+        :param width: The width of the pop-up window.
+        :param title: The title to display at the top of the pop-up.
+        :param padx: The horizontal padding to apply to the title label and menu options.
+        :param pady: The vertical padding to apply to the title label and menu options.
+        :param menu_options: A list of strings representing the menu options to display.
+        """
         # Create the frame for the whole in-game menu
         super().__init__(window, width)
 
@@ -908,6 +996,10 @@ class TrueFalseQuestionAndAnswerMenu(QuestionAndAnswerWithOptionsMenu):
 
     def __init__(self, window, width, wraplength, title, padx, ipady):
         options = ("True", "False")
+        """
+        Calls the __init__ method of the QuestionAndAnswerWithOptionsMenu
+        to initialize an object of the class.
+        """
         super().__init__(
             window,
             width,
@@ -928,6 +1020,10 @@ class MultipleChoiceQuestionAndAnswerMenu(
 
     def __init__(self, window, width, wraplength, title, padx, ipady):
         options = [""] * 4
+        """
+        Calls the __init__ method of the QuestionAndAnswerWithOptionsMenu
+        to initialize an object of the class.
+        """
         super().__init__(
             window,
             width,
